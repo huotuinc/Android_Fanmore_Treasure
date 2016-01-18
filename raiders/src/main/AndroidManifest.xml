@@ -27,6 +27,60 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--添加sqllite支持-->
+        <meta-data android:name="DATABASE" android:value="@string/db_name"></meta-data>
+        <meta-data android:name="VERSION" android:value="1"></meta-data>
+        <meta-data android:name="QUERY_LOG" android:value="false"></meta-data>
+        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.huotu.fanmore.pinkcatraiders"></meta-data>
+        <!--添加sqllite支持-->
+        <!--shareSDK分享-->
+        <activity android:name="com.mob.tools.MobUIShell"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <data android:scheme="tencent1101260450"></data>
+                <action android:name="android.intent.action.VIEW"></action>
+                <category android:name="android.intent.category.BROWSABLE"></category>
+                <category android:name="android.intent.category.DEFAULT"></category>
+            </intent-filter>
+        </activity>
+        <!--微信分享回调-->
+        <activity android:name="cy.com.morefan.wxapi.WXEntryActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--shareSDK分享-->
+        <!--微信支付-->
+        <activity
+            android:name="cy.com.morefan.wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"/>
+        <receiver
+            android:name="com.huotu.fanmore.pinkcatraiders.receiver.AppRegister">
+            <intent-filter>
+                <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP" />
+            </intent-filter>
+        </receiver>
+        <!--微信支付-->
+        <!--支付宝钱包支付-->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+        </activity>
+        <activity
+            android:name="com.alipay.sdk.auth.AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind" >
+        </activity>
+        <!--支付宝支付-->
     </application>
 
     <uses-permission android:name="android.permission.GET_TASKS" />

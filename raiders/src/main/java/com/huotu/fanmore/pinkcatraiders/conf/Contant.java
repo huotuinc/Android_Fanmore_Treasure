@@ -22,4 +22,6 @@ public class Contant {
     public static final String FIRST_OPEN  = "firstOpen";
     public static final String MEMBER_INFO = "member_info";
     public static final String MEMBER_TOKEN = "member_token";
+    //微信支付ID
+    public static final String WXPAY_ID ="";
 }
