@@ -24,4 +24,16 @@ public class Contant {
     public static final String MEMBER_TOKEN = "member_token";
     //微信支付ID
     public static final String WXPAY_ID ="";
+    //微信登录:用户存在
+    public static final int MSG_USERID_FOUND    = 0x00000001;
+    //微信登录：用户不存在
+    public static final int MSG_USERID_NO_FOUND = 0x00000002;
+    public static final int MSG_LOGIN           = 0x00000003;
+    public static final int MSG_AUTH_CANCEL     = 0x00000004;
+    public static final int MSG_AUTH_ERROR      = 0x00000005;
+    public static final int MSG_AUTH_COMPLETE   = 0x00000006;
+    //鉴权失效
+    public static final int LOGIN_AUTH_ERROR = 0x00000007;
+
+
 }

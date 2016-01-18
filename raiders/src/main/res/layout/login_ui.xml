@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/loginLL"
+    android:background="@color/color_white">
+    <RelativeLayout
+        android:id="@+id/loginBg"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/loginL">
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/loginL"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/loginBtnHeight"
+        >
+        <TextView
+            android:id="@+id/loginText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/btn_margin_size"
+            android:layout_marginRight="@dimen/btn_margin_size"
+            android:padding="5dp"
+            android:text="微信授权登录"
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/text_size_22"
+            android:textStyle="normal"
+            android:background="@drawable/home_item_btn"
+            android:textColor="@color/assist_bg"
+            android:gravity="center"/>
+    </RelativeLayout>
+
+</RelativeLayout>

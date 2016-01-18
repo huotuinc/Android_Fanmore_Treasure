@@ -6,4 +6,6 @@
     <color name="dialog_title_bg">#4682B4</color>
     <color name="text_black">#ff000000</color>
     <color name="alpha_black">#66000000</color>
+    <color name="assist_bg">#FF774C12</color>
+    <color name="home_item_line">#ffd6c29a</color>
 </resources>

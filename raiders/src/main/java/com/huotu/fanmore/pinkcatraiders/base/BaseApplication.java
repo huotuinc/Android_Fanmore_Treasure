@@ -14,11 +14,14 @@ import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
+import cn.sharesdk.framework.Platform;
+
 /**
  * 粉猫夺宝application
  */
 public class BaseApplication extends Application {
 
+    public Platform plat;
 
     @Override
     public void onLowMemory() {
