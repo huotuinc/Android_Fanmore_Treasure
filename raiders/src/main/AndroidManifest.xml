@@ -27,6 +27,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.huotu.fanmore.pinkcatraiders.ui.guide.GuideActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
         <!--添加sqllite支持-->
         <meta-data android:name="DATABASE" android:value="@string/db_name"></meta-data>
         <meta-data android:name="VERSION" android:value="1"></meta-data>

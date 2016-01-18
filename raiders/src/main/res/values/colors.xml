@@ -5,4 +5,5 @@
     <color name="color_gray">#ff8e8e8e</color>
     <color name="dialog_title_bg">#4682B4</color>
     <color name="text_black">#ff000000</color>
+    <color name="alpha_black">#66000000</color>
 </resources>

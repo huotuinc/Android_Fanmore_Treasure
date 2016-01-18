@@ -41,7 +41,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.ri_splash);
         ButterKnife.bind(this);
-    //设置沉浸模式
+        //设置沉浸模式
         ButterKnife.bind(this);
         application = ( BaseApplication ) SplashActivity.this.getApplication ( );
         mHandler = new Handler ( this );
