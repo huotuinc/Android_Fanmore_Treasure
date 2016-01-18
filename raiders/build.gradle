@@ -1,0 +1,86 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.3.0'
+    }
+}
+apply plugin: 'com.android.application'
+allprojects {
+    repositories {
+        maven{
+            url="http://repo.51flashmall.com:8081/nexus/content/groups/public/"
+        }
+        jcenter()
+    }
+}
+android {
+    signingConfigs {
+        huotu {
+            storeFile file("keystore/huotu_fm.keystore")
+            storePassword "huotuheyun"
+            keyAlias "huotu_fm.keystore"
+            keyPassword "huotuheyun"
+        }
+    }
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "com.huotu.fanmore.pinkcatraiders"
+        minSdkVersion 11
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0-snapshot"
+    }
+
+    sourceSets {
+        main {
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs']
+        }
+
+        raides{
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs']
+        }
+
+        instrumentTest.setRoot('tests')
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.huotu
+            zipAlignEnabled true
+        }
+        debug {
+            signingConfig signingConfigs.huotu
+        }
+    }
+
+    productFlavors {
+
+        raides{
+            applicationId 'cy.com.morefan'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:22+'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.mcxiaoke.volley:library:1.0.19'
+    compile 'commons-codec:commons-codec:1.10'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.loopeer.android.thirdparty.pulltorefresh:Android-PullToRefresh:2.1.1'
+    compile ('com.github.satyan:sugar:1.4'){
+        exclude module: 'support-v4'
+    }
+}
