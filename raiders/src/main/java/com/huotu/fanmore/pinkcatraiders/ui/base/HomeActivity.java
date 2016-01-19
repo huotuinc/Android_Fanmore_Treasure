@@ -141,6 +141,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     }
 
     private void initView() {
+        initTab();
 
     }
 
