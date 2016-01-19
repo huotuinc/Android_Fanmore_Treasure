@@ -98,7 +98,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                     //定位
                     //初始化接口
                     //跳转到新特新界面
-                    ActivityUtils.getInstance().skipActivity(SplashActivity.this, GuideActivity.class);
+                    ActivityUtils.getInstance().skipActivity(SplashActivity.this, HomeActivity.class);
                 }
             }
 
