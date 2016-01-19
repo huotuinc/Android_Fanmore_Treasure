@@ -134,7 +134,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         SystemTools.loadBackground(titleLayoutL, bgDraw);
         Drawable leftDraw = resources.getDrawable(R.mipmap.title_setting_white);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
-        Drawable rightDraw = resources.getDrawable(R.mipmap.title_more_white);
+        Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
         SystemTools.loadBackground(titleRightImage, rightDraw);
         stubSearchBar.inflate();
         EditText searchL = (EditText) this.findViewById(R.id.titleSearchBar);
