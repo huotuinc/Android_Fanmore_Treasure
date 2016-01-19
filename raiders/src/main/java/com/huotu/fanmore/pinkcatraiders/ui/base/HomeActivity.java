@@ -8,14 +8,22 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
+import com.huotu.fanmore.pinkcatraiders.fragment.HomeFragment;
+import com.huotu.fanmore.pinkcatraiders.fragment.ListFragment;
+import com.huotu.fanmore.pinkcatraiders.fragment.NewestFragment;
+import com.huotu.fanmore.pinkcatraiders.fragment.ProfileFragment;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
@@ -30,7 +38,7 @@ import butterknife.ButterKnife;
 /**
  * 首页
  */
-public class HomeActivity extends BaseActivity implements Handler.Callback {
+public class HomeActivity extends BaseActivity implements Handler.Callback, View.OnClickListener {
 
     //获取资源对象
     public
@@ -72,6 +80,23 @@ public class HomeActivity extends BaseActivity implements Handler.Callback {
     RelativeLayout listL;
     @Bind(R.id.profileL)
     RelativeLayout profileL;
+    @Bind(R.id.oneBuy)
+    ImageView oneBuy;
+    @Bind(R.id.obBuyLabel)
+    TextView obBuyLabel;
+    @Bind(R.id.newest)
+    ImageView newest;
+    @Bind(R.id.newestLabel)
+    TextView newestLabel;
+    @Bind(R.id.list)
+    ImageView list;
+    @Bind(R.id.listLabel)
+    TextView listLabel;
+    @Bind(R.id.profile)
+    ImageView profile;
+    @Bind(R.id.profileLabel)
+    TextView profileLabel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +104,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback {
         this.setContentView(R.layout.ri_home);
         ButterKnife.bind(this);
         application = (BaseApplication) this.getApplication();
+        application.mFragManager = FragManager.getIns(this, R.id.fragment_container);
         resources = this.getResources();
         mHandler = new Handler ( this );
         //设置沉浸模式
@@ -87,8 +113,18 @@ public class HomeActivity extends BaseActivity implements Handler.Callback {
         am = this.getAssets();
         //初始化title面板
         initTitle();
-        //
-        initBottom();
+        if (null == savedInstanceState)
+        {
+            application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
+
+        } else
+        {
+            application.mFragManager.setPreFragType(FragManager.FragType.HOME);
+            FragManager.FragType curFragType = (FragManager.FragType) savedInstanceState
+                    .getSerializable("curFragType");
+            application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
+        }
+        initView();
     }
 
     private void initTitle()
@@ -104,15 +140,142 @@ public class HomeActivity extends BaseActivity implements Handler.Callback {
         EditText searchL = (EditText) this.findViewById(R.id.titleSearchBar);
     }
 
-    private void initBottom()
-    {
+    private void initView() {
 
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState)
+    {
+        savedInstanceState.putSerializable("curFragType",
+                application.mFragManager.getCurrentFragType());
+        // TODO Auto-generated method stub
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    private void initTab()
+    {
+        Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_press);
+        SystemTools.loadBackground(oneBuy, oneBuyDraw);
+        obBuyLabel.setTextColor(resources.getColor(R.color.title_bg));
+        //重置其他
+        Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
+        SystemTools.loadBackground(newest, newestDraw);
+        newestLabel.setTextColor(resources.getColor(R.color.text_black));
+        Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_normal);
+        SystemTools.loadBackground(list, listDraw);
+        listLabel.setTextColor(resources.getColor(R.color.text_black));
+        Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
+        SystemTools.loadBackground(profile, profileDraw);
+        profileLabel.setTextColor(resources.getColor(R.color.text_black));
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
         VolleyUtil.cancelAllRequest();
+    }
+
+    public void onTabClicked(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.onBuyL:
+            {
+                //设置选中状态
+                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_press);
+                SystemTools.loadBackground(oneBuy, oneBuyDraw);
+                obBuyLabel.setTextColor(resources.getColor(R.color.title_bg));
+                //重置其他
+                Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
+                SystemTools.loadBackground(newest, newestDraw);
+                newestLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_normal);
+                SystemTools.loadBackground(list, listDraw);
+                listLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
+                SystemTools.loadBackground(profile, profileDraw);
+                profileLabel.setTextColor(resources.getColor(R.color.text_black));
+                //切换内容
+                String tag = Contant.TAG_1;
+                //加载具体的页面
+                Message msg = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
+                mHandler.sendMessage(msg );
+            }
+            break;
+            case R.id.newestL:
+            {
+                //设置选中状态
+                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
+                SystemTools.loadBackground(oneBuy, oneBuyDraw);
+                obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
+                //重置其他
+                Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_press);
+                SystemTools.loadBackground(newest, newestDraw);
+                newestLabel.setTextColor(resources.getColor(R.color.title_bg));
+                Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_normal);
+                SystemTools.loadBackground(list, listDraw);
+                listLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
+                SystemTools.loadBackground(profile, profileDraw);
+                profileLabel.setTextColor(resources.getColor(R.color.text_black));
+                //切换内容
+                String tag = Contant.TAG_2;
+                //加载具体的页面
+                Message msg = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
+                mHandler.sendMessage(msg);
+            }
+            break;
+            case R.id.listL:
+            {
+                //设置选中状态
+                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
+                SystemTools.loadBackground(oneBuy, oneBuyDraw);
+                obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
+                //重置其他
+                Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
+                SystemTools.loadBackground(newest, newestDraw);
+                newestLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_press);
+                SystemTools.loadBackground(list, listDraw);
+                listLabel.setTextColor(resources.getColor(R.color.title_bg));
+                Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
+                SystemTools.loadBackground(profile, profileDraw);
+                profileLabel.setTextColor(resources.getColor(R.color.text_black));
+                //切换内容
+                String tag = Contant.TAG_3;
+                //加载具体的页面
+                Message msg = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
+                mHandler.sendMessage(msg);
+            }
+            break;
+            case R.id.profileL:
+            {
+                //设置选中状态
+                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
+                SystemTools.loadBackground(oneBuy, oneBuyDraw);
+                obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
+                //重置其他
+                Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
+                SystemTools.loadBackground(newest, newestDraw);
+                newestLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_normal);
+                SystemTools.loadBackground(list, listDraw);
+                listLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_press);
+                SystemTools.loadBackground(profile, profileDraw);
+                profileLabel.setTextColor(resources.getColor(R.color.title_bg));
+                //切换内容
+                String tag = Contant.TAG_4;
+                //加载具体的页面
+                Message msg = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
+                mHandler.sendMessage(msg);
+            }
+            break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -148,6 +311,35 @@ public class HomeActivity extends BaseActivity implements Handler.Callback {
 
     @Override
     public boolean handleMessage(Message msg) {
+        switch (msg.what) {
+            case Contant.SWITCH_UI:
+            {
+                String tag = msg.obj.toString ();
+                if(tag.equals(Contant.TAG_1))
+                {
+                    application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
+                }
+                else if(tag.equals(Contant.TAG_2))
+                {
+                    application.mFragManager.setCurrentFrag(FragManager.FragType.NEWEST);
+                }
+                else if(tag.equals(Contant.TAG_3))
+                {
+                    application.mFragManager.setCurrentFrag(FragManager.FragType.LIST);
+                }
+                else if(tag.equals(Contant.TAG_4))
+                {
+                    application.mFragManager.setCurrentFrag(FragManager.FragType.PROFILE);
+                }
+            }
+            break;
+            default:
+                break;
+        }
         return false;
+    }
+
+    @Override
+    public void onClick(View v) {
     }
 }

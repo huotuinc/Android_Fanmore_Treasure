@@ -11,6 +11,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
 import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
@@ -22,6 +23,7 @@ import cn.sharesdk.framework.Platform;
 public class BaseApplication extends Application {
 
     public Platform plat;
+    public FragManager mFragManager;
 
     @Override
     public void onLowMemory() {

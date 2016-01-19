@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/titleSearchBar"
     android:layout_width="fill_parent"
-    android:layout_height="30dp"
+    android:layout_height="@dimen/search_height"
     android:background="@drawable/search_bg"
     android:drawableLeft="@mipmap/search_in_result"
     android:gravity="left|center_vertical"
@@ -11,4 +11,4 @@
     android:textColorHint="@color/text_gray"
     android:paddingLeft="5dp"
     android:singleLine="true"
-    android:textSize="@dimen/text_size_16"/>
+    android:textSize="@dimen/text_size_12"/>
