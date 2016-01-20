@@ -15,14 +15,18 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.HomeViewPagerAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.TabPagerAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
+import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.widget.MarqueenTextView;
@@ -70,11 +74,14 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
     TextView jdLabel;
     @Bind(R.id.zxrsLabel)
     TextView zxrsLabel;
+    @Bind(R.id.homePullRefresh)
+    PullToRefreshScrollView homePullRefresh;
     private int currentIndex = 0;
     public TabPagerAdapter tabPagerAdapter;
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
     public WindowManager wManager;
     public Handler xHandler;
+    public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
 
     @Override
     public void onResume() {
@@ -104,6 +111,20 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
 
     private void initView()
     {
+        homePullRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
+                operateType = OperateTypeEnum.REFRESH;
+                homePullRefresh.onRefreshComplete();
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
+                operateType = OperateTypeEnum.LOADMORE;
+                homePullRefresh.onRefreshComplete();
+            }
+        });
+        homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
         initSwitchImg();
         initProduct();
     }
@@ -183,6 +204,20 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
         SystemTools.loadBackground(zxInnerL, normal);
         SystemTools.loadBackground(jdInnerL, normal);
         SystemTools.loadBackground(zxrsInnerL, press);
+    }
+
+    /**
+     * 初始化加载数据
+     */
+    protected void firstGetData(){
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (getActivity().isFinishing()) return;
+                operateType = OperateTypeEnum.REFRESH;
+                homePullRefresh.setRefreshing(true);
+            }
+        }, 1000);
     }
 
     private void initSwitchImg()

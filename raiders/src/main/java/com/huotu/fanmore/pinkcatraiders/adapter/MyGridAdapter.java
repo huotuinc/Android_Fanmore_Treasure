@@ -70,10 +70,12 @@ public class MyGridAdapter extends BaseAdapter {
             BitmapLoader.create().displayUrl(mContext, holder.productIcon, product.getProductIcon(), R.mipmap.ic_launcher);
             if(0==product.getProductTag())
             {
+                holder.productTag.setText("十元\n专区");
                 SystemTools.loadBackground(holder.productTag, resources.getDrawable(R.mipmap.area_1));
             }
             else if(1==product.getProductTag())
             {
+                holder.productTag.setText("五元\n专区");
                 SystemTools.loadBackground(holder.productTag, resources.getDrawable(R.mipmap.area_2));
             }
 
@@ -101,7 +103,7 @@ public class MyGridAdapter extends BaseAdapter {
         @Bind(R.id.productIcon)
         ImageView productIcon;
         @Bind(R.id.productTag)
-        ImageView productTag;
+        TextView productTag;
         @Bind(R.id.iconL)
         RelativeLayout iconL;
         @Bind(R.id.productDetailL)

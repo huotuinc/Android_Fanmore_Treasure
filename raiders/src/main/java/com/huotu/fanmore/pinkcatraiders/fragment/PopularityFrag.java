@@ -34,10 +34,10 @@ public class PopularityFrag extends BaseFragment {
     public BaseApplication application;
     public HomeActivity rootAty;
     public WindowManager wManager;
-    /*@Bind(R.id.popularGrid)
+    @Bind(R.id.popularGrid)
     GridView popularGrid;
     public List<ProductModel> products;
-    public MyGridAdapter adapter;*/
+    public MyGridAdapter adapter;
 
     @Override
     public void onResume() {
@@ -53,13 +53,13 @@ public class PopularityFrag extends BaseFragment {
         rootAty = (HomeActivity) getActivity();
         ButterKnife.bind(this, rootView);
         wManager = getActivity().getWindowManager();
-        //initGrid();
+        initGrid();
         return rootView;
     }
 
     private void initGrid()
     {
-        /*products = new ArrayList<ProductModel>();
+        products = new ArrayList<ProductModel>();
         ProductModel product1 = new ProductModel();
         products.add(product1);
         product1.setLotterySchedule(0.5);
@@ -72,8 +72,14 @@ public class PopularityFrag extends BaseFragment {
         product2.setProductName("Apple MacBook Air 11.6英寸笔记本电脑 银色(Core i5 处理器/4GB内存/128GB SSD闪存 MJVM2CH/A)");
         product2.setProductTag(1);
         products.add(product2);
+        ProductModel product3 = new ProductModel();
+        product3.setLotterySchedule(0.7);
+        product3.setProductIcon("http://img4.imgtn.bdimg.com/it/u=2614217841,121717063&fm=21&gp=0.jpg");
+        product3.setProductName("Apple MacBook Air 11.6英寸笔记本电脑 银色(Core i5 处理器/4GB内存/128GB SSD闪存 MJVM2CH/A)");
+        product3.setProductTag(1);
+        products.add(product3);
         adapter = new MyGridAdapter(products, getActivity());
-        popularGrid.setAdapter(adapter);*/
+        popularGrid.setAdapter(adapter);
     }
 
     @Override
