@@ -4,19 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_white">
-    <!--<GridView
-        android:id="@+id/popularGrid"
+    <com.huotu.fanmore.pinkcatraiders.widget.MyGridView
+        android:id="@+id/totalGrid"
+        android:stretchMode="columnWidth"
+        android:listSelector="@null"
+        android:scrollbars="none"
+        android:background="@color/color_white"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:numColumns="2"
-        android:stretchMode="spacingWidth"
         android:verticalSpacing="0dp"
         android:horizontalSpacing="0dp">
-
-    </GridView>-->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="总需求"
-        android:textColor="@color/text_black"/>
+    </com.huotu.fanmore.pinkcatraiders.widget.MyGridView>
 </RelativeLayout>
