@@ -288,14 +288,14 @@
                     </RelativeLayout>
                 </RelativeLayout>
             </LinearLayout>
-            <android.support.v4.view.ViewPager
-                android:id="@+id/productsViewPager"
+            <LinearLayout
+                android:id="@+id/productsL"
+                android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_below="@+id/productSwitch"
-                android:layout_gravity="center"
                 android:background="@color/color_white" >
-            </android.support.v4.view.ViewPager>
+            </LinearLayout>
             <!--产品列表-->
         </RelativeLayout>
     </com.handmark.pulltorefresh.library.PullToRefreshScrollView>

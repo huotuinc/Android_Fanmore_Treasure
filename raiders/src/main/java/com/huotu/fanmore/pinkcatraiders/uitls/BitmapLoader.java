@@ -63,8 +63,8 @@ public class BitmapLoader
         VolleyUtil.getImageLoader(context).get(logoUrl, new ImageLoader.ImageListener() {
             @Override
             public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
-                if( imageContainer!=null && imageContainer.getBitmap()!=null){
-                    imageView.setImageBitmap( imageContainer.getBitmap() );
+                if (imageContainer != null && imageContainer.getBitmap() != null) {
+                    imageView.setImageBitmap(imageContainer.getBitmap());
                 }
             }
 
@@ -73,6 +73,23 @@ public class BitmapLoader
                 imageView.setBackgroundResource(errorImg);
             }
         });
+    }
+
+    public void displayUrl(Context context, final ImageView imageView, String logoUrl, final int errorImg)
+    {
+        VolleyUtil.getImageLoader(context).get(logoUrl, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
+                if (imageContainer != null && imageContainer.getBitmap() != null) {
+                    imageView.setImageBitmap(imageContainer.getBitmap());
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                imageView.setBackgroundResource(errorImg);
+            }
+        }, 0, 0 , ImageView.ScaleType.FIT_XY);
     }
 
     /**

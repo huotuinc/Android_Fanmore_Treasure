@@ -2,11 +2,11 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
     <item>
         <shape>
-            <solid android:color="@color/deep_red" />
+            <solid android:color="@color/list_separationline_layout" />
         </shape>
     </item>
     <!-- 主体背景颜色值 -->
-    <item android:bottom="2dp">
+    <item android:top="1px" android:right="1px" android:bottom="1px">
         <shape>
             <solid android:color="@color/color_white" />
         </shape>

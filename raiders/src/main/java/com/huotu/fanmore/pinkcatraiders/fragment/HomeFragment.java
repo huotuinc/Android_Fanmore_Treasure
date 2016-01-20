@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.HomeViewPagerAdapter;
@@ -49,8 +50,8 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
     List<AdEntity> adDataList = null;
     @Bind(R.id.homeHornText)
     MarqueenTextView homeHornText;
-    @Bind(R.id.productsViewPager)
-    ViewPager productsViewPager;
+    @Bind(R.id.productsL)
+    LinearLayout productsL;
     @Bind(R.id.productSwitch)
     LinearLayout productSwitch;
     @Bind(R.id.rqInnerL)
@@ -61,10 +62,19 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
     RelativeLayout jdInnerL;
     @Bind(R.id.zxrsInnerL)
     RelativeLayout zxrsInnerL;
+    @Bind(R.id.rqLabel)
+    TextView rqLabel;
+    @Bind(R.id.zxLabel)
+    TextView zxLabel;
+    @Bind(R.id.jdLabel)
+    TextView jdLabel;
+    @Bind(R.id.zxrsLabel)
+    TextView zxrsLabel;
     private int currentIndex = 0;
     public TabPagerAdapter tabPagerAdapter;
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
     public WindowManager wManager;
+    public Handler xHandler;
 
     @Override
     public void onResume() {
@@ -84,6 +94,9 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
         application = (BaseApplication) getActivity().getApplication();
         rootAty = (HomeActivity) getActivity();
         ButterKnife.bind(this, rootView);
+        application.proFragManager = FragManager.getIns(getActivity(), R.id.productsL);
+        application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
+        xHandler = new Handler(this);
         wManager = getActivity().getWindowManager();
         initView();
         return rootView;
@@ -97,104 +110,79 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
 
     private void initProduct()
     {
-        PopularityFrag popularity = new PopularityFrag();
-        NewestProductFrag newestProduct = new NewestProductFrag();
-        ProgressFrag progress = new ProgressFrag();
-        TotalRequiredFrag totalRequired = new TotalRequiredFrag();
-
-        Bundle b = new Bundle();
-        b.putInt("index", 0);
-        popularity.setArguments(b);
-        mFragmentList.add(popularity);
-        b = new Bundle();
-        b.putInt("index", 1);
-        newestProduct.setArguments(b);
-        mFragmentList.add(newestProduct);
-        b = new Bundle();
-        b.putInt("index", 2);
-        progress.setArguments(b);
-        mFragmentList.add(progress);
-        b = new Bundle();
-        b.putInt("index", 3);
-        totalRequired.setArguments(b);
-        mFragmentList.add(totalRequired);
-        tabPagerAdapter = new TabPagerAdapter(getActivity().getSupportFragmentManager(), mFragmentList);
-        productsViewPager.setAdapter(tabPagerAdapter);
-
-        productsViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (positionOffsetPixels != 0) {
-                }
-                if (positionOffsetPixels == 0) {
-                    currentIndex = position;
-                    changeIndex(currentIndex);
-                }
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+        application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
+        Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+        Drawable press = resources.getDrawable(R.drawable.switch_press);
+        rqLabel.setTextColor(resources.getColor(R.color.deep_red));
+        zxLabel.setTextColor(resources.getColor(R.color.text_black));
+        jdLabel.setTextColor(resources.getColor(R.color.text_black));
+        zxrsLabel.setTextColor(resources.getColor(R.color.text_black));
+        SystemTools.loadBackground(rqInnerL, press);
+        SystemTools.loadBackground(zxInnerL, normal);
+        SystemTools.loadBackground(jdInnerL, normal);
+        SystemTools.loadBackground(zxrsInnerL, normal);
     }
 
     @OnClick(R.id.rqInnerL)
     void clickRql()
     {
-        productsViewPager.setCurrentItem(0);
-        changeIndex(productsViewPager.getCurrentItem());
+        application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
+        Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+        Drawable press = resources.getDrawable(R.drawable.switch_press);
+        rqLabel.setTextColor(resources.getColor(R.color.deep_red));
+        zxLabel.setTextColor(resources.getColor(R.color.text_black));
+        jdLabel.setTextColor(resources.getColor(R.color.text_black));
+        zxrsLabel.setTextColor(resources.getColor(R.color.text_black));
+        SystemTools.loadBackground(rqInnerL, press);
+        SystemTools.loadBackground(zxInnerL, normal);
+        SystemTools.loadBackground(jdInnerL, normal);
+        SystemTools.loadBackground(zxrsInnerL, normal);
+
     }
     @OnClick(R.id.zxInnerL)
     void clickZxl()
     {
-        productsViewPager.setCurrentItem(1);
-        changeIndex(productsViewPager.getCurrentItem());
+        application.proFragManager.setCurrentFrag(FragManager.FragType.NEWEST_PRODUCT);
+        Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+        Drawable press = resources.getDrawable(R.drawable.switch_press);
+        rqLabel.setTextColor(resources.getColor(R.color.text_black));
+        zxLabel.setTextColor(resources.getColor(R.color.deep_red));
+        jdLabel.setTextColor(resources.getColor(R.color.text_black));
+        zxrsLabel.setTextColor(resources.getColor(R.color.text_black));
+        SystemTools.loadBackground(rqInnerL, normal);
+        SystemTools.loadBackground(zxInnerL, press);
+        SystemTools.loadBackground(jdInnerL, normal);
+        SystemTools.loadBackground(zxrsInnerL, normal);
     }
     @OnClick(R.id.jdInnerL)
     void clickJdl()
     {
-        productsViewPager.setCurrentItem(2);
-        changeIndex(productsViewPager.getCurrentItem());
+        application.proFragManager.setCurrentFrag(FragManager.FragType.PROGRESS);
+        Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+        Drawable press = resources.getDrawable(R.drawable.switch_press);
+        rqLabel.setTextColor(resources.getColor(R.color.text_black));
+        zxLabel.setTextColor(resources.getColor(R.color.text_black));
+        jdLabel.setTextColor(resources.getColor(R.color.deep_red));
+        zxrsLabel.setTextColor(resources.getColor(R.color.text_black));
+        SystemTools.loadBackground(rqInnerL, normal);
+        SystemTools.loadBackground(zxInnerL, normal);
+        SystemTools.loadBackground(jdInnerL, press);
+        SystemTools.loadBackground(zxrsInnerL, normal);
     }
     @OnClick(R.id.zxrsInnerL)
     void clickZxrsl()
     {
-        productsViewPager.setCurrentItem(3);
-        changeIndex(productsViewPager.getCurrentItem());
-    }
-
-    private void changeIndex(int index){
+        application.proFragManager.setCurrentFrag(FragManager.FragType.TOTAL);
         Drawable normal = resources.getDrawable(R.drawable.switch_normal);
         Drawable press = resources.getDrawable(R.drawable.switch_press);
-        if(index == 0){
-            SystemTools.loadBackground(rqInnerL, press);
-            SystemTools.loadBackground(zxInnerL, normal);
-            SystemTools.loadBackground(jdInnerL, normal);
-            SystemTools.loadBackground(zxrsInnerL, normal);
-        }else if(index == 1){
-            SystemTools.loadBackground(rqInnerL, normal);
-            SystemTools.loadBackground(zxInnerL, press);
-            SystemTools.loadBackground(jdInnerL, normal);
-            SystemTools.loadBackground(zxrsInnerL, normal);
-        }
-        else if(index == 2){
-            SystemTools.loadBackground(rqInnerL, normal);
-            SystemTools.loadBackground(zxInnerL, normal);
-            SystemTools.loadBackground(jdInnerL, press);
-            SystemTools.loadBackground(zxrsInnerL, normal);
-        }
-        else if(index == 3){
-            SystemTools.loadBackground(rqInnerL, normal);
-            SystemTools.loadBackground(zxInnerL, normal);
-            SystemTools.loadBackground(jdInnerL, normal);
-            SystemTools.loadBackground(zxrsInnerL, press);
-        }
+        rqLabel.setTextColor(resources.getColor(R.color.text_black));
+        zxLabel.setTextColor(resources.getColor(R.color.text_black));
+        jdLabel.setTextColor(resources.getColor(R.color.text_black));
+        zxrsLabel.setTextColor(resources.getColor(R.color.deep_red));
+        SystemTools.loadBackground(rqInnerL, normal);
+        SystemTools.loadBackground(zxInnerL, normal);
+        SystemTools.loadBackground(jdInnerL, normal);
+        SystemTools.loadBackground(zxrsInnerL, press);
     }
 
     private void initSwitchImg()

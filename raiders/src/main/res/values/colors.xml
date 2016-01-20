@@ -13,4 +13,6 @@
     <color name="title_bg">#FFEF6314</color>
     <color name="account_bg">#FFF4F4F6</color>
     <color name="deep_red">#FFFF1A17</color>
+    <color name="progress_bg">#ffeaeaea</color>
+    <color name="progress">#ffffb256</color>
 </resources>
