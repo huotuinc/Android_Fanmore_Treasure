@@ -78,7 +78,7 @@ public class PopularityFrag extends BaseFragment {
         product3.setProductName("Apple MacBook Air 11.6英寸笔记本电脑 银色(Core i5 处理器/4GB内存/128GB SSD闪存 MJVM2CH/A)");
         product3.setProductTag(1);
         products.add(product3);
-        adapter = new MyGridAdapter(products, getActivity());
+        adapter = new MyGridAdapter(products, getActivity(), getActivity());
         popularGrid.setAdapter(adapter);
     }
 

@@ -1,8 +1,10 @@
 package com.huotu.fanmore.pinkcatraiders.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,6 +15,8 @@ import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
+import com.huotu.fanmore.pinkcatraiders.ui.product.ProductDetailActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 
@@ -28,11 +32,13 @@ public class MyGridAdapter extends BaseAdapter {
 
     private List<ProductModel> productModels;
     private Context mContext;
+    private Activity aty;
 
-    public MyGridAdapter(List<ProductModel> productModels, Context mContext)
+    public MyGridAdapter(List<ProductModel> productModels, Context mContext, Activity aty)
     {
         this.productModels = productModels;
         this.mContext = mContext;
+        this.aty = aty;
     }
 
     @Override
@@ -82,7 +88,16 @@ public class MyGridAdapter extends BaseAdapter {
             holder.productName.setText(product.getProductName());
             holder.lotterySchedule.setText("开奖进度" + (product.getLotterySchedule() > 1 ? 100 : 100 * product.getLotterySchedule()) + "%");
             holder.lotteryScheduleProgress.setMax(100);
-            holder.lotteryScheduleProgress.setProgress((int)(100*product.getLotterySchedule()));
+            holder.lotteryScheduleProgress.setProgress((int) (100 * product.getLotterySchedule()));
+
+            holder.iconL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    //跳转到商品详情界面
+                    ActivityUtils.getInstance().showActivity(aty, ProductDetailActivity.class, bundle);
+                }
+            });
         }
         else
         {

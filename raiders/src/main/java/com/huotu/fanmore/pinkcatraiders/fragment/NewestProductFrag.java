@@ -81,7 +81,7 @@ public class NewestProductFrag extends BaseFragment {
         product3.setProductName("战地吉普（AFS JEEP）2015新款冬季棉衣男 棉服男士加厚加绒加毛棉袄外套男款 1308军绿色 XL(建议体重150斤左右)");
         product3.setProductTag(1);
         products.add(product3);
-        adapter = new MyGridAdapter(products, getActivity());
+        adapter = new MyGridAdapter(products, getActivity(), getActivity());
         newestProGrid.setAdapter(adapter);
     }
 

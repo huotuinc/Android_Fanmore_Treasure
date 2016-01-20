@@ -81,7 +81,7 @@ public class TotalRequiredFrag extends BaseFragment {
         product3.setProductName("家茗茶具 整套半自动青花茶具套组 礼品包装 1-时和年丰");
         product3.setProductTag(1);
         products.add(product3);
-        adapter = new MyGridAdapter(products, getActivity());
+        adapter = new MyGridAdapter(products, getActivity(), getActivity());
         totalGrid.setAdapter(adapter);
     }
 

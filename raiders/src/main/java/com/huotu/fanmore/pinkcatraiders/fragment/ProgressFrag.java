@@ -81,7 +81,7 @@ public class ProgressFrag extends BaseFragment {
         product3.setProductName("Bandai万代 MG版1:100 高达模型 敢达益智动漫拼装模型玩具 红色异端高达162047");
         product3.setProductTag(1);
         products.add(product3);
-        adapter = new MyGridAdapter(products, getActivity());
+        adapter = new MyGridAdapter(products, getActivity(), getActivity());
         progressGrid.setAdapter(adapter);
     }
 
