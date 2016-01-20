@@ -25,4 +25,5 @@
     <dimen name="icon_size_1">35dp</dimen>
     <dimen name="icon_size_2">12dp</dimen>
     <dimen name="switch_height">35dp</dimen>
+    <dimen name="switch_inner_width">70dp</dimen>
 </resources>

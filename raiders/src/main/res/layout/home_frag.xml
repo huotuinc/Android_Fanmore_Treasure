@@ -181,10 +181,18 @@
                 android:background="@color/color_white">
                 <RelativeLayout
                     android:id="@+id/rqL"
-                    android:padding="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="5dp"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/switch_height"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1">
+                <RelativeLayout
+                    android:id="@+id/rqInnerL"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="@dimen/switch_inner_width"
+                    android:layout_height="@dimen/switch_height">
                     <TextView
                         android:id="@+id/rqLabel"
                         android:layout_width="wrap_content"
@@ -194,29 +202,47 @@
                         android:layout_marginBottom="5dp"
                         android:textColor="@color/text_black"
                         android:textSize="@dimen/text_size_14"/>
+                    </RelativeLayout>
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/zxL"
-                    android:padding="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="5dp"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/switch_height"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1">
+                <RelativeLayout
+                    android:id="@+id/zxInnerL"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="@dimen/switch_inner_width"
+                    android:layout_height="@dimen/switch_height">
                     <TextView
                         android:id="@+id/zxLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
                         android:text="最新"
+                        android:layout_centerInParent="true"
                         android:layout_marginBottom="5dp"
                         android:textColor="@color/text_black"
                         android:textSize="@dimen/text_size_14"/>
+                    </RelativeLayout>
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/jdL"
-                    android:padding="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="5dp"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/switch_height"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1">
+                <RelativeLayout
+                    android:id="@+id/jdInnerL"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="@dimen/switch_inner_width"
+                    android:layout_height="@dimen/switch_height">
                     <TextView
                         android:id="@+id/jdLabel"
                         android:layout_width="wrap_content"
@@ -226,29 +252,40 @@
                         android:layout_marginBottom="5dp"
                         android:textColor="@color/text_black"
                         android:textSize="@dimen/text_size_14"/>
+                    </RelativeLayout>
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/zxrsL"
-                    android:padding="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="5dp"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/switch_height"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1">
+                <RelativeLayout
+                    android:id="@+id/zxrsInnerL"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="@dimen/switch_inner_width"
+                    android:layout_height="@dimen/switch_height">
                     <TextView
                         android:id="@+id/zxrsLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
                         android:text="总需人数"
+                        android:layout_centerVertical="true"
                         android:layout_marginBottom="5dp"
                         android:textColor="@color/text_black"
                         android:textSize="@dimen/text_size_14"/>
                     <ImageView
                         android:id="@+id/zxrsLogo"
                         android:layout_width="@dimen/icon_size_2"
-                        android:layout_alignParentRight="true"
+                        android:layout_toRightOf="@+id/zxrsLabel"
+                        android:layout_marginLeft="2dp"
                         android:layout_height="@dimen/icon_size_2"
                         android:layout_centerVertical="true"
                         android:background="@mipmap/sort"/>
+                    </RelativeLayout>
                 </RelativeLayout>
             </LinearLayout>
             <android.support.v4.view.ViewPager

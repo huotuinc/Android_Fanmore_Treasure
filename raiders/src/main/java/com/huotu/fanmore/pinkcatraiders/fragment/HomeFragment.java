@@ -53,19 +53,18 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
     ViewPager productsViewPager;
     @Bind(R.id.productSwitch)
     LinearLayout productSwitch;
-    @Bind(R.id.rqL)
-    RelativeLayout rqL;
-    @Bind(R.id.zxL)
-    RelativeLayout zxL;
-    @Bind(R.id.jdL)
-    RelativeLayout jdL;
-    @Bind(R.id.zxrsL)
-    RelativeLayout zxrsL;
+    @Bind(R.id.rqInnerL)
+    RelativeLayout rqInnerL;
+    @Bind(R.id.zxInnerL)
+    RelativeLayout zxInnerL;
+    @Bind(R.id.jdInnerL)
+    RelativeLayout jdInnerL;
+    @Bind(R.id.zxrsInnerL)
+    RelativeLayout zxrsInnerL;
     private int currentIndex = 0;
     public TabPagerAdapter tabPagerAdapter;
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
     public WindowManager wManager;
-
 
     @Override
     public void onResume() {
@@ -145,25 +144,25 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
         });
     }
 
-    @OnClick(R.id.rqL)
+    @OnClick(R.id.rqInnerL)
     void clickRql()
     {
         productsViewPager.setCurrentItem(0);
         changeIndex(productsViewPager.getCurrentItem());
     }
-    @OnClick(R.id.zxL)
+    @OnClick(R.id.zxInnerL)
     void clickZxl()
     {
         productsViewPager.setCurrentItem(1);
         changeIndex(productsViewPager.getCurrentItem());
     }
-    @OnClick(R.id.jdL)
+    @OnClick(R.id.jdInnerL)
     void clickJdl()
     {
         productsViewPager.setCurrentItem(2);
         changeIndex(productsViewPager.getCurrentItem());
     }
-    @OnClick(R.id.zxrsL)
+    @OnClick(R.id.zxrsInnerL)
     void clickZxrsl()
     {
         productsViewPager.setCurrentItem(3);
@@ -174,27 +173,27 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
         Drawable normal = resources.getDrawable(R.drawable.switch_normal);
         Drawable press = resources.getDrawable(R.drawable.switch_press);
         if(index == 0){
-            SystemTools.loadBackground(rqL, press);
-            SystemTools.loadBackground(zxL, normal);
-            SystemTools.loadBackground(jdL, normal);
-            SystemTools.loadBackground(zxrsL, normal);
+            SystemTools.loadBackground(rqInnerL, press);
+            SystemTools.loadBackground(zxInnerL, normal);
+            SystemTools.loadBackground(jdInnerL, normal);
+            SystemTools.loadBackground(zxrsInnerL, normal);
         }else if(index == 1){
-            SystemTools.loadBackground(rqL, normal);
-            SystemTools.loadBackground(zxL, press);
-            SystemTools.loadBackground(jdL, normal);
-            SystemTools.loadBackground(zxrsL, normal);
+            SystemTools.loadBackground(rqInnerL, normal);
+            SystemTools.loadBackground(zxInnerL, press);
+            SystemTools.loadBackground(jdInnerL, normal);
+            SystemTools.loadBackground(zxrsInnerL, normal);
         }
         else if(index == 2){
-            SystemTools.loadBackground(rqL, normal);
-            SystemTools.loadBackground(zxL, normal);
-            SystemTools.loadBackground(jdL, press);
-            SystemTools.loadBackground(zxrsL, normal);
+            SystemTools.loadBackground(rqInnerL, normal);
+            SystemTools.loadBackground(zxInnerL, normal);
+            SystemTools.loadBackground(jdInnerL, press);
+            SystemTools.loadBackground(zxrsInnerL, normal);
         }
         else if(index == 3){
-            SystemTools.loadBackground(rqL, normal);
-            SystemTools.loadBackground(zxL, normal);
-            SystemTools.loadBackground(jdL, normal);
-            SystemTools.loadBackground(zxrsL, press);
+            SystemTools.loadBackground(rqInnerL, normal);
+            SystemTools.loadBackground(zxInnerL, normal);
+            SystemTools.loadBackground(jdInnerL, normal);
+            SystemTools.loadBackground(zxrsInnerL, press);
         }
     }
 
