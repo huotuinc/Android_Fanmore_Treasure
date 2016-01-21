@@ -17,7 +17,64 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/account_bg">
-
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+        xmlns:ptr= "http://schemas.android.com/apk/res-auto"
+        android:id="@+id/productDetailPullRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        ptr:ptrAnimationStyle= "flip"
+        ptr:ptrMode= "both">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <!--切换图片-->
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/home_switch_img"
+            android:id="@+id/productDetailViewPager"
+            android:background="@color/color_white">
+        </android.support.v4.view.ViewPager>
+        <LinearLayout
+            android:layout_alignBottom="@+id/productDetailViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/productDetaildot"
+                android:layout_marginTop="3dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal">
+            </LinearLayout>
+        </LinearLayout>
+        <!--切换图片-->
+    </RelativeLayout>
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+    <RelativeLayout
+        android:id="@+id/bottomL"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/bottom_height"
+        android:padding="5dp"
+        android:background="@drawable/account_bg_draw_top"
+        android:layout_alignParentBottom="true">
+        <ViewStub
+            android:id="@+id/productDetailBottomOther"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:layout="@layout/bottom_other">
+        </ViewStub>
+        <ViewStub
+            android:id="@+id/productDetailBottomAnnounced"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:layout="@layout/bottom_announced">
+        </ViewStub>
+    </RelativeLayout>
     </RelativeLayout>
 
 </LinearLayout>
