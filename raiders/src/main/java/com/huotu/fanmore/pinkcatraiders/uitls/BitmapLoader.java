@@ -8,6 +8,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.widget.CircleImageView;
 
 /**
  * 

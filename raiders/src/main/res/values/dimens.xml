@@ -34,4 +34,7 @@
     <dimen name="common_icon_size_1">30dp</dimen>
     <dimen name="level_size">20dp</dimen>
     <dimen name="text_size_8">8sp</dimen>
+    <dimen name="partner_area_height">40dp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="logo_size_60">60dp</dimen>
 </resources>

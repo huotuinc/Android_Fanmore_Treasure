@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,8 +27,10 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
 import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
+import com.huotu.fanmore.pinkcatraiders.widget.CircleImageView;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 
@@ -71,6 +74,18 @@ public class ProductDetailActivity extends BaseActivity implements Handler.Callb
     ViewStub productDetailBottomOther;
     @Bind(R.id.productDetailBottomAnnounced)
     ViewStub productDetailBottomAnnounced;
+    @Bind(R.id.productDetailNameLabel)
+    TextView productDetailNameLabel;
+    @Bind(R.id.productDetailName)
+    TextView productDetailName;
+    @Bind(R.id.loginedDetail)
+    ViewStub loginedDetail;
+    @Bind(R.id.unloginFullPrice)
+    ViewStub unloginFullPrice;
+    @Bind(R.id.unlogin)
+    ViewStub unlogin;
+    @Bind(R.id.announcedDetail)
+    ViewStub announcedDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +101,72 @@ public class ProductDetailActivity extends BaseActivity implements Handler.Callb
         initTitle();
         initBottom();
         initSwitchImg();
+        initPartnerArea();
+    }
+
+    private void initPartnerArea()
+    {
+        //登录状态
+        /*loginedDetail.inflate();
+        TextView noLabel = (TextView) this.findViewById(R.id.noLabel);
+        noLabel.setText("期号：12345");
+        ProgressBar progressBar = (ProgressBar) this.findViewById(R.id.partnerProgress);
+        progressBar.setProgress(12);
+        progressBar.setMax(50);
+        TextView totalRequiredLabel = (TextView) this.findViewById(R.id.totalRequiredLabel);
+        totalRequiredLabel.setText("总需人数：1234次");
+        TextView surplusLabel = (TextView) this.findViewById(R.id.surplusLabel);
+        surplusLabel.setText("剩余：123");
+        TextView parentCount = (TextView) this.findViewById(R.id.parentCount);
+        parentCount.setText("您参与了：1人次");
+        TextView raidersNo = (TextView) this.findViewById(R.id.raidersNo);
+        raidersNo.setText("夺宝号码：1000589");*/
+        //未登陆全价
+        /*unloginFullPrice.inflate();
+        TextView fullPriceMoney = (TextView) this.findViewById(R.id.fullPriceMoney);
+        fullPriceMoney.setText("¥2000.0");
+        TextView settlementBtn = (TextView) this.findViewById(R.id.settlementBtn);
+        TextView noLabel = (TextView) this.findViewById(R.id.noLabel);
+        noLabel.setText("期号：10018");
+        ProgressBar partnerProgress = (ProgressBar) this.findViewById(R.id.partnerProgress);
+        partnerProgress.setMax(100);
+        partnerProgress.setProgress(38);
+        TextView totalRequiredLabel = (TextView) this.findViewById(R.id.totalRequiredLabel);
+        totalRequiredLabel.setText("总需人数：100人次");
+        TextView surplusLabel = (TextView) this.findViewById(R.id.surplusLabel);
+        surplusLabel.setText("剩余：62");
+        TextView buyBtn = (TextView) this.findViewById(R.id.buyBtn);
+        TextView addCartBtn = (TextView) this.findViewById(R.id.addCartBtn);*/
+        //未登陆状态
+        /*unlogin.inflate();
+        TextView noLabel = (TextView) this.findViewById(R.id.noLabel);
+        noLabel.setText("期号：12345");
+        ProgressBar progressBar = (ProgressBar) this.findViewById(R.id.partnerProgress);
+        progressBar.setProgress(12);
+        progressBar.setMax(50);
+        TextView totalRequiredLabel = (TextView) this.findViewById(R.id.totalRequiredLabel);
+        totalRequiredLabel.setText("总需人数：1234次");
+        TextView surplusLabel = (TextView) this.findViewById(R.id.surplusLabel);
+        surplusLabel.setText("剩余：123");*/
+        //揭晓状态
+        announcedDetail.inflate();
+        CircleImageView accountLogo = (CircleImageView) this.findViewById(R.id.accountLogo);
+        BitmapLoader.create().loadRoundImage(ProductDetailActivity.this, accountLogo, "http://v1.qzone.cc/avatar/201404/10/00/12/534571832f9ea304.jpg!200x200.jpg", R.mipmap.ic_launcher);
+        TextView winnerName = (TextView) this.findViewById(R.id.winnerName);
+        winnerName.setText("中奖者：百晓生");
+        TextView winnerIp = (TextView) this.findViewById(R.id.winnerIp);
+        winnerName.setText("铁岭：10.10.123.45");
+        TextView winnerId = (TextView) this.findViewById(R.id.winnerId);
+        winnerName.setText("用户ID：23000909");
+        TextView partnerUser = (TextView) this.findViewById(R.id.partnerUser);
+        winnerName.setText("本期参与：3000次");
+        TextView partnerTime = (TextView) this.findViewById(R.id.partnerTime);
+        winnerName.setText("揭晓时间：2015-12-11 14:20:11");
+        TextView luckyNo = (TextView) this.findViewById(R.id.luckyNo);
+        winnerName.setText("幸运号：32890");
+        TextView calculationDetail = (TextView) this.findViewById(R.id.calculationDetail);
+        winnerName.setText("幸运号：32890");
+
     }
 
     private void initBottom()

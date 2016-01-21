@@ -51,6 +51,81 @@
             </LinearLayout>
         </LinearLayout>
         <!--切换图片-->
+        <!--产品名称-->
+        <RelativeLayout
+            android:id="@+id/productDetailNameLL"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_below="@+id/productDetailViewPager"
+            android:background="@color/color_white">
+            <TextView
+                android:id="@+id/productDetailNameLabel"
+                android:padding="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="进行中"
+                android:gravity="center"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/text_size_14"
+                android:background="@drawable/button_common_1"/>
+            <RelativeLayout
+                android:id="@+id/productDetailNameL"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/productDetailNameLabel"
+                android:layout_centerVertical="true"
+                android:padding="5dp"
+                android:background="@color/color_white">
+                <TextView
+                    android:id="@+id/productDetailName"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="贝恩施 儿童玩具 托马斯积木益智玩具轨道火车1688组合装"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_14"
+                    android:lines="2"/>
+            </RelativeLayout>
+        </RelativeLayout>
+        <!--产品名称-->
+        <!--登录状态-->
+        <ViewStub
+            android:id="@+id/loginedDetail"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/productDetailNameLL"
+            android:layout="@layout/login_detail">
+        </ViewStub>
+        <!--登录状态-->
+        <!--未登录全价-->
+        <ViewStub
+            android:id="@+id/unloginFullPrice"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/productDetailNameLL"
+            android:layout="@layout/unlogin_funllprice">
+        </ViewStub>
+        <!--未登录全价-->
+        <!--未登录-->
+        <ViewStub
+            android:id="@+id/unlogin"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/productDetailNameLL"
+            android:layout="@layout/unlogin">
+        </ViewStub>
+        <!--未登录-->
+        <!--揭晓详情-->
+        <ViewStub
+            android:id="@+id/announcedDetail"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/productDetailNameLL"
+            android:layout="@layout/announced_detail">
+        </ViewStub>
+        <!--揭晓详情-->
     </RelativeLayout>
     </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
     <RelativeLayout

@@ -15,4 +15,6 @@
     <color name="deep_red">#FFFF1A17</color>
     <color name="progress_bg">#ffeaeaea</color>
     <color name="progress">#ffffb256</color>
+    <color name="color_light_gray">#FFF5F5F5</color>
+    <color name="color_light_yellow">#FFFFFAEE</color>
 </resources>
