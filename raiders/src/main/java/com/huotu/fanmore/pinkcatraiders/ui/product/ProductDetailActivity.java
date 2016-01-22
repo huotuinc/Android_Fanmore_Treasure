@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -26,6 +27,7 @@ import com.huotu.fanmore.pinkcatraiders.adapter.LoadSwitchImgAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
 import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
+import com.huotu.fanmore.pinkcatraiders.model.PartnerLogModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
@@ -86,6 +88,21 @@ public class ProductDetailActivity extends BaseActivity implements Handler.Callb
     ViewStub unlogin;
     @Bind(R.id.announcedDetail)
     ViewStub announcedDetail;
+    @Bind(R.id.graphicDetails)
+    LinearLayout graphicDetails;
+    @Bind(R.id.historys)
+    LinearLayout historys;
+    @Bind(R.id.sdL)
+    LinearLayout sdL;
+    @Bind(R.id.logL)
+    LinearLayout logL;
+    @Bind(R.id.allLogL)
+    LinearLayout allLogL;
+    @Bind(R.id.allLogText)
+    TextView allLogText;
+    @Bind(R.id.partnerLogL)
+    LinearLayout partnerLogL;
+    public List<PartnerLogModel> partnerLogs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +119,59 @@ public class ProductDetailActivity extends BaseActivity implements Handler.Callb
         initBottom();
         initSwitchImg();
         initPartnerArea();
+        initLog();
+    }
+
+    private void initLog()
+    {
+        partnerLogs = new ArrayList<PartnerLogModel>();
+        PartnerLogModel partnerLog1 = new PartnerLogModel();
+        partnerLog1.setGroupTime("2016-02-11");
+        partnerLog1.setPartnerCount("参与了3人次");
+        partnerLog1.setPartnerIp("（杭州市 IP 172.0.0.1）");
+        partnerLog1.setPartnerLogo("http://v1.qzone.cc/avatar/201404/10/00/12/534571832f9ea304.jpg!200x200.jpg");
+        partnerLog1.setPartnerTime("2016-02-11 12:23:23");
+        partnerLog1.setPartnerName("小鸡鸡");
+        partnerLogs.add(partnerLog1);
+        PartnerLogModel partnerLog2 = new PartnerLogModel();
+        partnerLog2.setGroupTime("2016-02-11");
+        partnerLog2.setPartnerCount("参与了4人次");
+        partnerLog2.setPartnerIp("（铁岭市 IP 172.0.0.1）");
+        partnerLog2.setPartnerLogo("http://v1.qzone.cc/avatar/201404/10/00/12/534571832f9ea304.jpg!200x200.jpg");
+        partnerLog2.setPartnerTime("2016-02-11 09:23:23");
+        partnerLog2.setPartnerName("小丫丫");
+        partnerLogs.add(partnerLog2);
+        if(null!=partnerLogs && !partnerLogs.isEmpty())
+        {
+            int size = partnerLogs.size();
+            for(int i = 0; i < size; i++)
+            {
+                PartnerLogModel partnerLog = partnerLogs.get(i);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup
+                        .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                RelativeLayout parntersLayout = (RelativeLayout) LayoutInflater.from(ProductDetailActivity.this).inflate(R.layout.partner_log, null);
+                TextView bgLine = (TextView) parntersLayout.findViewById(R.id.bgLine);
+                bgLine.setMinimumHeight(200);
+                CircleImageView partnerLogo = (CircleImageView) parntersLayout.findViewById(R.id.partnerLogo);
+                BitmapLoader.create().loadRoundImage(ProductDetailActivity.this, partnerLogo, partnerLog.getPartnerLogo(), R.mipmap.ic_launcher);
+                TextView partnerName = (TextView) parntersLayout.findViewById(R.id.partnerName);
+                partnerName.setText(partnerLog.getPartnerName());
+                TextView partnerIp = (TextView) parntersLayout.findViewById(R.id.partnerIp);
+                partnerIp.setText(partnerLog.getPartnerIp());
+                TextView partnerCount = (TextView) parntersLayout.findViewById(R.id.partnerCount);
+                partnerCount.setText(partnerLog.getPartnerCount());
+                TextView partnerTime = (TextView) parntersLayout.findViewById(R.id.partnerTime);
+                partnerTime.setText(partnerLog.getPartnerTime());
+                lp.setMargins(0, 0, 0, 0);
+                parntersLayout.setLayoutParams(lp);
+                partnerLogL.addView(parntersLayout);
+            }
+        }
+        else
+        {
+            //显示暂无参与历史记录
+
+        }
     }
 
     private void initPartnerArea()

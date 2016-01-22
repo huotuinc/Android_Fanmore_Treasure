@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         ptr:ptrAnimationStyle= "flip"
+        android:layout_above="@+id/bottomL"
         ptr:ptrMode= "both">
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -90,42 +91,244 @@
             </RelativeLayout>
         </RelativeLayout>
         <!--产品名称-->
-        <!--登录状态-->
-        <ViewStub
-            android:id="@+id/loginedDetail"
+        <RelativeLayout
+            android:id="@+id/statusL"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/productDetailNameLL"
-            android:layout="@layout/login_detail">
-        </ViewStub>
-        <!--登录状态-->
-        <!--未登录全价-->
-        <ViewStub
-            android:id="@+id/unloginFullPrice"
+            android:background="@color/color_white">
+            <!--登录状态-->
+            <ViewStub
+                android:id="@+id/loginedDetail"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout="@layout/login_detail">
+            </ViewStub>
+            <!--登录状态-->
+            <!--未登录全价-->
+            <ViewStub
+                android:id="@+id/unloginFullPrice"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout="@layout/unlogin_funllprice">
+            </ViewStub>
+            <!--未登录全价-->
+            <!--未登录-->
+            <ViewStub
+                android:id="@+id/unlogin"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout="@layout/unlogin">
+            </ViewStub>
+            <!--未登录-->
+            <!--揭晓详情-->
+            <ViewStub
+                android:id="@+id/announcedDetail"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout="@layout/announced_detail">
+            </ViewStub>
+            <!--揭晓详情-->
+        </RelativeLayout>
+        <!--功能列表-->
+        <RelativeLayout
+            android:id="@+id/accountSettingLayout"
+            android:layout_marginTop="10dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/productDetailNameLL"
-            android:layout="@layout/unlogin_funllprice">
-        </ViewStub>
-        <!--未登录全价-->
-        <!--未登录-->
-        <ViewStub
-            android:id="@+id/unlogin"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/productDetailNameLL"
-            android:layout="@layout/unlogin">
-        </ViewStub>
-        <!--未登录-->
-        <!--揭晓详情-->
-        <ViewStub
-            android:id="@+id/announcedDetail"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/productDetailNameLL"
-            android:layout="@layout/announced_detail">
-        </ViewStub>
-        <!--揭晓详情-->
+            android:layout_below="@+id/statusL"
+            android:background="@color/account_bg">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <!--图文详情-->
+                <LinearLayout
+                    android:id="@+id/graphicDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:background="@drawable/account_bg_bottom">
+
+                    <TextView
+                        android:id="@+id/graphicDetailsLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="图文详情"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/text_black"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:maxLength="20"
+                        android:text="建议在WIFI下打开"
+                        android:textColor="@color/text_gray"
+                        android:textSize="@dimen/text_size_14" />
+                    <ImageView
+                        android:layout_width="@dimen/account_arrow_size"
+                        android:layout_height="@dimen/account_arrow_size"
+                        android:layout_marginLeft="5dp"
+                        android:background="@mipmap/account_arrow" />
+                </LinearLayout>
+                <!--图文详情-->
+                <!--往期揭晓-->
+                <LinearLayout
+                    android:id="@+id/historys"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:background="@drawable/account_bg_bottom">
+
+                    <TextView
+                        android:id="@+id/historysLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="往期揭晓"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/text_black"/>
+
+                    <TextView
+                        android:id="@+id/historysText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:maxLength="6"
+                        android:text=""
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_size_14" />
+
+                    <ImageView
+                        android:layout_width="@dimen/account_arrow_size"
+                        android:layout_height="@dimen/account_arrow_size"
+                        android:layout_marginLeft="5dp"
+                        android:background="@mipmap/account_arrow" />
+                </LinearLayout>
+                <!--往期揭晓-->
+                <!--晒单分享-->
+                <LinearLayout
+                    android:id="@+id/sdL"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:background="@drawable/account_bg_bottom">
+
+                    <TextView
+                        android:id="@+id/sdLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="晒单分享"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/text_black"/>
+
+                    <TextView
+                        android:id="@+id/sdText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:maxLength="20"
+                        android:text=""
+                        android:textSize="@dimen/text_size_14"
+                        android:textColor="@color/text_gray"/>
+                    <ImageView
+                        android:layout_width="@dimen/account_arrow_size"
+                        android:layout_height="@dimen/account_arrow_size"
+                        android:layout_marginLeft="5dp"
+                        android:background="@mipmap/account_arrow" />
+                </LinearLayout>
+                <!--晒单分享-->
+                <!--参与记录-->
+                <LinearLayout
+                    android:id="@+id/logL"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:background="@color/color_white">
+
+                    <TextView
+                        android:id="@+id/logLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="参与记录"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/text_black"/>
+
+                    <TextView
+                        android:id="@+id/logText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:maxLength="20"
+                        android:text=""
+                        android:textSize="@dimen/text_size_14"
+                        android:textColor="@color/text_gray"/>
+                </LinearLayout>
+                <!--参与记录-->
+                <!--所有参与记录-->
+                <LinearLayout
+                    android:id="@+id/allLogL"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:padding="10dp"
+                    android:background="@drawable/account_bg_bottom">
+
+                    <TextView
+                        android:id="@+id/allLogLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="所有参与记录"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="@dimen/text_size_16"
+                        android:textColor="@color/text_black"/>
+
+                    <TextView
+                        android:id="@+id/allLogText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:maxLength="30"
+                        android:text="（2016-1-21 10:07:12开始）"
+                        android:textSize="@dimen/text_size_14"
+                        android:textColor="@color/text_gray"/>
+                </LinearLayout>
+                <!--所有参与记录-->
+            <LinearLayout
+                android:id="@+id/partnerLogL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/account_bg">
+
+            </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+        <!--功能列表-->
+
     </RelativeLayout>
     </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
     <RelativeLayout

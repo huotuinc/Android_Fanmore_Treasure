@@ -17,4 +17,5 @@
     <color name="progress">#ffffb256</color>
     <color name="color_light_gray">#FFF5F5F5</color>
     <color name="color_light_yellow">#FFFFFAEE</color>
+    <color name="color_blue">#FF509BFF</color>
 </resources>
