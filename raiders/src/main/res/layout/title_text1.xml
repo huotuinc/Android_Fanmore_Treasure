@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+    <TextView
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/titleText"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/text_size_16"
+        android:maxEms="12"
+        android:text="sassa"
+        android:singleLine="true"
+        android:ellipsize="end"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/titleCount"
+        android:layout_centerVertical="true"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/text_size_16"
+        android:layout_toRightOf="@+id/titleText"
+        android:layout_marginLeft="3dp"
+        android:text="（10）"/>
+</RelativeLayout>

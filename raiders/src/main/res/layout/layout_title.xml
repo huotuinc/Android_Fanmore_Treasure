@@ -28,6 +28,13 @@
             android:layout_centerInParent="true"
             android:layout="@layout/title_search">
         </ViewStub>
+        <ViewStub
+            android:id="@+id/stubTitleText1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout="@layout/title_text1">
+        </ViewStub>
         <ImageView
             android:id="@+id/titleRightImage"
             android:layout_width="@dimen/common_icon_size"

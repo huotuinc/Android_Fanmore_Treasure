@@ -18,4 +18,5 @@
     <color name="color_light_gray">#FFF5F5F5</color>
     <color name="color_light_yellow">#FFFFFAEE</color>
     <color name="color_blue">#FF509BFF</color>
+    <color name="driver_color">#FFF2F2F2</color>
 </resources>
