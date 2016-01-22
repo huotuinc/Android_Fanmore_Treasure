@@ -29,6 +29,7 @@ import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.product.AreaActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
@@ -135,7 +136,8 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
     @OnClick(R.id.lbL)
     void showCatagoryUi()
     {
-        ToastUtils.showLongToast(getActivity(), "弹出分类界面");
+        //ToastUtils.showLongToast(getActivity(), "弹出分类界面");
+        ActivityUtils.getInstance().showActivity(getActivity(), RaidesLogActivity.class);
     }
 
     @OnClick(R.id.zqL)
