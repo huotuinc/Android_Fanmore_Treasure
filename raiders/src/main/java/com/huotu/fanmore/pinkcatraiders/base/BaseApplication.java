@@ -16,6 +16,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
 import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
 
 /**
  * 粉猫夺宝application
@@ -38,6 +39,7 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        ShareSDK.initSDK(getApplicationContext());
         VolleyUtil.init(getApplicationContext());
         //加载异常处理模块
         CrashHandler crashHandler = CrashHandler.getInstance ();

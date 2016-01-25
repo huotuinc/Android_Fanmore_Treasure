@@ -26,6 +26,7 @@ public class Contant {
     public static final String WXPAY_ID ="";
     //微信登录:用户存在
     public static final int MSG_USERID_FOUND    = 0x00000001;
+
     //微信登录：用户不存在
     public static final int MSG_USERID_NO_FOUND = 0x00000002;
     public static final int MSG_LOGIN           = 0x00000003;
@@ -34,6 +35,7 @@ public class Contant {
     public static final int MSG_AUTH_COMPLETE   = 0x00000006;
     //鉴权失效
     public static final int LOGIN_AUTH_ERROR = 0x00000007;
+    public static final int INIT_MENU_ERROR = 0x00000008;
     //切换内容页
     public static final int SWITCH_UI = 0x00000010;
     /**

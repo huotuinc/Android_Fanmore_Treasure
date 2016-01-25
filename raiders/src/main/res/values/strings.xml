@@ -4,6 +4,8 @@
     <!--微信支付-->
     <string name="app_tip">支付提示</string>
     <string name="pay_result_callback_msg" formatted="false">微信支付结果：%s</string>
+    <string name="hint_username2">用户名/手机号</string>
+    <string name="hint_pwd2">密码</string>
     <!--引导界面图片-->
     <string-array name="guide_icon">
         <item>newfeature_0</item>
