@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottomPeriodsLabel"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/text_size_16"
+        android:text="新一期正在火热进行中..."/>
+    <TextView
+        android:id="@+id/bottomPeriodsBtn"
+        android:layout_width="@dimen/common_btn_width_1"
+        android:layout_height="@dimen/common_btn_height_1"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="立即前往"
+        android:gravity="center"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/text_size_16"
+        android:background="@drawable/button_common_1"/>
+</RelativeLayout>

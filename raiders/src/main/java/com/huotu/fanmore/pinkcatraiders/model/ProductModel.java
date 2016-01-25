@@ -9,6 +9,25 @@ public class ProductModel extends BaseModel {
     private String productIcon;
     private String productName;
     private double lotterySchedule;
+    private long total;
+    private long surplus;
+
+    public long getSurplus() {
+        return surplus;
+    }
+
+    public void setSurplus(long surplus) {
+        this.surplus = surplus;
+    }
+
+    public long getTotal() {
+        return total;
+
+    }
+
+    public void setTotal(long total) {
+        this.total = total;
+    }
 
     public int getProductTag() {
         return productTag;

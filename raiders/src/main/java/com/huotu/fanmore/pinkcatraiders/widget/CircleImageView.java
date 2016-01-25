@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.huotu.fanmore.pinkcatraiders.uitls;
+package com.huotu.fanmore.pinkcatraiders.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -156,7 +156,6 @@ public class CircleImageView extends ImageView {
         if (borderColor == mBorderColor) {
             return;
         }
-
         mBorderColor = borderColor;
         mBorderPaint.setColor(mBorderColor);
         invalidate();

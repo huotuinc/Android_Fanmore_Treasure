@@ -28,7 +28,12 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.product.AreaActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.BuyLogActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.widget.MarqueenTextView;
 
 import java.util.ArrayList;
@@ -127,6 +132,35 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
         homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
         initSwitchImg();
         initProduct();
+    }
+
+    @OnClick(R.id.lbL)
+    void showCatagoryUi()
+    {
+        //ToastUtils.showLongToast(getActivity(), "弹出分类界面");
+        ActivityUtils.getInstance().showActivity(getActivity(), RaidesLogActivity.class);
+    }
+
+    @OnClick(R.id.zqL)
+    void showZqUi()
+    {
+        Bundle bundle = new Bundle();
+        bundle.putString("type", "十元专区");
+        ActivityUtils.getInstance().showActivity(getActivity(), AreaActivity.class, bundle);
+    }
+
+    @OnClick(R.id.sdL)
+    void showSdUi()
+    {
+        //ToastUtils.showLongToast(getActivity(), "弹出晒单界面");
+        //购买记录
+        ActivityUtils.getInstance().showActivity(getActivity(), BuyLogActivity.class);
+    }
+
+    @OnClick(R.id.wtL)
+    void showWtUi()
+    {
+        ToastUtils.showLongToast(getActivity(), "弹出问题界面");
     }
 
     private void initProduct()

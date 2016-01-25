@@ -6,20 +6,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
+import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 
 import java.util.List;
 
 /**
- * 首页无线滚动切换图片适配器
+ * Created by Administrator on 2016/1/21.
  */
-public class HomeViewPagerAdapter extends PagerAdapter {
+public class LoadSwitchImgAdapter extends PagerAdapter {
 
-    private List<AdEntity> datas;
+    private List<String> datas;
     private Context mContext;
-    public HomeViewPagerAdapter(List<AdEntity> datas, Context mContext)
+    public LoadSwitchImgAdapter(List<String> datas, Context mContext)
     {
         this.datas = datas;
         this.mContext = mContext;
@@ -41,10 +41,10 @@ public class HomeViewPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        AdEntity adImage = datas.get(position%datas.size());
+        String String = datas.get(position%datas.size());
         View view=View.inflate(mContext, R.layout.fillview,null);
         ImageView image=(ImageView) view.findViewById(R.id.image);
-        image.setImageResource(adImage.getImage());
+        BitmapLoader.create().displayUrl(mContext, image, String, R.mipmap.ic_launcher);
         container.addView(view);
         return view;
     }
