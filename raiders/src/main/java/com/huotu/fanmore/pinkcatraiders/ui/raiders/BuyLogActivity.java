@@ -24,6 +24,7 @@ import com.huotu.fanmore.pinkcatraiders.fragment.BuyWaitPayFrag;
 import com.huotu.fanmore.pinkcatraiders.fragment.BuyWaitReceiptFrag;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -271,10 +272,18 @@ public class BuyLogActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        VolleyUtil.cancelAllRequest();
+        ButterKnife.unbind(this);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN)
+        {
+            //关闭
+            this.closeSelf(BuyLogActivity.this);
+        }
         return super.onKeyDown(keyCode, event);
     }
 
