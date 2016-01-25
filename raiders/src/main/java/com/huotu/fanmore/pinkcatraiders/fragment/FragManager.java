@@ -14,7 +14,7 @@ public class FragManager {
 
 
     public enum FragType{
-        HOME, NEWEST, LIST, PROFILE;
+        HOME, NEWEST, LIST, PROFILE, POPULAR, NEWEST_PRODUCT, PROGRESS, TOTAL;
     }
     private int viewId;
     private FragmentManager fragManager;
@@ -59,6 +59,18 @@ public class FragManager {
                     break;
                 case PROFILE:
                     frag = new ProfileFragment();
+                    break;
+                case POPULAR:
+                    frag = new PopularityFrag();
+                    break;
+                case NEWEST_PRODUCT:
+                    frag = new NewestProductFrag();
+                    break;
+                case PROGRESS:
+                    frag = new ProgressFrag();
+                    break;
+                case TOTAL:
+                    frag = new TotalRequiredFrag();
                     break;
                 default:
                     frag = new HomeFragment();

@@ -1,6 +1,7 @@
 package com.huotu.fanmore.pinkcatraiders.base;
 
 import android.app.Application;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -25,6 +26,7 @@ public class BaseApplication extends Application {
 
     public Platform plat;
     public FragManager mFragManager;
+    public FragManager proFragManager;
 
     @Override
     public void onLowMemory() {
