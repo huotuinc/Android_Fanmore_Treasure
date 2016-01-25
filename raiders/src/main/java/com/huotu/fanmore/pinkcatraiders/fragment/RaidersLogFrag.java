@@ -15,11 +15,13 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.AreaProductAdapter;
+import com.huotu.fanmore.pinkcatraiders.adapter.RaidersAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
+import com.huotu.fanmore.pinkcatraiders.model.WinnerModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 
@@ -81,10 +83,41 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
 
             }
         });
-        products = new ArrayList<ProductModel>();
-        adapter = new AreaProductAdapter(products, getActivity());
+        raiders = new ArrayList<RaidersModel>();
+        adapter = new RaidersAdapter(raiders, getActivity());
         raidersLogList.setAdapter(adapter);
         firstGetData();
+    }
+
+    private void loadData()
+    {
+        RaidersModel raiders1 = new RaidersModel();
+        raiders1.setProductIcon("http://img4.imgtn.bdimg.com/it/u=4269198236,3866462712&fm=206&gp=0.jpg");
+        raiders1.setProductName("飞科剃须刀");
+        raiders1.setPartnerNo("100189");
+        raiders1.setTotal(120);
+        raiders1.setLotterySchedule(35);
+        raiders1.setSurplus(85);
+        raiders1.setPartnerCount("12");
+        raiders1.setRaidersType(0);
+        raiders.add(raiders1);
+        RaidersModel raiders2 = new RaidersModel();
+        raiders2.setProductIcon("http://img1.imgtn.bdimg.com/it/u=1175270452,550953813&fm=11&gp=0.jpg");
+        raiders2.setProductName("飞科剃须刀");
+        raiders2.setPartnerNo("100190");
+        raiders2.setTotal(120);
+        raiders2.setLotterySchedule(35);
+        raiders2.setSurplus(85);
+        raiders2.setPartnerCount("12");
+        raiders2.setRaidersType(1);
+        WinnerModel winner = new WinnerModel();
+        winner.setWinnerName("徐河口");
+        winner.setAnnouncedTime("2016-1-25 18:12:11");
+        winner.setLuckyNo("100012");
+        winner.setPeriod(24);
+        raiders2.setWinner(winner);
+        raiders.add(raiders2);
+        raidersLogList.onRefreshComplete();
     }
 
     protected void firstGetData(){

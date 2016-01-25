@@ -71,13 +71,14 @@
             <TextView
                 android:id="@+id/addBtn"
                 android:layout_centerInParent="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/common_btn_width_2"
+                android:layout_height="@dimen/common_btn_height_1"
                 android:text="追加"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
+                android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:textColor="@color/deep_red"
+                android:textColor="@color/color_white"
                 android:background="@drawable/button_common_1"/>
         </RelativeLayout>
     </RelativeLayout>

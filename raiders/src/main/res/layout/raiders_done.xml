@@ -63,6 +63,7 @@
         android:id="@+id/winnerL"
         android:layout_below="@+id/partnerCount"
         android:layout_marginTop="10dp"
+        android:padding="10dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/progress_bg">
@@ -70,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/winnerName"
-            android:textColor="@color/text_black"
+            android:textColor="@color/text_gray"
             android:textSize="@dimen/text_size_16"
             android:text="sdsda"/>
         <TextView
@@ -79,7 +80,7 @@
             android:id="@+id/winnerNo"
             android:layout_below="@+id/winnerName"
             android:layout_marginTop="5dp"
-            android:textColor="@color/text_black"
+            android:textColor="@color/text_gray"
             android:textSize="@dimen/text_size_16"
             android:text="sdsda"/>
         <TextView
@@ -88,7 +89,7 @@
             android:id="@+id/luckyNo"
             android:layout_below="@+id/winnerNo"
             android:layout_marginTop="5dp"
-            android:textColor="@color/text_black"
+            android:textColor="@color/text_gray"
             android:textSize="@dimen/text_size_16"
             android:text="sdsda"/>
         <TextView
@@ -97,7 +98,7 @@
             android:id="@+id/announcedTime"
             android:layout_below="@+id/luckyNo"
             android:layout_marginTop="5dp"
-            android:textColor="@color/text_black"
+            android:textColor="@color/text_gray"
             android:textSize="@dimen/text_size_16"
             android:text="sdsda"/>
     </RelativeLayout>

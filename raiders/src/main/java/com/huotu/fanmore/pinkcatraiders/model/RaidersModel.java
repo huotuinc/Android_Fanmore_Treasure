@@ -11,6 +11,15 @@ public class RaidersModel extends ProductModel {
     private String partnerCount;
     //中奖人
     private WinnerModel winner;
+    private long raidersType;
+
+    public long getRaidersType() {
+        return raidersType;
+    }
+
+    public void setRaidersType(long raidersType) {
+        this.raidersType = raidersType;
+    }
 
     public String getPartnerNo() {
         return partnerNo;
