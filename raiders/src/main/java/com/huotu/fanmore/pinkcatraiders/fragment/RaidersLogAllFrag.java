@@ -14,15 +14,12 @@ import android.widget.ListView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
-import com.huotu.fanmore.pinkcatraiders.adapter.AreaProductAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.RaidersAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
-import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.WinnerModel;
-import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 
 import java.util.ArrayList;
@@ -32,9 +29,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * 夺宝记录
+ * 全部夺宝记录
  */
-public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
+public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback {
 
     View rootView;
     public Resources resources;
@@ -101,7 +98,7 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
         raiders1.setPartnerCount("12");
         raiders1.setRaidersType(0);
         raiders.add(raiders1);
-        /*RaidersModel raiders2 = new RaidersModel();
+        RaidersModel raiders2 = new RaidersModel();
         raiders2.setProductIcon("http://img1.imgtn.bdimg.com/it/u=1175270452,550953813&fm=11&gp=0.jpg");
         raiders2.setProductName("飞科剃须刀");
         raiders2.setPartnerNo("100190");
@@ -116,7 +113,7 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
         winner.setLuckyNo("100012");
         winner.setPeriod(24);
         raiders2.setWinner(winner);
-        raiders.add(raiders2);*/
+        raiders.add(raiders2);
         raidersLogList.onRefreshComplete();
     }
 

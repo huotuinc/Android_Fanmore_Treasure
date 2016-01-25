@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.TabPagerAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogAllFrag;
+import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogDoneFrag;
 import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogFrag;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
@@ -86,9 +88,9 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
 
     private void initSwitch()
     {
-        RaidersLogFrag raidersLogFragAll = new RaidersLogFrag();
+        RaidersLogAllFrag raidersLogFragAll = new RaidersLogAllFrag();
         RaidersLogFrag raidersLogFragDoing = new RaidersLogFrag();
-        RaidersLogFrag raidersLogFragDone = new RaidersLogFrag();
+        RaidersLogDoneFrag raidersLogFragDone = new RaidersLogDoneFrag();
         Bundle b = new Bundle();
         b.putInt("index", 0);
         raidersLogFragAll.setArguments(b);
