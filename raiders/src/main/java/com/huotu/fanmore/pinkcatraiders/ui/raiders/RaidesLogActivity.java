@@ -126,6 +126,12 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
         });
     }
 
+    @OnClick(R.id.titleLeftImage)
+    void doBack()
+    {
+        closeSelf(RaidesLogActivity.this);
+    }
+
     private void changeIndex(int index){
         if(index == 0){
             Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);

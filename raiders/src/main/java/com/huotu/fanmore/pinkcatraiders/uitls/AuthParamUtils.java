@@ -101,6 +101,18 @@ public class AuthParamUtils {
     private Map<String, Object> appendParams(Map<String, Object> params)
     {
         //加入公共参数
+        //appKey
+        params.put("appKey", Contant.APPKEY);
+        //lat
+        params.put("lat", "");
+        //lng
+        params.put("lng", "");
+        //cityCode
+        params.put("cityCode", "");
+        //cityCode
+        params.put("cityCode", "");
+        //cpaCode
+        params.put("cpaCode", "");
         //时间
         params.put("timestamp", String.valueOf(timestamp));
         //版本号

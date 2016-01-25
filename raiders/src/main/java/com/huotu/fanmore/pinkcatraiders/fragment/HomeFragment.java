@@ -34,6 +34,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.MarqueenTextView;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ import butterknife.OnClick;
 /**
  * 首页UI
  */
-public class HomeFragment extends BaseFragment implements Handler.Callback, View.OnClickListener {
+public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     View rootView;
     public Resources resources;
@@ -85,7 +86,6 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
     public TabPagerAdapter tabPagerAdapter;
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
     public WindowManager wManager;
-    public Handler xHandler;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
 
     @Override
@@ -108,7 +108,6 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
         ButterKnife.bind(this, rootView);
         application.proFragManager = FragManager.getIns(getActivity(), R.id.productsL);
         application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
-        xHandler = new Handler(this);
         wManager = getActivity().getWindowManager();
         initView();
         return rootView;
@@ -308,7 +307,7 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
 
         //改变dot
         for (int i = 0; i < dot.getChildCount(); i++) {
-            dot.getChildAt(i).setEnabled(i==currentPage);
+            dot.getChildAt(i).setEnabled(i == currentPage);
         }
 
     }
@@ -332,6 +331,7 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
     public void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(getActivity());
+        VolleyUtil.cancelAllRequest();
     }
 
     @Override
@@ -354,18 +354,24 @@ public class HomeFragment extends BaseFragment implements Handler.Callback, View
 
     }
 
-    @Override
-    public boolean handleMessage(Message msg) {
-        return false;
-    }
-
     public Handler mHandler = new Handler()
     {
         @Override
         public void handleMessage(Message msg) {
-            homeViewPager.setCurrentItem(homeViewPager.getCurrentItem()+1);
-            mHandler.sendEmptyMessageDelayed(0, 3000);
+            switch (msg.what)
+            {
+                case 0:
+                {
+                    homeViewPager.setCurrentItem(homeViewPager.getCurrentItem()+1);
+                    mHandler.sendEmptyMessageDelayed(0, 3000);
+                }
+                break;
+                default:
+                    break;
+            }
         }
+
+
     };
 
 }

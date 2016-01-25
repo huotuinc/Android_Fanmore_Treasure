@@ -33,8 +33,11 @@
     <dimen name="text_size_10">10sp</dimen>
     <dimen name="common_btn_width_1">80dp</dimen>
     <dimen name="common_btn_width_2">50dp</dimen>
+    <dimen name="common_btn_height_2">40dp</dimen>
+    <dimen name="common_btn_width_3">100dp</dimen>
     <dimen name="common_btn_height_1">30dp</dimen>
     <dimen name="common_icon_size_1">30dp</dimen>
+    <dimen name="common_icon_size_2">100dp</dimen>
     <dimen name="level_size">20dp</dimen>
     <dimen name="text_size_8">8sp</dimen>
     <dimen name="partner_area_height">40dp</dimen>

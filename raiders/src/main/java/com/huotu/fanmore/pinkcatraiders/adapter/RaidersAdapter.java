@@ -15,6 +15,7 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
+import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 
 import org.w3c.dom.Text;
@@ -76,28 +77,30 @@ public class RaidersAdapter extends BaseAdapter {
             {
                 //进行中
                 holder.lotteryScheduleProgress.setVisibility(View.VISIBLE);
-                holder.raidersName.setText(raider.getProductName());
-                holder.partnerNo.setText("参与期号：" + raider.getPartnerNo());
-                holder.lotteryScheduleProgress.setMax((int) raider.getTotal());
-                holder.lotteryScheduleProgress.setProgress((int) raider.getLotterySchedule());
-                holder.totalRequired.setText("总需" + raider.getTotal());
-                holder.surplus.setText("剩余："+raider.getSurplus());
-                holder.partnerCount.setText("本期参与："+raider.getPartnerCount() + "人次");
                 holder.winnerL.setVisibility(View.GONE);
+                holder.addBtn.setVisibility(View.VISIBLE);
+                holder.raidersName.setText(raider.getTitle());
+                holder.partnerNo.setText("参与期号：" + raider.getIssueId());
+                holder.lotteryScheduleProgress.setMax((int) raider.getToAmount());
+                holder.lotteryScheduleProgress.setProgress((int) (raider.getToAmount()-raider.getRemainAmount()));
+                holder.totalRequired.setText("总需" + raider.getToAmount());
+                holder.surplus.setText("剩余："+raider.getRemainAmount());
+                holder.partnerCount.setText("本期参与：" + raider.getAttendAmount() + "人次");
             }
             else if(1==raider.getRaidersType())
             {
                 holder.winnerL.setVisibility(View.VISIBLE);
                 holder.lotteryScheduleProgress.setVisibility(View.GONE);
+                holder.addBtn.setVisibility(View.GONE);
                 //已完成
-                holder.raidersName.setText(raider.getProductName());
-                holder.partnerNo.setText("参与期号：" + raider.getPartnerNo());
-                holder.totalRequired.setText("总需"+raider.getTotal());
-                holder.partnerCount.setText("本期参与："+raider.getPartnerCount() + "人次");
-                holder.winnerName.setText(raider.getWinner().getWinnerName());
-                holder.winnerNo.setText("本期参与："+raider.getWinner().getPeriod()+"人次");
-                holder.luckyNo.setText("幸运号："+raider.getWinner().getLuckyNo());
-                holder.announcedTime.setText("揭晓时间："+raider.getWinner().getAnnouncedTime());
+                holder.raidersName.setText(raider.getTitle());
+                holder.partnerNo.setText("参与期号：" + raider.getIssueId());
+                holder.totalRequired.setText("总需"+raider.getToAmount());
+                holder.partnerCount.setText("本期参与："+raider.getAttendAmount() + "人次");
+                holder.winnerName.setText(raider.getWinner());
+                holder.winnerNo.setText("本期参与："+raider.getWinnerAttendAmount()+"人次");
+                holder.luckyNo.setText("幸运号："+raider.getLunkyNumber());
+                holder.announcedTime.setText("揭晓时间："+ DateUtils.transformDataformat1(raider.getAwardingDate()));
             }
         }
         else

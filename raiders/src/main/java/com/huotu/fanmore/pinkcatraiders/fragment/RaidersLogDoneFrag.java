@@ -98,7 +98,7 @@ public class RaidersLogDoneFrag extends BaseFragment implements Handler.Callback
          raiders1.setPartnerCount("12");
          raiders1.setRaidersType(0);
          raiders.add(raiders1);*/
-        RaidersModel raiders2 = new RaidersModel();
+        /*RaidersModel raiders2 = new RaidersModel();
         raiders2.setProductIcon("http://img1.imgtn.bdimg.com/it/u=1175270452,550953813&fm=11&gp=0.jpg");
         raiders2.setProductName("飞科剃须刀");
         raiders2.setPartnerNo("100190");
@@ -113,7 +113,7 @@ public class RaidersLogDoneFrag extends BaseFragment implements Handler.Callback
         winner.setLuckyNo("100012");
         winner.setPeriod(24);
         raiders2.setWinner(winner);
-        raiders.add(raiders2);
+        raiders.add(raiders2);*/
         raidersLogList.onRefreshComplete();
     }
 

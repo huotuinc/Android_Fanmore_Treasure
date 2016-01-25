@@ -99,6 +99,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.ri_home);

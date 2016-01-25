@@ -12,16 +12,17 @@ public class Contant {
     /**
      * appsecret
      */
-    public static final String APP_SECRET = "1165a8d240b29af3f418b8d10599d0da";
+    public static final String APP_SECRET = "4165a8d240b29af3f41818d10599d0d1";
     /**
      * operation
      */
-    public static final String OPERATION = "ymr2015huotu";
+    public static final String OPERATION = "fenmore2016";
     public static final String SYS_INFO    = "sysInfo";
     public static final String SYS_PACKAGE = "cy.com.morefan";
     public static final String FIRST_OPEN  = "firstOpen";
     public static final String MEMBER_INFO = "member_info";
     public static final String MEMBER_TOKEN = "member_token";
+    public static final String APPKEY = "123456";
     //微信支付ID
     public static final String WXPAY_ID ="";
     //微信登录:用户存在
@@ -52,4 +53,8 @@ public class Contant {
      * 菜单标记4
      */
     public final static String TAG_4 = "profile";
+    //接口请求地址
+    public static final String REQUEST_URL = "http://192.168.3.20:8080/duobao/app/";
+    //获取夺宝记录
+    public static final String GET_MY_RAIDER_LIST = "getMyRaiderList";
 }

@@ -91,7 +91,7 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
 
     private void loadData()
     {
-        RaidersModel raiders1 = new RaidersModel();
+        /*RaidersModel raiders1 = new RaidersModel();
         raiders1.setProductIcon("http://img4.imgtn.bdimg.com/it/u=4269198236,3866462712&fm=206&gp=0.jpg");
         raiders1.setProductName("飞科剃须刀");
         raiders1.setPartnerNo("100189");
@@ -100,7 +100,7 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
         raiders1.setSurplus(85);
         raiders1.setPartnerCount("12");
         raiders1.setRaidersType(0);
-        raiders.add(raiders1);
+        raiders.add(raiders1);*/
         /*RaidersModel raiders2 = new RaidersModel();
         raiders2.setProductIcon("http://img1.imgtn.bdimg.com/it/u=1175270452,550953813&fm=11&gp=0.jpg");
         raiders2.setProductName("飞科剃须刀");
