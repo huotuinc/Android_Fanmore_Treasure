@@ -8,6 +8,7 @@ import android.view.ViewStub;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
@@ -15,6 +16,8 @@ import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -72,41 +75,29 @@ public class RaidersAdapter extends BaseAdapter {
             if(0==raider.getRaidersType())
             {
                 //进行中
-                holder.doingL.inflate();
-                TextView raidersName = (TextView) convertView.findViewById(R.id.raidersName);
-                raidersName.setText(raider.getProductName());
-                TextView partnerNo = (TextView) convertView.findViewById(R.id.partnerNo);
-                partnerNo.setText("参与期号：" + raider.getPartnerNo());
-                ProgressBar lotteryScheduleProgress = (ProgressBar) convertView.findViewById(R.id.lotteryScheduleProgress);
-                lotteryScheduleProgress.setMax((int)raider.getTotal());
-                lotteryScheduleProgress.setProgress((int) raider.getLotterySchedule());
-                TextView totalRequired = (TextView) convertView.findViewById(R.id.totalRequired);
-                totalRequired.setText("总需"+raider.getTotal());
-                TextView surplus = (TextView) convertView.findViewById(R.id.surplus);
-                surplus.setText("剩余："+raider.getSurplus());
-                TextView partnerCount = (TextView) convertView.findViewById(R.id.partnerCount);
-                partnerCount.setText("本期参与："+raider.getPartnerCount() + "人次");
+                holder.lotteryScheduleProgress.setVisibility(View.VISIBLE);
+                holder.raidersName.setText(raider.getProductName());
+                holder.partnerNo.setText("参与期号：" + raider.getPartnerNo());
+                holder.lotteryScheduleProgress.setMax((int) raider.getTotal());
+                holder.lotteryScheduleProgress.setProgress((int) raider.getLotterySchedule());
+                holder.totalRequired.setText("总需" + raider.getTotal());
+                holder.surplus.setText("剩余："+raider.getSurplus());
+                holder.partnerCount.setText("本期参与："+raider.getPartnerCount() + "人次");
+                holder.winnerL.setVisibility(View.GONE);
             }
             else if(1==raider.getRaidersType())
             {
+                holder.winnerL.setVisibility(View.VISIBLE);
+                holder.lotteryScheduleProgress.setVisibility(View.GONE);
                 //已完成
-                holder.doneL.inflate();
-                TextView raidersName = (TextView) convertView.findViewById(R.id.raidersName);
-                raidersName.setText(raider.getProductName());
-                TextView partnerNo = (TextView) convertView.findViewById(R.id.partnerNo);
-                partnerNo.setText("参与期号：" + raider.getPartnerNo());
-                TextView totalRequired = (TextView) convertView.findViewById(R.id.totalRequired);
-                totalRequired.setText("总需"+raider.getTotal());
-                TextView partnerCount = (TextView) convertView.findViewById(R.id.partnerCount);
-                partnerCount.setText("本期参与："+raider.getPartnerCount() + "人次");
-                TextView winnerName = (TextView) convertView.findViewById(R.id.winnerName);
-                winnerName.setText(raider.getWinner().getWinnerName());
-                TextView winnerNo = (TextView) convertView.findViewById(R.id.winnerNo);
-                winnerNo.setText("本期参与："+raider.getWinner().getPeriod()+"人次");
-                TextView luckyNo = (TextView) convertView.findViewById(R.id.luckyNo);
-                luckyNo.setText("幸运号："+raider.getWinner().getLuckyNo());
-                TextView announcedTime = (TextView) convertView.findViewById(R.id.announcedTime);
-                announcedTime.setText("揭晓时间："+raider.getWinner().getAnnouncedTime());
+                holder.raidersName.setText(raider.getProductName());
+                holder.partnerNo.setText("参与期号：" + raider.getPartnerNo());
+                holder.totalRequired.setText("总需"+raider.getTotal());
+                holder.partnerCount.setText("本期参与："+raider.getPartnerCount() + "人次");
+                holder.winnerName.setText(raider.getWinner().getWinnerName());
+                holder.winnerNo.setText("本期参与："+raider.getWinner().getPeriod()+"人次");
+                holder.luckyNo.setText("幸运号："+raider.getWinner().getLuckyNo());
+                holder.announcedTime.setText("揭晓时间："+raider.getWinner().getAnnouncedTime());
             }
         }
         else
@@ -124,9 +115,31 @@ public class RaidersAdapter extends BaseAdapter {
         }
         @Bind(R.id.raidersIcon)
         ImageView raidersIcon;
-        @Bind(R.id.doingL)
-        ViewStub doingL;
-        @Bind(R.id.doneL)
-        ViewStub doneL;
+        @Bind(R.id.raidersName)
+        TextView raidersName;
+        @Bind(R.id.partnerNo)
+        TextView partnerNo;
+        @Bind(R.id.lotteryScheduleProgress)
+        ProgressBar lotteryScheduleProgress;
+        @Bind(R.id.totalRequired)
+        TextView totalRequired;
+        @Bind(R.id.surplus)
+        TextView surplus;
+        @Bind(R.id.addBtn)
+        TextView addBtn;
+        @Bind(R.id.partnerCount)
+        TextView partnerCount;
+        @Bind(R.id.showPhone)
+        TextView showPhone;
+        @Bind(R.id.winnerName)
+        TextView winnerName;
+        @Bind(R.id.winnerL)
+        RelativeLayout winnerL;
+        @Bind(R.id.winnerNo)
+        TextView winnerNo;
+        @Bind(R.id.luckyNo)
+        TextView luckyNo;
+        @Bind(R.id.announcedTime)
+        TextView announcedTime;
     }
 }

@@ -40,7 +40,6 @@ public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback 
     public WindowManager wManager;
     @Bind(R.id.raidersLogList)
     PullToRefreshListView raidersLogList;
-    View emptyView = null;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public List<RaidersModel> raiders;
     public RaidersAdapter adapter;
