@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.adapter.MyGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
@@ -24,6 +25,7 @@ import com.huotu.fanmore.pinkcatraiders.fragment.HomeFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.ListFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.NewestFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.ProfileFragment;
+import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
@@ -31,6 +33,8 @@ import com.huotu.fanmore.pinkcatraiders.widget.MorePopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.SharePopupWindow;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -97,6 +101,19 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     @Bind(R.id.profileLabel)
     TextView profileLabel;
 
+    //加载首页产品列表适配器
+    //人气
+    public MyGridAdapter popAdapter;
+    public List<ProductModel> popProducts;
+    //最新
+    public MyGridAdapter newestAdapter;
+    public List<ProductModel> newestProducts;
+    //进度
+    public MyGridAdapter progressAdapter;
+    public List<ProductModel> progressProducts;
+    //总需
+    public MyGridAdapter totalAdapter;
+    public List<ProductModel> totalProducts;
 
     @Override
     protected void onResume() {

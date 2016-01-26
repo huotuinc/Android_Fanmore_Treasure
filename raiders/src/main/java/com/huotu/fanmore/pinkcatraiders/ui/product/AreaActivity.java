@@ -115,10 +115,10 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
 
     private void loadData()
     {
-        ProductModel product1 = new ProductModel();
-        product1.setProductTag(0);
-        product1.setProductName("九阳（Joyoung）DJ13B-D08EC 双磨全钢多功能豆浆机");
-        product1.setProductIcon("http://img2.imgtn.bdimg.com/it/u=1700202158,1687325532&fm=206&gp=0.jpg");
+        /*ProductModel product1 = new ProductModel();
+        product1.setAreaAmount(0);
+        product1.setTitle("九阳（Joyoung）DJ13B-D08EC 双磨全钢多功能豆浆机");
+        product1.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=1700202158,1687325532&fm=206&gp=0.jpg");
         product1.setLotterySchedule(0.8);
         product1.setSurplus(234);
         product1.setTotal(1000);
@@ -130,7 +130,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
         product2.setLotterySchedule(0.4);
         product2.setSurplus(134);
         product2.setTotal(600);
-        products.add(product2);
+        products.add(product2);*/
         areaList.onRefreshComplete();
     }
 

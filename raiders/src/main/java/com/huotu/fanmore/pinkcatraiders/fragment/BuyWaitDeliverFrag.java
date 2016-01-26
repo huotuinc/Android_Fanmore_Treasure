@@ -91,10 +91,10 @@ public class BuyWaitDeliverFrag extends BaseFragment implements Handler.Callback
     private void loadData()
     {
         BuyItemModel item2 = new BuyItemModel();
-        item2.setProductName("迷你小飞机");
-        item2.setTotal(20);
+        item2.setTitle("迷你小飞机");
+        item2.setToAmount(20);
         item2.setAmount(1);
-        item2.setProductIcon("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
+        item2.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
         item2.setStatus(1);
         item2.setTotalMoney(200);
         item2.setPrice(200);
