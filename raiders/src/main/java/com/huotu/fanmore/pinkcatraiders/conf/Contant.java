@@ -37,6 +37,9 @@ public class Contant {
     public static final int LOGIN_AUTH_ERROR = 0x00000007;
     //切换内容页
     public static final int SWITCH_UI = 0x00000010;
+    //更新夺宝数量
+    public static final int UPDATE_RAIDER_COUNT = 0x00000011;
+    //
     /**
      * 菜单标记1
      */

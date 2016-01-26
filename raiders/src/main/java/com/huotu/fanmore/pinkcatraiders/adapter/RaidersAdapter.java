@@ -1,5 +1,6 @@
 package com.huotu.fanmore.pinkcatraiders.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.view.View;
@@ -14,9 +15,12 @@ import android.widget.TextView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
+import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 
 import org.w3c.dom.Text;
 
@@ -56,7 +60,6 @@ public class RaidersAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         ViewHolder holder = null;
         Resources resources = mContext.getResources();
         if (convertView == null)
@@ -71,36 +74,38 @@ public class RaidersAdapter extends BaseAdapter {
         }
         if(null!=raiders&&!raiders.isEmpty()&&null!=raiders.get(position))
         {
-            RaidersModel raider = raiders.get(position);
-            BitmapLoader.create().displayUrl(mContext, holder.raidersIcon, raider.getProductIcon(), R.mipmap.ic_launcher);
-            if(0==raider.getRaidersType())
+            try {
+                RaidersModel raider = raiders.get(position);
+                BitmapLoader.create().displayUrl(mContext, holder.raidersIcon, raider.getProductIcon(), R.mipmap.ic_launcher);
+                if (0 == raider.getRaidersType()) {
+                    //进行中
+                    holder.lotteryScheduleProgress.setVisibility(View.VISIBLE);
+                    holder.winnerL.setVisibility(View.GONE);
+                    holder.addBtn.setVisibility(View.VISIBLE);
+                    holder.raidersName.setText(raider.getTitle());
+                    holder.partnerNo.setText("参与期号：" + raider.getIssueId());
+                    holder.lotteryScheduleProgress.setMax((int) raider.getToAmount());
+                    holder.lotteryScheduleProgress.setProgress((int) (raider.getToAmount() - raider.getRemainAmount()));
+                    holder.totalRequired.setText("总需" + raider.getToAmount());
+                    holder.surplus.setText("剩余：" + raider.getRemainAmount());
+                    holder.partnerCount.setText("本期参与：" + raider.getAttendAmount() + "人次");
+                } else if (1 == raider.getRaidersType()) {
+                    holder.winnerL.setVisibility(View.VISIBLE);
+                    holder.lotteryScheduleProgress.setVisibility(View.GONE);
+                    holder.addBtn.setVisibility(View.GONE);
+                    //已完成
+                    holder.raidersName.setText(raider.getTitle());
+                    holder.partnerNo.setText("参与期号：" + raider.getIssueId());
+                    holder.totalRequired.setText("总需" + raider.getToAmount());
+                    holder.partnerCount.setText("本期参与：" + raider.getAttendAmount() + "人次");
+                    holder.winnerName.setText(raider.getWinner());
+                    holder.winnerNo.setText("本期参与：" + raider.getWinnerAttendAmount() + "人次");
+                    holder.luckyNo.setText("幸运号：" + raider.getLunkyNumber());
+                    holder.announcedTime.setText("揭晓时间：" + DateUtils.transformDataformat1(raider.getAwardingDate()));
+                }
+            }catch (Exception e)
             {
-                //进行中
-                holder.lotteryScheduleProgress.setVisibility(View.VISIBLE);
-                holder.winnerL.setVisibility(View.GONE);
-                holder.addBtn.setVisibility(View.VISIBLE);
-                holder.raidersName.setText(raider.getTitle());
-                holder.partnerNo.setText("参与期号：" + raider.getIssueId());
-                holder.lotteryScheduleProgress.setMax((int) raider.getToAmount());
-                holder.lotteryScheduleProgress.setProgress((int) (raider.getToAmount()-raider.getRemainAmount()));
-                holder.totalRequired.setText("总需" + raider.getToAmount());
-                holder.surplus.setText("剩余："+raider.getRemainAmount());
-                holder.partnerCount.setText("本期参与：" + raider.getAttendAmount() + "人次");
-            }
-            else if(1==raider.getRaidersType())
-            {
-                holder.winnerL.setVisibility(View.VISIBLE);
-                holder.lotteryScheduleProgress.setVisibility(View.GONE);
-                holder.addBtn.setVisibility(View.GONE);
-                //已完成
-                holder.raidersName.setText(raider.getTitle());
-                holder.partnerNo.setText("参与期号：" + raider.getIssueId());
-                holder.totalRequired.setText("总需"+raider.getToAmount());
-                holder.partnerCount.setText("本期参与："+raider.getAttendAmount() + "人次");
-                holder.winnerName.setText(raider.getWinner());
-                holder.winnerNo.setText("本期参与："+raider.getWinnerAttendAmount()+"人次");
-                holder.luckyNo.setText("幸运号："+raider.getLunkyNumber());
-                holder.announcedTime.setText("揭晓时间："+ DateUtils.transformDataformat1(raider.getAwardingDate()));
+                ToastUtils.showLongToast(mContext, "列表数据加载失败");
             }
         }
         else

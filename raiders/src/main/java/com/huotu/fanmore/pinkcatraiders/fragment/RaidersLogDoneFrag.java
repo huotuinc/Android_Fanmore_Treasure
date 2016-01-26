@@ -11,19 +11,30 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ListView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.RaidersAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
+import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.WinnerModel;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -58,6 +69,7 @@ public class RaidersLogDoneFrag extends BaseFragment implements Handler.Callback
         application = (BaseApplication) getActivity().getApplication();
         rootAty = (RaidesLogActivity) getActivity();
         ButterKnife.bind(this, rootView);
+        emptyView = inflater.inflate(R.layout.empty, null);
         wManager = getActivity().getWindowManager();
         initList();
         return rootView;
@@ -88,33 +100,87 @@ public class RaidersLogDoneFrag extends BaseFragment implements Handler.Callback
 
     private void loadData()
     {
-         /*RaidersModel raiders1 = new RaidersModel();
-         raiders1.setProductIcon("http://img4.imgtn.bdimg.com/it/u=4269198236,3866462712&fm=206&gp=0.jpg");
-         raiders1.setProductName("飞科剃须刀");
-         raiders1.setPartnerNo("100189");
-         raiders1.setTotal(120);
-         raiders1.setLotterySchedule(35);
-         raiders1.setSurplus(85);
-         raiders1.setPartnerCount("12");
-         raiders1.setRaidersType(0);
-         raiders.add(raiders1);*/
-        /*RaidersModel raiders2 = new RaidersModel();
-        raiders2.setProductIcon("http://img1.imgtn.bdimg.com/it/u=1175270452,550953813&fm=11&gp=0.jpg");
-        raiders2.setProductName("飞科剃须刀");
-        raiders2.setPartnerNo("100190");
-        raiders2.setTotal(120);
-        raiders2.setLotterySchedule(35);
-        raiders2.setSurplus(85);
-        raiders2.setPartnerCount("12");
-        raiders2.setRaidersType(1);
-        WinnerModel winner = new WinnerModel();
-        winner.setWinnerName("徐河口");
-        winner.setAnnouncedTime("2016-1-25 18:12:11");
-        winner.setLuckyNo("100012");
-        winner.setPeriod(24);
-        raiders2.setWinner(winner);
-        raiders.add(raiders2);*/
-        raidersLogList.onRefreshComplete();
+        if( false == rootAty.canConnect() ){
+            rootAty.mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    raidersLogList.onRefreshComplete();
+                }
+            });
+            return;
+        }
+        String url = Contant.REQUEST_URL + Contant.GET_MY_RAIDER_LIST;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
+        Map<String, Object> maps = new HashMap<String, Object>();
+        //全部
+        maps.put("type", "2");
+        if ( OperateTypeEnum.REFRESH == operateType )
+        {// 下拉
+            maps.put("lastId", 0);
+        } else if (OperateTypeEnum.LOADMORE == operateType)
+        {// 上拉
+            if ( raiders != null && raiders.size() > 0)
+            {
+                RaidersModel raider = raiders.get(raiders.size() - 1);
+                maps.put("lastId", raider.getPid());
+            } else if (raiders != null && raiders.size() == 0)
+            {
+                maps.put("lastId", 0);
+            }
+        }
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                raidersLogList.onRefreshComplete();
+                if(rootAty.isFinishing())
+                {
+                    return;
+                }
+                JSONUtil<RaidersOutputModel> jsonUtil = new JSONUtil<RaidersOutputModel>();
+                RaidersOutputModel raiderOutputs = new RaidersOutputModel();
+                raiderOutputs = jsonUtil.toBean(response.toString(), raiderOutputs);
+                if(null != raiderOutputs && null != raiderOutputs.getResultData() && (1==raiderOutputs.getResultCode()))
+                {
+                    if(null != raiderOutputs.getResultData().getList() && !raiderOutputs.getResultData().getList().isEmpty())
+                    {
+                        //更新夺宝数据
+                        String[] counts = new String[]{String.valueOf(raiderOutputs.getResultData().getAllNumber()), String.valueOf(raiderOutputs.getResultData().getRunNumber()), String.valueOf(raiderOutputs.getResultData().getFinishNumber())};
+                        Message message = rootAty.mHandler.obtainMessage(Contant.UPDATE_RAIDER_COUNT, counts);
+                        rootAty.mHandler.sendMessage(message);
+                        if( operateType == OperateTypeEnum.REFRESH){
+                            raiders.clear();
+                            raiders.addAll(raiderOutputs.getResultData().getList());
+                            adapter.notifyDataSetChanged();
+                        }else if( operateType == OperateTypeEnum.LOADMORE){
+                            raiders.addAll( raiderOutputs.getResultData().getList());
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                    else
+                    {
+                        raidersLogList.setEmptyView(emptyView);
+                    }
+                }
+                else
+                {
+                    //异常处理，自动切换成无数据
+                    raidersLogList.setEmptyView(emptyView);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                raidersLogList.onRefreshComplete();
+                if(rootAty.isFinishing())
+                {
+                    return;
+                }
+                raidersLogList.setEmptyView(emptyView);
+            }
+        });
     }
 
     protected void firstGetData(){

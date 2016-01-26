@@ -146,6 +146,10 @@ public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback 
                 {
                     if(null != raiderOutputs.getResultData().getList() && !raiderOutputs.getResultData().getList().isEmpty())
                     {
+                        //更新夺宝数据
+                        String[] counts = new String[]{String.valueOf(raiderOutputs.getResultData().getAllNumber()), String.valueOf(raiderOutputs.getResultData().getRunNumber()), String.valueOf(raiderOutputs.getResultData().getFinishNumber())};
+                        Message message = rootAty.mHandler.obtainMessage(Contant.UPDATE_RAIDER_COUNT, counts);
+                        rootAty.mHandler.sendMessage(message);
                         if( operateType == OperateTypeEnum.REFRESH){
                             raiders.clear();
                             raiders.addAll(raiderOutputs.getResultData().getList());
