@@ -174,7 +174,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     void showZqUi()
     {
         Bundle bundle = new Bundle();
-        bundle.putString("type", "十元专区");
+        bundle.putLong("step", 10);
         ActivityUtils.getInstance().showActivity(getActivity(), AreaActivity.class, bundle);
     }
 

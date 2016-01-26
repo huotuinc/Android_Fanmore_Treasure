@@ -39,6 +39,8 @@ public class Contant {
     public static final int SWITCH_UI = 0x00000010;
     //更新夺宝数量
     public static final int UPDATE_RAIDER_COUNT = 0x00000011;
+    //更新专区数量
+    public static final int LOAD_AREA_COUNT = 0x00000012;
     //
     /**
      * 菜单标记1
@@ -62,4 +64,6 @@ public class Contant {
     public static final String GET_MY_RAIDER_LIST = "getMyRaiderList";
     //获取首页商品列表
     public static final String GET_GOODS_LIST_INDEX = "getGoodsListByIndex";
+    //获取专区商品列表
+    public static final String GET_GOODS_LIST_BY_AREA = "getGoodsListByArea";
 }
