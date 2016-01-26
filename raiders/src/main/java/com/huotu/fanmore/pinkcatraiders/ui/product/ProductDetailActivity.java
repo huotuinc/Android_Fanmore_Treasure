@@ -18,8 +18,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.HomeViewPagerAdapter;
@@ -27,6 +29,7 @@ import com.huotu.fanmore.pinkcatraiders.adapter.LoadSwitchImgAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
 import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
+import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.PartnerLogModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
@@ -45,12 +48,11 @@ import butterknife.ButterKnife;
 /**
  * 商品详情界面
  */
-public class ProductDetailActivity extends BaseActivity implements Handler.Callback {
+public class ProductDetailActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
 
     public
     Resources resources;
     public BaseApplication application;
-    public Handler xHandler;
     public
     WindowManager wManager;
     public
@@ -103,6 +105,8 @@ public class ProductDetailActivity extends BaseActivity implements Handler.Callb
     @Bind(R.id.partnerLogL)
     LinearLayout partnerLogL;
     public List<PartnerLogModel> partnerLogs;
+    public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
+    public Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,15 +115,43 @@ public class ProductDetailActivity extends BaseActivity implements Handler.Callb
         ButterKnife.bind(this);
         application = (BaseApplication) this.getApplication();
         resources = this.getResources();
-        xHandler = new Handler ( this );
-        //设置沉浸模式
-        //setImmerseLayout(this.findViewById(R.id.titleLayoutL));
         wManager = this.getWindowManager();
+        mHandler = new Handler(this);
         initTitle();
         initBottom();
+        initView();
         initSwitchImg();
         initPartnerArea();
         initLog();
+    }
+
+    private void initView()
+    {
+        getDetailData();
+        productDetailPullRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
+                operateType = OperateTypeEnum.REFRESH;
+                getDetailData();
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
+                operateType = OperateTypeEnum.LOADMORE;
+                getCommentLog();
+            }
+        });
+        productDetailPullRefresh.getRefreshableView().smoothScrollTo(0, 0);
+    }
+
+    private void getDetailData()
+    {
+
+    }
+
+    private void getCommentLog()
+    {
+
     }
 
     private void initLog()
@@ -172,6 +204,20 @@ public class ProductDetailActivity extends BaseActivity implements Handler.Callb
             //显示暂无参与历史记录
 
         }
+    }
+
+    /**
+     * 初始化加载数据
+     */
+    protected void firstGetData(){
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (ProductDetailActivity.this.isFinishing()) return;
+                operateType = OperateTypeEnum.REFRESH;
+                productDetailPullRefresh.setRefreshing(true);
+            }
+        }, 1000);
     }
 
     private void initPartnerArea()
@@ -289,7 +335,6 @@ public class ProductDetailActivity extends BaseActivity implements Handler.Callb
         initListener();
         //更新文本内容
         updateTextAndDot();
-        mHandler.sendEmptyMessageDelayed(0, 3000);
     }
 
     /**
@@ -327,7 +372,7 @@ public class ProductDetailActivity extends BaseActivity implements Handler.Callb
 
         //改变dot
         for (int i = 0; i < productDetaildot.getChildCount(); i++) {
-            productDetaildot.getChildAt(i).setEnabled(i==currentPage);
+            productDetaildot.getChildAt(i).setEnabled(i == currentPage);
         }
 
     }
@@ -366,16 +411,12 @@ public class ProductDetailActivity extends BaseActivity implements Handler.Callb
     }
 
     @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
     public boolean handleMessage(Message msg) {
         return false;
     }
-
-    public Handler mHandler = new Handler()
-    {
-        @Override
-        public void handleMessage(Message msg) {
-            productDetailViewPager.setCurrentItem(productDetailViewPager.getCurrentItem()+1);
-            mHandler.sendEmptyMessageDelayed(0, 3000);
-        }
-    };
 }
