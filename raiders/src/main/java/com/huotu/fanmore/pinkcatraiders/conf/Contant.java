@@ -60,4 +60,6 @@ public class Contant {
     public static final String REQUEST_URL = "http://192.168.3.20:8080/duobao/app/";
     //获取夺宝记录
     public static final String GET_MY_RAIDER_LIST = "getMyRaiderList";
+    //获取首页商品列表
+    public static final String GET_GOODS_LIST_INDEX = "getGoodsListByIndex";
 }
