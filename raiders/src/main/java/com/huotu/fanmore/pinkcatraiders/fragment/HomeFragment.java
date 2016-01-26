@@ -29,6 +29,7 @@ import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.product.AreaActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.product.ProductDetailActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.BuyLogActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -159,7 +160,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @OnClick(R.id.wtL)
     void showWtUi()
     {
-        ToastUtils.showLongToast(getActivity(), "弹出问题界面");
+        ActivityUtils.getInstance().showActivity(getActivity(), ProductDetailActivity.class);
     }
 
     private void initProduct()
