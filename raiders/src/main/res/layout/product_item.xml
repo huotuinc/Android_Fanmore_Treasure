@@ -69,9 +69,9 @@
                 android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/lotteryScheduleProgress"
                 android:text="加入清单"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp"
+                android:padding="5dp"
                 android:gravity="center"
                 android:textColor="@color/deep_red"
                 android:background="@drawable/add_draw"/>

@@ -105,26 +105,24 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
         SystemTools.loadBackground(titleRightImage, rightDraw);
         stubTitleText1.inflate();
         TextView titleText = (TextView) this.findViewById(R.id.titleText);
-        titleText.setText("奖品详情");
+        if(10 == bundle.getLong("step"))
+        {
+            titleText.setText("十元专区");
+        }
+        else if(5 == bundle.getLong("step"))
+        {
+            titleText.setText("五元专区");
+        }
         titleCount = (TextView) this.findViewById(R.id.titleCount);
         titleCount.setText("（0）");
     }
 
     private void initList()
     {
-        areaList.setMode(PullToRefreshBase.Mode.BOTH);
-        areaList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        areaList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.REFRESH;
+            public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 loadData();
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.LOADMORE;
-                loadData();
-
             }
         });
         products = new ArrayList<ProductModel>();
@@ -166,16 +164,11 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
                 if (null != areaProductsOutputs && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList()) {
 
                     //修改记录总数
-                    Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, areaProductsOutputs.getResultData().getCount());
+                    Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, areaProductsOutputs.getResultData().getList().size());
                     mHandler.sendMessage(message);
-                    if (operateType == OperateTypeEnum.REFRESH) {
-                        products.clear();
-                        products.addAll(areaProductsOutputs.getResultData().getList());
-                        adapter.notifyDataSetChanged();
-                    } else if (operateType == OperateTypeEnum.LOADMORE) {
-                        products.addAll(areaProductsOutputs.getResultData().getList());
-                        adapter.notifyDataSetChanged();
-                    }
+                    products.clear();
+                    products.addAll(areaProductsOutputs.getResultData().getList());
+                    adapter.notifyDataSetChanged();
                 } else {
                     //提示获取数据失败
                     areaList.setEmptyView(emptyView);
@@ -241,7 +234,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
         {
             case Contant.LOAD_AREA_COUNT:
             {
-                long count = (long) msg.obj;
+                int count = (int) msg.obj;
                 titleCount.setText("（"+count+"）");
             }
             break;

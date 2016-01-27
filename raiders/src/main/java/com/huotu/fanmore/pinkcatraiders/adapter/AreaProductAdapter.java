@@ -65,12 +65,12 @@ public class AreaProductAdapter extends BaseAdapter {
         {
             ProductModel product = products.get(position);
             BitmapLoader.create().displayUrl(mContext, holder.icon, product.getPictureUrl(), R.mipmap.ic_launcher);
-            if(0==product.getAreaAmount())
+            if(10==product.getAreaAmount())
             {
                 holder.productTag.setText("十元\n专区");
                 SystemTools.loadBackground(holder.productTag, resources.getDrawable(R.mipmap.area_1));
             }
-            else if(1==product.getAreaAmount())
+            else if(5==product.getAreaAmount())
             {
                 holder.productTag.setText("五元\n专区");
                 SystemTools.loadBackground(holder.productTag, resources.getDrawable(R.mipmap.area_2));

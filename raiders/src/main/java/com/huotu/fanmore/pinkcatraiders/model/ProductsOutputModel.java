@@ -20,6 +20,14 @@ public class ProductsOutputModel extends BaseModel {
     public class ProductsInnerModel
     {
         private List<ProductModel> list;
+        private long sort;
+        public long getSort() {
+            return sort;
+        }
+
+        public void setSort(long sort) {
+            this.sort = sort;
+        }
 
         public List<ProductModel> getList() {
             return list;

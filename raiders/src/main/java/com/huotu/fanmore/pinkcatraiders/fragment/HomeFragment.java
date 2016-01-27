@@ -466,6 +466,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @OnClick(R.id.rqInnerL)
     void clickRql()
     {
+        currentIndex = 0;
         application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
         Drawable normal = resources.getDrawable(R.drawable.switch_normal);
         Drawable press = resources.getDrawable(R.drawable.switch_press);
@@ -477,11 +478,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(zxInnerL, normal);
         SystemTools.loadBackground(jdInnerL, normal);
         SystemTools.loadBackground(zxrsInnerL, normal);
-        firstGetData();
+        if(null==rootAty.popProducts || rootAty.popProducts.isEmpty())
+        {
+            firstGetData();
+        }
     }
     @OnClick(R.id.zxInnerL)
     void clickZxl()
     {
+        currentIndex = 1;
         application.proFragManager.setCurrentFrag(FragManager.FragType.NEWEST_PRODUCT);
         Drawable normal = resources.getDrawable(R.drawable.switch_normal);
         Drawable press = resources.getDrawable(R.drawable.switch_press);
@@ -493,11 +498,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(zxInnerL, press);
         SystemTools.loadBackground(jdInnerL, normal);
         SystemTools.loadBackground(zxrsInnerL, normal);
-        firstGetData();
+        if(null==rootAty.newestProducts || rootAty.newestProducts.isEmpty())
+        {
+            firstGetData();
+        }
     }
     @OnClick(R.id.jdInnerL)
     void clickJdl()
     {
+        currentIndex = 2;
         application.proFragManager.setCurrentFrag(FragManager.FragType.PROGRESS);
         Drawable normal = resources.getDrawable(R.drawable.switch_normal);
         Drawable press = resources.getDrawable(R.drawable.switch_press);
@@ -509,11 +518,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(zxInnerL, normal);
         SystemTools.loadBackground(jdInnerL, press);
         SystemTools.loadBackground(zxrsInnerL, normal);
-        firstGetData();
+        if(null==rootAty.progressProducts || rootAty.progressProducts.isEmpty())
+        {
+            firstGetData();
+        }
     }
     @OnClick(R.id.zxrsInnerL)
     void clickZxrsl()
     {
+        currentIndex = 3;
         application.proFragManager.setCurrentFrag(FragManager.FragType.TOTAL);
         Drawable normal = resources.getDrawable(R.drawable.switch_normal);
         Drawable press = resources.getDrawable(R.drawable.switch_press);
@@ -525,7 +538,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(zxInnerL, normal);
         SystemTools.loadBackground(jdInnerL, normal);
         SystemTools.loadBackground(zxrsInnerL, press);
-        firstGetData();
+        if(null==rootAty.totalProducts || rootAty.totalProducts.isEmpty())
+        {
+            firstGetData();
+        }
     }
 
     /**
