@@ -72,7 +72,7 @@ public class MyGridAdapter extends BaseAdapter {
         }
         if(null!=productModels&&!productModels.isEmpty()&&null!=productModels.get(position))
         {
-            ProductModel product = productModels.get(position);
+            final ProductModel product = productModels.get(position);
             BitmapLoader.create().displayUrl(mContext, holder.productIcon, product.getPictureUrl(), R.mipmap.ic_launcher);
             if(0==product.getAreaAmount())
             {
@@ -94,6 +94,7 @@ public class MyGridAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
+                    bundle.putLong("goodsId", product.getPid());
                     //跳转到商品详情界面
                     ActivityUtils.getInstance().showActivity(aty, ProductDetailActivity.class, bundle);
                 }

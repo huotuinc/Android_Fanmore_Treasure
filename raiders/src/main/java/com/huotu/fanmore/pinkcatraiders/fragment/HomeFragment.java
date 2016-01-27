@@ -189,7 +189,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @OnClick(R.id.wtL)
     void showWtUi()
     {
-        ActivityUtils.getInstance().showActivity(getActivity(), ProductDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putLong("goodsId", 0l);
+        ActivityUtils.getInstance().showActivity(getActivity(), ProductDetailActivity.class, bundle);
     }
 
     private void initProduct()
