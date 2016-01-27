@@ -22,6 +22,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -99,6 +100,7 @@ public class MyGridAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     bundle.putLong("goodsId", product.getPid());
+                    bundle.putStringArrayList("imgs", (ArrayList<String>) product.getImgs());
                     //跳转到商品详情界面
                     ActivityUtils.getInstance().showActivity(aty, ProductDetailActivity.class, bundle);
                 }

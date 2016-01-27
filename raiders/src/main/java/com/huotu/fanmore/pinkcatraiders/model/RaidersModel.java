@@ -3,15 +3,14 @@ package com.huotu.fanmore.pinkcatraiders.model;
 /**
  * 夺宝model
  */
-public class RaidersModel extends ProductModel {
+public class RaidersModel extends BaseModel {
 
     private long pid;
     private long issueId;
-    private String partnerNo;
     private long attendAmount;
     private String awardingDate;
     private long lunkyNumber;
-    private long raidersType;
+    private long status;
     private String pictureUrl;
     private long remainAmount;
     private String title;
@@ -33,14 +32,6 @@ public class RaidersModel extends ProductModel {
 
     public void setIssueId(long issueId) {
         this.issueId = issueId;
-    }
-
-    public String getPartnerNo() {
-        return partnerNo;
-    }
-
-    public void setPartnerNo(String partnerNo) {
-        this.partnerNo = partnerNo;
     }
 
     public long getAttendAmount() {
@@ -67,12 +58,12 @@ public class RaidersModel extends ProductModel {
         this.lunkyNumber = lunkyNumber;
     }
 
-    public long getRaidersType() {
-        return raidersType;
+    public long getStatus() {
+        return status;
     }
 
-    public void setRaidersType(long raidersType) {
-        this.raidersType = raidersType;
+    public void setStatus(long status) {
+        this.status = status;
     }
 
     public String getPictureUrl() {

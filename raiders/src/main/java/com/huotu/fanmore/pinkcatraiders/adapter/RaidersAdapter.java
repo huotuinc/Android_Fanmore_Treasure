@@ -77,11 +77,12 @@ public class RaidersAdapter extends BaseAdapter {
             try {
                 RaidersModel raider = raiders.get(position);
                 BitmapLoader.create().displayUrl(mContext, holder.raidersIcon, raider.getPictureUrl(), R.mipmap.ic_launcher);
-                if (0 == raider.getRaidersType()) {
+                if (3 != raider.getStatus()) {
                     //进行中
                     holder.lotteryScheduleProgress.setVisibility(View.VISIBLE);
                     holder.winnerL.setVisibility(View.GONE);
                     holder.addBtn.setVisibility(View.VISIBLE);
+                    holder.surplus.setVisibility(View.VISIBLE);
                     holder.raidersName.setText(raider.getTitle());
                     holder.partnerNo.setText("参与期号：" + raider.getIssueId());
                     holder.lotteryScheduleProgress.setMax((int) raider.getToAmount());
@@ -89,10 +90,12 @@ public class RaidersAdapter extends BaseAdapter {
                     holder.totalRequired.setText("总需" + raider.getToAmount());
                     holder.surplus.setText("剩余：" + raider.getRemainAmount());
                     holder.partnerCount.setText("本期参与：" + raider.getAttendAmount() + "人次");
-                } else if (1 == raider.getRaidersType()) {
+                } else
+                {
                     holder.winnerL.setVisibility(View.VISIBLE);
                     holder.lotteryScheduleProgress.setVisibility(View.GONE);
                     holder.addBtn.setVisibility(View.GONE);
+                    holder.surplus.setVisibility(View.GONE);
                     //已完成
                     holder.raidersName.setText(raider.getTitle());
                     holder.partnerNo.setText("参与期号：" + raider.getIssueId());

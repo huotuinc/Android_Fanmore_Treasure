@@ -1,5 +1,7 @@
 package com.huotu.fanmore.pinkcatraiders.model;
 
+import java.util.List;
+
 /**
  * 产品model
  */
@@ -12,6 +14,15 @@ public class ProductModel extends BaseModel {
     private long toAmount;
     private long remainAmount;
     private long stepAmount;
+    private List<String> imgs;
+
+    public List<String> getImgs() {
+        return imgs;
+    }
+
+    public void setImgs(List<String> imgs) {
+        this.imgs = imgs;
+    }
 
     public long getAreaAmount() {
         return areaAmount;

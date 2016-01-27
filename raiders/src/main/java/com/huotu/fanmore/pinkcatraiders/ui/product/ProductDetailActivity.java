@@ -89,7 +89,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     LinearLayout productDetaildot;
     @Bind(R.id.productDetailPullRefresh)
     PullToRefreshScrollView productDetailPullRefresh;
-    List<String> imgs = null;
+    List<String> imgs = new ArrayList<String>();
     @Bind(R.id.productDetailBottomOther)
     ViewStub productDetailBottomOther;
     @Bind(R.id.productDetailBottomAnnounced)
@@ -120,7 +120,6 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     TextView allLogText;
     @Bind(R.id.partnerLogL)
     LinearLayout partnerLogL;
-    public List<PartnerLogModel> partnerLogs;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public Handler mHandler;
     public Bundle bundle;
@@ -139,6 +138,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         mHandler = new Handler(this);
         initTitle();
         initBottom();
+        initSwitchImg();
         initView();
     }
 
@@ -198,7 +198,15 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                     {
                         ProductDetailModel productDetail = productDetailsOutput.getResultData().getData();
                         issueId = productDetail.getIssueId();
-                        initSwitchImg(productDetail.getPictureUrl());
+                        if(1==productDetail.getStatus())
+                        {
+                            productDetailNameLabel.setText("进行中");
+                        }
+                        else if(2==productDetail.getStatus())
+                        {
+                            productDetailNameLabel.setText("已揭晓");
+                        }
+                        productDetailName.setText(productDetail.getTitle());
                         //是否登录
                         if(application.isLogin())
                         {
@@ -251,14 +259,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                 //未揭晓
                                 unlogin.inflate();
                                 TextView noLabel = (TextView) ProductDetailActivity.this.findViewById(R.id.noLabel);
-                                noLabel.setText("期号：12345");
+                                noLabel.setText("期号："+productDetail.getIssueId());
                                 ProgressBar progressBar = (ProgressBar) ProductDetailActivity.this.findViewById(R.id.partnerProgress);
-                                progressBar.setProgress(12);
-                                progressBar.setMax(50);
+                                progressBar.setProgress((int)(productDetail.getToAmount() - productDetail.getRemainAmount()));
+                                progressBar.setMax((int) productDetail.getToAmount());
                                 TextView totalRequiredLabel = (TextView) ProductDetailActivity.this.findViewById(R.id.totalRequiredLabel);
-                                totalRequiredLabel.setText("总需人数：1234次");
+                                totalRequiredLabel.setText("总需人数："+productDetail.getToAmount()+"次");
                                 TextView surplusLabel = (TextView) ProductDetailActivity.this.findViewById(R.id.surplusLabel);
-                                surplusLabel.setText("剩余：123");
+                                surplusLabel.setText("剩余："+productDetail.getRemainAmount());
                             }
                             else
                             {
@@ -347,25 +355,21 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onResponse(JSONObject response) {
                 productDetailPullRefresh.onRefreshComplete();
-                if(ProductDetailActivity.this.isFinishing())
-                {
+                if (ProductDetailActivity.this.isFinishing()) {
                     return;
                 }
                 JSONUtil<PartnerHistorysOutputModel> jsonUtil = new JSONUtil<PartnerHistorysOutputModel>();
                 PartnerHistorysOutputModel partnerHistory = new PartnerHistorysOutputModel();
                 partnerHistory = jsonUtil.toBean(response.toString(), partnerHistory);
-                if(null != partnerHistory && null != partnerHistory.getResultData() && (1==partnerHistory.getResultCode()))
-                {
-                    if(null != partnerHistory.getResultData().getList() && !partnerHistory.getResultData().getList().isEmpty())
-                    {
-                        if( operateType == OperateTypeEnum.REFRESH){
+                if (null != partnerHistory && null != partnerHistory.getResultData() && (1 == partnerHistory.getResultCode())) {
+                    if (null != partnerHistory.getResultData().getList() && !partnerHistory.getResultData().getList().isEmpty()) {
+                        if (operateType == OperateTypeEnum.REFRESH) {
                             partnerLogL.removeAllViews();
-                        }else if( operateType == OperateTypeEnum.LOADMORE){
+                        } else if (operateType == OperateTypeEnum.LOADMORE) {
                         }
                         partnerHistorys = partnerHistory.getResultData().getList();
                         int size = partnerHistorys.size();
-                        for(int i = 0; i < size; i++)
-                        {
+                        for (int i = 0; i < size; i++) {
                             PartnerHistorysModel partnerLog = partnerHistorys.get(i);
                             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup
                                     .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -377,23 +381,19 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                             TextView partnerName = (TextView) parntersLayout.findViewById(R.id.partnerName);
                             partnerName.setText(partnerLog.getNickName());
                             TextView partnerIp = (TextView) parntersLayout.findViewById(R.id.partnerIp);
-                            partnerIp.setText("（"+partnerLog.getCity() + " " +partnerLog.getIp()+"）");
+                            partnerIp.setText("（" + partnerLog.getCity() + " " + partnerLog.getIp() + "）");
                             TextView partnerCount = (TextView) parntersLayout.findViewById(R.id.partnerCount);
-                            partnerCount.setText("参与了"+partnerLog.getAttendAmount()+"人次");
+                            partnerCount.setText("参与了" + partnerLog.getAttendAmount() + "人次");
                             TextView partnerTime = (TextView) parntersLayout.findViewById(R.id.partnerTime);
                             partnerTime.setText(partnerLog.getDate());
                             lp.setMargins(0, 0, 0, 0);
                             parntersLayout.setLayoutParams(lp);
                             partnerLogL.addView(parntersLayout);
                         }
-                    }
-                    else
-                    {
+                    } else {
                         //数据为空
                     }
-                }
-                else
-                {
+                } else {
                     //异常处理，自动切换成无数据
                 }
             }
@@ -401,8 +401,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onErrorResponse(VolleyError error) {
                 productDetailPullRefresh.onRefreshComplete();
-                if(ProductDetailActivity.this.isFinishing())
-                {
+                if (ProductDetailActivity.this.isFinishing()) {
                     return;
                 }
                 //数据为空
@@ -410,7 +409,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         });
     }
 
-    private void initLog()
+    /*private void initLog()
     {
         partnerLogs = new ArrayList<PartnerLogModel>();
         PartnerLogModel partnerLog1 = new PartnerLogModel();
@@ -438,7 +437,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             //显示暂无参与历史记录
 
         }
-    }
+    }*/
 
     /**
      * 初始化加载数据
@@ -489,8 +488,9 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         titleText.setText("奖品详情");
     }
 
-    private void initSwitchImg(List<String> imgs)
+    private void initSwitchImg()
     {
+        imgs = bundle.getStringArrayList("imgs");
         initDots();
         //通过适配器引入图片
         productDetailViewPager.setAdapter(new LoadSwitchImgAdapter(imgs, ProductDetailActivity.this));
