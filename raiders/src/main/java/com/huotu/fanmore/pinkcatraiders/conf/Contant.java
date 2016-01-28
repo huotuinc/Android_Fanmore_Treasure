@@ -12,7 +12,7 @@ public class Contant {
     /**
      * appsecret
      */
-    public static final String APP_SECRET = "1165a8d240b29af3f418b8d10599d0da";
+    public static final String APP_SECRET = "4165a8d240b29af3f41818d10599d0d1";
     /**
      * operation
      */
@@ -38,6 +38,7 @@ public class Contant {
     public static final int INIT_MENU_ERROR = 0x00000008;
     //切换内容页
     public static final int SWITCH_UI = 0x00000010;
+    public static final String URL="http://192.168.1.41:8080/duobao/app/";
     /**
      * 菜单标记1
      */
@@ -54,4 +55,22 @@ public class Contant {
      * 菜单标记4
      */
     public final static String TAG_4 = "profile";
+    /**
+     * capCode
+     */
+    // 登录信息文件
+    public final static String LOGIN_USER_INFO = "login_user_info";
+    /**
+     * token添加的类型
+     */
+    public final static String LOGIN_AUTH_REALNAME="realName";
+    public final static String LOGIN_AUTH_ENABLED="enabled";
+    public final static String LOGIN_AUTH_MOBILE="mobile";
+    public final static String LOGIN_AUTH_MOBILEBANDED="mobileBanded";
+    public final static String LOGIN_AUTH_MONEY="money";
+    public final static String LOGIN_AUTH_TOKEN="token";
+    public final static String LOGIN_AUTH_USERFORMTYPE="userFormType";
+    public final static String LOGIN_AUTH_UDERHEAD="userHead";
+    public final static String LOGIN_AUTH_USERID="userId";
+    public final static String LOGIN_AUTH_USERNAME="username";
 }

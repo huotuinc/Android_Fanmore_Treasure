@@ -18,15 +18,30 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.google.common.eventbus.EventBus;
 import com.huotu.android.library.libedittext.EditText;
+import com.huotu.android.library.libedittext.MainActivity;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
+import com.huotu.fanmore.pinkcatraiders.model.AppWXLoginModel;
+import com.huotu.fanmore.pinkcatraiders.model.LoginQQModel;
 import com.huotu.fanmore.pinkcatraiders.model.LoginWXModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.GsonRequest;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 
@@ -34,7 +49,9 @@ import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,7 +63,8 @@ import cn.sharesdk.wechat.friends.Wechat;
 /**
  * 登录界面
  */
-public class LoginActivity extends BaseActivity implements Handler.Callback,View.OnClickListener {
+public class LoginActivity extends BaseActivity
+        implements Handler.Callback,View.OnClickListener, Response.ErrorListener  {
 
     private
     AutnLogin      login;
@@ -158,17 +176,64 @@ public class LoginActivity extends BaseActivity implements Handler.Callback,View
             case Contant.MSG_LOGIN:
             {
                 successProgress.dismissView();
-                ToastUtils.showShortToast(this,"登陆成功");
-//                LoginWXModel loginWXModel  = (LoginWXModel) msg.obj;
-//
-//                AuthParamUtils paramUtils = new AuthParamUtils( application, System.currentTimeMillis (),  LoginActivity.this );
-               // paramUtils.obtainPostParam ( "loginWXModel",loginWXModel);
+
+               // ToastUtils.showShortToast(this,"登陆成功");
+
+                if( msg.arg1 == 1 ) {
+                    LoginQQModel qqModel = (LoginQQModel) msg.obj;
+                    AuthParamUtils paramUtils = new AuthParamUtils( application, System.currentTimeMillis (),  LoginActivity.this );
+                    Map<String,Object> qqlogin =new HashMap<>();
+                    qqlogin.put("username",qqModel.getNickname());
+                    qqlogin.put("unionId",qqModel.getOpenid());
+                    qqlogin.put("head",qqModel.getIcon());
+                    qqlogin.put("type", "2");
+                    String str=paramUtils.obtainGetParam(qqlogin);
+                    String url=Contant.URL+"authLogin"+str;
+
+                    GsonRequest<AppWXLoginModel> loginRequest = new GsonRequest<AppWXLoginModel>(
+                            Request.Method.GET,
+                            url ,
+                            AppWXLoginModel.class,
+                            null,
+                            loginListener,
+                            this
+                    );
+
+                    VolleyUtil.addRequest(loginRequest);
+                }
+                else if( msg.arg1 == 2 ) {
+                    LoginWXModel loginWXModel = (LoginWXModel) msg.obj;
+                    AuthParamUtils paramUtils = new AuthParamUtils( application, System.currentTimeMillis (),  LoginActivity.this );
+                    Map<String,Object> wxlogin =new HashMap<>();
+                    wxlogin.put("username",loginWXModel.getNickname());
+                    wxlogin.put("unionId",loginWXModel.getUnionid());
+                    wxlogin.put("head",loginWXModel.getHeadimgurl());
+                    wxlogin.put("type", "1");
+                    String str=paramUtils.obtainGetParam(wxlogin);
+                    String url=Contant.URL+"authLogin"+str;
+
+                    GsonRequest<AppWXLoginModel> loginRequest = new GsonRequest<AppWXLoginModel>(
+                            Request.Method.GET,
+                            url ,
+                            AppWXLoginModel.class,
+                            null,
+                            loginListener,
+                            this
+                    );
+
+                    VolleyUtil.addRequest(loginRequest);
+                }
+
+
+
+
 
 
 
 
             }
             break;
+
             case Contant.MSG_USERID_NO_FOUND:
             {
                   successProgress.dismissView();
@@ -270,5 +335,72 @@ public class LoginActivity extends BaseActivity implements Handler.Callback,View
 
     }
 
+
+    @Override
+    public void onErrorResponse(VolleyError volleyError) {
+//        if( BaseFragmentActivity.this.isFinishing() ) return;
+//
+//        BaseFragmentActivity.this.closeProgressDialog();
+//        if( _pullToRefreshBase!=null ){
+//            _pullToRefreshBase.onRefreshComplete();
+//        }
+
+        String message="";
+        if( volleyError instanceof TimeoutError){
+            message = "网络连接超时";
+        }else if( volleyError instanceof NetworkError || volleyError instanceof NoConnectionError) {
+            message ="网络请求异常，请检查网络状态";
+        }else if( volleyError instanceof ParseError){
+            message = "数据解析失败，请检测数据的正确性";
+        }else if( volleyError instanceof ServerError || volleyError instanceof AuthFailureError){
+            if( null != volleyError.networkResponse){
+                message=new String( volleyError.networkResponse.data);
+            }else{
+                message = volleyError.getMessage();
+            }
+        }
+
+        if( message.length()<1){
+            message = "网络请求失败，请检查网络状态";
+        }
+
+        //DialogUtils.showDialog(BaseFragmentActivity.this, BaseFragmentActivity.this.getSupportFragmentManager(), "错误信息", message, "关闭");
+    }
+
+
+
+    Response.Listener<AppWXLoginModel> loginListener = new Response.Listener<AppWXLoginModel>() {
+        @Override
+        public void onResponse(AppWXLoginModel appWXLoginModel) {
+            //LoginActivity.this.closeProgressDialog();
+
+            if( null == appWXLoginModel ){
+
+                return;
+            }
+            else if( appWXLoginModel.getSystemResultCode() != 1){
+
+                return;
+            }else if( appWXLoginModel.getResultCode() !=1){
+
+                return;
+            }
+            if( appWXLoginModel.getResultData() ==null ){
+
+                return;
+            }
+            AppUserModel user = appWXLoginModel.getResultData().getUser();
+            if(null != user)
+            {
+                //记录token
+                BaseApplication.getInstance().writeUserInfo(user);
+
+                ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class );
+            }
+            else
+            {
+                ToastUtils.showShortToast(LoginActivity.this, "未请求到数据");
+            }
+        }};
 
 }

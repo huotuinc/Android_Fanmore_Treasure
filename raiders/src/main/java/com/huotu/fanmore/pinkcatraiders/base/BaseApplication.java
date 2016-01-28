@@ -13,6 +13,7 @@ import android.text.TextUtils;
 
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
+import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
@@ -23,11 +24,17 @@ import cn.sharesdk.framework.ShareSDK;
  * 粉猫夺宝application
  */
 public class BaseApplication extends Application {
+    private static BaseApplication app;
 
     public Platform plat;
     public FragManager mFragManager;
     public FragManager proFragManager;
-
+    public static synchronized BaseApplication getInstance() {
+        if (app == null) {
+            app = new BaseApplication();
+        }
+        return app;
+    }
     @Override
     public void onLowMemory() {
         super.onLowMemory();
@@ -41,6 +48,9 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        app = this;
+
         ShareSDK.initSDK(getApplicationContext());
         VolleyUtil.init(getApplicationContext());
         //加载异常处理模块
@@ -104,6 +114,20 @@ public class BaseApplication extends Application {
         }
     }
 
+    public void writeUserInfo(AppUserModel user)
+    {
+        PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_REALNAME,user.getRealName());
+        PreferenceHelper.writeBoolean(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_ENABLED,user.isEnabled());
+        PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_MOBILE,user.getMoblie());
+        PreferenceHelper.writeBoolean(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MOBILEBANDED, user.isMobileBanded());
+        PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MONEY, String.valueOf(user.getMoney()));
+        PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_TOKEN,user.getToken());
+        PreferenceHelper.writeInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_USERFORMTYPE, user.getUserFormType());
+        PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_UDERHEAD,user.getUserHead());
+        PreferenceHelper.writeLong(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_USERID, user.getUserId());
+
+        PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_USERNAME,user.getUsername());
+    }
     public void writeInitInfo(String initStr)
     {
         PreferenceHelper.writeString ( getApplicationContext (), Contant.SYS_INFO, Contant.FIRST_OPEN, initStr );
