@@ -19,5 +19,7 @@
         <item name="android:activityCloseEnterAnimation">@anim/slide_left_in</item>
         <item name="android:activityCloseExitAnimation">@anim/slide_right_out</item>
     </style>
+    <style name="CyEditTextStyle" parent="android:Theme.Light"> <!-- parent="android:Theme.Light"解决自定义style，光标变白问题 -->
+    </style>
 
 </resources>

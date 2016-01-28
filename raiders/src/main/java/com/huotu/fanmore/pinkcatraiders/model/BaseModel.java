@@ -12,6 +12,7 @@ public class BaseModel implements Serializable {
     private String resultDescription;
     private String systemResultDescription;
 
+
     public int getResultCode() {
         return resultCode;
     }

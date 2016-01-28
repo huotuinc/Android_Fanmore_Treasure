@@ -19,6 +19,31 @@ public class InitOutputsModel extends BaseModel {
     {
         private GlobalModel global;
         private UpdateModel update;
+        private AppUserModel user;
+
+        public GlobalModel getGlobal() {
+            return global;
+        }
+
+        public void setGlobal(GlobalModel global) {
+            this.global = global;
+        }
+
+        public UpdateModel getUpdate() {
+            return update;
+        }
+
+        public void setUpdate(UpdateModel update) {
+            this.update = update;
+        }
+
+        public AppUserModel getUser() {
+            return user;
+        }
+
+        public void setUser(AppUserModel user) {
+            this.user = user;
+        }
 
         public class GlobalModel
         {
@@ -67,6 +92,14 @@ public class InitOutputsModel extends BaseModel {
             private String updateTips;
             private String updateUrl;
             private UpdateType updateType;
+
+            public UpdateType getUpdateType() {
+                return updateType;
+            }
+
+            public void setUpdateType(UpdateType updateType) {
+                this.updateType = updateType;
+            }
 
             public String getUpdateMD5() {
                 return updateMD5;

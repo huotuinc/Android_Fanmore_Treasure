@@ -55,7 +55,7 @@ class ProgressPopupWindow extends PopupWindow {
     }
 
     public void dismissView()
-    {
+    {   WindowUtils.backgroundAlpha(aty, 1.0f);
         setOnDismissListener ( new PoponDismissListener( aty ) );
         dismiss ();
     }

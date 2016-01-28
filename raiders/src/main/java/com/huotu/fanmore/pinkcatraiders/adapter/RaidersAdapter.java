@@ -77,7 +77,7 @@ public class RaidersAdapter extends BaseAdapter {
             try {
                 RaidersModel raider = raiders.get(position);
                 BitmapLoader.create().displayUrl(mContext, holder.raidersIcon, raider.getPictureUrl(), R.mipmap.ic_launcher);
-                if (3 != raider.getStatus()) {
+                if (2 != raider.getStatus()) {
                     //进行中
                     holder.lotteryScheduleProgress.setVisibility(View.VISIBLE);
                     holder.winnerL.setVisibility(View.GONE);

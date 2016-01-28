@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/titleLayoutL"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <include
+            layout="@layout/layout_title"/>
+
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/gray_bg"
+        >
+    <com.huotu.android.library.libedittext.EditText
+        android:id="@+id/edtPhone"
+        style="@style/CyEditTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:hint="手机号"
+        android:imeOptions="actionNext"
+        android:inputType="phone"
+        android:maxLength="11"
+        android:textColor="@color/text_black" />
+        <RelativeLayout
+            android:id="@+id/layCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+
+
+            <com.huotu.android.library.libedittext.EditText
+                android:id="@+id/edtCode"
+                style="@style/CyEditTextStyle"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:hint="请输入验证码"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLength="20"
+                android:textColor="@color/text_black" />
+
+
+
+            <TextView
+                android:id="@+id/btn_code"
+                android:layout_width="100dp"
+                android:layout_height="33dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="25dp"
+                android:background="@drawable/btn_login"
+                android:clickable="true"
+                android:gravity="center"
+                android:minWidth="120dp"
+                android:onClick="onClickButton"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="获取验证码"
+                android:textColor="@color/color_white" />
+        </RelativeLayout>
+        <Button
+            android:id="@+id/btn_commit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="提交验证码"
+            android:textSize="20sp"
+            android:padding="10dp"
+            android:textColor="@color/color_white"
+            android:background="@drawable/btn_login"/>
+    </LinearLayout>
+
+</LinearLayout>

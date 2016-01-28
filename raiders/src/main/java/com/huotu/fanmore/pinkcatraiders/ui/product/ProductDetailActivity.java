@@ -198,9 +198,13 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                     {
                         ProductDetailModel productDetail = productDetailsOutput.getResultData().getData();
                         issueId = productDetail.getIssueId();
-                        if(1==productDetail.getStatus())
+                        if(0==productDetail.getStatus())
                         {
                             productDetailNameLabel.setText("进行中");
+                        }
+                        else if(1==productDetail.getStatus())
+                        {
+                            productDetailNameLabel.setText("倒计时");
                         }
                         else if(2==productDetail.getStatus())
                         {

@@ -26,11 +26,13 @@ import com.huotu.fanmore.pinkcatraiders.model.InitOutputsModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.guide.GuideActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.widget.MsgPopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
@@ -128,21 +130,55 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                             initOutputs = jsonUtil.toBean(response.toString(), initOutputs);
                             if(null != initOutputs && null != initOutputs.getResultData() && (1==initOutputs.getResultCode()))
                             {
-
+                                //加载全局变量数据
+                                if(null!=initOutputs.getResultData().getGlobal())
+                                {
+                                    application.loadGlobalData(initOutputs.getResultData().getGlobal());
+                                }
+                                if(null!=initOutputs.getResultData().getUpdate())
+                                {
+                                    //加载更新信息
+                                    application.loadUpdate(initOutputs.getResultData().getUpdate());
+                                }
+                                if(null!=initOutputs.getResultData().getUser())
+                                {
+                                    //加载用户信息
+                                    application.writeUserInfo(initOutputs.getResultData().getUser());
+                                }
+                                if(application.isFirst())
+                                {
+                                    ActivityUtils.getInstance().skipActivity ( SplashActivity.this, GuideActivity.class );
+                                    //写入初始化数据
+                                    application.writeInitInfo ( "inited" );
+                                }
+                                else {
+                                    //判断是否登录
+                                    if ( application.isLogin ( ) ) {
+                                        ActivityUtils.getInstance ().skipActivity ( SplashActivity.this, HomeActivity.class);
+                                    }
+                                    else {
+                                        ActivityUtils.getInstance ( )
+                                                .skipActivity (
+                                                        SplashActivity
+                                                                .this,
+                                                        LoginActivity.class );
+                                    }
+                                }
                             }
                             else
                             {
                                 //异常处理，自动切换成无数据
+                                ToastUtils.showLongToast(SplashActivity.this, "初始化数据失败");
                             }
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            //初始化失败
+                            //异常处理，自动切换成无数据
+                            ToastUtils.showLongToast(SplashActivity.this, "初始化数据失败");
                         }
                     });
-                    //跳转到新特新界面
-                    ActivityUtils.getInstance().skipActivity(SplashActivity.this, HomeActivity.class);
                 }
             }
 

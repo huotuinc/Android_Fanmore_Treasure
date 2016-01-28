@@ -1,5 +1,6 @@
 package com.huotu.fanmore.pinkcatraiders.ui.base;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -25,7 +26,11 @@ import com.huotu.fanmore.pinkcatraiders.fragment.HomeFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.ListFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.NewestFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.ProfileFragment;
+
+import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
+
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
+
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
@@ -276,6 +281,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             case R.id.profileL:
             {
                 //设置选中状态
+                Intent intent = new Intent();
+                intent.setClass(HomeActivity.this, LoginActivity.class);
+                startActivity(intent);
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
                 obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
@@ -294,6 +302,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 //加载具体的页面
                 Message msg = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
                 mHandler.sendMessage(msg);
+
             }
             break;
             default:

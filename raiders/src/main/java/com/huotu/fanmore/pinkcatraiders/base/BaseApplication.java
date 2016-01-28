@@ -13,20 +13,29 @@ import android.text.TextUtils;
 
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
+import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
+import com.huotu.fanmore.pinkcatraiders.model.InitOutputsModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
 import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
 
 /**
  * 粉猫夺宝application
  */
 public class BaseApplication extends Application {
+    private static BaseApplication app;
 
     public Platform plat;
     public FragManager mFragManager;
     public FragManager proFragManager;
-
+    public static synchronized BaseApplication getInstance() {
+        if (app == null) {
+            app = new BaseApplication();
+        }
+        return app;
+    }
     @Override
     public void onLowMemory() {
         super.onLowMemory();
@@ -40,6 +49,10 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        app = this;
+
+        ShareSDK.initSDK(getApplicationContext());
         VolleyUtil.init(getApplicationContext());
         //加载异常处理模块
         CrashHandler crashHandler = CrashHandler.getInstance ();
@@ -102,11 +115,40 @@ public class BaseApplication extends Application {
         }
     }
 
+    public void writeUserInfo(AppUserModel user)
+    {
+        PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_REALNAME,user.getRealName());
+        PreferenceHelper.writeBoolean(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_ENABLED,user.isEnabled());
+        PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_MOBILE,user.getMoblie());
+        PreferenceHelper.writeBoolean(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MOBILEBANDED, user.isMobileBanded());
+        PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MONEY, String.valueOf(user.getMoney()));
+        PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_TOKEN,user.getToken());
+        PreferenceHelper.writeInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_USERFORMTYPE, user.getUserFormType());
+        PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_UDERHEAD,user.getUserHead());
+        PreferenceHelper.writeLong(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_USERID, user.getUserId());
+
+        PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_USERNAME,user.getUsername());
+    }
     public void writeInitInfo(String initStr)
     {
         PreferenceHelper.writeString ( getApplicationContext (), Contant.SYS_INFO, Contant.FIRST_OPEN, initStr );
     }
 
+    public void loadGlobalData(InitOutputsModel.InitInnerModel.GlobalModel globalModel)
+    {
+        PreferenceHelper.writeString(getApplicationContext(),"global_info","customerServicePhone",globalModel.getCustomerServicePhone());
+        PreferenceHelper.writeString(getApplicationContext(),"global_info","helpURL",globalModel.getHelpURL());
+        PreferenceHelper.writeString(getApplicationContext(),"global_info","serverUrl",globalModel.getServerUrl());
+        PreferenceHelper.writeBoolean(getApplicationContext(), "global_info", "voiceSupported", globalModel.isVoiceSupported());
+    }
+
+    public void loadUpdate(InitOutputsModel.InitInnerModel.UpdateModel update)
+    {
+        PreferenceHelper.writeString(getApplicationContext(),"update_info","updateMD5",update.getUpdateMD5());
+        PreferenceHelper.writeString(getApplicationContext(),"update_info","updateTips",update.getUpdateTips());
+        PreferenceHelper.writeString(getApplicationContext(),"update_info","updateUrl",update.getUpdateUrl());
+        PreferenceHelper.writeString(getApplicationContext(),"update_info","updateType",update.getUpdateType().getName());
+    }
     //判断是否登录
     public boolean isLogin()
     {
