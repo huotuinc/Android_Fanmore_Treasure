@@ -16,16 +16,29 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.RelativeLayout;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
+import com.huotu.fanmore.pinkcatraiders.model.InitOutputsModel;
+import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
+import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.guide.GuideActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.widget.MsgPopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -97,6 +110,37 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                 {
                     //定位
                     //初始化接口
+                    String url = Contant.REQUEST_URL + Contant.INIT;
+                    AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), SplashActivity.this);
+                    Map<String, Object> maps = new HashMap<String, Object>();
+                    String suffix = params.obtainGetParam(maps);
+                    url = url + suffix;
+                    HttpUtils httpUtils = new HttpUtils();
+                    httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                                if(SplashActivity.this.isFinishing())
+                            {
+                                return;
+                            }
+                            JSONUtil<InitOutputsModel> jsonUtil = new JSONUtil<InitOutputsModel>();
+                            InitOutputsModel initOutputs = new InitOutputsModel();
+                            initOutputs = jsonUtil.toBean(response.toString(), initOutputs);
+                            if(null != initOutputs && null != initOutputs.getResultData() && (1==initOutputs.getResultCode()))
+                            {
+
+                            }
+                            else
+                            {
+                                //异常处理，自动切换成无数据
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    });
                     //跳转到新特新界面
                     ActivityUtils.getInstance().skipActivity(SplashActivity.this, HomeActivity.class);
                 }
