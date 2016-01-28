@@ -40,7 +40,9 @@ import com.huotu.fanmore.pinkcatraiders.model.ProductDetailModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductDetailsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
+import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
@@ -60,6 +62,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 商品详情界面
@@ -125,6 +128,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     public Bundle bundle;
     public long issueId;
     public List<PartnerHistorysModel> partnerHistorys;
+    public String detailUrl;
+    public boolean isInflate = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +160,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
                 operateType = OperateTypeEnum.LOADMORE;
-               // getCommentLog();
+                // getCommentLog();
             }
         });
         productDetailPullRefresh.getRefreshableView().smoothScrollTo(0, 0);
@@ -185,58 +190,64 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onResponse(JSONObject response) {
                 productDetailPullRefresh.onRefreshComplete();
-                if(ProductDetailActivity.this.isFinishing())
-                {
+                if (ProductDetailActivity.this.isFinishing()) {
                     return;
                 }
                 JSONUtil<ProductDetailsOutputModel> jsonUtil = new JSONUtil<ProductDetailsOutputModel>();
                 ProductDetailsOutputModel productDetailsOutput = new ProductDetailsOutputModel();
                 productDetailsOutput = jsonUtil.toBean(response.toString(), productDetailsOutput);
-                if(null != productDetailsOutput && null != productDetailsOutput.getResultData() && (1==productDetailsOutput.getResultCode()))
-                {
-                    if(null != productDetailsOutput.getResultData().getData())
-                    {
+                if (null != productDetailsOutput && null != productDetailsOutput.getResultData() && (1 == productDetailsOutput.getResultCode())) {
+                    if (null != productDetailsOutput.getResultData().getData()) {
                         ProductDetailModel productDetail = productDetailsOutput.getResultData().getData();
                         issueId = productDetail.getIssueId();
-                        if(0==productDetail.getStatus())
-                        {
+                        detailUrl = productDetail.getLink();
+                        if (0 == productDetail.getStatus()) {
                             productDetailNameLabel.setText("进行中");
-                        }
-                        else if(1==productDetail.getStatus())
-                        {
+                        } else if (1 == productDetail.getStatus()) {
                             productDetailNameLabel.setText("倒计时");
-                        }
-                        else if(2==productDetail.getStatus())
-                        {
+                        } else if (2 == productDetail.getStatus()) {
                             productDetailNameLabel.setText("已揭晓");
                         }
                         productDetailName.setText(productDetail.getTitle());
                         //是否登录
-                        if(application.isLogin())
-                        {
+                        if (application.isLogin()) {
                             //登录
-                            if(3!=productDetail.getStatus())
-                            {
+                            if (3 != productDetail.getStatus()) {
                                 //未揭晓
-                                loginedDetail.inflate();
+                                if (isInflate) {
+                                    loginedDetail.inflate();
+                                }
+                                loginedDetail.setOnInflateListener(new ViewStub.OnInflateListener() {
+                                    @Override
+                                    public void onInflate(ViewStub stub, View inflated) {
+                                        isInflate = false;
+                                    }
+                                });
+
                                 TextView noLabel = (TextView) ProductDetailActivity.this.findViewById(R.id.noLabel);
                                 noLabel.setText("期号：" + productDetail.getIssueId());
                                 ProgressBar progressBar = (ProgressBar) ProductDetailActivity.this.findViewById(R.id.partnerProgress);
-                                progressBar.setProgress((int)(productDetail.getToAmount() - productDetail.getRemainAmount()));
+                                progressBar.setProgress((int) (productDetail.getToAmount() - productDetail.getRemainAmount()));
                                 progressBar.setMax((int) productDetail.getToAmount());
                                 TextView totalRequiredLabel = (TextView) ProductDetailActivity.this.findViewById(R.id.totalRequiredLabel);
-                                totalRequiredLabel.setText("总需人数："+productDetail.getToAmount()+"次");
+                                totalRequiredLabel.setText("总需人数：" + productDetail.getToAmount() + "次");
                                 TextView surplusLabel = (TextView) ProductDetailActivity.this.findViewById(R.id.surplusLabel);
-                                surplusLabel.setText("剩余："+productDetail.getRemainAmount());
+                                surplusLabel.setText("剩余：" + productDetail.getRemainAmount());
                                 TextView parentCount = (TextView) ProductDetailActivity.this.findViewById(R.id.parentCount);
                                 parentCount.setText("您参与了：1人次");
                                 TextView raidersNo = (TextView) ProductDetailActivity.this.findViewById(R.id.raidersNo);
                                 raidersNo.setText("夺宝号码：1000589");
-                            }
-                            else
-                            {
+                            } else {
                                 //揭晓
-                                announcedDetail.inflate();
+                                if (isInflate) {
+                                    announcedDetail.inflate();
+                                }
+                                announcedDetail.setOnInflateListener(new ViewStub.OnInflateListener() {
+                                    @Override
+                                    public void onInflate(ViewStub stub, View inflated) {
+                                        isInflate = false;
+                                    }
+                                });
                                 CircleImageView accountLogo = (CircleImageView) ProductDetailActivity.this.findViewById(R.id.accountLogo);
                                 BitmapLoader.create().loadRoundImage(ProductDetailActivity.this, accountLogo, "http://v1.qzone.cc/avatar/201404/10/00/12/534571832f9ea304.jpg!200x200.jpg", R.mipmap.ic_launcher);
                                 TextView winnerName = (TextView) ProductDetailActivity.this.findViewById(R.id.winnerName);
@@ -254,28 +265,39 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                 TextView calculationDetail = (TextView) ProductDetailActivity.this.findViewById(R.id.calculationDetail);
                                 calculationDetail.setText("幸运号：32890");
                             }
-                        }
-                        else
-                        {
+                        } else {
                             //未登陆
-                            if(3!=productDetail.getStatus())
-                            {
+                            if (3 != productDetail.getStatus()) {
                                 //未揭晓
-                                unlogin.inflate();
+                                if (isInflate) {
+                                    unlogin.inflate();
+                                }
+                                unlogin.setOnInflateListener(new ViewStub.OnInflateListener() {
+                                    @Override
+                                    public void onInflate(ViewStub stub, View inflated) {
+                                        isInflate = false;
+                                    }
+                                });
                                 TextView noLabel = (TextView) ProductDetailActivity.this.findViewById(R.id.noLabel);
-                                noLabel.setText("期号："+productDetail.getIssueId());
+                                noLabel.setText("期号：" + productDetail.getIssueId());
                                 ProgressBar progressBar = (ProgressBar) ProductDetailActivity.this.findViewById(R.id.partnerProgress);
-                                progressBar.setProgress((int)(productDetail.getToAmount() - productDetail.getRemainAmount()));
+                                progressBar.setProgress((int) (productDetail.getToAmount() - productDetail.getRemainAmount()));
                                 progressBar.setMax((int) productDetail.getToAmount());
                                 TextView totalRequiredLabel = (TextView) ProductDetailActivity.this.findViewById(R.id.totalRequiredLabel);
-                                totalRequiredLabel.setText("总需人数："+productDetail.getToAmount()+"次");
+                                totalRequiredLabel.setText("总需人数：" + productDetail.getToAmount() + "次");
                                 TextView surplusLabel = (TextView) ProductDetailActivity.this.findViewById(R.id.surplusLabel);
-                                surplusLabel.setText("剩余："+productDetail.getRemainAmount());
-                            }
-                            else
-                            {
+                                surplusLabel.setText("剩余：" + productDetail.getRemainAmount());
+                            } else {
                                 //揭晓
-                                announcedDetail.inflate();
+                                if (isInflate) {
+                                    announcedDetail.inflate();
+                                }
+                                announcedDetail.setOnInflateListener(new ViewStub.OnInflateListener() {
+                                    @Override
+                                    public void onInflate(ViewStub stub, View inflated) {
+                                        isInflate = false;
+                                    }
+                                });
                                 CircleImageView accountLogo = (CircleImageView) ProductDetailActivity.this.findViewById(R.id.accountLogo);
                                 BitmapLoader.create().loadRoundImage(ProductDetailActivity.this, accountLogo, "http://v1.qzone.cc/avatar/201404/10/00/12/534571832f9ea304.jpg!200x200.jpg", R.mipmap.ic_launcher);
                                 TextView winnerName = (TextView) ProductDetailActivity.this.findViewById(R.id.winnerName);
@@ -294,17 +316,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                 calculationDetail.setText("幸运号：32890");
                             }
                         }
+                        isInflate = false;
 
                         //加载参与历史
                         //getCommentLog();
-                    }
-                    else
-                    {
+                    } else {
                         //暂无数据提示
                     }
-                }
-                else
-                {
+                } else {
                     //异常处理，自动切换成无数据
                 }
             }
@@ -312,13 +331,21 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onErrorResponse(VolleyError error) {
                 productDetailPullRefresh.onRefreshComplete();
-                if(ProductDetailActivity.this.isFinishing())
-                {
+                if (ProductDetailActivity.this.isFinishing()) {
                     return;
                 }
                 //暂无数据提示
             }
         });
+    }
+
+    @OnClick(R.id.graphicDetails)
+    void showDetail()
+    {
+        Bundle bundle = new Bundle();
+        bundle.putString("link", detailUrl);
+        bundle.putString("title", "图文详情");
+        ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, WebExhibitionActivity.class, bundle);
     }
 
     private void getCommentLog()
