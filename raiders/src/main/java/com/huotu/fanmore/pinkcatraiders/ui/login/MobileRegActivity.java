@@ -99,7 +99,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
         checkAuthCode.put("phone",edtPhone.getText().toString());
         checkAuthCode.put("authcode",edtCode.getText().toString());
         String str=paramUtils.obtainGetParam(checkAuthCode);
-        String url= Contant.URL+"checkAuthCode"+str;
+        String url= Contant.REQUEST_URL+"checkAuthCode"+str;
 
         GsonRequest<GetCode> loginRequest = new GsonRequest<GetCode>(
                 Request.Method.GET,
@@ -135,7 +135,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
              getcode.put("type","1");
              getcode.put("codeType","0");
             String str=paramUtils.obtainGetParam(getcode);
-            String url= Contant.URL+"sendSMS"+str;
+            String url= Contant.REQUEST_URL+"sendSMS"+str;
 
             GsonRequest<GetCode> loginRequest = new GsonRequest<GetCode>(
                     Request.Method.GET,
