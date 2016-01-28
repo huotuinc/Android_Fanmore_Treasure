@@ -95,28 +95,28 @@ public class BuyAllFrag extends BaseFragment implements Handler.Callback {
     private void loadData()
     {
         BuyItemModel item1 = new BuyItemModel();
-        item1.setProductName("迷你小飞机");
-        item1.setTotal(20);
+        item1.setTitle("迷你小飞机");
+        item1.setToAmount(20);
         item1.setAmount(1);
-        item1.setProductIcon("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
+        item1.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
         item1.setStatus(0);
         item1.setTotalMoney(200);
         item1.setPrice(200);
         items.add(item1);
         BuyItemModel item2 = new BuyItemModel();
-        item2.setProductName("迷你小飞机");
-        item2.setTotal(20);
+        item2.setTitle("迷你小飞机");
+        item2.setToAmount(20);
         item2.setAmount(1);
-        item2.setProductIcon("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
+        item2.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
         item2.setStatus(1);
         item2.setTotalMoney(200);
         item2.setPrice(200);
         items.add(item2);
         BuyItemModel item3 = new BuyItemModel();
-        item3.setProductName("迷你小飞机");
-        item3.setTotal(20);
+        item3.setTitle("迷你小飞机");
+        item3.setToAmount(20);
         item3.setAmount(1);
-        item3.setProductIcon("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
+        item3.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
         item3.setStatus(2);
         item3.setTotalMoney(200);
         item3.setPrice(200);

@@ -64,23 +64,23 @@ public class AreaProductAdapter extends BaseAdapter {
         if(null!=products&&!products.isEmpty()&&null!=products.get(position))
         {
             ProductModel product = products.get(position);
-            BitmapLoader.create().displayUrl(mContext, holder.icon, product.getProductIcon(), R.mipmap.ic_launcher);
-            if(0==product.getProductTag())
+            BitmapLoader.create().displayUrl(mContext, holder.icon, product.getPictureUrl(), R.mipmap.ic_launcher);
+            if(10==product.getAreaAmount())
             {
                 holder.productTag.setText("十元\n专区");
                 SystemTools.loadBackground(holder.productTag, resources.getDrawable(R.mipmap.area_1));
             }
-            else if(1==product.getProductTag())
+            else if(5==product.getAreaAmount())
             {
                 holder.productTag.setText("五元\n专区");
                 SystemTools.loadBackground(holder.productTag, resources.getDrawable(R.mipmap.area_2));
             }
 
-            holder.productName.setText(product.getProductName());
-            holder.lotteryScheduleProgress.setMax(100);
-            holder.lotteryScheduleProgress.setProgress((int) (100 * product.getLotterySchedule()));
-            holder.totalRequired.setText("总需："+product.getTotal());
-            holder.surplus.setText("剩余："+product.getSurplus());
+            holder.productName.setText(product.getTitle());
+            holder.lotteryScheduleProgress.setMax((int)product.getToAmount());
+            holder.lotteryScheduleProgress.setProgress((int) (product.getToAmount()-product.getRemainAmount()));
+            holder.totalRequired.setText("总需："+product.getToAmount());
+            holder.surplus.setText("剩余："+ product.getRemainAmount());
         }
         else
         {

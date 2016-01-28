@@ -27,7 +27,6 @@
     <RelativeLayout
         android:padding="5dp"
         android:id="@+id/productDetal"
-        android:layout_alignBottom="@+id/productIcon"
         android:layout_toRightOf="@+id/productIcon"
         android:layout_toLeftOf="@+id/productContorl"
         android:layout_width="fill_parent"
@@ -73,8 +72,8 @@
     <RelativeLayout
         android:padding="5dp"
         android:id="@+id/productContorl"
-        android:layout_alignBottom="@+id/productIcon"
         android:layout_alignParentRight="true"
+        android:layout_alignBaseline="@+id/productDetal"
         android:layout_marginBottom="20dp"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent">
@@ -85,6 +84,7 @@
             android:layout_height="wrap_content"
             android:text="加入清单"
             android:gravity="center"
+            android:padding="5dp"
             android:textColor="@color/deep_red"
             android:background="@drawable/add_draw"/>
     </RelativeLayout>

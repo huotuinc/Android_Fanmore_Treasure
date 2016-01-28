@@ -18,12 +18,14 @@ import android.widget.TextView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.TabPagerAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogAllFrag;
 import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogDoneFrag;
 import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogFrag;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
+import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +74,7 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
     private int currentIndex = 0;
     public TabPagerAdapter tabPagerAdapter;
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
+    public NoticePopWindow noticePopWin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +127,12 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
             public void onPageScrollStateChanged(int state) {
             }
         });
+    }
+
+    @OnClick(R.id.titleLeftImage)
+    void doBack()
+    {
+        closeSelf(RaidesLogActivity.this);
     }
 
     private void changeIndex(int index){
@@ -227,6 +236,19 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public boolean handleMessage(Message msg) {
+        switch (msg.what)
+        {
+            case Contant.UPDATE_RAIDER_COUNT:
+            {
+                String[] counts = (String[]) msg.obj;
+                allCount.setText(counts[0]);
+                doingCount.setText(counts[1]);
+                doneCount.setText(counts[2]);
+            }
+            break;
+            default:
+                break;
+        }
         return false;
     }
 

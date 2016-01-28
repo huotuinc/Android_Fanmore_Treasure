@@ -87,6 +87,7 @@
                     android:text="贝恩施 儿童玩具 托马斯积木益智玩具轨道火车1688组合装"
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_14"
+                    android:ellipsize="end"
                     android:lines="2"/>
             </RelativeLayout>
         </RelativeLayout>

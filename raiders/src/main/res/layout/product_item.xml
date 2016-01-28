@@ -35,7 +35,7 @@
             android:id="@+id/productName"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:maxLines="2"
+            android:singleLine="true"
             android:ellipsize="end"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_size_14"/>
@@ -69,9 +69,9 @@
                 android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/lotteryScheduleProgress"
                 android:text="加入清单"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp"
+                android:padding="5dp"
                 android:gravity="center"
                 android:textColor="@color/deep_red"
                 android:background="@drawable/add_draw"/>

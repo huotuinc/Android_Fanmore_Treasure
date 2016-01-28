@@ -9,15 +9,26 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.GridView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.MyGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
+import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,8 +45,6 @@ public class ProgressFrag extends BaseFragment {
     public WindowManager wManager;
     @Bind(R.id.progressGrid)
     GridView progressGrid;
-    public List<ProductModel> products;
-    public MyGridAdapter adapter;
 
     @Override
     public void onResume() {
@@ -62,27 +71,11 @@ public class ProgressFrag extends BaseFragment {
 
     private void initGrid()
     {
-        products = new ArrayList<ProductModel>();
-        ProductModel product1 = new ProductModel();
-        products.add(product1);
-        product1.setLotterySchedule(0.5);
-        product1.setProductIcon("http://img4.imgtn.bdimg.com/it/u=1514000187,1211372575&fm=21&gp=0.jpg");
-        product1.setProductName("贝恩施 儿童玩具 托马斯积木益智玩具轨道火车1688组合装");
-        product1.setProductTag(0);
-        ProductModel product2 = new ProductModel();
-        product2.setLotterySchedule(0.3);
-        product2.setProductIcon("http://img0.imgtn.bdimg.com/it/u=193661410,2272359788&fm=21&gp=0.jpg");
-        product2.setProductName("澳贝（AUBY） 益智玩具 乖乖小鸭 运动爬行婴幼儿童早教启智声光玩具 6-12个月 463318DS");
-        product2.setProductTag(1);
-        products.add(product2);
-        ProductModel product3 = new ProductModel();
-        product3.setLotterySchedule(0.7);
-        product3.setProductIcon("http://img4.imgtn.bdimg.com/it/u=2134827264,3899370224&fm=21&gp=0.jpg");
-        product3.setProductName("Bandai万代 MG版1:100 高达模型 敢达益智动漫拼装模型玩具 红色异端高达162047");
-        product3.setProductTag(1);
-        products.add(product3);
-        adapter = new MyGridAdapter(products, getActivity(), getActivity());
-        progressGrid.setAdapter(adapter);
+
+        //初始化数据
+        rootAty.progressProducts = new ArrayList<ProductModel>();
+        rootAty.progressAdapter = new MyGridAdapter(rootAty.progressProducts, getActivity(), getActivity());
+        progressGrid.setAdapter(rootAty.progressAdapter);
     }
 
     @Override

@@ -91,10 +91,10 @@ public class BuyWaitReceiptFrag extends BaseFragment implements Handler.Callback
     private void loadData()
     {
         BuyItemModel item3 = new BuyItemModel();
-        item3.setProductName("迷你小飞机");
-        item3.setTotal(20);
+        item3.setTitle("迷你小飞机");
+        item3.setToAmount(20);
         item3.setAmount(1);
-        item3.setProductIcon("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
+        item3.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
         item3.setStatus(2);
         item3.setTotalMoney(200);
         item3.setPrice(200);

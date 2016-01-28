@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
@@ -15,22 +16,35 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.AreaProductAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.AreaProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
+import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 专区界面
@@ -58,6 +72,8 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public List<ProductModel> products;
     public AreaProductAdapter adapter;
+    public Bundle bundle;
+    TextView titleCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +84,12 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
         resources = this.getResources();
         mHandler = new Handler ( this );
         wManager = this.getWindowManager();
-        emptyView = new View(AreaActivity.this);
-        emptyView.setBackgroundResource(R.mipmap.empty);
+        emptyView = LayoutInflater.from(AreaActivity.this).inflate(R.layout.empty, null);
+        TextView label = (TextView) emptyView.findViewById(R.id.emptyTag);
+        label.setText("暂无数据");
+        TextView contrl = (TextView) emptyView.findViewById(R.id.emptyBtn);
+        contrl.setVisibility(View.GONE);
+        bundle = this.getIntent().getExtras();
         initTitle();
         initList();
     }
@@ -85,26 +105,24 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
         SystemTools.loadBackground(titleRightImage, rightDraw);
         stubTitleText1.inflate();
         TextView titleText = (TextView) this.findViewById(R.id.titleText);
-        titleText.setText("奖品详情");
-        TextView titleCount = (TextView) this.findViewById(R.id.titleCount);
-        titleCount.setText("（24）");
+        if(10 == bundle.getLong("step"))
+        {
+            titleText.setText("十元专区");
+        }
+        else if(5 == bundle.getLong("step"))
+        {
+            titleText.setText("五元专区");
+        }
+        titleCount = (TextView) this.findViewById(R.id.titleCount);
+        titleCount.setText("（0）");
     }
 
     private void initList()
     {
-        areaList.setMode(PullToRefreshBase.Mode.BOTH);
-        areaList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        areaList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.REFRESH;
+            public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 loadData();
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.LOADMORE;
-                loadData();
-
             }
         });
         products = new ArrayList<ProductModel>();
@@ -115,23 +133,57 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
 
     private void loadData()
     {
-        ProductModel product1 = new ProductModel();
-        product1.setProductTag(0);
-        product1.setProductName("九阳（Joyoung）DJ13B-D08EC 双磨全钢多功能豆浆机");
-        product1.setProductIcon("http://img2.imgtn.bdimg.com/it/u=1700202158,1687325532&fm=206&gp=0.jpg");
-        product1.setLotterySchedule(0.8);
-        product1.setSurplus(234);
-        product1.setTotal(1000);
-        products.add(product1);
-        ProductModel product2 = new ProductModel();
-        product2.setProductTag(0);
-        product2.setProductName("苏泊尔32cm火红点无油烟不粘炒锅PC32M2");
-        product2.setProductIcon("http://img0.imgtn.bdimg.com/it/u=3317574596,528516568&fm=21&gp=0.jpg");
-        product2.setLotterySchedule(0.4);
-        product2.setSurplus(134);
-        product2.setTotal(600);
-        products.add(product2);
-        areaList.onRefreshComplete();
+        if( false == AreaActivity.this.canConnect() ){
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    areaList.onRefreshComplete();
+                }
+            });
+            return;
+        }
+
+        String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_AREA;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), AreaActivity.this);
+        Map<String, Object> maps = new HashMap<String, Object>();
+        maps.put("step", bundle.get("step"));
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                areaList.onRefreshComplete();
+                if (AreaActivity.this.isFinishing()) {
+                    return;
+                }
+                JSONUtil<AreaProductsOutputModel> jsonUtil = new JSONUtil<AreaProductsOutputModel>();
+                AreaProductsOutputModel areaProductsOutputs = new AreaProductsOutputModel();
+                areaProductsOutputs = jsonUtil.toBean(response.toString(), areaProductsOutputs);
+                if (null != areaProductsOutputs && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList()) {
+
+                    //修改记录总数
+                    Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, areaProductsOutputs.getResultData().getList().size());
+                    mHandler.sendMessage(message);
+                    products.clear();
+                    products.addAll(areaProductsOutputs.getResultData().getList());
+                    adapter.notifyDataSetChanged();
+                } else {
+                    //提示获取数据失败
+                    areaList.setEmptyView(emptyView);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                areaList.onRefreshComplete();
+                if (AreaActivity.this.isFinishing()) {
+                    return;
+                }
+                areaList.setEmptyView(emptyView);
+            }
+        });
     }
 
     protected void firstGetData(){
@@ -154,6 +206,12 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
         ButterKnife.unbind(this);
     }
 
+    @OnClick(R.id.titleLeftImage)
+    void doBack()
+    {
+        closeSelf(AreaActivity.this);
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
@@ -172,6 +230,17 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public boolean handleMessage(Message msg) {
+        switch (msg.what)
+        {
+            case Contant.LOAD_AREA_COUNT:
+            {
+                int count = (int) msg.obj;
+                titleCount.setText("（"+count+"）");
+            }
+            break;
+            default:
+                break;
+        }
         return false;
     }
 

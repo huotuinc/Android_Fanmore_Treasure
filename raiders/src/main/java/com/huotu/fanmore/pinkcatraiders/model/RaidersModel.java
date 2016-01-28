@@ -3,45 +3,114 @@ package com.huotu.fanmore.pinkcatraiders.model;
 /**
  * 夺宝model
  */
-public class RaidersModel extends ProductModel {
+public class RaidersModel extends BaseModel {
 
-    //参与期号
-    private String partnerNo;
-    //本期参与人数
-    private String partnerCount;
-    //中奖人
-    private WinnerModel winner;
-    private long raidersType;
+    private long pid;
+    private long issueId;
+    private long attendAmount;
+    private String awardingDate;
+    private long lunkyNumber;
+    private long status;
+    private String pictureUrl;
+    private long remainAmount;
+    private String title;
+    private long toAmount;
+    private String winner;
+    private long winnerAttendAmount;
 
-    public long getRaidersType() {
-        return raidersType;
+    public long getPid() {
+        return pid;
     }
 
-    public void setRaidersType(long raidersType) {
-        this.raidersType = raidersType;
+    public void setPid(long pid) {
+        this.pid = pid;
     }
 
-    public String getPartnerNo() {
-        return partnerNo;
+    public long getIssueId() {
+        return issueId;
     }
 
-    public void setPartnerNo(String partnerNo) {
-        this.partnerNo = partnerNo;
+    public void setIssueId(long issueId) {
+        this.issueId = issueId;
     }
 
-    public String getPartnerCount() {
-        return partnerCount;
+    public long getAttendAmount() {
+        return attendAmount;
     }
 
-    public void setPartnerCount(String partnerCount) {
-        this.partnerCount = partnerCount;
+    public void setAttendAmount(long attendAmount) {
+        this.attendAmount = attendAmount;
     }
 
-    public WinnerModel getWinner() {
+    public String getAwardingDate() {
+        return awardingDate;
+    }
+
+    public void setAwardingDate(String awardingDate) {
+        this.awardingDate = awardingDate;
+    }
+
+    public long getLunkyNumber() {
+        return lunkyNumber;
+    }
+
+    public void setLunkyNumber(long lunkyNumber) {
+        this.lunkyNumber = lunkyNumber;
+    }
+
+    public long getStatus() {
+        return status;
+    }
+
+    public void setStatus(long status) {
+        this.status = status;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
+    public long getRemainAmount() {
+        return remainAmount;
+    }
+
+    public void setRemainAmount(long remainAmount) {
+        this.remainAmount = remainAmount;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public long getToAmount() {
+        return toAmount;
+    }
+
+    public void setToAmount(long toAmount) {
+        this.toAmount = toAmount;
+    }
+
+    public String getWinner() {
         return winner;
     }
 
-    public void setWinner(WinnerModel winner) {
+    public void setWinner(String winner) {
         this.winner = winner;
+    }
+
+    public long getWinnerAttendAmount() {
+        return winnerAttendAmount;
+    }
+
+    public void setWinnerAttendAmount(long winnerAttendAmount) {
+        this.winnerAttendAmount = winnerAttendAmount;
     }
 }

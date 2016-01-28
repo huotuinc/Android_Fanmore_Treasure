@@ -16,12 +16,13 @@ public class Contant {
     /**
      * operation
      */
-    public static final String OPERATION = "ymr2015huotu";
+    public static final String OPERATION = "fenmore2016";
     public static final String SYS_INFO    = "sysInfo";
     public static final String SYS_PACKAGE = "cy.com.morefan";
     public static final String FIRST_OPEN  = "firstOpen";
     public static final String MEMBER_INFO = "member_info";
     public static final String MEMBER_TOKEN = "member_token";
+    public static final String APPKEY = "123456";
     //微信支付ID
     public static final String WXPAY_ID ="";
     //微信登录:用户存在
@@ -38,7 +39,14 @@ public class Contant {
     public static final int INIT_MENU_ERROR = 0x00000008;
     //切换内容页
     public static final int SWITCH_UI = 0x00000010;
-    public static final String URL="http://192.168.1.41:8080/duobao/app/";
+
+
+
+    //更新夺宝数量
+    public static final int UPDATE_RAIDER_COUNT = 0x00000011;
+    //更新专区数量
+    public static final int LOAD_AREA_COUNT = 0x00000012;
+
     /**
      * 菜单标记1
      */
@@ -55,6 +63,7 @@ public class Contant {
      * 菜单标记4
      */
     public final static String TAG_4 = "profile";
+
     /**
      * capCode
      */
@@ -73,4 +82,21 @@ public class Contant {
     public final static String LOGIN_AUTH_UDERHEAD="userHead";
     public final static String LOGIN_AUTH_USERID="userId";
     public final static String LOGIN_AUTH_USERNAME="username";
+
+    //接口请求地址
+    //loginapi
+     public static final String URL="http://192.168.1.41:8080/duobao/app/";
+    //public static final String REQUEST_URL = "http://192.168.3.20:8080/duobao/app/";
+    public static final String REQUEST_URL = "http://192.168.3.13:8080/duobao/app/";
+    //获取夺宝记录
+    public static final String GET_MY_RAIDER_LIST = "getMyRaiderList";
+    //获取首页商品列表
+    public static final String GET_GOODS_LIST_INDEX = "getGoodsListByIndex";
+    //获取专区商品列表
+    public static final String GET_GOODS_LIST_BY_AREA = "getGoodsListByArea";
+    //获取商品详情信息
+    public static final String GET_GOODS_DTAIL_BY_GOODS_ID = "getGoodsDetailByGoodsId";
+    //获取参与历史
+    public static final String GET_BUY_LIST = "getBuyList";
+
 }

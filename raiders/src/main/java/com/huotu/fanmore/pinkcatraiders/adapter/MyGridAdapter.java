@@ -20,6 +20,9 @@ import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -72,28 +75,32 @@ public class MyGridAdapter extends BaseAdapter {
         }
         if(null!=productModels&&!productModels.isEmpty()&&null!=productModels.get(position))
         {
-            ProductModel product = productModels.get(position);
-            BitmapLoader.create().displayUrl(mContext, holder.productIcon, product.getProductIcon(), R.mipmap.ic_launcher);
-            if(0==product.getProductTag())
+            final ProductModel product = productModels.get(position);
+            BitmapLoader.create().displayUrl(mContext, holder.productIcon, product.getPictureUrl(), R.mipmap.ic_launcher);
+            if(0==product.getAreaAmount())
             {
                 holder.productTag.setText("十元\n专区");
                 SystemTools.loadBackground(holder.productTag, resources.getDrawable(R.mipmap.area_1));
             }
-            else if(1==product.getProductTag())
+            else if(1==product.getAreaAmount())
             {
                 holder.productTag.setText("五元\n专区");
                 SystemTools.loadBackground(holder.productTag, resources.getDrawable(R.mipmap.area_2));
             }
 
-            holder.productName.setText(product.getProductName());
-            holder.lotterySchedule.setText("开奖进度" + (product.getLotterySchedule() > 1 ? 100 : 100 * product.getLotterySchedule()) + "%");
-            holder.lotteryScheduleProgress.setMax(100);
-            holder.lotteryScheduleProgress.setProgress((int) (100 * product.getLotterySchedule()));
+            holder.productName.setText(product.getTitle());
+            BigDecimal decimal = new BigDecimal((product.getToAmount()-product.getRemainAmount())/(double)product.getToAmount());
+            double value =  decimal.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
+            holder.lotterySchedule.setText("开奖进度" + (value > 1 ? 100 : 100 * value) + "%");
+            holder.lotteryScheduleProgress.setMax((int)product.getToAmount());
+            holder.lotteryScheduleProgress.setProgress((int) (product.getToAmount()-product.getRemainAmount()));
 
             holder.iconL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
+                    bundle.putLong("goodsId", product.getPid());
+                    bundle.putStringArrayList("imgs", (ArrayList<String>) product.getImgs());
                     //跳转到商品详情界面
                     ActivityUtils.getInstance().showActivity(aty, ProductDetailActivity.class, bundle);
                 }
