@@ -69,6 +69,12 @@ public class Contant {
      */
     // 登录信息文件
     public final static String LOGIN_USER_INFO = "login_user_info";
+    // 短信获取方式:文本
+    public final static String SMS_TYPE_TEXT = "0";
+
+    // 短信获取方式:语音
+    public final static String SMS_TYPE_VOICE = "1";
+
     /**
      * token添加的类型
      */

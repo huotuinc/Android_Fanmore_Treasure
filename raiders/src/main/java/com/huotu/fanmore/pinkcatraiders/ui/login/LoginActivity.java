@@ -74,7 +74,7 @@ import cn.sharesdk.wechat.friends.Wechat;
  * 登录界面
  */
 public class LoginActivity extends BaseActivity
-        implements Handler.Callback,View.OnClickListener, Response.ErrorListener  {
+        implements Handler.Callback,View.OnClickListener {
 
     private
     AutnLogin      login;
@@ -91,8 +91,7 @@ public class LoginActivity extends BaseActivity
     public
     AssetManager am;
 
-    public
-    BaseApplication application;
+
     public Resources res;
 
     @Bind(R.id.titleLayoutL)
@@ -440,36 +439,6 @@ public class LoginActivity extends BaseActivity
     }
 
 
-    @Override
-    public void onErrorResponse(VolleyError volleyError) {
-//        if( BaseFragmentActivity.this.isFinishing() ) return;
-//
-//        BaseFragmentActivity.this.closeProgressDialog();
-//        if( _pullToRefreshBase!=null ){
-//            _pullToRefreshBase.onRefreshComplete();
-//        }
-
-        String message="";
-        if( volleyError instanceof TimeoutError){
-            message = "网络连接超时";
-        }else if( volleyError instanceof NetworkError || volleyError instanceof NoConnectionError) {
-            message ="网络请求异常，请检查网络状态";
-        }else if( volleyError instanceof ParseError){
-            message = "数据解析失败，请检测数据的正确性";
-        }else if( volleyError instanceof ServerError || volleyError instanceof AuthFailureError){
-            if( null != volleyError.networkResponse){
-                message=new String( volleyError.networkResponse.data);
-            }else{
-                message = volleyError.getMessage();
-            }
-        }
-
-        if( message.length()<1){
-            message = "网络请求失败，请检查网络状态";
-        }
-
-        //DialogUtils.showDialog(BaseFragmentActivity.this, BaseFragmentActivity.this.getSupportFragmentManager(), "错误信息", message, "关闭");
-    }
 
 
 
