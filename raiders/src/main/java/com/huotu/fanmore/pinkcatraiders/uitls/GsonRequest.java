@@ -20,6 +20,9 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.huotu.fanmore.pinkcatraiders.model.AppWXLoginModel;
+import com.huotu.fanmore.pinkcatraiders.model.GetCode;
+import com.huotu.fanmore.pinkcatraiders.ui.login.MobileRegActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
@@ -107,9 +110,9 @@ public class GsonRequest<T> extends Request<T> {
 			, Listener<T> listener
 			, ErrorListener errorListener
 					  ){
-		super(method,url, errorListener);
+		super(method,url, (ErrorListener) errorListener);
 		this.mTypeToken= typeToken;
-		this.mListener = listener;
+		this.mListener = (Listener<T>) listener;
 		this.mGson = new GsonBuilder()
 				.registerTypeAdapter(Date.class, new DateJsonDeserializer())
 				.registerTypeAdapter(Date.class , new DateJsonSerializer())
