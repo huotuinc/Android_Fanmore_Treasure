@@ -59,8 +59,8 @@ public class Contant {
      */
     public final static String TAG_4 = "profile";
     //接口请求地址
-    public static final String REQUEST_URL = "http://192.168.3.20:8080/duobao/app/";
-    //public static final String REQUEST_URL = "http://192.168.3.13:8080/duobao/app/";
+    //public static final String REQUEST_URL = "http://192.168.3.20:8080/duobao/app/";
+    public static final String REQUEST_URL = "http://192.168.3.13:8080/duobao/app/";
     //获取夺宝记录
     public static final String GET_MY_RAIDER_LIST = "getMyRaiderList";
     //获取首页商品列表
@@ -68,7 +68,7 @@ public class Contant {
     //获取专区商品列表
     public static final String GET_GOODS_LIST_BY_AREA = "getGoodsListByArea";
     //获取商品详情信息
-    public static final String GET_GOODS_DTAIL = "getGoodsDetail";
+    public static final String GET_GOODS_DTAIL_BY_GOODS_ID = "getGoodsDetailByGoodsId";
     //获取参与历史
     public static final String GET_BUY_LIST = "getBuyList";
 }

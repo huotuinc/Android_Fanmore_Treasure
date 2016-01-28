@@ -480,7 +480,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(zxrsInnerL, normal);
         if(null==rootAty.popProducts || rootAty.popProducts.isEmpty())
         {
-            firstGetData();
+            initProduct();
         }
     }
     @OnClick(R.id.zxInnerL)
@@ -500,7 +500,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(zxrsInnerL, normal);
         if(null==rootAty.newestProducts || rootAty.newestProducts.isEmpty())
         {
-            firstGetData();
+            initProduct();
         }
     }
     @OnClick(R.id.jdInnerL)
@@ -520,7 +520,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(zxrsInnerL, normal);
         if(null==rootAty.progressProducts || rootAty.progressProducts.isEmpty())
         {
-            firstGetData();
+            initProduct();
         }
     }
     @OnClick(R.id.zxrsInnerL)
@@ -540,7 +540,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(zxrsInnerL, press);
         if(null==rootAty.totalProducts || rootAty.totalProducts.isEmpty())
         {
-            firstGetData();
+            initProduct();
         }
     }
 

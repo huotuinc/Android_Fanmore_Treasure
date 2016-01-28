@@ -155,7 +155,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
                 operateType = OperateTypeEnum.LOADMORE;
-                getCommentLog();
+               // getCommentLog();
             }
         });
         productDetailPullRefresh.getRefreshableView().smoothScrollTo(0, 0);
@@ -173,7 +173,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             });
             return;
         }
-        String url = Contant.REQUEST_URL + Contant.GET_GOODS_DTAIL;
+        String url = Contant.REQUEST_URL + Contant.GET_GOODS_DTAIL_BY_GOODS_ID;
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ProductDetailActivity.this);
         Map<String, Object> maps = new HashMap<String, Object>();
         //商品id
@@ -292,7 +292,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                         }
 
                         //加载参与历史
-                        getCommentLog();
+                        //getCommentLog();
                     }
                     else
                     {
