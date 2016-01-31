@@ -73,7 +73,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.guide.GuideActivity"
             android:screenOrientation="portrait"
@@ -110,33 +109,46 @@
         <!-- 添加sqllite支持 -->
         <!-- shareSDK分享 -->
 
-
-        <activity android:name="com.huotu.fanmore.pinkcatraiders.ui.product.ProductDetailActivity"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"/>
-        <activity android:name="com.huotu.fanmore.pinkcatraiders.ui.product.AreaActivity"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"/>
-        <activity android:name="com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"/>
-        <activity android:name="com.huotu.fanmore.pinkcatraiders.ui.raiders.BuyLogActivity"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"/>
-        <activity android:name="com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"/>
-        <!--添加sqllite支持-->
-        <meta-data android:name="DATABASE" android:value="@string/db_name"></meta-data>
-        <meta-data android:name="VERSION" android:value="1"></meta-data>
-        <meta-data android:name="QUERY_LOG" android:value="false"></meta-data>
-        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.huotu.fanmore.pinkcatraiders"></meta-data>
-        <!--添加sqllite支持-->
-        <!--shareSDK分享-->
-        <activity android:name="com.mob.tools.MobUIShell"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+        <activity
+            android:name=".ui.product.ProductDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.product.AreaActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.raiders.RaidesLogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.raiders.BuyLogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.assistant.WebExhibitionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <!-- 添加sqllite支持 -->
+        <meta-data
+            android:name="DATABASE"
+            android:value="@string/db_name" />
+        <meta-data
+            android:name="VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="false" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="com.huotu.fanmore.pinkcatraiders" />
+        <!-- 添加sqllite支持 -->
+        <!-- shareSDK分享 -->
+        <activity
+            android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <data android:scheme="tencent1101260450" />
@@ -158,7 +170,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- shareSDK分享 -->
         <!-- 微信支付 -->
         <activity
@@ -178,14 +190,17 @@
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind" />
         <!-- 支付宝支付 -->
 
+        <activity
+            android:name=".ui.usercenter.User_Center"
+            android:label="@string/title_activity_user__center"></activity>
     </application>
 
 </manifest>
