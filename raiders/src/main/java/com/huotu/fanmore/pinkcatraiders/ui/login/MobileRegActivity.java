@@ -285,8 +285,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                                 "获取验证码", 60000, new CountDownFinish());
                         countDownBtn.start();
                     } else {
-                        edtPhone.requestFocus();
-                        edtPhone.setError("手机号码不能为空");
+                        ToastUtils.showShortToast(MobileRegActivity.this, "手机号不能为空");
                     }
                 }
             break;

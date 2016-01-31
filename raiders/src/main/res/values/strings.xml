@@ -10,4 +10,5 @@
     <string-array name="guide_icon">
         <item>newfeature_0</item>
     </string-array>
+    <string name="title_activity_user__center">User_Center</string>
 </resources>
