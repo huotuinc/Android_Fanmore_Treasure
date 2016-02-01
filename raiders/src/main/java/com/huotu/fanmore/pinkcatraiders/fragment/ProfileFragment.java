@@ -14,7 +14,11 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
+import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
+import com.huotu.fanmore.pinkcatraiders.widget.CircleImageView;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
@@ -26,6 +30,8 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
     public BaseApplication application;
     public HomeActivity rootAty;
     public WindowManager wManager;
+    @Bind(R.id.Userimg)
+    CircleImageView userimg;
 
     @Override
     public void onReshow() {
@@ -65,6 +71,9 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
         application = (BaseApplication) getActivity().getApplication();
         rootAty = (HomeActivity) getActivity();
         ButterKnife.bind(this, rootView);
+        BitmapLoader.create().loadRoundImage(getActivity(), userimg, "http://imgk.zol.com.cn/dcbbs/2342/a2341460.jpg", R.mipmap.error);
+        userimg.setBorderColor(resources.getColor(R.color.color_white));
+        userimg.setBorderWidth((int)resources.getDimension(R.dimen.head_width));
         wManager = getActivity().getWindowManager();
         return rootView;
     }
