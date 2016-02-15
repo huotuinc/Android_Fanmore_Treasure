@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,6 +36,7 @@ import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
+import com.huotu.fanmore.pinkcatraiders.widget.FuncPopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.MorePopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
@@ -69,6 +72,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     public
     NoticePopWindow noticePop;
     private SharePopupWindow share;
+    public FuncPopWin funcPopWin;
     //title
     @Bind(R.id.titleLayoutL)
     RelativeLayout titleLayoutL;
@@ -105,6 +109,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     ImageView profile;
     @Bind(R.id.profileLabel)
     TextView profileLabel;
+    @Bind(R.id.homeBottom)
+    LinearLayout homeBottom;
 
     //加载首页产品列表适配器
     //人气
@@ -137,6 +143,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         //设置沉浸模式
         setImmerseLayout(this.findViewById(R.id.titleLayoutL));
         wManager = this.getWindowManager();
+        funcPopWin = new FuncPopWin(HomeActivity.this, HomeActivity.this, wManager);
         am = this.getAssets();
         //初始化title面板
         initTitle();
@@ -225,6 +232,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
                 SystemTools.loadBackground(profile, profileDraw);
                 profileLabel.setTextColor(resources.getColor(R.color.text_black));
+                funcPopWin.dismissView();
                 //切换内容
                 String tag = Contant.TAG_1;
                 //加载具体的页面
@@ -248,6 +256,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
                 SystemTools.loadBackground(profile, profileDraw);
                 profileLabel.setTextColor(resources.getColor(R.color.text_black));
+                funcPopWin.dismissView();
                 //切换内容
                 String tag = Contant.TAG_2;
                 //加载具体的页面
@@ -271,6 +280,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
                 SystemTools.loadBackground(profile, profileDraw);
                 profileLabel.setTextColor(resources.getColor(R.color.text_black));
+                //显示清单操作弹出框
+                funcPopWin.showLayout();
+                funcPopWin.showAsDropDown(homeBottom, 0, -160);
                 //切换内容
                 String tag = Contant.TAG_3;
                 //加载具体的页面
@@ -297,6 +309,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_press);
                 SystemTools.loadBackground(profile, profileDraw);
                 profileLabel.setTextColor(resources.getColor(R.color.title_bg));
+                funcPopWin.dismissView();
                 //切换内容
                 String tag = Contant.TAG_4;
                 //加载具体的页面

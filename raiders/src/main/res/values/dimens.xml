@@ -55,4 +55,5 @@
     <!--头像边框-->
     <dimen name="head_width">3dp</dimen>
     <dimen name="common_icon_size_3">10dp</dimen>
+    <dimen name="common_icon_size_4">30dp</dimen>
 </resources>
