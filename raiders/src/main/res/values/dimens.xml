@@ -14,6 +14,7 @@
     <dimen name="loginBtnHeight">60dp</dimen>
     <dimen name="btn_margin_size">60dp</dimen>
     <dimen name="text_size_22">22sp</dimen>
+    <dimen name="text_size_26">26sp</dimen>
     <dimen name="shareIconSize">58dp</dimen>
     <dimen name="share_cancel_height">40dp</dimen>
     <dimen name="bottom_height">50dp</dimen>
@@ -53,4 +54,5 @@
     <dimen name="switch_height2">70dp</dimen>
     <!--头像边框-->
     <dimen name="head_width">3dp</dimen>
+    <dimen name="common_icon_size_3">10dp</dimen>
 </resources>
