@@ -282,7 +282,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 profileLabel.setTextColor(resources.getColor(R.color.text_black));
                 //显示清单操作弹出框
                 funcPopWin.showLayout();
-                funcPopWin.showAsDropDown(homeBottom, 0, -160);
+                funcPopWin.showAsDropDown(homeBottom, 0, -(2*(int)resources.getDimension(R.dimen.bottom_height)));
                 //切换内容
                 String tag = Contant.TAG_3;
                 //加载具体的页面
