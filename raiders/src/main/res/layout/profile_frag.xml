@@ -138,12 +138,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/profile_item_height"
                 android:orientation="horizontal"
                 android:background="@color/color_white">
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
                     android:background="@mipmap/mine_hongbao"/>
                 <TextView
@@ -161,14 +163,16 @@
             </LinearLayout>
             <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/profile_item_height"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
             android:background="@drawable/account_bg_bottom">
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:background="@mipmap/mine_chongzhi"/>
             <TextView
                 android:layout_weight="1"
@@ -185,13 +189,15 @@
         </LinearLayout>
             <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/profile_item_height"
             android:orientation="horizontal"
             android:background="@drawable/account_bg_bottom">
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:background="@mipmap/mine_zhonjiang"/>
             <TextView
                 android:layout_weight="1"
@@ -208,12 +214,14 @@
         </LinearLayout>
             <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/profile_item_height"
             android:orientation="horizontal"
             android:background="@color/color_white">
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center"
                 android:layout_height="wrap_content"
                 android:background="@mipmap/mine_shaidan"/>
             <TextView
@@ -231,13 +239,15 @@
         </LinearLayout>
             <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/profile_item_height"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
             android:background="@drawable/account_bg_bottom">
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center"
                 android:layout_height="wrap_content"
                 android:background="@mipmap/mine_shezhi"/>
             <TextView
