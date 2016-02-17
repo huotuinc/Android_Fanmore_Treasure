@@ -89,14 +89,11 @@ public class ListAdapter extends BaseAdapter {
             if(0==type)
             {
                 //编辑模式
-                ViewGroup.LayoutParams pl = holder.editBtnL.getLayoutParams();
-                pl.height = holder.productL.getMeasuredHeight();
-                holder.editBtnL.setLayoutParams(pl);
                 SystemTools.loadBackground(holder.editBtn, resources.getDrawable(R.mipmap.unselect));
             }
             else if(1==type)
             {
-                holder.editBtnL.setVisibility(View.GONE);
+                holder.editBtn.setVisibility(View.GONE);
             }
             holder.totalRequired.setText("总需" + list.getToAmount() + "人次");
             holder.surplusRequired.setText("剩余" + list.getRemainAmount() + "人次");
@@ -125,12 +122,8 @@ public class ListAdapter extends BaseAdapter {
         {
             ButterKnife.bind(this, view);
         }
-        @Bind(R.id.editBtnL)
-        RelativeLayout editBtnL;
         @Bind(R.id.editBtn)
         TextView editBtn;
-        @Bind(R.id.productL)
-        RelativeLayout productL;
         @Bind(R.id.listProductIcon)
         ImageView listProductIcon;
         @Bind(R.id.productTag)

@@ -14,12 +14,16 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.BuyLogActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.CircleImageView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 个人中心fragment
@@ -78,6 +82,19 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
         return rootView;
     }
 
+    @OnClick(R.id.raideLogL)
+    void toRaideLog()
+    {
+        //跳转到夺宝记录
+        ActivityUtils.getInstance().showActivity(getActivity(), RaidesLogActivity.class);
+    }
+
+    @OnClick(R.id.winningLogL)
+    void towinningLog()
+    {
+        //跳转到中奖记录
+        ActivityUtils.getInstance().showActivity(getActivity(), BuyLogActivity.class);
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
