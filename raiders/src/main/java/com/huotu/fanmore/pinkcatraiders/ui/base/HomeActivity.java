@@ -293,29 +293,31 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             case R.id.profileL:
             {
                 //设置选中状态
-                Intent intent = new Intent();
-                intent.setClass(HomeActivity.this, LoginActivity.class);
-                startActivity(intent);
-                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
-                SystemTools.loadBackground(oneBuy, oneBuyDraw);
-                obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
-                //重置其他
-                Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
-                SystemTools.loadBackground(newest, newestDraw);
-                newestLabel.setTextColor(resources.getColor(R.color.text_black));
-                Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_normal);
-                SystemTools.loadBackground(list, listDraw);
-                listLabel.setTextColor(resources.getColor(R.color.text_black));
-                Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_press);
-                SystemTools.loadBackground(profile, profileDraw);
-                profileLabel.setTextColor(resources.getColor(R.color.title_bg));
-                funcPopWin.dismissView();
-                //切换内容
-                String tag = Contant.TAG_4;
-                //加载具体的页面
-                Message msg = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
-                mHandler.sendMessage(msg);
-
+                if (application.isLogin()==false){
+                    Intent intent = new Intent();
+                    intent.setClass(HomeActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }else {
+                    Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
+                    SystemTools.loadBackground(oneBuy, oneBuyDraw);
+                    obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
+                    //重置其他
+                    Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
+                    SystemTools.loadBackground(newest, newestDraw);
+                    newestLabel.setTextColor(resources.getColor(R.color.text_black));
+                    Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_normal);
+                    SystemTools.loadBackground(list, listDraw);
+                    listLabel.setTextColor(resources.getColor(R.color.text_black));
+                    Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_press);
+                    SystemTools.loadBackground(profile, profileDraw);
+                    profileLabel.setTextColor(resources.getColor(R.color.title_bg));
+                    funcPopWin.dismissView();
+                    //切换内容
+                    String tag = Contant.TAG_4;
+                    //加载具体的页面
+                    Message msg = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
+                    mHandler.sendMessage(msg);
+                }
             }
             break;
             default:

@@ -275,6 +275,11 @@ public class BuyLogActivity extends BaseActivity implements View.OnClickListener
         VolleyUtil.cancelAllRequest();
         ButterKnife.unbind(this);
     }
+    @OnClick(R.id.titleLeftImage)
+    void doBack()
+    {
+        closeSelf(BuyLogActivity.this);
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
