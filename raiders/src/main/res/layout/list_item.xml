@@ -4,33 +4,24 @@
     android:layout_height="match_parent"
     android:background="@color/color_white"
     android:padding="5dp">
-    <RelativeLayout
-        android:id="@+id/editBtnL"
-        android:layout_alignParentLeft="true"
-        android:layout_width="wrap_content"
-        android:padding="5dp"
-        android:layout_height="fill_parent">
         <TextView
             android:layout_width="@dimen/common_icon_size_4"
             android:layout_height="@dimen/common_icon_size_4"
             android:id="@+id/editBtn"
-           android:layout_centerInParent="true"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/productL"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_toRightOf="@+id/editBtnL">
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"/>
         <ImageView
             android:layout_width="@dimen/icon_size_4"
             android:layout_height="@dimen/icon_size_4"
             android:id="@+id/listProductIcon"
-            android:layout_alignParentLeft="true"/>
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/editBtn"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/productTag"
             android:layout_alignTop="@+id/listProductIcon"
+            android:layout_alignLeft="@+id/listProductIcon"
             android:layout_marginLeft="10dp"
             android:gravity="center"
             android:textColor="@color/color_white"
@@ -100,5 +91,4 @@
             android:id="@+id/stepTag"
             android:textColor="@color/title_bg"
             android:textSize="@dimen/text_size_14"/>
-    </RelativeLayout>
 </RelativeLayout>
