@@ -167,7 +167,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     void showCatagoryUi()
     {
         //ToastUtils.showLongToast(getActivity(), "弹出分类界面");
-        ActivityUtils.getInstance().showActivity(getActivity(), RaidesLogActivity.class);
     }
 
     @OnClick(R.id.zqL)
@@ -183,7 +182,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     {
         //ToastUtils.showLongToast(getActivity(), "弹出晒单界面");
         //购买记录
-        ActivityUtils.getInstance().showActivity(getActivity(), BuyLogActivity.class);
     }
 
     @OnClick(R.id.wtL)
