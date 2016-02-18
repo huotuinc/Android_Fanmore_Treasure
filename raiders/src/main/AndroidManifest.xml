@@ -96,6 +96,9 @@
         <activity android:name=".ui.orders.ShowOrderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
+        <activity android:name=".ui.orders.OrderDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
         <!-- 添加sqllite支持 -->
         <meta-data
             android:name="DATABASE"

@@ -7,6 +7,16 @@ import java.util.List;
  */
 public class OrderModel extends AccountModel {
 
+    private long pid;
+
+    public long getPid() {
+        return pid;
+    }
+
+    public void setPid(long pid) {
+        this.pid = pid;
+    }
+
     private String orderTime;
     private String orderTitle;
     private String productDetail;

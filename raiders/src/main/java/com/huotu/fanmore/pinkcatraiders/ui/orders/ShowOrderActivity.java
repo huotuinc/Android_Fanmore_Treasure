@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -26,6 +27,7 @@ import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.OrderModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
@@ -111,6 +113,15 @@ public class ShowOrderActivity extends BaseActivity implements View.OnClickListe
         orders = new ArrayList<OrderModel>();
         adapter = new OrderAdapter(orders, ShowOrderActivity.this);
         orderList.setAdapter(adapter);
+        orderList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                long pid = orders.get(position).getPid();
+                Bundle bundle = new Bundle();
+                bundle.putLong("pid", pid);
+                ActivityUtils.getInstance().showActivity(ShowOrderActivity.this, OrderDetailActivity.class, bundle);
+            }
+        });
         firstGetData();
     }
 
