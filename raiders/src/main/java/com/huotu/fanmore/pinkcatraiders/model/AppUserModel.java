@@ -3,9 +3,9 @@ package com.huotu.fanmore.pinkcatraiders.model;
 import java.math.BigDecimal;
 
 /**
- * Created by Administrator on 2016/1/25.
+ * 用户实体
  */
-public class AppUserModel  {
+public class AppUserModel extends BaseModel  {
     boolean enabled;
     Long userId;
     String moblie;
