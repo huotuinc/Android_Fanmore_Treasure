@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:padding="10dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/payChannel"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/text_size_16"
+        android:text="wwww"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/payTime"
+        android:text="sassa"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/text_size_14"
+        android:layout_below="@+id/payChannel"
+        android:layout_marginTop="5dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/payStatus"
+        android:text="sassa"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/text_size_14"
+        android:layout_below="@+id/payTime"
+        android:layout_marginTop="5dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/money"
+        android:text="222"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:textColor="@color/title_bg"
+        android:textSize="@dimen/text_size_14" />
+</RelativeLayout>
