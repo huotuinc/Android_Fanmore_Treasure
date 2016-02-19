@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
+import com.huotu.fanmore.pinkcatraiders.ui.assistant.RechargeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.RechargeLogActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.BuyLogActivity;
@@ -102,6 +103,13 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
     {
         //跳转到充值记录
         ActivityUtils.getInstance().showActivity(getActivity(), RechargeLogActivity.class);
+    }
+
+    @OnClick(R.id.txtScore)
+    void toRecharge()
+    {
+        //跳转到充值界面
+        ActivityUtils.getInstance().showActivity(getActivity(), RechargeActivity.class);
     }
     @Override
     public void onDestroy() {
