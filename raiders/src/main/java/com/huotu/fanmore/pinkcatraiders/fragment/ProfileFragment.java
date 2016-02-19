@@ -16,6 +16,8 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.BuyLogActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.RedEnvelopesActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.WinLogActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
@@ -89,11 +91,17 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
         ActivityUtils.getInstance().showActivity(getActivity(), RaidesLogActivity.class);
     }
 
+    @OnClick(R.id.redpacketL)
+    void toredpacket()
+    {
+        //跳转到红包
+        ActivityUtils.getInstance().showActivity(getActivity(), RedEnvelopesActivity.class);
+    }
     @OnClick(R.id.winningLogL)
     void towinningLog()
     {
         //跳转到中奖记录
-        ActivityUtils.getInstance().showActivity(getActivity(), BuyLogActivity.class);
+        ActivityUtils.getInstance().showActivity(getActivity(), WinLogActivity.class);
     }
     @Override
     public void onDestroy() {

@@ -200,7 +200,9 @@
 
         <activity
             android:name=".ui.usercenter.User_Center"
-            android:label="@string/title_activity_user__center"></activity>
+            android:label="@string/title_activity_user__center" />
+        <activity android:name=".ui.raiders.WinLogActivity" />
+        <activity android:name=".ui.raiders.RedEnvelopesActivity"></activity>
     </application>
 
 </manifest>
