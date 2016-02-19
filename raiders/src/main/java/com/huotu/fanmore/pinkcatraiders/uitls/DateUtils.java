@@ -23,6 +23,17 @@ public class DateUtils {
     }
 
     /**
+     * 转换成 2015/12/12 10:00:00格式
+     * @param timeStamp
+     * @return
+     */
+    public static String transformDataformat3(String timeStamp)
+    {
+        DateFormat format = new SimpleDateFormat("MM-dd HH:mm");
+        return format.format(new Date(Long.parseLong(timeStamp)));
+    }
+
+    /**
      * 转换成 2015-12-12 10:00:00格式
      * @param timeStamp
      * @return

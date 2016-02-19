@@ -1,4 +1,4 @@
-package com.huotu.fanmore.pinkcatraiders.ui.orders;
+package com.huotu.fanmore.pinkcatraiders.ui.assistant;
 
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -20,13 +20,14 @@ import android.widget.TextView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
-import com.huotu.fanmore.pinkcatraiders.adapter.ListAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.OrderAdapter;
+import com.huotu.fanmore.pinkcatraiders.adapter.RechargeAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
-import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.OrderModel;
+import com.huotu.fanmore.pinkcatraiders.model.RechargeModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.orders.OrderDetailActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
@@ -38,44 +39,56 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * 晒单界面
+ * 充值记录界面
  */
-public class ShowOrderActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+public class RechargeLogActivity extends BaseActivity implements View.OnClickListener, Handler.Callback{
 
     public Handler mHandler;
     public WindowManager wManager;
     public
     AssetManager am;
-    public Resources res;
+    public Resources resources;
     public BaseApplication application;
-    @Bind(R.id.orderList)
-    PullToRefreshListView orderList;
+    @Bind(R.id.rechargeLogList)
+    PullToRefreshListView rechargeLogList;
     @Bind(R.id.titleLayoutL)
     RelativeLayout titleLayoutL;
     @Bind(R.id.stubTitleText)
     ViewStub stubTitleText;
     @Bind(R.id.titleLeftImage)
     ImageView titleLeftImage;
+    @Bind(R.id.titleRightImage)
+    ImageView titleRightImage;
     View emptyView = null;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
-    public List<OrderModel> orders;
-    public OrderAdapter adapter;
+    public List<RechargeModel> recharges;
+    public RechargeAdapter adapter;
     public LayoutInflater inflate;
+
+    @Override
+    public boolean handleMessage(Message msg) {
+        return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.show_order);
+        setContentView(R.layout.recharge_log);
         ButterKnife.bind(this);
         mHandler = new Handler ( this );
         am = this.getAssets();
-        inflate = LayoutInflater.from(ShowOrderActivity.this);
-        res = this.getResources();
+        inflate = LayoutInflater.from(RechargeLogActivity.this);
+        resources = this.getResources();
         application = (BaseApplication) this.getApplication ();
         wManager = this.getWindowManager();
         emptyView = inflate.inflate(R.layout.empty, null);
         TextView emptyTag = (TextView) emptyView.findViewById(R.id.emptyTag);
-        emptyTag.setText("暂无晒单信息");
+        emptyTag.setText("暂无充值记录信息");
         TextView emptyBtn = (TextView) emptyView.findViewById(R.id.emptyBtn);
         emptyBtn.setVisibility(View.GONE);
         initTitle();
@@ -85,19 +98,21 @@ public class ShowOrderActivity extends BaseActivity implements View.OnClickListe
     private void initTitle()
     {
         //背景色
-        Drawable bgDraw = res.getDrawable(R.drawable.account_bg_bottom);
+        Drawable bgDraw = resources.getDrawable(R.drawable.account_bg_bottom);
         SystemTools.loadBackground(titleLayoutL, bgDraw);
-        Drawable leftDraw = res.getDrawable(R.mipmap.back_gray);
+        Drawable leftDraw = resources.getDrawable(R.mipmap.back_gray);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
+        Drawable rightDraw = resources.getDrawable(R.mipmap.recharge_icon);
+        SystemTools.loadBackground(titleRightImage, rightDraw);
         stubTitleText.inflate();
         TextView titleText = (TextView) this.findViewById(R.id.titleText);
-        titleText.setText("晒单分享");
+        titleText.setText("充值记录");
     }
 
     private void initList()
     {
-        orderList.setMode(PullToRefreshBase.Mode.BOTH);
-        orderList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        rechargeLogList.setMode(PullToRefreshBase.Mode.BOTH);
+        rechargeLogList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 operateType = OperateTypeEnum.REFRESH;
@@ -110,53 +125,39 @@ public class ShowOrderActivity extends BaseActivity implements View.OnClickListe
                 loadData();
             }
         });
-        orders = new ArrayList<OrderModel>();
-        adapter = new OrderAdapter(orders, ShowOrderActivity.this);
-        orderList.setAdapter(adapter);
-        orderList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                long pid = orders.get(position).getPid();
-                Bundle bundle = new Bundle();
-                bundle.putLong("pid", pid);
-                ActivityUtils.getInstance().showActivity(ShowOrderActivity.this, OrderDetailActivity.class, bundle);
-            }
-        });
+        recharges = new ArrayList<RechargeModel>();
+        adapter = new RechargeAdapter(recharges, RechargeLogActivity.this);
+        rechargeLogList.setAdapter(adapter);
         firstGetData();
     }
 
     private void loadData()
     {
-        orderList.onRefreshComplete();
-        OrderModel order1 = new OrderModel();
-        order1.setIssue(10098);
-        order1.setOrderDetail("呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵");
-        order1.setOrderTime("1455702902672");
-        order1.setOrderTitle("中了中了哈哈");
-        order1.setProductDetail("iphone6s 4.7英寸64G");
-        order1.setUserHead("http://imgk.zol.com.cn/dcbbs/2342/a2341460.jpg");
-        order1.setUsername("小小");
-        orders.add(order1);
-        OrderModel order2 = new OrderModel();
-        order2.setIssue(10098);
-        order2.setOrderDetail("呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵");
-        order2.setOrderTime("1455702902672");
-        order2.setOrderTitle("中了中了哈哈");
-        order2.setProductDetail("iphone6s 4.7英寸64G");
-        order2.setUserHead("http://imgk.zol.com.cn/dcbbs/2342/a2341460.jpg");
-        order2.setUsername("小小");
-        orders.add(order2);
+        //rechargeLogList.setEmptyView(emptyView);
+        rechargeLogList.onRefreshComplete();
+        RechargeModel recharge = new RechargeModel();
+        recharge.setMoney(2);
+        recharge.setPayChannel(0);
+        recharge.setPayStatus(3);
+        recharge.setPayTime("1455702902672");
+        recharges.add(recharge);
+        RechargeModel recharge1 = new RechargeModel();
+        recharge1.setMoney(3);
+        recharge1.setPayChannel(1);
+        recharge1.setPayStatus(1);
+        recharge1.setPayTime("1455702902672");
+        recharges.add(recharge1);
     }
 
     protected void firstGetData(){
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (ShowOrderActivity.this.isFinishing()) {
+                if (RechargeLogActivity.this.isFinishing()) {
                     return;
                 }
                 operateType = OperateTypeEnum.REFRESH;
-                orderList.setRefreshing(true);
+                rechargeLogList.setRefreshing(true);
             }
         }, 1000);
     }
@@ -174,27 +175,8 @@ public class ShowOrderActivity extends BaseActivity implements View.OnClickListe
                 && event.getAction() == KeyEvent.ACTION_DOWN)
         {
             //关闭
-            this.closeSelf(ShowOrderActivity.this);
+            this.closeSelf(RechargeLogActivity.this);
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public boolean handleMessage(Message msg) {
-        return false;
-    }
-
-    @Override
-    public void onClick(View v) {
     }
 }
