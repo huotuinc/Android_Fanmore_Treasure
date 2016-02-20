@@ -75,6 +75,7 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
     public TabPagerAdapter tabPagerAdapter;
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
     public NoticePopWindow noticePopWin;
+    int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +87,9 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
         mHandler = new Handler ( this );
         wManager = this.getWindowManager();
         initTitle();
+        currentIndex=getIntent().getIntExtra("index",0);
         initSwitch();
+
     }
 
     private void initSwitch()
@@ -111,6 +114,8 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onPageSelected(int index) {
+
+
             }
 
             @Override
@@ -127,6 +132,7 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
             public void onPageScrollStateChanged(int state) {
             }
         });
+        raidersViewPager.setCurrentItem(currentIndex);
     }
 
     @OnClick(R.id.titleLeftImage)

@@ -93,18 +93,22 @@
             android:name=".ui.base.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ui.orders.ShowOrderActivity"
+        <activity
+            android:name=".ui.orders.ShowOrderActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".ui.orders.OrderDetailActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.orders.OrderDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".ui.assistant.RechargeLogActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.assistant.RechargeLogActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".ui.assistant.RechargeActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.assistant.RechargeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <!-- 添加sqllite支持 -->
         <meta-data
             android:name="DATABASE"
@@ -214,7 +218,8 @@
             android:name=".ui.usercenter.User_Center"
             android:label="@string/title_activity_user__center" />
         <activity android:name=".ui.raiders.WinLogActivity" />
-        <activity android:name=".ui.raiders.RedEnvelopesActivity"></activity>
+        <activity android:name=".ui.raiders.RedEnvelopesActivity" />
+        <activity android:name=".ui.raiders.UserSettingActivity"></activity>
     </application>
 
 </manifest>

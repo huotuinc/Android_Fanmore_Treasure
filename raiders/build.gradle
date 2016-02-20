@@ -7,14 +7,7 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
-allprojects {
-    repositories {
-        maven{
-            url="http://repo.51flashmall.com:8081/nexus/content/groups/public/"
-        }
-        jcenter()
-    }
-}
+
 android {
     signingConfigs {
         huotu {
@@ -73,15 +66,16 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22+'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    //compile 'com.android.support:appcompat-v7:22+'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'commons-codec:commons-codec:1.10'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.loopeer.android.thirdparty.pulltorefresh:Android-PullToRefresh:2.1.1'
     compile 'com.huotu.android.library:libedittext:1.6'
-    compile ('com.github.satyan:sugar:1.4'){
+    compile('com.github.satyan:sugar:1.4') {
         exclude module: 'support-v4'
     }
+    compile 'com.android.support:appcompat-v7:22.1.1'
 }
