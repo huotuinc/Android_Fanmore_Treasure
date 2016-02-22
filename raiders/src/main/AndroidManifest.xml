@@ -219,7 +219,9 @@
             android:label="@string/title_activity_user__center" />
         <activity android:name=".ui.raiders.WinLogActivity" />
         <activity android:name=".ui.raiders.RedEnvelopesActivity" />
-        <activity android:name=".ui.raiders.UserSettingActivity"></activity>
+        <activity android:name=".ui.raiders.UserSettingActivity" />
+        <activity android:name=".ui.raiders.ShareOrderActivity" />
+        <activity android:name=".ui.raiders.AddressListActivity"></activity>
     </application>
 
 </manifest>

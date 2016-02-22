@@ -19,6 +19,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.BuyLogActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RedEnvelopesActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.ShareOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.WinLogActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -101,6 +102,12 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
     void toll2()
     {
         ActivityUtils.getInstance().showActivity(getActivity(),RaidesLogActivity.class,"index",2);
+    }
+    @OnClick(R.id.shareL)
+    void toshare()
+    {
+        //跳转到晒单
+        ActivityUtils.getInstance().showActivity(getActivity(), ShareOrderActivity.class);
     }
     @OnClick(R.id.raideLogL)
     void toRaideLog()

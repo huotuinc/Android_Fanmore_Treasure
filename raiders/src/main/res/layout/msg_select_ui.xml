@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/account_bg">
+    <RelativeLayout
+        android:id="@+id/msgTitleL"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/account_bg_bottom"
+        android:padding="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/msgTitle"
+            android:text="111"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_16"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/msgConL"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/msgTitleL">
+        <ImageView
+            android:id="@+id/emptyImage"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_centerInParent="true"
+            android:layout_margin="20dp"
+            android:visibility="gone"
+            android:background="@mipmap/empty"/>
+        <ListView
+            android:id="@+id/msgList"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:divider="@color/driver_color"
+            android:dividerHeight="1px"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -218,6 +218,7 @@
                 android:background="@mipmap/jinru"/>
         </LinearLayout>
             <LinearLayout
+                android:id="@+id/shareL"
             android:layout_width="match_parent"
             android:layout_height="@dimen/profile_item_height"
             android:orientation="horizontal"
