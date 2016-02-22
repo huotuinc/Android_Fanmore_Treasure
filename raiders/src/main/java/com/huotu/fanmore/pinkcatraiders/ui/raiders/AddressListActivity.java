@@ -84,13 +84,13 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 operateType = OperateTypeEnum.REFRESH;
-                //loadData();
+                loadData();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 operateType = OperateTypeEnum.LOADMORE;
-                //loadData();
+                loadData();
 
             }
         });
