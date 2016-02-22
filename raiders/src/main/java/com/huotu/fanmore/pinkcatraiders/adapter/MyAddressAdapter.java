@@ -80,7 +80,7 @@ public class MyAddressAdapter extends BaseAdapter {
         Resources resources = context.getResources();
         if (convertView == null)
         {
-            convertView = View.inflate(context, R.layout.list_item, null);
+            convertView = View.inflate(context, R.layout.addresslist_item, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }
