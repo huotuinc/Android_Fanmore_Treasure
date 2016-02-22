@@ -82,8 +82,6 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
         rootAty = (HomeActivity) getActivity();
         ButterKnife.bind(this, rootView);
         BitmapLoader.create().loadRoundImage(getActivity(), userimg, "http://imgk.zol.com.cn/dcbbs/2342/a2341460.jpg", R.mipmap.error);
-        userimg.setBorderColor(resources.getColor(R.color.color_white));
-        userimg.setBorderWidth((int)resources.getDimension(R.dimen.head_width));
         wManager = getActivity().getWindowManager();
         return rootView;
     }

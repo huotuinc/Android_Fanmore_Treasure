@@ -46,6 +46,10 @@ public class Contant {
     public static final int UPDATE_RAIDER_COUNT = 0x00000011;
     //更新专区数量
     public static final int LOAD_AREA_COUNT = 0x00000012;
+    /**
+     * 上传图片
+     */
+    public static final int UPLOAD_IMAGE = 0x00000031;
 
     /**
      * 菜单标记1
