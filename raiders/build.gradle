@@ -9,9 +9,7 @@ buildscript {
 apply plugin: 'com.android.application'
 allprojects {
     repositories {
-        maven{
-            url="http://repo.51flashmall.com:8081/nexus/content/groups/public/"
-        }
+        flatDir { dirs 'libs' }
         jcenter()
     }
 }
@@ -80,7 +78,7 @@ dependencies {
     compile 'commons-codec:commons-codec:1.10'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.loopeer.android.thirdparty.pulltorefresh:Android-PullToRefresh:2.1.1'
-    compile 'com.huotu.android.library:libedittext:1.6'
+    compile(name:'libedittext-release', ext:'aar')
     compile ('com.github.satyan:sugar:1.4'){
         exclude module: 'support-v4'
     }
