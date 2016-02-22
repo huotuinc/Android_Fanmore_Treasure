@@ -5,16 +5,19 @@ import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.MyAddressListModel;
+import com.huotu.fanmore.pinkcatraiders.model.NewestProduct;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
@@ -88,6 +91,10 @@ public class MyAddressAdapter extends BaseAdapter {
         {
             holder = (ViewHolder) convertView.getTag();
         }
+        final MyAddressListModel MyAddressList = lists.get(position);
+        holder.receiver.setText(MyAddressList.getReceiver());
+        holder.mobile.setText(MyAddressList.getMobile());
+        holder.details.setText(MyAddressList.getDetails());
 
 
         return convertView;
@@ -98,5 +105,12 @@ public class MyAddressAdapter extends BaseAdapter {
         {
             ButterKnife.bind(this, view);
         }
+        @Bind(R.id.receiver)
+        TextView receiver;
+        @Bind(R.id.mobile)
+        TextView mobile;
+        @Bind(R.id.details)
+        TextView details;
+
     }
 }
