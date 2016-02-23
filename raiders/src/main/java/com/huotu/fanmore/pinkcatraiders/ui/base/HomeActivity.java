@@ -29,10 +29,14 @@ import com.huotu.fanmore.pinkcatraiders.fragment.ListFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.NewestFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.ProfileFragment;
 
+import com.huotu.fanmore.pinkcatraiders.ui.assistant.MsgActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.assistant.SearchActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
@@ -46,6 +50,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 首页
@@ -169,15 +174,43 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         Drawable leftDraw = resources.getDrawable(R.mipmap.title_setting_white);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
         Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
-        SystemTools.loadBackground(titleRightImage, rightDraw);
-        stubSearchBar.inflate();
+        SystemTools.loadBackground ( titleRightImage, rightDraw );
+        stubSearchBar.inflate ( );
         EditText searchL = (EditText) this.findViewById(R.id.titleSearchBar);
+        searchL.setOnClickListener (
+                new View.OnClickListener ( ) {
+
+                    @Override
+                    public
+                    void onClick ( View v ) {
+
+                        Bundle bundle = new Bundle ( );
+                        bundle.putInt ( "searchType", 0 );
+                        ActivityUtils.getInstance ( ).showActivity ( HomeActivity.this,
+                                                                     SearchActivity.class, bundle );
+                    }
+                }
+                                   );
+    }
+
+    @OnClick (R.id.titleLeftImage)
+    void doSetting()
+    {
+        ActivityUtils.getInstance ( ).showActivity ( HomeActivity.this, UserSettingActivity.class );
+    }
+
+    @OnClick (R.id.titleRightImage)
+    void showMsg()
+    {
+        ActivityUtils.getInstance ( ).showActivity ( HomeActivity.this, MsgActivity.class );
     }
 
     private void initView() {
         initTab();
 
     }
+
+
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState)

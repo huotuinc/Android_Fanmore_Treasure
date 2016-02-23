@@ -1,7 +1,7 @@
 package com.huotu.fanmore.pinkcatraiders.model;
 
 /**
- * Created by Administrator on 2016/2/20.
+ * 收货地址
  */
 public class MyAddressListModel {
     int cityId;

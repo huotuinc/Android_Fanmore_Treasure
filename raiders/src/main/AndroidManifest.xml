@@ -109,6 +109,18 @@
             android:name=".ui.assistant.RechargeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <activity android:name=".ui.assistant.ModifyInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.assistant.AddAddressActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme" />
+        <activity android:name=".ui.assistant.SearchActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme" />
+        <activity android:name=".ui.assistant.MsgActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme" />
         <!-- 添加sqllite支持 -->
         <meta-data
             android:name="DATABASE"

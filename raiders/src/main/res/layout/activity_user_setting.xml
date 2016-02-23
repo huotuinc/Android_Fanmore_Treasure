@@ -12,10 +12,20 @@
         <include
             layout="@layout/layout_title"/>
     </RelativeLayout>
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+        android:id="@+id/userSettingPullRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/user_setting_item_height_1"
         android:orientation="horizontal"
+        android:id="@+id/userLogoL"
+        android:padding="10dp"
         android:background="@color/color_white">
         <TextView
             android:layout_weight="1"
@@ -23,13 +33,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="头像"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_18"
+            android:textColor="@color/text_gray"
             android:layout_gravity="center"/>
         <com.huotu.fanmore.pinkcatraiders.widget.CircleImageView
             android:id="@+id/Userimg"
             android:layout_margin="5dp"
-            android:layout_width="60dp"
-            android:layout_height="60dp" />
+            android:layout_gravity="center"
+            android:layout_width="@dimen/icon_size_40"
+            android:layout_height="@dimen/icon_size_40" />
         <ImageView
             android:layout_marginRight="5dp"
             android:layout_gravity="center"
@@ -43,9 +55,10 @@
         android:background="@color/gray_bg"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/user_setting_item_height"
         android:orientation="horizontal"
         android:padding="10dp"
+        android:id="@+id/userIdL"
         android:background="@color/color_white">
         <TextView
             android:layout_weight="1"
@@ -53,12 +66,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="ID"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_18"
+            android:textColor="@color/text_gray"
             android:layout_gravity="center"/>
        <TextView
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:textSize="18sp"
+           android:textSize="@dimen/text_size_16"
            android:layout_marginRight="5dp"
            android:text="1241234123123123@qq.com"/>
         <ImageView
@@ -74,9 +88,10 @@
         android:background="@color/gray_bg"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/user_setting_item_height"
         android:orientation="horizontal"
         android:padding="10dp"
+        android:id="@+id/userAccountL"
         android:background="@color/color_white">
         <TextView
             android:layout_weight="1"
@@ -84,12 +99,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="账号"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_18"
+            android:textColor="@color/text_gray"
             android:layout_gravity="center"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_16"
             android:layout_marginRight="5dp"
             android:text="1241234123123123@qq.com"/>
         <ImageView
@@ -105,9 +121,10 @@
         android:background="@color/gray_bg"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/user_setting_item_height"
         android:orientation="horizontal"
         android:padding="10dp"
+        android:id="@+id/userNickNameL"
         android:background="@color/color_white">
         <TextView
             android:layout_weight="1"
@@ -115,12 +132,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="昵称"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_18"
+            android:textColor="@color/text_gray"
             android:layout_gravity="center"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_16"
             android:layout_marginRight="5dp"
             android:text="反对法"/>
         <ImageView
@@ -136,8 +154,9 @@
         android:background="@color/gray_bg"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/user_setting_item_height"
         android:orientation="horizontal"
+        android:id="@+id/userPhoneL"
         android:padding="10dp"
         android:background="@color/color_white">
         <TextView
@@ -146,12 +165,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="手机号码"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_18"
+            android:textColor="@color/text_gray"
             android:layout_gravity="center"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_16"
+            android:id="@+id/userPhone"
             android:layout_marginRight="5dp"
             android:text="12412341231231"/>
         <ImageView
@@ -166,10 +187,10 @@
         android:layout_height="1px"
         android:background="@color/gray_bg"/>
     <LinearLayout
-        android:id="@+id/addressL"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/user_setting_item_height"
         android:orientation="horizontal"
+        android:id="@+id/userAddressL"
         android:padding="10dp"
         android:background="@color/color_white">
         <TextView
@@ -178,7 +199,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="地址管理"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_18"
+            android:textColor="@color/text_gray"
             android:layout_gravity="center"/>
 
         <ImageView
@@ -188,6 +210,7 @@
             android:layout_height="wrap_content"
             android:background="@mipmap/jinru"/>
     </LinearLayout>
-
+    </LinearLayout>
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 
 </LinearLayout>
