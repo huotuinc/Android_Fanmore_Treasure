@@ -70,7 +70,7 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate ( savedInstanceState );
     }
 
     @Nullable
@@ -132,6 +132,12 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
     {
         //跳转到充值记录
         ActivityUtils.getInstance().showActivity(getActivity(), RechargeLogActivity.class);
+    }
+
+    @OnClick(R.id.userNameL)
+    void doShowSeeting()
+    {
+        ActivityUtils.getInstance().showActivity(getActivity(), UserSettingActivity.class);
     }
 
     @OnClick(R.id.txtScore)

@@ -91,11 +91,29 @@ public class MyAddressAdapter extends BaseAdapter {
         {
             holder = (ViewHolder) convertView.getTag();
         }
-        final MyAddressListModel MyAddressList = lists.get(position);
-        holder.receiver.setText(MyAddressList.getReceiver());
-        holder.mobile.setText(MyAddressList.getMobile());
-        holder.details.setText(MyAddressList.getDetails());
 
+        SystemTools.loadBackground ( holder.editBtn, resources.getDrawable ( R.mipmap.unselect ) );
+        SystemTools.loadBackground ( holder.editIcon, resources.getDrawable ( R.mipmap.editor_icon ) );
+        final MyAddressListModel MyAddressList = lists.get(position);
+        if(1==MyAddressList.getDefaultAddress ())
+        {
+            holder.isDefault.setText ( "[默认]" );
+        }
+        else
+        {
+            holder.isDefault.setVisibility ( View.GONE );
+        }
+        holder.receiver.setText(MyAddressList.getReceiver());
+        holder.mobile.setText(MyAddressList.getMobile ( ));
+        holder.details.setText(MyAddressList.getDetails ( ));
+        holder.editIcon.setOnClickListener ( new View.OnClickListener ( ) {
+
+                                                 @Override
+                                                 public
+                                                 void onClick ( View v ) {
+
+                                                 }
+                                             } );
 
         return convertView;
     }
@@ -111,6 +129,11 @@ public class MyAddressAdapter extends BaseAdapter {
         TextView mobile;
         @Bind(R.id.details)
         TextView details;
-
+        @Bind ( R.id.editBtn )
+        TextView editBtn;
+        @Bind ( R.id.editIcon )
+        TextView editIcon;
+        @Bind ( R.id.isDefault )
+        TextView isDefault;
     }
 }
