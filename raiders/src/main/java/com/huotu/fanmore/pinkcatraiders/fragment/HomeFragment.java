@@ -34,12 +34,14 @@ import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
+import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.ShowOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.product.AreaActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.product.ProductDetailActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.BuyLogActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
@@ -109,7 +111,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate ( savedInstanceState );
     }
 
     @Nullable
@@ -124,26 +126,33 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
         wManager = getActivity().getWindowManager();
         initView();
-        iniScroll();
+        iniScroll ( );
         return rootView;
     }
 
     private void iniScroll()
     {
-        homePullRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.REFRESH;
-                initProduct();
-            }
+        homePullRefresh.setOnRefreshListener (
+                new PullToRefreshBase.OnRefreshListener2< ScrollView > ( ) {
 
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.LOADMORE;
-                initProduct();
-            }
-        });
-        homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
+                    @Override
+                    public
+                    void onPullDownToRefresh ( PullToRefreshBase< ScrollView > pullToRefreshBase ) {
+
+                        operateType = OperateTypeEnum.REFRESH;
+                        initProduct ( );
+                    }
+
+                    @Override
+                    public
+                    void onPullUpToRefresh ( PullToRefreshBase< ScrollView > pullToRefreshBase ) {
+
+                        operateType = OperateTypeEnum.LOADMORE;
+                        initProduct ( );
+                    }
+                }
+                                             );
+        homePullRefresh.getRefreshableView().smoothScrollTo ( 0, 0 );
     }
 
     private void initView()
@@ -189,6 +198,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     void showWtUi()
     {
         //显示常见问题
+        Bundle bundle = new Bundle (  );
+        bundle.putString ( "title", "常见问题" );
+        bundle.putString ( "link", "https://www.baidu.com/" );
+        ActivityUtils.getInstance ().showActivity ( getActivity (), WebExhibitionActivity.class, bundle );
     }
 
     private void initProduct()
