@@ -92,7 +92,7 @@ public class MyAddressAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        SystemTools.loadBackground ( holder.editBtn, resources.getDrawable ( R.mipmap.unselect ) );
+        holder.editBtn.setVisibility ( View.GONE );
         SystemTools.loadBackground ( holder.editIcon, resources.getDrawable ( R.mipmap.editor_icon ) );
         final MyAddressListModel MyAddressList = lists.get(position);
         if(1==MyAddressList.getDefaultAddress ())

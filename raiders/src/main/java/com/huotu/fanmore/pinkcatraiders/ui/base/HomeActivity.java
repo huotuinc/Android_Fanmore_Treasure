@@ -146,12 +146,12 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         resources = this.getResources();
         mHandler = new Handler ( this );
         //设置沉浸模式
-        setImmerseLayout(this.findViewById(R.id.titleLayoutL));
+        setImmerseLayout ( this.findViewById ( R.id.titleLayoutL ) );
         wManager = this.getWindowManager();
         funcPopWin = new FuncPopWin(HomeActivity.this, HomeActivity.this, wManager);
         am = this.getAssets();
         //初始化title面板
-        initTitle();
+        initTitle ( );
         if (null == savedInstanceState)
         {
             application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
@@ -163,7 +163,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     .getSerializable("curFragType");
             application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
         }
-        initView();
+        initView ( );
     }
 
     private void initTitle()
@@ -173,6 +173,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         SystemTools.loadBackground(titleLayoutL, bgDraw);
         Drawable leftDraw = resources.getDrawable(R.mipmap.title_setting_white);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
+        //消息模式
+        titleRightImage.setTag ( 0 );
         Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
         SystemTools.loadBackground ( titleRightImage, rightDraw );
         stubSearchBar.inflate ( );
@@ -202,7 +204,17 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     @OnClick (R.id.titleRightImage)
     void showMsg()
     {
-        ActivityUtils.getInstance ( ).showActivity ( HomeActivity.this, MsgActivity.class );
+        int tag = ( int ) titleRightImage.getTag ();
+        if(0 == tag)
+        {
+            ActivityUtils.getInstance ( ).showActivity ( HomeActivity.this, MsgActivity.class );
+        }
+        else if(1 == tag)
+        {
+            //切换编辑模式
+
+        }
+
     }
 
     private void initView() {
@@ -255,6 +267,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_press);
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
                 obBuyLabel.setTextColor(resources.getColor(R.color.title_bg));
+                //标题栏右图标
+                //消息模式
+                titleRightImage.setTag ( 0 );
+                Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
+                SystemTools.loadBackground ( titleRightImage, rightDraw );
                 //重置其他
                 Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
                 SystemTools.loadBackground(newest, newestDraw);
@@ -279,6 +296,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
                 obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
+                //标题栏右图标
+                //消息模式
+                titleRightImage.setTag ( 0 );
+                Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
+                SystemTools.loadBackground ( titleRightImage, rightDraw );
                 //重置其他
                 Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_press);
                 SystemTools.loadBackground(newest, newestDraw);
@@ -300,9 +322,14 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             case R.id.listL:
             {
                 //设置选中状态
-                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
+                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal );
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
                 obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
+                //标题栏右图标
+                //编辑模式
+                titleRightImage.setTag ( 1 );
+                Drawable rightDraw = resources.getDrawable(R.mipmap.title_edit);
+                SystemTools.loadBackground ( titleRightImage, rightDraw );
                 //重置其他
                 Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
                 SystemTools.loadBackground(newest, newestDraw);
@@ -313,6 +340,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
                 SystemTools.loadBackground(profile, profileDraw);
                 profileLabel.setTextColor(resources.getColor(R.color.text_black));
+
                 //显示清单操作弹出框
                 funcPopWin.showLayout();
                 funcPopWin.showAsDropDown(homeBottom, 0, -(2*(int)resources.getDimension(R.dimen.bottom_height)));
@@ -334,6 +362,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
                     SystemTools.loadBackground(oneBuy, oneBuyDraw);
                     obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
+                    //标题栏右图标
+                    //消息模式
+                    titleRightImage.setTag ( 0 );
+                    Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
+                    SystemTools.loadBackground ( titleRightImage, rightDraw );
                     //重置其他
                     Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
                     SystemTools.loadBackground(newest, newestDraw);
