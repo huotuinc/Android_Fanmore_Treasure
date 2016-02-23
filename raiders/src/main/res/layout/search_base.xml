@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="@drawable/account_bg_bottom">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:id="@+id/searchHistoryText"
+        android:layout_alignParentLeft="true"
+        android:textSize="@dimen/text_size_14"
+        android:textColor="@color/text_gray"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchHistoryTime"
+        android:layout_centerInParent="true"
+        android:textSize="@dimen/text_size_14"
+        android:textColor="@color/text_gray"/>
+</RelativeLayout>

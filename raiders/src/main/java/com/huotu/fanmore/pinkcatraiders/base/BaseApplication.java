@@ -17,6 +17,7 @@ import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
 import com.huotu.fanmore.pinkcatraiders.model.InitOutputsModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
+import com.orm.SugarContext;
 
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
@@ -57,6 +58,8 @@ public class BaseApplication extends Application {
         //加载异常处理模块
         CrashHandler crashHandler = CrashHandler.getInstance ();
         crashHandler.init(getApplicationContext());
+        //加载数据库初始化模块
+        SugarContext.init ( getApplicationContext ( ) );
     }
 
     //判断是否为4.4版本。可设置沉浸模式

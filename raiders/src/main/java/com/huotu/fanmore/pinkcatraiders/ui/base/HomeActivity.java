@@ -29,6 +29,7 @@ import com.huotu.fanmore.pinkcatraiders.fragment.ListFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.NewestFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.ProfileFragment;
 
+import com.huotu.fanmore.pinkcatraiders.ui.assistant.SearchActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
@@ -175,6 +176,16 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         SystemTools.loadBackground ( titleRightImage, rightDraw );
         stubSearchBar.inflate ( );
         EditText searchL = (EditText) this.findViewById(R.id.titleSearchBar);
+        searchL.setOnClickListener ( new View.OnClickListener ( ) {
+
+                                         @Override
+                                         public
+                                         void onClick ( View v ) {
+                                             Bundle bundle = new Bundle (  );
+                                             bundle.putInt ( "searchType", 0 );
+                                             ActivityUtils.getInstance ().showActivity ( HomeActivity.this, SearchActivity.class, bundle );
+                                         }
+                                     } );
     }
 
     @OnClick (R.id.titleLeftImage)
@@ -187,6 +198,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         initTab();
 
     }
+
+
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState)
