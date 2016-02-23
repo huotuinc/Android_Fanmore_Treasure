@@ -221,7 +221,8 @@
         <activity android:name=".ui.raiders.RedEnvelopesActivity" />
         <activity android:name=".ui.raiders.UserSettingActivity" />
         <activity android:name=".ui.raiders.ShareOrderActivity" />
-        <activity android:name=".ui.raiders.AddressListActivity"></activity>
+        <activity android:name=".ui.raiders.AddressListActivity" />
+        <activity android:name=".ui.product.CateGoryActivity"></activity>
     </application>
 
 </manifest>

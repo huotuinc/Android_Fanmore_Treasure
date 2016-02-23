@@ -141,8 +141,8 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
             list1.setPid(1);
             list1.setToAmount(1000);
             list1.setAreaAmount(10);
-            list1.setTitle("想嘻嘻嘻嘻嘻嘻嘻嘻嘻想");
-            list1.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
+            list1.setTitle("想嘻嘻嘻嘻嘻嘻嘻嘻嘻想发大苏打倒萨大苏打啊大大实打实大苏打阿斯顿阿德阿斯顿阿德啊大苏打大苏打大苏打三大");
+            list1.setPictureUrl("http://imgk.zol.com.cn/dcbbs/2342/a2341460.jpg");
             list1.setRemainAmount(155);
             list1.setStepAmount(10);
             lists.add(list1);
@@ -150,8 +150,8 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
             list2.setPid(2);
             list2.setToAmount(1000);
             list2.setAreaAmount(10);
-            list2.setTitle("想嘻嘻嘻嘻嘻嘻嘻嘻嘻想");
-            list2.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
+            list2.setTitle("想嘻嘻嘻嘻嘻嘻嘻嘻嘻想发大苏打倒萨大苏打啊大大实打实大苏打阿斯顿阿德阿斯顿阿德啊大苏打大苏打大苏打三大");
+            list2.setPictureUrl("http://imgk.zol.com.cn/dcbbs/2342/a2341460.jpg");
             list2.setRemainAmount(155);
             list2.setStepAmount(10);
             lists.add(list2);
@@ -159,8 +159,8 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
             list3.setPid(3);
             list3.setToAmount(1000);
             list3.setAreaAmount(10);
-            list3.setTitle("想嘻嘻嘻嘻嘻嘻嘻嘻嘻想");
-            list3.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
+            list3.setTitle("想嘻嘻嘻嘻嘻嘻嘻嘻嘻想发大苏打倒萨大苏打啊大大实打实大苏打阿斯顿阿德阿斯顿阿德啊大苏打大苏打大苏打三大");
+            list3.setPictureUrl("http://imgk.zol.com.cn/dcbbs/2342/a2341460.jpg");
             list3.setRemainAmount(155);
             list3.setStepAmount(10);
             lists.add(list3);

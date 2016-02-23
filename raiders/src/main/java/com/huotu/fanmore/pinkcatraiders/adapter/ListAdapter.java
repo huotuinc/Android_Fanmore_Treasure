@@ -97,6 +97,7 @@ public class ListAdapter extends BaseAdapter {
             }
             holder.totalRequired.setText("总需" + list.getToAmount() + "人次");
             holder.surplusRequired.setText("剩余" + list.getRemainAmount() + "人次");
+            holder.addAndSub.setTextSize((int) resources.getDimension(R.dimen.text_size_4));
             holder.addAndSub.setViewsLayoutParm((int) resources.getDimension(R.dimen.add_sub_width), (int) resources.getDimension(R.dimen.add_sub_height));
             holder.addAndSub.setButtonBgDrawable(resources.getDrawable(R.drawable.add_sub_bg), resources.getDrawable(R.drawable.add_sub_bg));
             holder.addAndSub.setNum((int)list.getStepAmount());

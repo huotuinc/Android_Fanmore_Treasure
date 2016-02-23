@@ -2,15 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/productRL"
     android:background="@color/color_white"
     android:padding="5dp">
         <TextView
-            android:layout_width="@dimen/common_icon_size_4"
-            android:layout_height="@dimen/common_icon_size_4"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:id="@+id/editBtn"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"/>
         <ImageView
+            android:layout_centerVertical="true"
             android:layout_width="@dimen/icon_size_4"
             android:layout_height="@dimen/icon_size_4"
             android:id="@+id/listProductIcon"
@@ -20,14 +22,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/productTag"
-            android:layout_alignTop="@+id/listProductIcon"
-            android:layout_alignLeft="@+id/listProductIcon"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:layout_marginLeft="10dp"
             android:gravity="center"
             android:textColor="@color/color_white"
             android:textSize="@dimen/text_size_10"/>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/listProductName"
             android:layout_toRightOf="@+id/listProductIcon"
@@ -47,7 +49,7 @@
             android:layout_alignLeft="@+id/listProductName"
             android:text="2222"
             android:textColor="@color/text_gray"
-            android:textSize="@dimen/text_size_14"/>
+            android:textSize="@dimen/text_size_12"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,7 +59,7 @@
             android:layout_marginLeft="10dp"
             android:text="3333"
             android:textColor="@color/text_gray"
-            android:textSize="@dimen/text_size_14"/>
+            android:textSize="@dimen/text_size_12"/>
         <RelativeLayout
             android:id="@+id/addSubL"
             android:layout_width="wrap_content"
@@ -72,7 +74,7 @@
                 android:layout_centerVertical="true"
                 android:text="参与人次"
                 android:textColor="@color/text_gray"
-                android:textSize="@dimen/text_size_14"/>
+                android:textSize="@dimen/text_size_12"/>
             <com.huotu.fanmore.pinkcatraiders.widget.AddAndSubView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -90,5 +92,5 @@
             android:text="参与人数"
             android:id="@+id/stepTag"
             android:textColor="@color/title_bg"
-            android:textSize="@dimen/text_size_14"/>
+            android:textSize="@dimen/text_size_12"/>
 </RelativeLayout>

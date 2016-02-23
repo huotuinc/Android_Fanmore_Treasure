@@ -101,6 +101,8 @@ public class Contant {
     public static final String GET_GOODS_LIST_INDEX = "getGoodsListByIndex";
     //获取专区商品列表
     public static final String GET_GOODS_LIST_BY_AREA = "getGoodsListByArea";
+    //获取分类浏览列表
+    public static final String GET_CATE_GORY_LIST="getCategoryList";
     //获取商品详情信息
     public static final String GET_GOODS_DTAIL_BY_GOODS_ID = "getGoodsDetailByGoodsId";
     //获取参与历史
