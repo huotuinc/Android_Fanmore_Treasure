@@ -240,6 +240,44 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
         addressPopWin.setOnDismissListener(new PoponDismissListener (AddAddressActivity.this));
     }
 
+    @OnClick ( R.id.cityL )
+    void selectCity()
+    {
+        //选择省份
+        addresses = new ArrayList<AddressModel> (  );
+        AddressModel address1 = new AddressModel ();
+        address1.setPid ( 0 );
+        address1.setAddressName ( "杭州市" );
+        addresses.add ( address1 );
+        AddressModel address2 = new AddressModel ();
+        address2.setPid ( 1 );
+        address2.setAddressName ( "台州市" );
+        addresses.add ( address2 );
+        addressPopWin = new AddressPopWin ( mHandler, application, AddAddressActivity.this, addresses, 1, wManager, AddAddressActivity.this );
+        addressPopWin.initView();
+        addressPopWin.showAtLocation (titleLeftImage, Gravity.CENTER, 0, 0);
+        addressPopWin.setOnDismissListener(new PoponDismissListener (AddAddressActivity.this));
+    }
+
+    @OnClick ( R.id.areaL )
+    void selectArea()
+    {
+        //选择省份
+        addresses = new ArrayList<AddressModel> (  );
+        AddressModel address1 = new AddressModel ();
+        address1.setPid ( 0 );
+        address1.setAddressName ( "滨江区" );
+        addresses.add ( address1 );
+        AddressModel address2 = new AddressModel ();
+        address2.setPid ( 1 );
+        address2.setAddressName ( "上城区" );
+        addresses.add ( address2 );
+        addressPopWin = new AddressPopWin ( mHandler, application, AddAddressActivity.this, addresses, 2, wManager, AddAddressActivity.this );
+        addressPopWin.initView();
+        addressPopWin.showAtLocation (titleLeftImage, Gravity.CENTER, 0, 0);
+        addressPopWin.setOnDismissListener(new PoponDismissListener (AddAddressActivity.this));
+    }
+
     @OnClick(R.id.titleLeftImage)
     void doBack()
     {
