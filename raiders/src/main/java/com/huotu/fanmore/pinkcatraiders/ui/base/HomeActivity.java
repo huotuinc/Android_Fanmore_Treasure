@@ -29,6 +29,7 @@ import com.huotu.fanmore.pinkcatraiders.fragment.ListFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.NewestFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.ProfileFragment;
 
+import com.huotu.fanmore.pinkcatraiders.ui.assistant.MsgActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.SearchActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 
@@ -176,22 +177,32 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         SystemTools.loadBackground ( titleRightImage, rightDraw );
         stubSearchBar.inflate ( );
         EditText searchL = (EditText) this.findViewById(R.id.titleSearchBar);
-        searchL.setOnClickListener ( new View.OnClickListener ( ) {
+        searchL.setOnClickListener (
+                new View.OnClickListener ( ) {
 
-                                         @Override
-                                         public
-                                         void onClick ( View v ) {
-                                             Bundle bundle = new Bundle (  );
-                                             bundle.putInt ( "searchType", 0 );
-                                             ActivityUtils.getInstance ().showActivity ( HomeActivity.this, SearchActivity.class, bundle );
-                                         }
-                                     } );
+                    @Override
+                    public
+                    void onClick ( View v ) {
+
+                        Bundle bundle = new Bundle ( );
+                        bundle.putInt ( "searchType", 0 );
+                        ActivityUtils.getInstance ( ).showActivity ( HomeActivity.this,
+                                                                     SearchActivity.class, bundle );
+                    }
+                }
+                                   );
     }
 
     @OnClick (R.id.titleLeftImage)
     void doSetting()
     {
         ActivityUtils.getInstance ( ).showActivity ( HomeActivity.this, UserSettingActivity.class );
+    }
+
+    @OnClick (R.id.titleRightImage)
+    void showMsg()
+    {
+        ActivityUtils.getInstance ( ).showActivity ( HomeActivity.this, MsgActivity.class );
     }
 
     private void initView() {
