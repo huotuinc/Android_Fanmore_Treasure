@@ -161,4 +161,8 @@ public class Contant {
     public static final String REG                         = "reg";
     //修改用户信息资料
     public static final String UPDATE_PROFILE = "updateProfile";
+    //获取地址列表
+    public static final String GET_MY_ADDRESS_LIST = "getMyAddressList";
+    //添加地址
+    public static final String ADD_MY_ADDRESS = "addMyAddress";
 }

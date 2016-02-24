@@ -16,23 +16,36 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.ListAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.MyAddressAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.AddressOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.MyAddressListModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
+import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
+import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.AddAddressActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -54,8 +67,6 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     PullToRefreshListView addressList;
 
     View emptyView = null;
-
-    public OperateTypeEnum operateType = OperateTypeEnum.REFRESH;
 
     public List< MyAddressListModel > lists;
 
@@ -133,23 +144,12 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     private void initList() {
         addressList.setMode(PullToRefreshBase.Mode.BOTH);
         addressList.setOnRefreshListener (
-                new PullToRefreshBase.OnRefreshListener2< ListView > ( ) {
+                new PullToRefreshBase.OnRefreshListener< ListView > ( ) {
 
                     @Override
                     public
-                    void onPullDownToRefresh ( PullToRefreshBase< ListView > pullToRefreshBase ) {
-
-                        operateType = OperateTypeEnum.REFRESH;
-                        loadData ( );
-                    }
-
-                    @Override
-                    public
-                    void onPullUpToRefresh ( PullToRefreshBase< ListView > pullToRefreshBase ) {
-
-                        operateType = OperateTypeEnum.LOADMORE;
-                        loadData ( );
-
+                    void onRefresh ( PullToRefreshBase< ListView > pullToRefreshBase ) {
+                        loadData ();
                     }
                 }
                                          );
@@ -170,7 +170,6 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
                         if ( AddressListActivity.this.isFinishing ( ) ) {
                             return;
                         }
-                        operateType = OperateTypeEnum.REFRESH;
                         addressList.setRefreshing ( true );
                     }
                 }, 1000
@@ -186,30 +185,56 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
 
     private void loadData()
     {
-        /*if(null!=lists&&!lists.isEmpty())
-        {*/
-        addressList.onRefreshComplete();
-        MyAddressListModel list1 = new MyAddressListModel();
-        list1.setCityId(1);
-        list1.setDefaultAddress ( 1 );
-        list1.setDetails("想嘻嘻嘻嘻嘻嘻嘻嘻嘻想");
-        list1.setMobile("165465465");
-        list1.setReceiver("dadsad");
-        lists.add(list1);
-        MyAddressListModel list2 = new MyAddressListModel();
-        list2.setCityId(1);
-        list2.setDefaultAddress(0);
-        list2.setDetails("想嘻嘻嘻嘻嘻嘻嘻嘻嘻想");
-        list2.setMobile("165465465");
-        list2.setReceiver("dadsad");
-        lists.add(list2);
-        MyAddressListModel list3 = new MyAddressListModel();
-        list3.setCityId(1);
-        list3.setDefaultAddress(0);
-        list3.setDetails("想嘻嘻嘻嘻嘻嘻嘻嘻嘻想");
-        list3.setMobile("165465465");
-        list3.setReceiver("dadsad");
-        lists.add(list3);
+
+        if( false == AddressListActivity.this.canConnect ( ) ){
+            mHandler.post(new Runnable() {
+                                      @Override
+                                      public void run() {
+                                          addressList.onRefreshComplete();
+                                      }
+                                  });
+            return;
+        }
+        String url = Contant.REQUEST_URL + Contant.GET_MY_ADDRESS_LIST;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), AddressListActivity.this);
+        Map<String, Object> maps = new HashMap<String, Object> ();
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject >() {
+                                  @Override
+                                  public void onResponse(JSONObject response) {
+                                      addressList.onRefreshComplete();
+                                      if(AddressListActivity.this.isFinishing ( ))
+                                      {
+                                          return;
+                                      }
+                                      JSONUtil<AddressOutputModel> jsonUtil = new JSONUtil<AddressOutputModel>();
+                                      AddressOutputModel addressOutput = new AddressOutputModel();
+                                      addressOutput = jsonUtil.toBean(response.toString(), addressOutput);
+                                      if(null != addressOutput && null != addressOutput.getResultData() && (1==addressOutput.getResultCode()))
+                                      {
+                                          lists.clear();
+                                          lists.addAll(addressOutput.getResultData().getList());
+                                          adapter.notifyDataSetChanged();
+                                      }
+                                      else
+                                      {
+                                          //异常处理，自动切换成无数据
+                                          addressList.setEmptyView(emptyView);
+                                      }
+                                  }
+                              }, new Response.ErrorListener() {
+                                  @Override
+                                  public void onErrorResponse(VolleyError error) {
+                                      addressList.onRefreshComplete();
+                                      if(AddressListActivity.this.isFinishing ( ))
+                                      {
+                                          return;
+                                      }
+                                      addressList.setEmptyView(emptyView);
+                                  }
+                              });
 
     }
     @OnClick(R.id.titleLeftImage)
