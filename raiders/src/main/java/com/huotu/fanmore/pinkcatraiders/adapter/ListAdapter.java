@@ -2,6 +2,7 @@ package com.huotu.fanmore.pinkcatraiders.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -89,7 +90,30 @@ public class ListAdapter extends BaseAdapter {
             if(0==type)
             {
                 //编辑模式
-                SystemTools.loadBackground(holder.editBtn, resources.getDrawable(R.mipmap.unselect));
+                final TextView editBtn = holder.editBtn;
+                final Drawable draw1 = resources.getDrawable ( R.mipmap.unselect );
+                final Drawable draw2 = resources.getDrawable ( R.mipmap.unselected );
+                editBtn.setTag ( 0 );
+                SystemTools.loadBackground ( holder.editBtn, draw1 );
+                editBtn.setOnClickListener ( new View.OnClickListener ( ) {
+
+                                                        @Override
+                                                        public
+                                                        void onClick ( View v ) {
+                                                            if(0 == editBtn.getTag ())
+                                                            {
+                                                                editBtn.setTag ( 1 );
+                                                                SystemTools.loadBackground (
+                                                                        editBtn, draw2);
+                                                            }
+                                                            else if(1 == editBtn.getTag ())
+                                                            {
+                                                                editBtn.setTag ( 0 );
+                                                                SystemTools.loadBackground (
+                                                                        editBtn, draw1);
+                                                            }
+                                                        }
+                                                    } );
             }
             else if(1==type)
             {
