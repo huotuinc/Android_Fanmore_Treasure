@@ -165,4 +165,10 @@ public class Contant {
     public static final String GET_MY_ADDRESS_LIST = "getMyAddressList";
     //添加地址
     public static final String ADD_MY_ADDRESS = "addMyAddress";
+    //更新地址
+    public static final String UPDATE_ADDRESS = "updateAddress";
+    //删除地址
+    public static final String DELETE_ADDRESS = " deleteAddress";
+    //获取默认充值金额数据
+    public static final String GET_DEFAULT_PUT_MONEY_LIST = "getDefaultPutMoneyList";
 }

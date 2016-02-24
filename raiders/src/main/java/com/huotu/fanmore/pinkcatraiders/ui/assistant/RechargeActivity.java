@@ -6,97 +6,204 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.MoneyAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
+import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.RechargeOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.MyGridView;
+import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 充值界面
  */
 public class RechargeActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
 
-    public Handler mHandler;
+    public Handler       mHandler;
+
     public WindowManager wManager;
+
     public
     AssetManager am;
-    public Resources res;
-    public BaseApplication application;
-    @Bind(R.id.titleLayoutL)
-    RelativeLayout titleLayoutL;
-    @Bind(R.id.stubTitleText)
-    ViewStub stubTitleText;
-    @Bind(R.id.titleLeftImage)
-    ImageView titleLeftImage;
 
-    @Bind(R.id.moneyGrid)
-    MyGridView moneyGrid;
-    @Bind(R.id.wxPayL)
+    public Resources       res;
+
+    public BaseApplication application;
+
+    @Bind ( R.id.titleLayoutL )
+    RelativeLayout titleLayoutL;
+
+    @Bind ( R.id.stubTitleText )
+    ViewStub       stubTitleText;
+
+    @Bind ( R.id.titleLeftImage )
+    ImageView      titleLeftImage;
+
+    @Bind ( R.id.moneyGrid )
+    MyGridView     moneyGrid;
+
+    @Bind ( R.id.wxPayL )
     RelativeLayout wxPayL;
-    @Bind(R.id.moneyMethodIcon1)
-    ImageView moneyMethodIcon1;
-    @Bind(R.id.aliPayL)
+
+    @Bind ( R.id.moneyMethodIcon1 )
+    ImageView      moneyMethodIcon1;
+
+    @Bind ( R.id.aliPayL )
     RelativeLayout aliPayL;
-    @Bind(R.id.moneyMethodIcon2)
-    ImageView moneyMethodIcon2;
+
+    @Bind ( R.id.moneyMethodIcon2 )
+    ImageView      moneyMethodIcon2;
 
     public MoneyAdapter adapter;
 
+    public
+    ProgressPopupWindow progress;
+    public List<Long> moneys;
+    public long money;
+
 
     @Override
-    public boolean handleMessage(Message msg) {
+    public
+    boolean handleMessage ( Message msg ) {
+
         return false;
     }
 
     @Override
-    public void onClick(View v) {
+    public
+    void onClick ( View v ) {
 
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.recharge);
-        ButterKnife.bind(this);
+    protected
+    void onCreate ( Bundle savedInstanceState ) {
+
+        super.onCreate ( savedInstanceState );
+        setContentView ( R.layout.recharge );
+        ButterKnife.bind ( this );
         mHandler = new Handler ( this );
-        am = this.getAssets();
-        res = this.getResources();
-        application = (BaseApplication) this.getApplication ();
-        wManager = this.getWindowManager();
-        initTitle();
-        initView();
+        am = this.getAssets ( );
+        res = this.getResources ( );
+        application = ( BaseApplication ) this.getApplication ( );
+        wManager = this.getWindowManager ( );
+        initTitle ( );
+        initView ( );
     }
 
-    private void initView()
+    @OnClick(R.id.wxPayL)
+    void selectWX()
     {
+        SystemTools.loadBackground ( moneyMethodIcon1, res.getDrawable ( R.mipmap.money_select ) );
+        SystemTools.loadBackground ( moneyMethodIcon2, res.getDrawable ( R.mipmap.unselect ) );
+    }
+
+    @OnClick(R.id.aliPayL)
+    void selectAlipay()
+    {
+        SystemTools.loadBackground ( moneyMethodIcon1, res.getDrawable ( R.mipmap.unselect ) );
+        SystemTools.loadBackground ( moneyMethodIcon2, res.getDrawable ( R.mipmap.money_select ) );
+    }
+
+    @OnClick(R.id.titleLeftImage)
+    void doBack()
+    {
+        closeSelf ( RechargeActivity.this );
+    }
+
+    private
+    void initView ( ) {
+
         //重构充值面额
-        List<String> moneys = new ArrayList<String>();
-        moneys.add("20");
-        moneys.add("50");
-        moneys.add("100");
-        moneys.add("200");
-        moneys.add("500");
-        moneys.add("其他金额");
-        adapter = new MoneyAdapter(moneys, RechargeActivity.this, RechargeActivity.this);
-        moneyGrid.setAdapter(adapter);
+        String                url    = Contant.REQUEST_URL + Contant.GET_DEFAULT_PUT_MONEY_LIST;
+        AuthParamUtils        params = new AuthParamUtils ( application, System.currentTimeMillis
+                ( ), RechargeActivity.this );
+        Map< String, Object > maps   = new HashMap< String, Object > ( );
+        String                suffix = params.obtainGetParam ( maps );
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils ( );
+        httpUtils.doVolleyGet (
+                url, new Response.Listener< JSONObject > ( ) {
+
+                    @Override
+                    public
+                    void onResponse ( JSONObject response ) {
+
+                        if ( RechargeActivity.this.isFinishing ( ) ) {
+                            return;
+                        }
+                        JSONUtil< RechargeOutputModel > jsonUtil = new JSONUtil<
+                                RechargeOutputModel > ( );
+                        RechargeOutputModel rechargeOutput = new RechargeOutputModel
+                                ( );
+                        rechargeOutput = jsonUtil.toBean ( response.toString ( ), rechargeOutput );
+                        if ( null != rechargeOutput && null != rechargeOutput.getResultData ( )
+                             && ( 1 == rechargeOutput.getResultCode ( ) ) ) {
+                            moneys = rechargeOutput.getResultData ().getList ();
+                            adapter = new MoneyAdapter ( moneys, RechargeActivity.this,
+                                                         RechargeActivity.this );
+                            moneyGrid.setAdapter ( adapter );
+                        }
+                        else {
+                            //异常处理，自动切换成无数据
+                            ToastUtils.showShortToast ( RechargeActivity.this, "加载默认金额失败" );
+                        }
+                    }
+                }, new Response.ErrorListener ( ) {
+
+                    @Override
+                    public
+                    void onErrorResponse ( VolleyError error ) {
+                        if ( RechargeActivity.this.isFinishing ( ) ) {
+                            return;
+                        }
+                        ToastUtils.showShortToast ( RechargeActivity.this, "加载默认金额失败" );
+                    }
+                }
+                              );
+        moneyGrid.setOnItemClickListener ( new AdapterView.OnItemClickListener ( ) {
+
+                                               @Override
+                                               public
+                                               void onItemClick ( AdapterView< ? > parent, View view, int position, long id ) {
+                                                   adapter.setSeclection(position);
+                                                   adapter.notifyDataSetChanged ( );
+                                                   money = moneys.get ( position );
+                                               }
+                                           } );
     }
 
     private void initTitle()

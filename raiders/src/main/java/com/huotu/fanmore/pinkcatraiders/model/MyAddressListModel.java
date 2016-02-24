@@ -9,6 +9,19 @@ public class MyAddressListModel {
     String details;
     String mobile;
     String receiver;
+    private long addressId;
+
+    public
+    long getAddressId ( ) {
+
+        return addressId;
+    }
+
+    public
+    void setAddressId ( long addressId ) {
+
+        this.addressId = addressId;
+    }
 
     public int getCityId() {
         return cityId;

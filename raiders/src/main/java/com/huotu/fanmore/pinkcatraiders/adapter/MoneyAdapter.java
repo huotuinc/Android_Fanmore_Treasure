@@ -10,6 +10,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+
 import java.util.List;
 
 import butterknife.Bind;
@@ -20,15 +22,21 @@ import butterknife.ButterKnife;
  */
 public class MoneyAdapter extends BaseAdapter {
 
-    private List<String> moneys;
+    private List<Long> moneys;
     private Context context;
     private Activity aty;
+    private int clickTemp = -1;
 
-    public MoneyAdapter(List<String> moneys, Context context, Activity aty)
+    public MoneyAdapter(List<Long> moneys, Context context, Activity aty)
     {
         this.moneys = moneys;
         this.context = context;
         this.aty = aty;
+    }
+
+    //标识选择的Item
+    public void setSeclection(int position) {
+        clickTemp = position;
     }
 
     @Override
@@ -61,8 +69,15 @@ public class MoneyAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         if(null!=moneys&&!moneys.isEmpty()&&null!=moneys.get(position))
-        {
-            holder.moneyTag.setText(moneys.get(position));
+        {if (clickTemp == position) {
+            SystemTools.loadBackground ( holder.moneyL, resources.getDrawable ( R.drawable.money_draw2 ) );
+            holder.moneyTag.setTextColor ( resources.getColor ( R.color.title_bg ) );
+        } else {
+            SystemTools.loadBackground ( holder.moneyL, resources.getDrawable ( R.drawable
+                                                                                        .money_draw1 ) );
+            holder.moneyTag.setTextColor ( resources.getColor ( R.color.text_gray ) );
+        }
+            holder.moneyTag.setText(String.valueOf ( moneys.get(position)));
         }
         else
         {

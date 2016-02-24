@@ -68,8 +68,8 @@
             android:layout_marginLeft="10dp"
             android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="@dimen/common_icon_size_6"
-                android:layout_height="@dimen/common_icon_size_6"
+                android:layout_width="@dimen/common_icon_size_5"
+                android:layout_height="@dimen/common_icon_size_5"
                 android:id="@+id/moneyMethodIcon1"
                 android:layout_centerVertical="true"
                 android:background="@mipmap/unselect"/>
@@ -93,8 +93,8 @@
             android:layout_marginLeft="10dp"
             android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="@dimen/common_icon_size_6"
-                android:layout_height="@dimen/common_icon_size_6"
+                android:layout_width="@dimen/common_icon_size_5"
+                android:layout_height="@dimen/common_icon_size_5"
                 android:id="@+id/moneyMethodIcon2"
                 android:layout_centerVertical="true"
                 android:background="@mipmap/unselect"/>

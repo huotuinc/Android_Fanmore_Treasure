@@ -364,10 +364,27 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
             progress.showAtLocation (titleLayoutL,
                                      Gravity.CENTER, 0, 0
                                     );
-            String url = Contant.REQUEST_URL + Contant.ADD_MY_ADDRESS;
+            String url = null;
+            if(null==bundle)
+            {
+                url = Contant.REQUEST_URL + Contant.ADD_MY_ADDRESS;
+            }
+            else
+            {
+                url = Contant.REQUEST_URL + Contant.UPDATE_ADDRESS;
+            }
+
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), AddAddressActivity.this);
             Map<String, Object> maps = new HashMap<String, Object> ();
-            maps.put("cityId", "0");
+            if(null==bundle)
+            {
+                maps.put("cityId", "0");
+            }
+            else
+            {
+                maps.put("addressId", String.valueOf ( bundle.getLong ( "addressId" ) ));
+            }
+
             maps.put ( "receiver",  receiverName.getText ().toString ( ));
             maps.put ( "mobile",  receiverPhone.getText ().toString ( ));
             maps.put ( "details",  detail.getText ().toString ( ));
