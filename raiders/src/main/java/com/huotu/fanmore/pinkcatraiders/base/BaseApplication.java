@@ -139,9 +139,10 @@ public class BaseApplication extends Application {
     }
 
     //获取userId
-    public String readUerId()
+    public Long readUerId()
     {
-        return PreferenceHelper.readString ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_USERID );
+        return PreferenceHelper.readLong ( getApplicationContext ( ), Contant.LOGIN_USER_INFO,
+                                           Contant.LOGIN_AUTH_USERID );
     }
 
     //获取user账号
@@ -185,7 +186,7 @@ public class BaseApplication extends Application {
     //判断是否登录
     public boolean isLogin()
     {
-        String token = PreferenceHelper.readString ( getApplicationContext (), Contant.MEMBER_INFO, Contant.MEMBER_TOKEN );
+        String token = PreferenceHelper.readString ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_TOKEN);
         if(null != token && !"".equals ( token ))
         {
             return true;
@@ -198,6 +199,6 @@ public class BaseApplication extends Application {
 
     public String obtainToken()
     {
-        return PreferenceHelper.readString(getApplicationContext (), Contant.MEMBER_INFO, Contant.MEMBER_TOKEN);
+        return PreferenceHelper.readString(getApplicationContext (), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_TOKEN);
     }
 }

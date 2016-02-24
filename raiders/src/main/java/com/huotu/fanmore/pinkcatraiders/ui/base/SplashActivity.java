@@ -112,7 +112,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                 {
                     //定位
                     //初始化接口
-                    /*String url = Contant.REQUEST_URL + Contant.INIT;
+                    String url = Contant.REQUEST_URL + Contant.INIT;
                     AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), SplashActivity.this);
                     Map<String, Object> maps = new HashMap<String, Object>();
                     String suffix = params.obtainGetParam(maps);
@@ -178,8 +178,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                             //异常处理，自动切换成无数据
                             ToastUtils.showLongToast(SplashActivity.this, "初始化数据失败");
                         }
-                    });*/
-                    ActivityUtils.getInstance ().skipActivity ( SplashActivity.this, HomeActivity.class);
+                    });
                 }
             }
 
