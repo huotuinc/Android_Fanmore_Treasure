@@ -56,11 +56,11 @@ public class RechargeAdapter extends BaseAdapter {
         }
         if (null != recharges && !recharges.isEmpty() && null != recharges.get(position)) {
             RechargeModel recharge = recharges.get(position);
-            if(0==recharge.getPayChannel())
+            if(0==recharge.getMoneyFlowType ( ))
             {
                 holder.payChannel.setText("微信支付");
             }
-            else if(1==recharge.getPayChannel())
+            else if(1==recharge.getMoneyFlowType())
             {
                 holder.payChannel.setText("支付宝支付");
             }
@@ -69,27 +69,8 @@ public class RechargeAdapter extends BaseAdapter {
                 holder.payChannel.setText("其他支付");
             }
 
-            holder.payTime.setText(DateUtils.transformDataformat1(recharge.getPayTime()));
-            if(0==recharge.getPayStatus())
-            {
-                holder.payStatus.setText("待支付");
-            }
-            else if(1==recharge.getPayStatus())
-            {
-                holder.payStatus.setText("已支付");
-            }
-            else if(2==recharge.getPayStatus())
-            {
-                holder.payStatus.setText("支付失败");
-            }
-            else if(3==recharge.getPayStatus())
-            {
-                holder.payStatus.setText("取消支付");
-            }
-            else
-            {
-                holder.payStatus.setText("其他状态");
-            }
+            holder.payTime.setText(DateUtils.transformDataformat1(recharge.getTime ()));
+            holder.payStatus.setText(recharge.getRemark ());
             holder.money.setText(recharge.getMoney()+"元");
         } else {
 

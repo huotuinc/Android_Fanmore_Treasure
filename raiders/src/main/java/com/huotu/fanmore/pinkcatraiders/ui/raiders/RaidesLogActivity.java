@@ -252,6 +252,11 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
                 doneCount.setText(counts[2]);
             }
             break;
+            case Contant.RAIDERS_NOW:
+            {
+                closeSelf ( RaidesLogActivity.this );
+            }
+            break;
             default:
                 break;
         }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -68,11 +69,20 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         resources = getActivity().getResources();
-        rootView = inflater.inflate(R.layout.raiders_log_frag, container, false);
+        rootView = inflater.inflate ( R.layout.raiders_log_frag, container, false );
         application = (BaseApplication) getActivity().getApplication();
-        rootAty = (RaidesLogActivity) getActivity();
+        rootAty = (RaidesLogActivity) getActivity ( );
         ButterKnife.bind(this, rootView);
         emptyView = inflater.inflate(R.layout.empty, null);
+        TextView emptyBtn = ( TextView ) emptyView.findViewById ( R.id.emptyBtn );
+        emptyBtn.setOnClickListener ( new View.OnClickListener ( ) {
+
+                                          @Override
+                                          public
+                                          void onClick ( View v ) {
+                                              rootAty.mHandler.sendEmptyMessage ( Contant.RAIDERS_NOW );
+                                          }
+                                      } );
         wManager = getActivity().getWindowManager();
         initList();
         return rootView;

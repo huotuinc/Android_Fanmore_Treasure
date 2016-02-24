@@ -73,6 +73,10 @@ public class Contant {
      * 选择地址
      */
     public static final int SELECT_ADDRESS      = 0x00000032;
+    /**
+     * 立即夺宝
+     */
+    public static final int RAIDERS_NOW      = 0x00000040;
 
     /**
      * 菜单标记1
@@ -171,4 +175,6 @@ public class Contant {
     public static final String DELETE_ADDRESS = " deleteAddress";
     //获取默认充值金额数据
     public static final String GET_DEFAULT_PUT_MONEY_LIST = "getDefaultPutMoneyList";
+    //获取充值记录
+    public static final String GET_MY_PUT_LIST = "getMyPutList";
 }
