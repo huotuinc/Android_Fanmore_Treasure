@@ -149,12 +149,13 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public
                     void onRefresh ( PullToRefreshBase< ListView > pullToRefreshBase ) {
-                        loadData ();
+
+                        loadData ( );
                     }
                 }
                                          );
         lists = new ArrayList<MyAddressListModel>();
-        adapter = new MyAddressAdapter(lists, this, 0);
+        adapter = new MyAddressAdapter(lists, this, AddressListActivity.this, 0);
         addressList.setAdapter ( adapter );
         firstGetData ( );
     }

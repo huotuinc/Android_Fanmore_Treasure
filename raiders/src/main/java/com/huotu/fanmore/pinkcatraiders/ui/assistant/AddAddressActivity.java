@@ -57,6 +57,7 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
     public BaseApplication application;
 
     public Handler mHandler;
+    public Bundle bundle;
 
     public
     WindowManager wManager;
@@ -168,6 +169,7 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
         setContentView ( R.layout.add_address );
         ButterKnife.bind ( this );
         application = ( BaseApplication ) this.getApplication ( );
+        bundle = this.getIntent ().getExtras ();
         resources = this.getResources ( );
         mHandler = new Handler ( this );
         wManager = this.getWindowManager ( );
@@ -179,7 +181,44 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
     private
     void initData ( ) {
         //设置标记：1 非默认  0 默认
-        defauleBtn.setTag ( 1 );
+        if(null!=bundle)
+        {
+            if(bundle.containsKey( "receiver"))
+            {
+                receiverName.setText ( bundle.getString ( "receiver" ) );
+            }
+            if(bundle.containsKey( "mobile" ))
+            {
+                receiverPhone.setText ( bundle.getString ( "mobile" ) );
+            }
+            if(bundle.containsKey ( "details" ))
+            {
+                detail.setText ( bundle.getString ( "details" ) );
+            }
+            if(bundle.containsKey ( "defaultAddress" ))
+            {
+                defauleBtn.setTag ( bundle.getInt ( "defaultAddress" ) );
+            }
+            else
+            {
+                defauleBtn.setTag ( 1 );
+            }
+            if(1==defauleBtn.getTag ())
+            {
+                SystemTools.loadBackground ( defauleBtn, resources.getDrawable ( R.mipmap.setting_default_a ) );
+            }
+            else if(0==defauleBtn.getTag ())
+            {
+                SystemTools.loadBackground ( defauleBtn, resources.getDrawable ( R.mipmap.setting_default_b ) );
+            }
+
+        }
+        else
+        {
+            defauleBtn.setTag ( 1 );
+        }
+
+
     }
 
     private
