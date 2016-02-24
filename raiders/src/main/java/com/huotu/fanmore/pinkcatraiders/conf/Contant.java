@@ -131,9 +131,9 @@ public class Contant {
 
     //接口请求地址
     //loginapi
-    //public static final String REQUEST_URL = "http://192.168.3.20:8080/duobao/app/";
+    public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
-    public static final String REQUEST_URL                 = "http://192.168.1.146:8081/duobao/app/";
+    //public static final String REQUEST_URL                 = "http://192.168.1.146:8081/duobao/app/";
 
     //public static final String REQUEST_URL = "http://192.168.3.13:8080/duobao/app/";
     //获取夺宝记录
@@ -159,4 +159,6 @@ public class Contant {
     public static final String LOGIN                       = "login";
 
     public static final String REG                         = "reg";
+    //修改用户信息资料
+    public static final String UPDATE_PROFILE = "updateProfile";
 }

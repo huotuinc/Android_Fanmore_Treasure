@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewStub;
@@ -66,6 +67,13 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
     PullToRefreshScrollView userSettingPullRefresh;
     @Bind ( R.id.userPhone )
     TextView userPhone;
+    @Bind ( R.id.userNickName )
+    TextView userNickName;
+    @Bind ( R.id.userId )
+    TextView userId;
+    @Bind ( R.id.userAccount )
+    TextView userAccount;
+
 
     @Override
     protected
@@ -102,10 +110,19 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
     private void initData()
     {
         BitmapLoader.create ( ).loadRoundImage (
-                this, userimg, "http://imgk.zol.com"
-                               + ".cn/dcbbs/2342/a2341460.jpg",
-                R.mipmap.error
+                this, userimg, application.readUerHead ( ), R.mipmap.error
                                                );
+        userId.setText (
+                (
+                        null != application.readUerId ( ) && ! TextUtils.isEmpty (
+                                application
+                                        .readUerId ( )
+                                                                                 )
+                ) ? application.readUerId ( ) : ""
+                       );
+        userAccount.setText ( (null!=application.readAccount ( )&& !TextUtils.isEmpty ( application.readAccount ( ) ))?application.readAccount ( ):""  );
+        userNickName.setText ( (null!=application.readNickName ( )&& !TextUtils.isEmpty ( application.readNickName ( ) ))?application.readNickName ( ):""  );
+        userPhone.setText ( (null!=application.readMobile ( )&& !TextUtils.isEmpty ( application.readMobile ( ) ))?application.readMobile ( ):"未设置手机号码"  );
     }
 
     private
@@ -156,13 +173,13 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
         commonPopWin.showAtLocation (titleLeftImage, Gravity.BOTTOM, 0, 0);
         commonPopWin.setOnDismissListener(new PoponDismissListener (UserSettingActivity.this));
     }
-    @OnClick(R.id.userPhoneL)
-    void doPhoneL()
+    @OnClick(R.id.userNickNameL)
+    void modifyNickName()
     {
         //设置手机号码
         Bundle bundle = new Bundle (  );
-        bundle.putString ( "profile", "手机号码" );
-        bundle.putString ( "content", userPhone.getText ().toString () );
+        bundle.putString ( "profile", "昵称" );
+        bundle.putString ( "content", userNickName.getText ().toString () );
         ActivityUtils
                 .getInstance ().showActivity ( UserSettingActivity.this, ModifyInfoActivity.class, bundle );
     }

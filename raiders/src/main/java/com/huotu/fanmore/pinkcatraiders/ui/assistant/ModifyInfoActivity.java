@@ -5,6 +5,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewStub;
@@ -13,12 +15,24 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.huotu.android.library.libedittext.EditText;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.UpdateProfileModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
+import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
+import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,19 +46,36 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
 
     public
     Resources resources;
+
     public BaseApplication application;
+
     public Handler mHandler;
+
     public
     WindowManager wManager;
+
     @Bind ( R.id.titleLayoutL )
     RelativeLayout titleLayoutL;
+
     @Bind ( R.id.stubTitleText )
     ViewStub stubTitleText;
+
     @Bind ( R.id.titleLeftImage )
     ImageView titleLeftImage;
+
+    @Bind ( R.id.titleRightImage )
+    ImageView titleRightImage;
+
     public Bundle bundle;
+
     @Bind ( R.id.modityTextInput )
     EditText modityTextInput;
+
+    public
+    ProgressPopupWindow progress;
+
+    public
+    NoticePopWindow noticePop;
 
     @Override
     public
@@ -62,23 +93,26 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
     @Override
     protected
     void onCreate ( Bundle savedInstanceState ) {
+
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.user_modify );
         ButterKnife.bind ( this );
         application = ( BaseApplication ) this.getApplication ( );
         resources = this.getResources ( );
         mHandler = new Handler ( this );
-        bundle = this.getIntent ().getExtras ( );
+        bundle = this.getIntent ( ).getExtras ( );
         wManager = this.getWindowManager ( );
+        progress = new ProgressPopupWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager );
         initTitle ( );
-        initData();
+        initData ( );
     }
 
     @OnClick ( R.id.titleLeftImage )
-    void doback()
-    {
+    void doback ( ) {
+
         closeSelf ( ModifyInfoActivity.this );
     }
+
     private
     void initTitle ( ) {
         //背景色
@@ -86,14 +120,90 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
         SystemTools.loadBackground ( titleLayoutL, bgDraw );
         Drawable leftDraw = resources.getDrawable ( R.mipmap.back_gray );
         SystemTools.loadBackground ( titleLeftImage, leftDraw );
+        Drawable rightDraw = resources.getDrawable ( R.mipmap.save_btn );
+        SystemTools.loadBackground ( titleRightImage, rightDraw );
         stubTitleText.inflate ( );
         TextView titleText = ( TextView ) this.findViewById ( R.id.titleText );
         titleText.setText ( bundle.getString ( "profile" ) + "信息修改" );
     }
 
-    private void initData()
-    {
+    private
+    void initData ( ) {
+
         modityTextInput.setText ( bundle.getString ( "content" ) );
+    }
+
+    @OnClick(R.id.titleRightImage)
+    void saveData()
+    {
+       if( TextUtils.isEmpty ( modityTextInput.getText () ))
+       {
+           ToastUtils.showLongToast ( ModifyInfoActivity.this, "请输入修改后的信息" );
+           return;
+       }
+        else
+       {
+           //弹出执行进度条
+           progress.showProgress ( "正在修改用户昵称" );
+           progress.showAtLocation (titleLayoutL,
+                                    Gravity.CENTER, 0, 0
+                                   );
+           String url = Contant.REQUEST_URL + Contant.UPDATE_PROFILE;
+           AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ModifyInfoActivity.this);
+           Map<String, Object> maps = new HashMap<String, Object> ();
+           maps.put("profileType", "1");
+           maps.put ( "profileData",  modityTextInput.getText ().toString ( ));
+           Map<String, Object> param = params.obtainPostParam(maps);
+           UpdateProfileModel updateProfile = new UpdateProfileModel ();
+           HttpUtils<UpdateProfileModel> httpUtils = new HttpUtils<UpdateProfileModel> ();
+           httpUtils.doVolleyPost (
+                   updateProfile, url, param, new Response.Listener< UpdateProfileModel > ( ) {
+                       @Override
+                       public
+                       void onResponse ( UpdateProfileModel response ) {
+                           progress.dismissView ();
+                           UpdateProfileModel updateProfile = response;
+                           if(1==updateProfile.getResultCode ())
+                           {
+                               //上传成功
+                               noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户昵称修改成功");
+                               noticePop.showNotice ( );
+                               noticePop.showAtLocation (
+                                       findViewById ( R.id.titleLayout ),
+                                       Gravity.CENTER, 0, 0
+                                                        );
+                               //更新本地用户信息
+                               application
+                                       .writeUserInfo ( updateProfile.getResultData ().getUser () );
+                           }
+                           else
+                           {
+                               //上传失败
+                               noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户昵称修改失败");
+                               noticePop.showNotice ( );
+                               noticePop.showAtLocation (
+                                       findViewById ( R.id.titleLayout ),
+                                       Gravity.CENTER, 0, 0
+                                                        );
+                           }
+                       }
+                   }, new Response.ErrorListener ( ) {
+
+                       @Override
+                       public
+                       void onErrorResponse ( VolleyError error ) {
+                           progress.dismissView ();
+                           //系统级别错误
+                           noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "服务器拒绝本次修改");
+                           noticePop.showNotice ( );
+                           noticePop.showAtLocation (
+                                   findViewById ( R.id.titleLayout ),
+                                   Gravity.CENTER, 0, 0
+                                                    );
+                       }
+                   }
+                                  );
+       }
     }
 
     @Override
