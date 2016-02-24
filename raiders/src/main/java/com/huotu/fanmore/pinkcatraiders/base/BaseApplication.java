@@ -155,7 +155,7 @@ public class BaseApplication extends Application {
     //判断是否登录
     public boolean isLogin()
     {
-        String token = PreferenceHelper.readString ( getApplicationContext (), Contant.MEMBER_INFO, Contant.MEMBER_TOKEN );
+        String token = PreferenceHelper.readString ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_TOKEN);
         if(null != token && !"".equals ( token ))
         {
             return true;

@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.RechargeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.RechargeLogActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
@@ -24,6 +27,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.WinLogActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
+import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.CircleImageView;
 
@@ -42,6 +46,10 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
     public WindowManager wManager;
     @Bind(R.id.Userimg)
     CircleImageView userimg;
+    @Bind(R.id.TVUserName)
+    TextView TVUserName;
+    @Bind(R.id.money)
+    TextView money;
 
     @Override
     public void onReshow() {
@@ -81,7 +89,11 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
         application = (BaseApplication) getActivity().getApplication();
         rootAty = (HomeActivity) getActivity();
         ButterKnife.bind(this, rootView);
-        BitmapLoader.create().loadRoundImage(getActivity(), userimg, "http://imgk.zol.com.cn/dcbbs/2342/a2341460.jpg", R.mipmap.error);
+
+        String imgurl= PreferenceHelper.readString (getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_UDERHEAD);
+        BitmapLoader.create().loadRoundImage(getActivity(), userimg, imgurl, R.mipmap.error);
+        TVUserName.setText(PreferenceHelper.readString(getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_REALNAME));
+        money.setText(PreferenceHelper.readString(getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MONEY));
         wManager = getActivity().getWindowManager();
         return rootView;
     }
