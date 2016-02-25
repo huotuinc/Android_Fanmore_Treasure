@@ -11,7 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.model.AppUserBuyFlowModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
+import com.huotu.fanmore.pinkcatraiders.model.RedPacketsModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
@@ -22,73 +24,106 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by Administrator on 2016/2/17.
+ * 中奖记录数据适配
  */
 public class WinAdapter extends BaseAdapter {
-    private List<RaidersModel> raiders;
-    private Context mContext;
 
-    public WinAdapter(List<RaidersModel> raiders, Context mContext)
-    {
-        this.raiders = raiders;
+    private List< AppUserBuyFlowModel> winners;
+
+    private Context                     mContext;
+
+    public
+    WinAdapter ( List< AppUserBuyFlowModel > winners, Context mContext ) {
+
+        this.winners = winners;
         this.mContext = mContext;
     }
 
     @Override
-    public int getCount() {
-        return 0;
+    public
+    int getCount ( ) {
+
+        return (null==winners || winners.isEmpty())?0:winners.size ();
     }
 
     @Override
-    public Object getItem(int position) {
-        return null;
+    public
+    Object getItem ( int position ) {
+
+        return (null==winners || winners.isEmpty())?null:winners.get(position);
     }
 
     @Override
-    public long getItemId(int position) {
-        return 0;
+    public
+    long getItemId ( int position ) {
+
+        return position;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public
+    View getView ( int position, View convertView, ViewGroup parent ) {
+
         ViewHolder holder = null;
         Resources resources = mContext.getResources();
-        convertView = View.inflate(mContext, R.layout.win_log_item, null);
+        if (convertView == null)
+        {
+            convertView = View.inflate(mContext, R.layout.win_log_item, null);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+        }
+        else
+        {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        if(null!=winners&&!winners.isEmpty()&&null!=winners.get(position))
+        {
+            AppUserBuyFlowModel winner = winners.get(position);
+            BitmapLoader.create().displayUrl (
+                    mContext, holder.raidersIcon, winner
+                            .getDefaultPictureUrl ( ), R.mipmap.ic_launcher
+                                             );
+            holder.raidersName.setText ( winner.getTitle ( ) );
+            holder.partnerNo.setText ( "参与期号：" + winner.getIssueId ( ) );
+            holder.totalRequired.setText ( "总需："+winner.getToAmount ( ) );
+            holder.showPhone.setText ( String.valueOf ( winner.getLuckyNumber () ));
+            holder.benqicanyu.setText ( "本期参与人数："+ winner.getAmount () );
+            holder.jiexiaoshijian.setText ( DateUtils.transformDataformat6 ( winner.getAwardingDate () ) );
+            holder.addBtn.setOnClickListener ( new View.OnClickListener ( ) {
+
+                                                   @Override
+                                                   public
+                                                   void onClick ( View v ) {
+
+                                                   }
+                                               } );
+        }
         return convertView;
     }
-    class ViewHolder
-    {
-//        public ViewHolder(View view)
-//        {
-//            ButterKnife.bind(this, view);
-//        }
-//        @Bind(R.id.raidersIcon)
-//        ImageView raidersIcon;
-//        @Bind(R.id.raidersName)
-//        TextView raidersName;
-//        @Bind(R.id.partnerNo)
-//        TextView partnerNo;
-//        @Bind(R.id.lotteryScheduleProgress)
-//        ProgressBar lotteryScheduleProgress;
-//        @Bind(R.id.totalRequired)
-//        TextView totalRequired;
-//        @Bind(R.id.surplus)
-//        TextView surplus;
-//        @Bind(R.id.addBtn)
-//        TextView addBtn;
-//        @Bind(R.id.partnerCount)
-//        TextView partnerCount;
-//        @Bind(R.id.showPhone)
-//        TextView showPhone;
-//        @Bind(R.id.winnerName)
-//        TextView winnerName;
-//        @Bind(R.id.winnerL)
-//        RelativeLayout winnerL;
-//        @Bind(R.id.winnerNo)
-//        TextView winnerNo;
-//        @Bind(R.id.luckyNo)
-//        TextView luckyNo;
-//        @Bind(R.id.announcedTime)
-//        TextView announcedTime;
+
+    class ViewHolder {
+        public ViewHolder(View view)
+        {
+           ButterKnife.bind(this, view);
+        }
+
+        @Bind ( R.id.raidersIcon )
+        ImageView raidersIcon;
+        @Bind ( R.id.raidersName )
+        TextView raidersName;
+        @Bind ( R.id.partnerNo )
+        TextView partnerNo;
+        @Bind ( R.id.totalRequired )
+        TextView totalRequired;
+        @Bind ( R.id.addBtn )
+        TextView addBtn;
+        @Bind ( R.id.partnerCount )
+        TextView partnerCount;
+        @Bind ( R.id.showPhone )
+        TextView showPhone;
+        @Bind ( R.id.benqicanyu )
+        TextView benqicanyu;
+        @Bind ( R.id.jiexiaoshijian )
+        TextView jiexiaoshijian;
     }
 }

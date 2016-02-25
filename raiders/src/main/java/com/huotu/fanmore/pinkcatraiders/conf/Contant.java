@@ -179,4 +179,6 @@ public class Contant {
     public static final String GET_MY_PUT_LIST = "getMyPutList";
     //获取红包列表
     public static final String GET_MY_REDPACKAGES_LIST = "getMyRedPacketsList";
+    //获取中奖纪录列表
+    public static final String GET_MY_LOTTERY_LIST = "getMyLotteryList";
 }
