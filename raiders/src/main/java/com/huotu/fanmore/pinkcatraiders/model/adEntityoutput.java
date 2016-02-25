@@ -6,16 +6,16 @@ import java.util.List;
  * Created by Administrator on 2016/2/24.
  */
 public class AdEntityoutput extends BaseModel {
-    private adEntityInnerModel resultData;
+    private AdEntityInnerModel resultData;
 
-    public adEntityInnerModel getResultData() {
+    public AdEntityInnerModel getResultData() {
         return resultData;
     }
 
-    public void setResultData(adEntityInnerModel resultData) {
+    public void setResultData(AdEntityInnerModel resultData) {
         this.resultData = resultData;
     }
-    public class adEntityInnerModel{
+    public class AdEntityInnerModel{
         private List<AdEntity> list;
 
         public List<AdEntity> getList() {
