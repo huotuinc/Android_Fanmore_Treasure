@@ -15,7 +15,27 @@
             layout="@layout/layout_title"/>
         </RelativeLayout>
     <LinearLayout
-        android:layout_below="@+id/titleLayoutL"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchL"
+        android:orientation="horizontal"
+        android:padding="10dp">
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/search_height"
+            android:background="@drawable/searchbg_catagory"
+            android:drawableLeft="@mipmap/search_in_result"
+            android:gravity="left|center_vertical"
+            android:hint="  输入关键字"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColorHint="@color/text_gray"
+            android:paddingLeft="5dp"
+            android:singleLine="true"
+            android:textSize="@dimen/text_size_12"/>
+    </LinearLayout>
+    <LinearLayout
         android:id="@+id/allL"
         android:padding="10dp"
         android:layout_width="match_parent"

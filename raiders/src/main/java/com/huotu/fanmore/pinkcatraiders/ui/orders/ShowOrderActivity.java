@@ -17,25 +17,39 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.ListAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.OrderAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.OrderModel;
+import com.huotu.fanmore.pinkcatraiders.model.OrderOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
+import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 晒单界面
@@ -86,12 +100,12 @@ public class ShowOrderActivity extends BaseActivity implements View.OnClickListe
     {
         //背景色
         Drawable bgDraw = res.getDrawable(R.drawable.account_bg_bottom);
-        SystemTools.loadBackground(titleLayoutL, bgDraw);
+        SystemTools.loadBackground ( titleLayoutL, bgDraw );
         Drawable leftDraw = res.getDrawable(R.mipmap.back_gray);
-        SystemTools.loadBackground(titleLeftImage, leftDraw);
-        stubTitleText.inflate();
+        SystemTools.loadBackground ( titleLeftImage, leftDraw );
+        stubTitleText.inflate ( );
         TextView titleText = (TextView) this.findViewById(R.id.titleText);
-        titleText.setText("晒单分享");
+        titleText.setText ( "晒单分享" );
     }
 
     private void initList()
@@ -112,40 +126,108 @@ public class ShowOrderActivity extends BaseActivity implements View.OnClickListe
         });
         orders = new ArrayList<OrderModel>();
         adapter = new OrderAdapter(orders, ShowOrderActivity.this);
-        orderList.setAdapter(adapter);
-        orderList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                long pid = orders.get(position).getPid();
-                Bundle bundle = new Bundle();
-                bundle.putLong("pid", pid);
-                ActivityUtils.getInstance().showActivity(ShowOrderActivity.this, OrderDetailActivity.class, bundle);
-            }
-        });
-        firstGetData();
+        orderList.setAdapter ( adapter );
+        orderList.setOnItemClickListener (
+                new AdapterView.OnItemClickListener ( ) {
+
+                    @Override
+                    public
+                    void onItemClick ( AdapterView< ? > parent, View view, int position, long id ) {
+
+                        long   pid    = orders.get ( position - 1 ).getPid ( );
+                        Bundle bundle = new Bundle ( );
+                        bundle.putLong ( "pid", pid );
+                        ActivityUtils.getInstance ( ).showActivity ( ShowOrderActivity.this, OrderDetailActivity.class, bundle );
+                    }
+                }
+                                         );
+        firstGetData ( );
+    }
+
+    @OnClick(R.id.titleLeftImage)
+    void doBack()
+    {
+        closeSelf ( ShowOrderActivity.this );
     }
 
     private void loadData()
     {
-        orderList.onRefreshComplete();
-        OrderModel order1 = new OrderModel();
-        order1.setIssue(10098);
-        order1.setOrderDetail("呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵");
-        order1.setOrderTime("1455702902672");
-        order1.setOrderTitle("中了中了哈哈");
-        order1.setProductDetail("iphone6s 4.7英寸64G");
-        order1.setUserHead("http://imgk.zol.com.cn/dcbbs/2342/a2341460.jpg");
-        order1.setUsername("小小");
-        orders.add(order1);
-        OrderModel order2 = new OrderModel();
-        order2.setIssue(10098);
-        order2.setOrderDetail("呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵");
-        order2.setOrderTime("1455702902672");
-        order2.setOrderTitle("中了中了哈哈");
-        order2.setProductDetail("iphone6s 4.7英寸64G");
-        order2.setUserHead("http://imgk.zol.com.cn/dcbbs/2342/a2341460.jpg");
-        order2.setUsername("小小");
-        orders.add(order2);
+
+
+        if( false == ShowOrderActivity.this.canConnect ( ) ){
+            mHandler.post(new Runnable() {
+                                      @Override
+                                      public void run() {
+                                          orderList.onRefreshComplete();
+                                      }
+                                  });
+            return;
+        }
+        String url = Contant.REQUEST_URL + Contant.GET_SHARE_ORDER_LIST;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ShowOrderActivity.this);
+        Map<String, Object> maps = new HashMap<String, Object> ();
+        if ( OperateTypeEnum.REFRESH == operateType )
+        {// 下拉
+            maps.put("lastId", 0);
+        } else if (OperateTypeEnum.LOADMORE == operateType)
+        {// 上拉
+            if ( orders != null && orders.size() > 0)
+            {
+                OrderModel order = orders.get(orders.size() - 1);
+                maps.put("lastId", order.getPid());
+            } else if (orders != null && orders.size() == 0)
+            {
+                maps.put("lastId", 0);
+            }
+        }
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject >() {
+                                  @Override
+                                  public void onResponse(JSONObject response) {
+                                      orderList.onRefreshComplete();
+                                      if(ShowOrderActivity.this.isFinishing ( ))
+                                      {
+                                          return;
+                                      }
+                                      JSONUtil<OrderOutputModel > jsonUtil = new JSONUtil<OrderOutputModel>();
+                                      OrderOutputModel OrderOutputs = new OrderOutputModel();
+                                      OrderOutputs = jsonUtil.toBean(response.toString(), OrderOutputs);
+                                      if(null != OrderOutputs && null != OrderOutputs.getResultData() && (1==OrderOutputs.getResultCode()))
+                                      {
+                                          if(null != OrderOutputs.getResultData().getList() && !OrderOutputs.getResultData().getList().isEmpty())
+                                          {
+                                              if( operateType == OperateTypeEnum.REFRESH){
+                                                  orders.clear();
+                                                  orders.addAll(OrderOutputs.getResultData().getList());
+                                                  adapter.notifyDataSetChanged();
+                                              }else if( operateType == OperateTypeEnum.LOADMORE){
+                                                  orders.addAll( OrderOutputs.getResultData().getList());
+                                                  adapter.notifyDataSetChanged();
+                                              }
+                                          }
+                                          else
+                                          {
+                                              orderList.setEmptyView(emptyView);
+                                          }
+                                      }
+                                      else
+                                      {
+                                          //异常处理，自动切换成无数据
+                                          orderList.setEmptyView(emptyView);
+                                      }
+                                  }
+                              }, new Response.ErrorListener() {
+                                  @Override
+                                  public void onErrorResponse(VolleyError error) {
+                                      orderList.onRefreshComplete();
+                                      if(ShowOrderActivity.this.isFinishing() ) {
+                                          return;
+                                      }
+                                      orderList.setEmptyView(emptyView);
+                                  }
+                              });
     }
 
     protected void firstGetData(){

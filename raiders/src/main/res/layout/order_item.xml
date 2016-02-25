@@ -44,8 +44,11 @@
             android:layout_marginTop="5dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:background="@color/gray_bg">
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:background="@mipmap/share_order_bg">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

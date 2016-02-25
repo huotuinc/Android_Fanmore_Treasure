@@ -29,7 +29,9 @@ import com.huotu.fanmore.pinkcatraiders.model.CateGoryOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.CategoryListModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
+import com.huotu.fanmore.pinkcatraiders.ui.assistant.SearchActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
@@ -89,12 +91,12 @@ public class CateGoryActivity extends BaseActivity implements View.OnClickListen
     private void initTitle() {
         //背景色
         Drawable bgDraw = resources.getDrawable(R.drawable.account_bg_bottom);
-        SystemTools.loadBackground(titleLayoutL, bgDraw);
+        SystemTools.loadBackground ( titleLayoutL, bgDraw );
         Drawable leftDraw = resources.getDrawable(R.mipmap.back_gray);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
-        stubTitleText.inflate();
+        stubTitleText.inflate ( );
         TextView titleText = (TextView) this.findViewById(R.id.titleText);
-        titleText.setText("分类浏览");
+        titleText.setText ( "分类浏览" );
     }
 
     private void initList()
@@ -107,8 +109,8 @@ public class CateGoryActivity extends BaseActivity implements View.OnClickListen
         });
         category = new ArrayList<CategoryListModel>();
         adapter = new CategoryAdapter(category, CateGoryActivity.this);
-        cateList.setAdapter(adapter);
-        firstGetData();
+        cateList.setAdapter ( adapter );
+        firstGetData ( );
     }
     private void loadData()
     {
@@ -129,39 +131,65 @@ public class CateGoryActivity extends BaseActivity implements View.OnClickListen
         url = url + suffix;
         HttpUtils httpUtils = new HttpUtils();
 
-        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                cateList.onRefreshComplete();
-                if (CateGoryActivity.this.isFinishing()) {
-                    return;
-                }
-                JSONUtil<CateGoryOutputModel> jsonUtil = new JSONUtil<CateGoryOutputModel>();
-                CateGoryOutputModel cateGoryOutputModel = new CateGoryOutputModel();
-                cateGoryOutputModel = jsonUtil.toBean(response.toString(), cateGoryOutputModel);
-                if (null != cateGoryOutputModel && null != cateGoryOutputModel.getResultData() && null != cateGoryOutputModel.getResultData().getList()) {
+        httpUtils.doVolleyGet (
+                url, new Response.Listener< JSONObject > ( ) {
 
-                    //修改记录总数
-                    Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, cateGoryOutputModel.getResultData().getList().size());
-                    mHandler.sendMessage(message);
-                    category.clear();
-                    category.addAll(cateGoryOutputModel.getResultData().getList());
-                    adapter.notifyDataSetChanged();
-                } else {
-                    //提示获取数据失败
-                    cateList.setEmptyView(emptyView);
+                    @Override
+                    public
+                    void onResponse ( JSONObject response ) {
+
+                        cateList.onRefreshComplete ( );
+                        if ( CateGoryActivity.this.isFinishing ( ) ) {
+                            return;
+                        }
+                        JSONUtil< CateGoryOutputModel > jsonUtil            = new JSONUtil<
+                                CateGoryOutputModel > ( );
+                        CateGoryOutputModel             cateGoryOutputModel = new
+                                CateGoryOutputModel ( );
+                        cateGoryOutputModel = jsonUtil.toBean ( response.toString ( ),
+                                                                cateGoryOutputModel );
+                        if ( null != cateGoryOutputModel && null != cateGoryOutputModel
+                                .getResultData ( ) && null != cateGoryOutputModel.getResultData (
+                                                                                                )
+                                                                                 .getList ( ) ) {
+
+                            //修改记录总数
+                            Message message = mHandler.obtainMessage ( Contant.LOAD_AREA_COUNT,
+                                                                       cateGoryOutputModel
+                                                                               .getResultData ( )
+                                                                               .getList ( ).size
+                                                                               ( ) );
+                            mHandler.sendMessage ( message );
+                            category.clear ( );
+                            category.addAll ( cateGoryOutputModel.getResultData ( ).getList ( ) );
+                            adapter.notifyDataSetChanged ( );
+                        }
+                        else {
+                            //提示获取数据失败
+                            cateList.setEmptyView ( emptyView );
+                        }
+                    }
+                }, new Response.ErrorListener ( ) {
+
+                    @Override
+                    public
+                    void onErrorResponse ( VolleyError error ) {
+
+                        cateList.onRefreshComplete ( );
+                        if ( CateGoryActivity.this.isFinishing ( ) ) {
+                            return;
+                        }
+                        cateList.setEmptyView ( emptyView );
+                    }
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                cateList.onRefreshComplete();
-                if (CateGoryActivity.this.isFinishing()) {
-                    return;
-                }
-                cateList.setEmptyView(emptyView);
-            }
-        });
+                              );
+    }
+
+    @OnClick(R.id.search)
+    void toSearch()
+    {
+        Bundle bundle = new Bundle (  );
+        ActivityUtils.getInstance ().showActivity ( CateGoryActivity.this, SearchActivity.class, bundle );
     }
 
     protected void firstGetData(){
