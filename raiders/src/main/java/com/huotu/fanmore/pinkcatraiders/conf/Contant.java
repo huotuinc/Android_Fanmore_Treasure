@@ -33,7 +33,8 @@ public class Contant {
     public static final String APPKEY           = "123456";
 
     //微信支付ID
-    public static final String WXPAY_ID         = "";
+    public static final String WXPAY_ID    = "wx2f2604e380cf6be1";
+    public static final String WXPAY_SECRT = "ae3a7d851f24bfc97047954fa3975cec";
 
     //微信登录:用户存在
     public static final int    MSG_USERID_FOUND = 0x00000001;
@@ -181,4 +182,10 @@ public class Contant {
     public static final String GET_MY_REDPACKAGES_LIST = "getMyRedPacketsList";
     //获取中奖纪录列表
     public static final String GET_MY_LOTTERY_LIST = "getMyLotteryList";
+    //预支付信息
+    public static final String PUT_MONEY = "putMoney";
+
+    //支付
+    //微信支付
+    public static final String WX_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 }

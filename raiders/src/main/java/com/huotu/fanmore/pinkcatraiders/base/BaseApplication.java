@@ -154,13 +154,15 @@ public class BaseApplication extends Application {
     //获取user昵称
     public String readNickName()
     {
-        return PreferenceHelper.readString ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_REALNAME );
+        return PreferenceHelper.readString ( getApplicationContext ( ), Contant.LOGIN_USER_INFO,
+                                             Contant.LOGIN_AUTH_REALNAME );
     }
 
     //获取user手机号
     public String readMobile()
     {
-        return PreferenceHelper.readString ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_MOBILE );
+        return PreferenceHelper.readString ( getApplicationContext ( ), Contant.LOGIN_USER_INFO,
+                                             Contant.LOGIN_AUTH_MOBILE );
     }
 
     public void writeInitInfo(String initStr)
@@ -200,5 +202,33 @@ public class BaseApplication extends Application {
     public String obtainToken()
     {
         return PreferenceHelper.readString(getApplicationContext (), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_TOKEN);
+    }
+
+    public String readWxpayParentId()
+    {
+        return PreferenceHelper.readString ( getApplicationContext ( ), "WX_PAY_INFO", "WEIXIN_MERCHANT_ID" );
+    }
+
+    public String readWxpayAppId()
+    {
+        return PreferenceHelper.readString ( getApplicationContext (), "WX_PAY_INFO", "MERCHANT_WEIXIN_ID" );
+    }
+
+    public String readWxpayAppKey()
+    {
+        return PreferenceHelper.readString ( getApplicationContext ( ), "WX_PAY_INFO",
+                                             "MERCHANT_WEIXIN_ID" );
+    }
+    public String readAlipayAppKey()
+    {
+        return PreferenceHelper.readString (
+                getApplicationContext ( ), "ALI_PAY_INFO",
+                "ALIPAY_KEY"
+                                           );
+    }
+
+    public String readAlipayParentId()
+    {
+        return PreferenceHelper.readString ( getApplicationContext (), "ALI_PAY_INFO", "ALIPAY_MERCHANT_ID" );
     }
 }

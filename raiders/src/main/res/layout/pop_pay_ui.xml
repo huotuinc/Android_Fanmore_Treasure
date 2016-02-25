@@ -2,11 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/popLayout"
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="wrap_content"
                 android:background="#ffffe0">
             <Button
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/common_btn_height_5"
                 android:id="@+id/wxPayBtn"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="@dimen/weixin_pay_margin"
@@ -17,7 +17,7 @@
                 android:background="@drawable/wx_pay"/>
             <Button
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/common_btn_height_5"
                 android:id="@+id/alipayBtn"
                 android:layout_below="@+id/wxPayBtn"
                 android:layout_marginTop="@dimen/weixin_pay_margin"
@@ -28,13 +28,13 @@
                 android:background="@drawable/ali_pay"/>
             <Button
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/common_btn_height_5"
                 android:id="@+id/cancelBtn"
                 android:layout_below="@+id/alipayBtn"
                 android:layout_marginTop="@dimen/weixin_pay_margin"
                 android:layout_marginLeft="@dimen/weixin_pay_margin"
                 android:layout_marginRight="@dimen/weixin_pay_margin"
-                android:text="取消"
+                android:text="取消支付"
                 android:textColor="#696969"
                 android:background="@drawable/btn_common"/>
     <Button

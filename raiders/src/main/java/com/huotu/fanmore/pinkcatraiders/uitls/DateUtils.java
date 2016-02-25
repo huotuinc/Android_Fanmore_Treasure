@@ -163,4 +163,19 @@ public class DateUtils {
     {
         return (System.currentTimeMillis () - Long.parseLong ( endTime ))>=0?false:true;
     }
+
+    public static String formatDate(Long currentTime, String fromat)
+    {
+        DateFormat format = null;
+        try
+        {
+            format = new SimpleDateFormat(fromat);
+            Date date = new Date(currentTime);
+            return format.format(date);
+        } catch(Exception e)
+        {
+            //发现异常时，返回当前时间
+            return format.format(new Date());
+        }
+    }
 }

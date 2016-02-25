@@ -46,6 +46,7 @@
     <dimen name="common_btn_height_2">40dp</dimen>
     <dimen name="common_btn_width_3">100dp</dimen>
     <dimen name="common_btn_height_1">30dp</dimen>
+    <dimen name="common_btn_height_5">50dp</dimen>
     <dimen name="common_icon_size_1">30dp</dimen>
     <dimen name="common_icon_size_2">100dp</dimen>
     <dimen name="level_size">20dp</dimen>

@@ -24,6 +24,7 @@ import com.huotu.fanmore.pinkcatraiders.adapter.MoneyAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
+import com.huotu.fanmore.pinkcatraiders.model.PayOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RechargeOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
@@ -34,6 +35,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.MyGridView;
+import com.huotu.fanmore.pinkcatraiders.widget.PayPopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 
 import org.json.JSONObject;
@@ -86,13 +88,18 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
 
     @Bind ( R.id.moneyMethodIcon2 )
     ImageView      moneyMethodIcon2;
+    @Bind ( R.id.rechargeBtn )
+    TextView rechargeBtn;
 
     public MoneyAdapter adapter;
 
     public
     ProgressPopupWindow progress;
     public List<Long> moneys;
-    public long money;
+    public long money = -1;
+    public int payType = -1;
+    public
+    PayPopWindow payPopWin;
 
 
     @Override
@@ -129,6 +136,8 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
     {
         SystemTools.loadBackground ( moneyMethodIcon1, res.getDrawable ( R.mipmap.money_select ) );
         SystemTools.loadBackground ( moneyMethodIcon2, res.getDrawable ( R.mipmap.unselect ) );
+        payType = 0;
+
     }
 
     @OnClick(R.id.aliPayL)
@@ -136,6 +145,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
     {
         SystemTools.loadBackground ( moneyMethodIcon1, res.getDrawable ( R.mipmap.unselect ) );
         SystemTools.loadBackground ( moneyMethodIcon2, res.getDrawable ( R.mipmap.money_select ) );
+        payType = 1;
     }
 
     @OnClick(R.id.titleLeftImage)
@@ -146,7 +156,6 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
 
     private
     void initView ( ) {
-
         //重构充值面额
         String                url    = Contant.REQUEST_URL + Contant.GET_DEFAULT_PUT_MONEY_LIST;
         AuthParamUtils        params = new AuthParamUtils ( application, System.currentTimeMillis
@@ -161,7 +170,6 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                     @Override
                     public
                     void onResponse ( JSONObject response ) {
-
                         if ( RechargeActivity.this.isFinishing ( ) ) {
                             return;
                         }
@@ -194,35 +202,40 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                     }
                 }
                               );
-        moneyGrid.setOnItemClickListener ( new AdapterView.OnItemClickListener ( ) {
+        moneyGrid.setOnItemClickListener (
+                new AdapterView.OnItemClickListener ( ) {
 
-                                               @Override
-                                               public
-                                               void onItemClick ( AdapterView< ? > parent, View view, int position, long id ) {
-                                                   adapter.setSeclection(position);
-                                                   adapter.notifyDataSetChanged ( );
-                                                   money = moneys.get ( position );
-                                               }
-                                           } );
+                    @Override
+                    public
+                    void onItemClick ( AdapterView< ? > parent, View view, int position, long id ) {
+
+                        adapter.setSeclection ( position );
+                        adapter.notifyDataSetChanged ( );
+                        money = moneys.get ( position );
+                    }
+                }
+                                         );
     }
+
+
 
     private void initTitle()
     {
         //背景色
-        Drawable bgDraw = res.getDrawable(R.drawable.account_bg_bottom);
+        Drawable bgDraw = res.getDrawable ( R.drawable.account_bg_bottom );
         SystemTools.loadBackground(titleLayoutL, bgDraw);
         Drawable leftDraw = res.getDrawable(R.mipmap.back_gray);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
-        stubTitleText.inflate();
+        stubTitleText.inflate ( );
         TextView titleText = (TextView) this.findViewById(R.id.titleText);
-        titleText.setText("充值");
+        titleText.setText ( "充值" );
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        ButterKnife.unbind(this);
-        VolleyUtil.cancelAllRequest();
+        super.onDestroy ( );
+        ButterKnife.unbind ( this );
+        VolleyUtil.cancelAllRequest ( );
     }
 
     @Override
@@ -234,5 +247,80 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
             this.closeSelf(RechargeActivity.this);
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @OnClick(R.id.rechargeBtn)
+    void doRecharge()
+    {
+        if(-1 == money)
+        {
+            ToastUtils.showShortToast ( RechargeActivity.this, "请选择充值的面额" );
+            return;
+        }
+        else if(-1 == payType)
+        {
+            ToastUtils.showShortToast ( RechargeActivity.this, "请选择支付方式" );
+            return;
+        }
+        else
+        {
+            progress = new ProgressPopupWindow ( RechargeActivity.this, RechargeActivity.this, wManager );
+            progress.showProgress ( "正在提交支付信息" );
+            progress.showAtLocation ( rechargeBtn, Gravity.CENTER, 0, 0 );
+            String                url    = Contant.REQUEST_URL + Contant.PUT_MONEY;
+            AuthParamUtils        params = new AuthParamUtils ( application, System.currentTimeMillis
+                    ( ), RechargeActivity.this );
+            Map< String, Object > maps   = new HashMap< String, Object > ( );
+            maps.put ( "money", String.valueOf ( money ) );
+            maps.put ( "payType", String.valueOf ( payType ) );
+            String                suffix = params.obtainGetParam ( maps );
+            url = url + suffix;
+            HttpUtils httpUtils = new HttpUtils ( );
+            httpUtils.doVolleyGet (
+                    url, new Response.Listener< JSONObject > ( ) {
+
+                        @Override
+                        public
+                        void onResponse ( JSONObject response ) {
+                            progress.dismissView ();
+
+                            if ( RechargeActivity.this.isFinishing ( ) ) {
+                                return;
+                            }
+                            JSONUtil< PayOutputModel > jsonUtil = new JSONUtil<
+                                    PayOutputModel > ( );
+                            PayOutputModel payOutput = new PayOutputModel
+                                    ( );
+                            payOutput = jsonUtil.toBean ( response.toString ( ), payOutput );
+                            if ( null != payOutput && null != payOutput.getResultData ( )
+                                 && ( 1 == payOutput.getResultCode ( ) ) ) {
+                                payPopWin = new PayPopWindow ( RechargeActivity.this, RechargeActivity.this, mHandler, application, payOutput.getResultData ().getData () );
+                                payPopWin.showAtLocation (
+                                        rechargeBtn,
+                                        Gravity.BOTTOM, 0, 0
+                                                            );
+                            }
+                            else {
+                                //异常处理，自动切换成无数据
+                                ToastUtils.showShortToast ( RechargeActivity.this, "提交支付信息失败" );
+                            }
+                        }
+                    }, new Response.ErrorListener ( ) {
+
+                        @Override
+                        public
+                        void onErrorResponse ( VolleyError error ) {
+                            progress.dismissView ();
+
+                            if ( RechargeActivity.this.isFinishing ( ) ) {
+                                return;
+                            }
+                            ToastUtils.showShortToast ( RechargeActivity.this, "提交支付信息失败" );
+                        }
+                    }
+                                  );
+
+        }
+
     }
 }
