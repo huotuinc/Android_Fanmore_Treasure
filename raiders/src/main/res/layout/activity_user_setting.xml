@@ -73,6 +73,7 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:textSize="@dimen/text_size_16"
+           android:id="@+id/userId"
            android:layout_marginRight="5dp"
            android:text="1241234123123123@qq.com"/>
         <ImageView
@@ -106,6 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_16"
+            android:id="@+id/userAccount"
             android:layout_marginRight="5dp"
             android:text="1241234123123123@qq.com"/>
         <ImageView
@@ -139,6 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_16"
+            android:id="@+id/userNickName"
             android:layout_marginRight="5dp"
             android:text="反对法"/>
         <ImageView

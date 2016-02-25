@@ -1,7 +1,9 @@
 package com.huotu.fanmore.pinkcatraiders.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,6 +14,8 @@ import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.MyAddressListModel;
 import com.huotu.fanmore.pinkcatraiders.model.NewestProduct;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
+import com.huotu.fanmore.pinkcatraiders.ui.assistant.AddAddressActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 
@@ -27,6 +31,8 @@ public class MyAddressAdapter extends BaseAdapter {
 
     private List<MyAddressListModel> lists;
     private Context context;
+    private
+    Activity aty;
     //0 编辑模式
     //1 结算模式
     private int type;
@@ -55,10 +61,10 @@ public class MyAddressAdapter extends BaseAdapter {
         this.type = type;
     }
 
-    public MyAddressAdapter(List<MyAddressListModel> lists, Context context, int type) {
+    public MyAddressAdapter(List<MyAddressListModel> lists, Context context, Activity aty,  int type) {
         this.lists = lists;
         this.context = context;
-
+        this.aty = aty;
         this.type = type;
     }
 
@@ -92,7 +98,7 @@ public class MyAddressAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        SystemTools.loadBackground ( holder.editBtn, resources.getDrawable ( R.mipmap.unselect ) );
+        holder.editBtn.setVisibility ( View.GONE );
         SystemTools.loadBackground ( holder.editIcon, resources.getDrawable ( R.mipmap.editor_icon ) );
         final MyAddressListModel MyAddressList = lists.get(position);
         if(1==MyAddressList.getDefaultAddress ())
@@ -112,6 +118,15 @@ public class MyAddressAdapter extends BaseAdapter {
                                                  public
                                                  void onClick ( View v ) {
 
+                                                     Bundle bundle = new Bundle ( );
+                                                     bundle.putString ( "receiver",  MyAddressList.getReceiver ());
+                                                     bundle.putString ( "mobile", MyAddressList.getMobile ( ) );
+                                                     bundle.putString ( "details", MyAddressList.getDetails ( ) );
+                                                     bundle.putLong ( "addressId", MyAddressList.getAddressId () );
+                                                     bundle.putInt ( "defaultAddress",
+                                                                     MyAddressList
+                                                                             .getDefaultAddress ( ) );
+                                                     ActivityUtils.getInstance ().showActivity ( aty, AddAddressActivity.class, bundle );
                                                  }
                                              } );
 

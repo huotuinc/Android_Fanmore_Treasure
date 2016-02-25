@@ -181,7 +181,9 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                             ToastUtils.showLongToast(SplashActivity.this, "初始化数据失败");
                         }
                     });
+
                     ActivityUtils.getInstance ().skipActivity ( SplashActivity.this, HomeActivity.class);
+
                 }
             }
 

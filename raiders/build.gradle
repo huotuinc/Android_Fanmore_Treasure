@@ -83,6 +83,9 @@ dependencies {
 
 
     compile(name:'libedittext-release', ext:'aar')
+    compile (name:'libcropper-1.0', ext:'aar'){
+        exclude module: 'support-v4'
+    }
     compile ('com.github.satyan:sugar:1.4'){
 
         exclude module: 'support-v4'

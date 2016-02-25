@@ -44,7 +44,7 @@ public class BaseApplication extends Application {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+        super.onConfigurationChanged ( newConfig );
     }
 
     @Override
@@ -132,6 +132,37 @@ public class BaseApplication extends Application {
 
         PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_USERNAME,user.getUsername());
     }
+    //获取头像
+    public String readUerHead()
+    {
+        return PreferenceHelper.readString ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_UDERHEAD );
+    }
+
+    //获取userId
+    public Long readUerId()
+    {
+        return PreferenceHelper.readLong ( getApplicationContext ( ), Contant.LOGIN_USER_INFO,
+                                           Contant.LOGIN_AUTH_USERID );
+    }
+
+    //获取user账号
+    public String readAccount()
+    {
+        return PreferenceHelper.readString ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_USERNAME );
+    }
+
+    //获取user昵称
+    public String readNickName()
+    {
+        return PreferenceHelper.readString ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_REALNAME );
+    }
+
+    //获取user手机号
+    public String readMobile()
+    {
+        return PreferenceHelper.readString ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_MOBILE );
+    }
+
     public void writeInitInfo(String initStr)
     {
         PreferenceHelper.writeString ( getApplicationContext (), Contant.SYS_INFO, Contant.FIRST_OPEN, initStr );
@@ -168,6 +199,8 @@ public class BaseApplication extends Application {
 
     public String obtainToken()
     {
-        return PreferenceHelper.readString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_TOKEN);
+
+        return PreferenceHelper.readString(getApplicationContext (), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_TOKEN);
+
     }
 }

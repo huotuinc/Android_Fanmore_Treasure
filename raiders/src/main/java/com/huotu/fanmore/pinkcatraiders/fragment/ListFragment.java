@@ -114,7 +114,7 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
             }
         });
         lists = new ArrayList<ListModel>();
-        adapter = new ListAdapter(lists, getActivity(), 0);
+        adapter = new ListAdapter(lists, getActivity(), 1);
         menuList.setAdapter(adapter);
         firstGetData();
     }

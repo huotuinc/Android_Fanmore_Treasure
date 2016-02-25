@@ -73,6 +73,10 @@ public class Contant {
      * 选择地址
      */
     public static final int SELECT_ADDRESS      = 0x00000032;
+    /**
+     * 立即夺宝
+     */
+    public static final int RAIDERS_NOW      = 0x00000040;
 
     /**
      * 菜单标记1
@@ -131,10 +135,10 @@ public class Contant {
 
     //接口请求地址
     //loginapi
-    public static final String REQUEST_URL = "http://192.168.3.67:8080/duobao/app/";
+    //public static final String REQUEST_URL = "http://192.168.3.67:8080/duobao/app/";
+    public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
-    //public static final String REQUEST_URL = "http://192.168.1.146:8081/duobao/app/";
-
+    //public static final String REQUEST_URL                 = "http://192.168.1.146:8081/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.3.13:8080/duobao/app/";
     //获取夺宝记录
     public static final String GET_MY_RAIDER_LIST          = "getMyRaiderList";
@@ -164,4 +168,18 @@ public class Contant {
     public static final String LOGIN                       = "login";
 
     public static final String REG                         = "reg";
+    //修改用户信息资料
+    public static final String UPDATE_PROFILE = "updateProfile";
+    //获取地址列表
+    public static final String GET_MY_ADDRESS_LIST = "getMyAddressList";
+    //添加地址
+    public static final String ADD_MY_ADDRESS = "addMyAddress";
+    //更新地址
+    public static final String UPDATE_ADDRESS = "updateAddress";
+    //删除地址
+    public static final String DELETE_ADDRESS = " deleteAddress";
+    //获取默认充值金额数据
+    public static final String GET_DEFAULT_PUT_MONEY_LIST = "getDefaultPutMoneyList";
+    //获取充值记录
+    public static final String GET_MY_PUT_LIST = "getMyPutList";
 }
