@@ -201,7 +201,9 @@ public class BaseApplication extends Application {
 
     public String obtainToken()
     {
+
         return PreferenceHelper.readString(getApplicationContext (), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_TOKEN);
+
     }
 
     public String readWxpayParentId()

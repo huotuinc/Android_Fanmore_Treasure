@@ -157,6 +157,11 @@ public class Contant {
     //获取参与历史
     public static final String GET_BUY_LIST                = "getBuyList";
 
+    //获取幻灯片轮播列表
+    public static final String GET_SLIDE_LIST              = "getSlideList";
+    //获取幻灯片轮播列表
+    public static final String GET_SLIDE_DETAIL            = "getSlideDetail";
+
     //初始化
     public static final String INIT                        = "init";
 

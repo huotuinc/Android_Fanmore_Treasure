@@ -89,7 +89,8 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
         application = (BaseApplication) getActivity().getApplication();
         rootAty = (HomeActivity) getActivity();
         ButterKnife.bind(this, rootView);
-
+        userimg.setBorderColor(resources.getColor(R.color.color_white));
+        userimg.setBorderWidth((int) resources.getDimension(R.dimen.head_width));
         String imgurl= PreferenceHelper.readString (getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_UDERHEAD);
         BitmapLoader.create().loadRoundImage(getActivity(), userimg, imgurl, R.mipmap.error);
         TVUserName.setText(PreferenceHelper.readString(getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_REALNAME));

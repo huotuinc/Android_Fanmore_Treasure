@@ -22,9 +22,11 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
+import com.huotu.fanmore.pinkcatraiders.model.CateGoryOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.InitOutputsModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.SlideListOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.guide.GuideActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -179,6 +181,9 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                             ToastUtils.showLongToast(SplashActivity.this, "初始化数据失败");
                         }
                     });
+
+                    ActivityUtils.getInstance ().skipActivity ( SplashActivity.this, HomeActivity.class);
+
                 }
             }
 
