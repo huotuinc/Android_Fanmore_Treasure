@@ -45,6 +45,17 @@ public class DateUtils {
     }
 
     /**
+     * 转换成 2015-12-12 10:00:00格式
+     * @param timeStamp
+     * @return
+     */
+    public static String transformDataformat6(String timeStamp)
+    {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return format.format(new Date(Long.parseLong(timeStamp)));
+    }
+
+    /**
      * 转换成 2015/12/12 10:00:00格式
      * @param date
      * @return
@@ -141,5 +152,15 @@ public class DateUtils {
         }
 
         return resultMap;
+    }
+
+    /**
+     * 判断是否过期
+     * @param endTime
+     * @return
+     */
+    public static boolean isExpired(String endTime)
+    {
+        return (System.currentTimeMillis () - Long.parseLong ( endTime ))>=0?false:true;
     }
 }

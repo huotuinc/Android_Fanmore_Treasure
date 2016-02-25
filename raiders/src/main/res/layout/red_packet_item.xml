@@ -38,6 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="满10元可用"
+            android:id="@+id/fullMoney"
             android:textSize="11sp"
             android:layout_alignBottom="@+id/redicon"
             android:layout_marginBottom="5dp"/>

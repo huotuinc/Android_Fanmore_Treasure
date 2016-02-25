@@ -177,4 +177,6 @@ public class Contant {
     public static final String GET_DEFAULT_PUT_MONEY_LIST = "getDefaultPutMoneyList";
     //获取充值记录
     public static final String GET_MY_PUT_LIST = "getMyPutList";
+    //获取红包列表
+    public static final String GET_MY_REDPACKAGES_LIST = "getMyRedPacketsList";
 }

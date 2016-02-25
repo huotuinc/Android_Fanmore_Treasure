@@ -10,25 +10,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.RedAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
+import com.huotu.fanmore.pinkcatraiders.model.RedPacketOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RedPacketsModel;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RedEnvelopesActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by Administrator on 2016/2/18.
+ * 已使用/过期红包
  */
 public class RedEnvelopesnouseFrag extends BaseFragment implements Handler.Callback {
     View rootView;
@@ -38,7 +50,7 @@ public class RedEnvelopesnouseFrag extends BaseFragment implements Handler.Callb
     public WindowManager wManager;
     View emptyView = null;
     @Bind(R.id.raidersLogList)
-    PullToRefreshListView raidersLogList;
+    PullToRefreshListView redPackageList;
     public OperateTypeEnum operateType = OperateTypeEnum.REFRESH;
     public List<RedPacketsModel> redPacketsModels;
     public RedAdapter adapter;
@@ -57,14 +69,18 @@ public class RedEnvelopesnouseFrag extends BaseFragment implements Handler.Callb
         rootAty = (RedEnvelopesActivity) getActivity();
         ButterKnife.bind(this, rootView);
         emptyView = inflater.inflate(R.layout.empty, null);
+        TextView emptyTag = (TextView) emptyView.findViewById(R.id.emptyTag);
+        emptyTag.setText ( "暂无过期红包信息" );
+        TextView emptyBtn = (TextView) emptyView.findViewById(R.id.emptyBtn);
+        emptyBtn.setVisibility(View.GONE);
         wManager = getActivity().getWindowManager();
         initList();
         return rootView;
     }
 
     private void initList() {
-        raidersLogList.setMode(PullToRefreshBase.Mode.BOTH);
-        raidersLogList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        redPackageList.setMode(PullToRefreshBase.Mode.BOTH);
+        redPackageList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 operateType = OperateTypeEnum.REFRESH;
@@ -80,84 +96,89 @@ public class RedEnvelopesnouseFrag extends BaseFragment implements Handler.Callb
         });
         redPacketsModels = new ArrayList<RedPacketsModel>();
         adapter = new RedAdapter(redPacketsModels, getActivity());
-        raidersLogList.setAdapter(adapter);
+        redPackageList.setAdapter(adapter);
         firstGetData();
     }
 
     private void loadData() {
-        if (false == rootAty.canConnect()) {
+
+        if( false == rootAty.canConnect() ){
             rootAty.mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    raidersLogList.onRefreshComplete();
-                }
-            });
+                                      @Override
+                                      public void run() {
+                                          redPackageList.onRefreshComplete();
+                                      }
+                                  });
             return;
         }
-//        String url = Contant.REQUEST_URL + Contant.GET_MY_RAIDER_LIST;
-//        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
-//        Map<String, Object> maps = new HashMap<String, Object>();
-//        //全部
-//        maps.put("type", "0");
-//        if ( OperateTypeEnum.REFRESH == operateType )
-//        {// 下拉
-//            maps.put("lastId", 0);
-//        } else if (OperateTypeEnum.LOADMORE == operateType)
-//        {// 上拉
-//            if ( redPacketsModels != null && redPacketsModels.size() > 0)
-//            {
-//                RedPacketsModel redPacketsModel = redPacketsModels.get(redPacketsModels.size() - 1);
-//                maps.put("lastId", redPacketsModels.getPid());
-//            } else if (redPacketsModels != null && redPacketsModels.size() == 0)
-//            {
-//                maps.put("lastId", 0);
-//            }
-//        }
-//        String suffix = params.obtainGetParam(maps);
-//        url = url + suffix;
-//        HttpUtils httpUtils = new HttpUtils();
-//        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                raidersLogList.onRefreshComplete();
-//                if (rootAty.isFinishing()) {
-//                    return;
-//                }
-//                JSONUtil<RaidersOutputModel> jsonUtil = new JSONUtil<RaidersOutputModel>();
-//                RaidersOutputModel raiderOutputs = new RaidersOutputModel();
-//                raiderOutputs = jsonUtil.toBean(response.toString(), raiderOutputs);
-//                if (null != raiderOutputs && null != raiderOutputs.getResultData() && (1 == raiderOutputs.getResultCode())) {
-//                    if (null != raiderOutputs.getResultData().getList() && !raiderOutputs.getResultData().getList().isEmpty()) {
-//                        //更新夺宝数据
-//                        String[] counts = new String[]{String.valueOf(raiderOutputs.getResultData().getAllNumber()), String.valueOf(raiderOutputs.getResultData().getRunNumber()), String.valueOf(raiderOutputs.getResultData().getFinishNumber())};
-//                        Message message = rootAty.mHandler.obtainMessage(Contant.UPDATE_RAIDER_COUNT, counts);
-//                        rootAty.mHandler.sendMessage(message);
-//                        if (operateType == OperateTypeEnum.REFRESH) {
-//                            raiders.clear();
-//                            raiders.addAll(raiderOutputs.getResultData().getList());
-//                            adapter.notifyDataSetChanged();
-//                        } else if (operateType == OperateTypeEnum.LOADMORE) {
-//                            raiders.addAll(raiderOutputs.getResultData().getList());
-//                            adapter.notifyDataSetChanged();
-//                        }
-//                    } else {
-//                        raidersLogList.setEmptyView(emptyView);
-//                    }
-//                } else {
-//                    //异常处理，自动切换成无数据
-//                    raidersLogList.setEmptyView(emptyView);
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                raidersLogList.onRefreshComplete();
-//                if (rootAty.isFinishing()) {
-//                    return;
-//                }
-//                raidersLogList.setEmptyView(emptyView);
-//            }
-//        });
+        String url = Contant.REQUEST_URL + Contant.GET_MY_REDPACKAGES_LIST;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
+        Map<String, Object> maps = new HashMap<String, Object> ();
+        //全部
+        maps.put("type", "1");
+        if ( OperateTypeEnum.REFRESH == operateType )
+        {// 下拉
+            maps.put("lastId", 0);
+        } else if (OperateTypeEnum.LOADMORE == operateType)
+        {// 上拉
+            if ( redPacketsModels != null && redPacketsModels.size() > 0)
+            {
+                RedPacketsModel redPacket = redPacketsModels.get(redPacketsModels.size() - 1);
+                maps.put("lastId", redPacket.getPid());
+            } else if (redPacketsModels != null && redPacketsModels.size() == 0)
+            {
+                maps.put("lastId", 0);
+            }
+        }
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject >() {
+                                  @Override
+                                  public void onResponse(JSONObject response) {
+                                      redPackageList.onRefreshComplete();
+                                      if(rootAty.isFinishing())
+                                      {
+                                          return;
+                                      }
+                                      JSONUtil<RedPacketOutputModel > jsonUtil = new JSONUtil<RedPacketOutputModel>();
+                                      RedPacketOutputModel redPacketOutput = new RedPacketOutputModel();
+                                      redPacketOutput = jsonUtil.toBean(response.toString(), redPacketOutput);
+                                      if(null != redPacketOutput && null != redPacketOutput.getResultData() && (1==redPacketOutput.getResultCode()))
+                                      {
+                                          if(null != redPacketOutput.getResultData().getList() && !redPacketOutput.getResultData().getList().isEmpty())
+                                          {
+                                              if( operateType == OperateTypeEnum.REFRESH){
+                                                  redPacketsModels.clear();
+                                                  redPacketsModels.addAll(redPacketOutput.getResultData().getList());
+                                                  adapter.notifyDataSetChanged();
+                                              }else if( operateType == OperateTypeEnum.LOADMORE){
+                                                  redPacketsModels.addAll( redPacketOutput.getResultData().getList());
+                                                  adapter.notifyDataSetChanged();
+                                              }
+                                          }
+                                          else
+                                          {
+                                              redPackageList.setEmptyView(emptyView);
+                                          }
+                                      }
+                                      else
+                                      {
+                                          //异常处理，自动切换成无数据
+                                          redPackageList.setEmptyView(emptyView);
+                                      }
+                                  }
+                              }, new Response.ErrorListener() {
+                                  @Override
+                                  public void onErrorResponse(VolleyError error) {
+                                      redPackageList.onRefreshComplete();
+                                      if(rootAty.isFinishing())
+                                      {
+                                          return;
+                                      }
+                                      redPackageList.setEmptyView(emptyView);
+                                  }
+                              });
     }
 
     protected void firstGetData() {
@@ -168,7 +189,7 @@ public class RedEnvelopesnouseFrag extends BaseFragment implements Handler.Callb
                     return;
                 }
                 operateType = OperateTypeEnum.REFRESH;
-                raidersLogList.setRefreshing(true);
+                redPackageList.setRefreshing(true);
             }
         }, 1000);
     }

@@ -4,71 +4,98 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * Created by Administrator on 2016/2/18.
+ * 我的红包model
  */
 public class RedPacketsModel extends BaseModel {
-    private Date endTime;
-    private BigDecimal fullMoney;
-    private BigDecimal minusMoney;
+    private String endTime;
+    private double fullMoney;
+    private double minusMoney;
     private String remark;
+    private String startTime;
+    private String title;
+    private Long pid;
 
-    public Date getEndTime() {
+    public
+    String getEndTime ( ) {
+
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public
+    void setEndTime ( String endTime ) {
+
         this.endTime = endTime;
     }
 
-    public BigDecimal getFullMoney() {
+    public
+    double getFullMoney ( ) {
+
         return fullMoney;
     }
 
-    public void setFullMoney(BigDecimal fullMoney) {
+    public
+    void setFullMoney ( double fullMoney ) {
+
         this.fullMoney = fullMoney;
     }
 
-    public BigDecimal getMinusMoney() {
+    public
+    double getMinusMoney ( ) {
+
         return minusMoney;
     }
 
-    public void setMinusMoney(BigDecimal minusMoney) {
+    public
+    void setMinusMoney ( double minusMoney ) {
+
         this.minusMoney = minusMoney;
     }
 
-    public String getRemark() {
+    public
+    String getRemark ( ) {
+
         return remark;
     }
 
-    public void setRemark(String remark) {
+    public
+    void setRemark ( String remark ) {
+
         this.remark = remark;
     }
 
-    public Date getStartTime() {
+    public
+    String getStartTime ( ) {
+
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public
+    void setStartTime ( String startTime ) {
+
         this.startTime = startTime;
     }
 
-    public String getTitle() {
+    public
+    String getTitle ( ) {
+
         return title;
     }
 
-    public void setTitle(String title) {
+    public
+    void setTitle ( String title ) {
+
         this.title = title;
     }
 
-    public Long getId() {
-        return id;
+    public
+    Long getPid ( ) {
+
+        return pid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public
+    void setPid ( Long pid ) {
 
-    private Date startTime;
-    private String title;
-    private Long id;
+        this.pid = pid;
+    }
 }
