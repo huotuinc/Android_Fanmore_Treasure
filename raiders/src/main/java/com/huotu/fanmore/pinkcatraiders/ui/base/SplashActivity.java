@@ -22,9 +22,11 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
+import com.huotu.fanmore.pinkcatraiders.model.CateGoryOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.InitOutputsModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.SlideListOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.guide.GuideActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -112,7 +114,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                 {
                     //定位
                     //初始化接口
-                    /*String url = Contant.REQUEST_URL + Contant.INIT;
+                    String url = Contant.REQUEST_URL + Contant.INIT;
                     AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), SplashActivity.this);
                     Map<String, Object> maps = new HashMap<String, Object>();
                     String suffix = params.obtainGetParam(maps);
@@ -178,7 +180,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                             //异常处理，自动切换成无数据
                             ToastUtils.showLongToast(SplashActivity.this, "初始化数据失败");
                         }
-                    });*/
+                    });
                     ActivityUtils.getInstance ().skipActivity ( SplashActivity.this, HomeActivity.class);
                 }
             }

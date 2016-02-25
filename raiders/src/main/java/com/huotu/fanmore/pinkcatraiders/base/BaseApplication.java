@@ -168,6 +168,6 @@ public class BaseApplication extends Application {
 
     public String obtainToken()
     {
-        return PreferenceHelper.readString(getApplicationContext (), Contant.MEMBER_INFO, Contant.MEMBER_TOKEN);
+        return PreferenceHelper.readString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_TOKEN);
     }
 }
