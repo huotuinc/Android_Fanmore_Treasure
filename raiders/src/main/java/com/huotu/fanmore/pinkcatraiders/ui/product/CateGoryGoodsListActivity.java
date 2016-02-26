@@ -1,12 +1,12 @@
 package com.huotu.fanmore.pinkcatraiders.ui.product;
 
 
-import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
@@ -22,20 +22,17 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.AreaProductAdapter;
-import com.huotu.fanmore.pinkcatraiders.adapter.CategoryAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AreaProductsOutputModel;
-import com.huotu.fanmore.pinkcatraiders.model.CateGoryOutputModel;
-import com.huotu.fanmore.pinkcatraiders.model.CategoryListModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
-import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
 import org.json.JSONObject;
 
@@ -48,7 +45,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CateGoryActivity extends BaseActivity implements View.OnClickListener, Handler.Callback  {
+public class CateGoryGoodsListActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+
     public
     Resources resources;
     public BaseApplication application;
@@ -60,26 +58,29 @@ public class CateGoryActivity extends BaseActivity implements View.OnClickListen
     RelativeLayout titleLayoutL;
     @Bind(R.id.titleLeftImage)
     ImageView titleLeftImage;
-    @Bind(R.id.stubTitleText)
-    ViewStub stubTitleText;
-    @Bind(R.id.cateList)
-    PullToRefreshListView cateList;
+    @Bind(R.id.titleRightImage)
+    ImageView titleRightImage;
+    @Bind(R.id.stubTitleText1)
+    ViewStub stubTitleText1;
+    @Bind(R.id.areaList)
+    PullToRefreshListView areaList;
     View emptyView = null;
-    public Bundle bundle;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
-    public List<CategoryListModel> category;
-    public CategoryAdapter adapter;
+    public List<ProductModel> products;
+    public AreaProductAdapter adapter;
+    public Bundle bundle;
+    TextView titleCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ri_cate_gory);
+        this.setContentView(R.layout.ri_area);
         ButterKnife.bind(this);
         application = (BaseApplication) this.getApplication();
         resources = this.getResources();
         mHandler = new Handler ( this );
         wManager = this.getWindowManager();
-        emptyView = LayoutInflater.from(CateGoryActivity.this).inflate(R.layout.empty, null);
+        emptyView = LayoutInflater.from(CateGoryGoodsListActivity.this).inflate(R.layout.empty, null);
         TextView label = (TextView) emptyView.findViewById(R.id.emptyTag);
         label.setText("暂无数据");
         TextView contrl = (TextView) emptyView.findViewById(R.id.emptyBtn);
@@ -88,45 +89,53 @@ public class CateGoryActivity extends BaseActivity implements View.OnClickListen
         initTitle();
         initList();
     }
-    private void initTitle() {
+
+    private void initTitle()
+    {
         //背景色
         Drawable bgDraw = resources.getDrawable(R.drawable.account_bg_bottom);
         SystemTools.loadBackground(titleLayoutL, bgDraw);
         Drawable leftDraw = resources.getDrawable(R.mipmap.back_gray);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
-        stubTitleText.inflate();
+        Drawable rightDraw = resources.getDrawable(R.mipmap.more_gray);
+        SystemTools.loadBackground(titleRightImage, rightDraw);
+        stubTitleText1.inflate();
         TextView titleText = (TextView) this.findViewById(R.id.titleText);
-        titleText.setText("分类浏览");
+        titleText.setText(bundle.getString("title"));
+        titleCount = (TextView) this.findViewById(R.id.titleCount);
+        titleCount.setText("（0）");
     }
 
     private void initList()
     {
-        cateList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        areaList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 loadData();
             }
         });
-        category = new ArrayList<CategoryListModel>();
-        adapter = new CategoryAdapter(category, CateGoryActivity.this);
-        cateList.setAdapter(adapter);
+        products = new ArrayList<ProductModel>();
+        adapter = new AreaProductAdapter(products, CateGoryGoodsListActivity.this);
+        areaList.setAdapter(adapter);
         firstGetData();
     }
+
     private void loadData()
     {
-        if( false == CateGoryActivity.this.canConnect() ){
+        if( false == CateGoryGoodsListActivity.this.canConnect() ){
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    cateList.onRefreshComplete();
+                    areaList.onRefreshComplete();
                 }
             });
             return;
         }
 
-        String url = Contant.REQUEST_URL + Contant.GET_CATE_GORY_LIST;
-        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryActivity.this);
+        String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_CATEGORY;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
         Map<String, Object> maps = new HashMap<String, Object>();
+        maps.put("categoryId", bundle.get("categoryId"));
         String suffix = params.obtainGetParam(maps);
         url = url + suffix;
         HttpUtils httpUtils = new HttpUtils();
@@ -134,34 +143,34 @@ public class CateGoryActivity extends BaseActivity implements View.OnClickListen
         httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                cateList.onRefreshComplete();
-                if (CateGoryActivity.this.isFinishing()) {
+                areaList.onRefreshComplete();
+                if (CateGoryGoodsListActivity.this.isFinishing()) {
                     return;
                 }
-                JSONUtil<CateGoryOutputModel> jsonUtil = new JSONUtil<CateGoryOutputModel>();
-                CateGoryOutputModel cateGoryOutputModel = new CateGoryOutputModel();
-                cateGoryOutputModel = jsonUtil.toBean(response.toString(), cateGoryOutputModel);
-                if (null != cateGoryOutputModel && null != cateGoryOutputModel.getResultData() && null != cateGoryOutputModel.getResultData().getList()) {
+                JSONUtil<AreaProductsOutputModel> jsonUtil = new JSONUtil<AreaProductsOutputModel>();
+                AreaProductsOutputModel areaProductsOutputs = new AreaProductsOutputModel();
+                areaProductsOutputs = jsonUtil.toBean(response.toString(), areaProductsOutputs);
+                if (null != areaProductsOutputs && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList()) {
 
                     //修改记录总数
-                    Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, cateGoryOutputModel.getResultData().getList().size());
+                    Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, areaProductsOutputs.getResultData().getList().size());
                     mHandler.sendMessage(message);
-                    category.clear();
-                    category.addAll(cateGoryOutputModel.getResultData().getList());
+                    products.clear();
+                    products.addAll(areaProductsOutputs.getResultData().getList());
                     adapter.notifyDataSetChanged();
                 } else {
                     //提示获取数据失败
-                    cateList.setEmptyView(emptyView);
+                    areaList.setEmptyView(emptyView);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                cateList.onRefreshComplete();
-                if (CateGoryActivity.this.isFinishing()) {
+                areaList.onRefreshComplete();
+                if (CateGoryGoodsListActivity.this.isFinishing()) {
                     return;
                 }
-                cateList.setEmptyView(emptyView);
+                areaList.setEmptyView(emptyView);
             }
         });
     }
@@ -170,30 +179,57 @@ public class CateGoryActivity extends BaseActivity implements View.OnClickListen
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (CateGoryActivity.this.isFinishing()) {
+                if (CateGoryGoodsListActivity.this.isFinishing()) {
                     return;
                 }
                 operateType = OperateTypeEnum.REFRESH;
-                cateList.setRefreshing(true);
+                areaList.setRefreshing(true);
             }
         }, 1000);
     }
-    @OnClick(R.id.allL)
-    void getdata()
-    {
-        Bundle bundle = new Bundle();
-        bundle.putLong("categoryId", 0);
-        bundle.putString("title","全部商品");
-        ActivityUtils.getInstance().showActivity(this, CateGoryGoodsListActivity.class, bundle);
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        VolleyUtil.cancelAllRequest();
+        ButterKnife.unbind(this);
     }
+
     @OnClick(R.id.titleLeftImage)
     void doBack()
     {
-        closeSelf(CateGoryActivity.this);
+        closeSelf(CateGoryGoodsListActivity.this);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN)
+        {
+            //关闭
+            this.closeSelf(CateGoryGoodsListActivity.this);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
     public boolean handleMessage(Message msg) {
+        switch (msg.what)
+        {
+            case Contant.LOAD_AREA_COUNT:
+            {
+                int count = (int) msg.obj;
+                titleCount.setText("（"+count+"）");
+            }
+            break;
+            default:
+                break;
+        }
         return false;
     }
 

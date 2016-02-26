@@ -135,8 +135,8 @@ public class Contant {
 
     //接口请求地址
     //loginapi
-    //public static final String REQUEST_URL = "http://192.168.3.67:8080/duobao/app/";
-    public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
+    public static final String REQUEST_URL = "http://192.168.3.67:8080/duobao/app/";
+    //public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
     //public static final String REQUEST_URL                 = "http://192.168.1.146:8081/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.3.13:8080/duobao/app/";
@@ -145,9 +145,12 @@ public class Contant {
 
     //获取首页商品列表
     public static final String GET_GOODS_LIST_INDEX        = "getGoodsListByIndex";
-
+    //获取最新揭晓
+    public static final String GET_NEWOPEN_LIST=  "getNewOpenList";
     //获取专区商品列表
     public static final String GET_GOODS_LIST_BY_AREA = "getGoodsListByArea";
+    //根据分类获取商品列表
+    public static final String GET_GOODS_LIST_BY_CATEGORY="getGoodsListByCategory";
     //获取分类浏览列表
     public static final String GET_CATE_GORY_LIST="getCategoryList";
     //获取商品详情信息
