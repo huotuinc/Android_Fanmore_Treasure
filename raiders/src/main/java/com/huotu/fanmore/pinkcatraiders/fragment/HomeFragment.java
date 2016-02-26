@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -29,11 +30,15 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
+import com.huotu.fanmore.pinkcatraiders.model.CarouselModel;
+import com.huotu.fanmore.pinkcatraiders.model.NoticeModel;
+import com.huotu.fanmore.pinkcatraiders.model.NoticeOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.ShowOrderActivity;
@@ -56,6 +61,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -69,70 +75,98 @@ import butterknife.OnClick;
 public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     View rootView;
-    public Resources resources;
+
+    public Resources       resources;
+
     public BaseApplication application;
-    public HomeActivity rootAty;
-    @Bind(R.id.homeViewPager)
-    ViewPager homeViewPager;
-    @Bind(R.id.dot)
+
+    public HomeActivity    rootAty;
+
+    @Bind ( R.id.homeViewPager )
+    ViewPager    homeViewPager;
+
+    @Bind ( R.id.dot )
     LinearLayout dot;
-    List<AdEntity> adDataList = null;
-    @Bind(R.id.homeHornText)
-    MarqueenTextView homeHornText;
-    @Bind(R.id.productsL)
-    LinearLayout productsL;
-    @Bind(R.id.productSwitch)
-    LinearLayout productSwitch;
-    @Bind(R.id.rqInnerL)
-    RelativeLayout rqInnerL;
-    @Bind(R.id.zxInnerL)
-    RelativeLayout zxInnerL;
-    @Bind(R.id.jdInnerL)
-    RelativeLayout jdInnerL;
-    @Bind(R.id.zxrsInnerL)
-    RelativeLayout zxrsInnerL;
-    @Bind(R.id.rqLabel)
-    TextView rqLabel;
-    @Bind(R.id.zxLabel)
-    TextView zxLabel;
-    @Bind(R.id.jdLabel)
-    TextView jdLabel;
-    @Bind(R.id.zxrsLabel)
-    TextView zxrsLabel;
-    @Bind(R.id.homePullRefresh)
+
+    List< CarouselModel > adDataList = null;
+
+    @Bind ( R.id.homeHornText )
+    ViewFlipper             homeHornText;
+
+    @Bind ( R.id.productsL )
+    LinearLayout            productsL;
+
+    @Bind ( R.id.productSwitch )
+    LinearLayout            productSwitch;
+
+    @Bind ( R.id.rqInnerL )
+    RelativeLayout          rqInnerL;
+
+    @Bind ( R.id.zxInnerL )
+    RelativeLayout          zxInnerL;
+
+    @Bind ( R.id.jdInnerL )
+    RelativeLayout          jdInnerL;
+
+    @Bind ( R.id.zxrsInnerL )
+    RelativeLayout          zxrsInnerL;
+
+    @Bind ( R.id.rqLabel )
+    TextView                rqLabel;
+
+    @Bind ( R.id.zxLabel )
+    TextView                zxLabel;
+
+    @Bind ( R.id.jdLabel )
+    TextView                jdLabel;
+
+    @Bind ( R.id.zxrsLabel )
+    TextView                zxrsLabel;
+
+    @Bind ( R.id.homePullRefresh )
     PullToRefreshScrollView homePullRefresh;
+
     private int currentIndex = 0;
+
     public WindowManager wManager;
-    public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
+
+    public OperateTypeEnum operateType = OperateTypeEnum.REFRESH;
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public
+    void onResume ( ) {
+
+        super.onResume ( );
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public
+    void onCreate ( Bundle savedInstanceState ) {
+
         super.onCreate ( savedInstanceState );
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        resources = getActivity().getResources();
-        rootView = inflater.inflate(R.layout.home_frag, container, false);
-        application = (BaseApplication) getActivity().getApplication();
-        rootAty = (HomeActivity) getActivity();
-        ButterKnife.bind(this, rootView);
-        application.proFragManager = FragManager.getIns(getActivity(), R.id.productsL);
-        application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
-        wManager = getActivity().getWindowManager();
-        initView();
+    public
+    View onCreateView ( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
+
+        resources = getActivity ( ).getResources ( );
+        rootView = inflater.inflate ( R.layout.home_frag, container, false );
+        application = ( BaseApplication ) getActivity ( ).getApplication ( );
+        rootAty = ( HomeActivity ) getActivity ( );
+        ButterKnife.bind ( this, rootView );
+        application.proFragManager = FragManager.getIns ( getActivity ( ), R.id.productsL );
+        application.proFragManager.setCurrentFrag ( FragManager.FragType.POPULAR );
+        wManager = getActivity ( ).getWindowManager ( );
+        initView ( );
         iniScroll ( );
         return rootView;
     }
 
-    private void iniScroll()
-    {
+    private
+    void iniScroll ( ) {
+
         homePullRefresh.setOnRefreshListener (
                 new PullToRefreshBase.OnRefreshListener2< ScrollView > ( ) {
 
@@ -153,44 +187,44 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     }
                 }
                                              );
-        homePullRefresh.getRefreshableView().smoothScrollTo ( 0, 0 );
+        homePullRefresh.getRefreshableView ( ).smoothScrollTo ( 0, 0 );
     }
 
-    private void initView()
-    {
+    private
+    void initView ( ) {
+
         currentIndex = 0;
-        application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
-        Drawable normal = resources.getDrawable(R.drawable.switch_normal);
-        Drawable press = resources.getDrawable(R.drawable.switch_press);
-        rqLabel.setTextColor(resources.getColor(R.color.deep_red));
-        zxLabel.setTextColor(resources.getColor(R.color.text_black));
-        jdLabel.setTextColor(resources.getColor(R.color.text_black));
-        zxrsLabel.setTextColor(resources.getColor(R.color.text_black));
-        SystemTools.loadBackground(rqInnerL, press);
-        SystemTools.loadBackground(zxInnerL, normal);
-        SystemTools.loadBackground(jdInnerL, normal);
-        SystemTools.loadBackground(zxrsInnerL, normal);
-        initSwitchImg();
-        firstGetData();
+        application.proFragManager.setCurrentFrag ( FragManager.FragType.POPULAR );
+        Drawable normal = resources.getDrawable ( R.drawable.switch_normal );
+        Drawable press  = resources.getDrawable ( R.drawable.switch_press );
+        rqLabel.setTextColor ( resources.getColor ( R.color.deep_red ) );
+        zxLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
+        jdLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
+        zxrsLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
+        SystemTools.loadBackground ( rqInnerL, press );
+        SystemTools.loadBackground ( zxInnerL, normal );
+        SystemTools.loadBackground ( jdInnerL, normal );
+        SystemTools.loadBackground ( zxrsInnerL, normal );
+        initSwitchImg ( );
+        firstGetData ( );
     }
 
-    @OnClick(R.id.lbL)
-    void showCatagoryUi()
-    {
-       ActivityUtils.getInstance().showActivity(getActivity(), CateGoryActivity.class);
+    @OnClick ( R.id.lbL )
+    void showCatagoryUi ( ) {
+
+        ActivityUtils.getInstance ( ).showActivity ( getActivity ( ), CateGoryActivity.class );
     }
 
-    @OnClick(R.id.zqL)
-    void showZqUi()
-    {
-        Bundle bundle = new Bundle();
-        bundle.putLong("step", 10);
-        ActivityUtils.getInstance().showActivity(getActivity(), AreaActivity.class, bundle);
+    @OnClick ( R.id.zqL )
+    void showZqUi ( ) {
+
+        Bundle bundle = new Bundle ( );
+        bundle.putLong ( "step", 10 );
+        ActivityUtils.getInstance ( ).showActivity ( getActivity ( ), AreaActivity.class, bundle );
     }
 
-    @OnClick(R.id.sdL)
-    void showSdUi()
-    {
+    @OnClick ( R.id.sdL )
+    void showSdUi ( ) {
         //ToastUtils.showLongToast(getActivity(), "弹出晒单界面");
         ActivityUtils.getInstance().showActivity(getActivity(), ShowOrderActivity.class);
     }
@@ -202,7 +236,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         Bundle bundle = new Bundle (  );
         bundle.putString ( "title", "常见问题" );
         bundle.putString ( "link", "https://www.baidu.com/" );
-        ActivityUtils.getInstance ().showActivity ( getActivity (), WebExhibitionActivity.class, bundle );
+        ActivityUtils.getInstance ().showActivity ( getActivity ( ), WebExhibitionActivity.class,
+                                                    bundle );
     }
 
     private void initProduct()
@@ -540,15 +575,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         currentIndex = 3;
         application.proFragManager.setCurrentFrag(FragManager.FragType.TOTAL);
         Drawable normal = resources.getDrawable(R.drawable.switch_normal);
-        Drawable press = resources.getDrawable(R.drawable.switch_press);
+        Drawable press = resources.getDrawable ( R.drawable.switch_press );
         rqLabel.setTextColor(resources.getColor(R.color.text_black));
-        zxLabel.setTextColor(resources.getColor(R.color.text_black));
-        jdLabel.setTextColor(resources.getColor(R.color.text_black));
+        zxLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
+        jdLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
         zxrsLabel.setTextColor(resources.getColor(R.color.deep_red));
-        SystemTools.loadBackground(rqInnerL, normal);
-        SystemTools.loadBackground(zxInnerL, normal);
-        SystemTools.loadBackground(jdInnerL, normal);
-        SystemTools.loadBackground(zxrsInnerL, press);
+        SystemTools.loadBackground ( rqInnerL, normal );
+        SystemTools.loadBackground ( zxInnerL, normal );
+        SystemTools.loadBackground ( jdInnerL, normal );
+        SystemTools.loadBackground ( zxrsInnerL, press );
         if(null==rootAty.totalProducts || rootAty.totalProducts.isEmpty())
         {
             initProduct();
@@ -559,26 +594,95 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
      * 初始化加载数据
      */
     protected void firstGetData(){
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (getActivity().isFinishing()) return;
-                operateType = OperateTypeEnum.REFRESH;
-                homePullRefresh.setRefreshing(true);
-            }
-        }, 1000);
+        mHandler.postDelayed (
+                new Runnable ( ) {
+
+                    @Override
+                    public
+                    void run ( ) {
+
+                        if ( getActivity ( ).isFinishing ( ) ) return;
+                        operateType = OperateTypeEnum.REFRESH;
+                        homePullRefresh.setRefreshing ( true );
+                    }
+                }, 1000
+                             );
     }
 
     private void initSwitchImg()
     {
-        homeHornText.requestFocus();
-        adDataList = new ArrayList<AdEntity>();
-        adDataList.add(new AdEntity(R.mipmap.home_switch_imgg1));
-        adDataList.add(new AdEntity(R.mipmap.home_switch_imgg2));
-        adDataList.add(new AdEntity(R.mipmap.home_switch_imgg3));
+
+        //滚动消息
+        String url = Contant.REQUEST_URL + Contant.GET_NOTICE_LIST;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity ());
+        Map<String, Object> maps = new HashMap<String, Object> ();
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.doVolleyGet (
+                url, new Response.Listener< JSONObject > ( ) {
+
+                    @Override
+                    public
+                    void onResponse ( JSONObject response ) {
+                            JSONUtil<NoticeOutputModel > jsonUtil = new JSONUtil<NoticeOutputModel>();
+                        NoticeOutputModel noticeOutput = new NoticeOutputModel();
+                        noticeOutput = jsonUtil.toBean(response.toString(), noticeOutput);
+                        if(null != noticeOutput && null != noticeOutput.getResultData() && (1==noticeOutput.getResultCode()))
+                        {
+                            if(null != noticeOutput.getResultData().getList() && !noticeOutput.getResultData().getList().isEmpty())
+                            {
+                                List<TextView> list = new ArrayList< TextView > (  );
+                                Iterator<NoticeModel> iterator = noticeOutput.getResultData ().getList ().iterator ();
+                                while ( iterator.hasNext () )
+                                {
+                                    NoticeModel notice = iterator.next ( );
+                                    TextView textView = new TextView ( getActivity () );
+                                    textView.setText ( notice.getTitle () );
+                                    list.add ( textView );
+                                }
+
+                                Iterator<TextView> it = list.iterator ();
+                                while ( it.hasNext () )
+                                {
+                                    homeHornText.addView ( it.next () );
+                                }
+
+                                // 设置文字in/out的动画效果
+                                homeHornText.setInAnimation(getActivity (), R.anim.push_up_in);
+                                homeHornText.setOutAnimation(getActivity (), R.anim.push_up_out);
+                                homeHornText.startFlipping();
+                            }
+                            else
+                            {
+                                //
+                            }
+                        }
+                        else
+                        {
+
+                        }
+
+                    }
+                }, new Response.ErrorListener ( ) {
+
+                    @Override
+                    public
+                    void onErrorResponse ( VolleyError error ) {
+
+                    }
+                }
+                              );
+        adDataList = new ArrayList<CarouselModel> (  );
+        //读取轮播图片实体
+        Iterator<CarouselModel> iterator = CarouselModel.findAll ( CarouselModel.class );
+        while ( iterator.hasNext () )
+        {
+            adDataList.add ( iterator.next () );
+        }
         initDots();
         //通过适配器引入图片
-        homeViewPager.setAdapter(new HomeViewPagerAdapter(adDataList, getActivity()));
+        homeViewPager.setAdapter(new HomeViewPagerAdapter(adDataList, getActivity(), rootAty.mHandler));
         int centerValue=Integer.MAX_VALUE/2;
         int value=centerValue%adDataList.size();
         homeViewPager.setCurrentItem(centerValue - value);

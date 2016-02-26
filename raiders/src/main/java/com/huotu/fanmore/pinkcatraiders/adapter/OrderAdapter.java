@@ -69,13 +69,13 @@ public class OrderAdapter extends BaseAdapter {
         if(null!=orders&&!orders.isEmpty()&&null!=orders.get(position))
         {
             OrderModel order = orders.get(position);
-            BitmapLoader.create().loadRoundImage(context, holder.shareUserLogo, order.getUserHead(), R.mipmap.error);
-            holder.shareUserName.setText(order.getUsername());
-            holder.orderTime.setText(DateUtils.transformDataformat3(order.getOrderTime()));
-            holder.showTitle.setText(order.getOrderTitle());
-            holder.productSummy.setText(order.getProductDetail());
-            holder.orderIssue.setText("期号："+order.getIssue());
-            holder.orderDetail.setText(order.getOrderDetail());
+            BitmapLoader.create().loadRoundImage(context, holder.shareUserLogo, order.getPictureUrl (), R.mipmap.error);
+            holder.shareUserName.setText(order.getNickName ());
+            holder.orderTime.setText(DateUtils.transformDataformat3(order.getTime ()));
+            holder.showTitle.setText(order.getShareOrderTitle ());
+            holder.productSummy.setText(order.getTitle ());
+            holder.orderIssue.setText("期号："+order.getIssueNo ());
+            holder.orderDetail.setText(order.getCharacters ());
             //动态添加晒单图片
         }
         else

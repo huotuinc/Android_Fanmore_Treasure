@@ -84,17 +84,19 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        resources = getActivity().getResources();
+        resources = getActivity().getResources ( );
         rootView = inflater.inflate(R.layout.profile_frag, container, false);
-        application = (BaseApplication) getActivity().getApplication();
+        application = (BaseApplication) getActivity().getApplication ( );
         rootAty = (HomeActivity) getActivity();
-        ButterKnife.bind(this, rootView);
-        userimg.setBorderColor(resources.getColor(R.color.color_white));
-        userimg.setBorderWidth((int) resources.getDimension(R.dimen.head_width));
+        ButterKnife.bind ( this, rootView );
+        userimg.setBorderColor ( resources.getColor ( R.color.color_white ) );
+        userimg.setBorderWidth ( ( int ) resources.getDimension ( R.dimen.head_width ) );
         String imgurl= PreferenceHelper.readString (getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_UDERHEAD);
-        BitmapLoader.create().loadRoundImage(getActivity(), userimg, imgurl, R.mipmap.error);
-        TVUserName.setText(PreferenceHelper.readString(getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_REALNAME));
-        money.setText(PreferenceHelper.readString(getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MONEY));
+        BitmapLoader.create().loadRoundImage ( getActivity ( ), userimg, imgurl, R.mipmap.error );
+        TVUserName.setText ( PreferenceHelper.readString ( getActivity ( ), Contant
+                                                                   .LOGIN_USER_INFO, Contant.LOGIN_AUTH_REALNAME ) );
+        String balance = PreferenceHelper.readString(getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MONEY);
+        money.setText((null!=balance&&!balance.isEmpty ()&&!"null".equals ( balance ))?balance+"元":0+"元");
         wManager = getActivity().getWindowManager();
         return rootView;
     }

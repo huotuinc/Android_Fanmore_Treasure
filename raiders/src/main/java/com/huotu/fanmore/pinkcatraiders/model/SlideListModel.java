@@ -1,19 +1,19 @@
 package com.huotu.fanmore.pinkcatraiders.model;
 
 /**
- * Created by Administrator on 2016/2/24.
+ *
  */
 public class SlideListModel extends BaseModel {
-    Long goodsId;
+    long goodsId;
     String link;
     String pictureUrl;
-    Long pid;
+    long pid;
 
-    public Long getGoodsId() {
+    public long getGoodsId() {
         return goodsId;
     }
 
-    public void setGoodsId(Long goodsId) {
+    public void setGoodsId(long goodsId) {
         this.goodsId = goodsId;
     }
 
@@ -33,11 +33,11 @@ public class SlideListModel extends BaseModel {
         this.pictureUrl = pictureUrl;
     }
 
-    public Long getPid() {
+    public long getPid() {
         return pid;
     }
 
-    public void setPid(Long pid) {
+    public void setPid(long pid) {
         this.pid = pid;
     }
 }

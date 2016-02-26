@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class OrderModel extends AccountModel {
 
-    private long pid;
+    private long 	pid ;
 
     public long getPid() {
         return pid;
@@ -17,58 +17,160 @@ public class OrderModel extends AccountModel {
         this.pid = pid;
     }
 
-    private String orderTime;
-    private String orderTitle;
-    private String productDetail;
-    private long issue;
-    private String orderDetail;
-    private List<String> orderImgs;
+    private String time;
+    private String shareOrderTitle;
+    private String pictureUrl;
+    private String characters;
+    private String issueNo;
+    private String nickName;
+    private String content;
+    private List<String> pictureUrls;
+    private String title;
+    private long attendAmount;
+    private String lotteryTime;
+    private String luckNumber;
 
-    public String getOrderTime() {
-        return orderTime;
+    public
+    long getAttendAmount ( ) {
+
+        return attendAmount;
     }
 
-    public void setOrderTime(String orderTime) {
-        this.orderTime = orderTime;
+    public
+    void setAttendAmount ( long attendAmount ) {
+
+        this.attendAmount = attendAmount;
     }
 
-    public String getOrderTitle() {
-        return orderTitle;
+    public
+    String getLotteryTime ( ) {
+
+        return lotteryTime;
     }
 
-    public void setOrderTitle(String orderTitle) {
-        this.orderTitle = orderTitle;
+    public
+    void setLotteryTime ( String lotteryTime ) {
+
+        this.lotteryTime = lotteryTime;
     }
 
-    public String getProductDetail() {
-        return productDetail;
+    public
+    String getLuckNumber ( ) {
+
+        return luckNumber;
     }
 
-    public void setProductDetail(String productDetail) {
-        this.productDetail = productDetail;
+    public
+    void setLuckNumber ( String luckNumber ) {
+
+        this.luckNumber = luckNumber;
     }
 
-    public long getIssue() {
-        return issue;
+    public
+    String getTime ( ) {
+
+        return time;
     }
 
-    public void setIssue(long issue) {
-        this.issue = issue;
+    public
+    void setTime ( String time ) {
+
+        this.time = time;
     }
 
-    public String getOrderDetail() {
-        return orderDetail;
+    public
+    String getShareOrderTitle ( ) {
+
+        return shareOrderTitle;
     }
 
-    public void setOrderDetail(String orderDetail) {
-        this.orderDetail = orderDetail;
+    public
+    void setShareOrderTitle ( String shareOrderTitle ) {
+
+        this.shareOrderTitle = shareOrderTitle;
     }
 
-    public List<String> getOrderImgs() {
-        return orderImgs;
+    public
+    String getPictureUrl ( ) {
+
+        return pictureUrl;
     }
 
-    public void setOrderImgs(List<String> orderImgs) {
-        this.orderImgs = orderImgs;
+    public
+    void setPictureUrl ( String pictureUrl ) {
+
+        this.pictureUrl = pictureUrl;
+    }
+
+    public
+    String getCharacters ( ) {
+
+        return characters;
+    }
+
+    public
+    void setCharacters ( String characters ) {
+
+        this.characters = characters;
+    }
+
+    public
+    String getIssueNo ( ) {
+
+        return issueNo;
+    }
+
+    public
+    void setIssueNo ( String issueNo ) {
+
+        this.issueNo = issueNo;
+    }
+
+    public
+    String getNickName ( ) {
+
+        return nickName;
+    }
+
+    public
+    void setNickName ( String nickName ) {
+
+        this.nickName = nickName;
+    }
+
+    public
+    String getContent ( ) {
+
+        return content;
+    }
+
+    public
+    void setContent ( String content ) {
+
+        this.content = content;
+    }
+
+    public
+    List< String > getPictureUrls ( ) {
+
+        return pictureUrls;
+    }
+
+    public
+    void setPictureUrls ( List< String > pictureUrls ) {
+
+        this.pictureUrls = pictureUrls;
+    }
+
+    public
+    String getTitle ( ) {
+
+        return title;
+    }
+
+    public
+    void setTitle ( String title ) {
+
+        this.title = title;
     }
 }

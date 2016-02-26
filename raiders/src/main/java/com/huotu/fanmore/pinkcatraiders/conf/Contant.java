@@ -33,7 +33,8 @@ public class Contant {
     public static final String APPKEY           = "123456";
 
     //微信支付ID
-    public static final String WXPAY_ID         = "";
+    public static final String WXPAY_ID    = "wx2f2604e380cf6be1";
+    public static final String WXPAY_SECRT = "ae3a7d851f24bfc97047954fa3975cec";
 
     //微信登录:用户存在
     public static final int    MSG_USERID_FOUND = 0x00000001;
@@ -77,6 +78,7 @@ public class Contant {
      * 立即夺宝
      */
     public static final int RAIDERS_NOW      = 0x00000040;
+    public static final int CAROUSE_URL     = 0x00000041;
 
     /**
      * 菜单标记1
@@ -185,4 +187,20 @@ public class Contant {
     public static final String GET_DEFAULT_PUT_MONEY_LIST = "getDefaultPutMoneyList";
     //获取充值记录
     public static final String GET_MY_PUT_LIST = "getMyPutList";
+    //获取红包列表
+    public static final String GET_MY_REDPACKAGES_LIST = "getMyRedPacketsList";
+    //获取中奖纪录列表
+    public static final String GET_MY_LOTTERY_LIST = "getMyLotteryList";
+    //预支付信息
+    public static final String PUT_MONEY = "putMoney";
+
+    //支付
+    //微信支付
+    public static final String WX_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+    //晒单列表
+    public static final String GET_SHARE_ORDER_LIST = "getShareOrderList";
+    //获取晒单详情
+    public static final String GET_SHARE_ORDER_DETAIL = "getShareOrderDetail";
+    //喇叭通知
+    public static final String GET_NOTICE_LIST = "getNoticeList";
 }
