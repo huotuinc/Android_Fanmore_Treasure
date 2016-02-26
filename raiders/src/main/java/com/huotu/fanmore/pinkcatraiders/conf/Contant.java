@@ -198,4 +198,6 @@ public class Contant {
     public static final String GET_SHARE_ORDER_LIST = "getShareOrderList";
     //获取晒单详情
     public static final String GET_SHARE_ORDER_DETAIL = "getShareOrderDetail";
+    //喇叭通知
+    public static final String GET_NOTICE_LIST = "getNoticeList";
 }

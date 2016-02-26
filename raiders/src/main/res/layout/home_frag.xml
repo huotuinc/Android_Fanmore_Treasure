@@ -152,7 +152,7 @@
                     android:layout_height="@dimen/icon_size_1"
                     android:layout_centerVertical="true"
                     android:background="@mipmap/home_horn"/>
-                <com.huotu.fanmore.pinkcatraiders.widget.MarqueenTextView
+                <ViewFlipper
                     android:id="@+id/homeHornText"
                     android:layout_toRightOf="@+id/homeHorn"
                     android:layout_marginLeft="5dp"
@@ -160,14 +160,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_black"
-                    android:ellipsize="marquee"
-                    android:focusable="true"
-                    android:singleLine="true"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:focusableInTouchMode="true"
-                    android:scrollHorizontally="true"
-                    android:textSize="@dimen/text_size_14"
-                    android:text="恭喜小小小小蜜蜂10分钟前获得小米6S全网通"/>
+                    />
             </RelativeLayout>
             <!--topic-->
             <!--产品列表-->
