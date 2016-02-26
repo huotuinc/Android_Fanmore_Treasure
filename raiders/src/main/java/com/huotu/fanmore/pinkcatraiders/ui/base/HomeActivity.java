@@ -19,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.ListAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.MyGridAdapter;
@@ -30,14 +32,20 @@ import com.huotu.fanmore.pinkcatraiders.fragment.ListFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.NewestFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.ProfileFragment;
 
+import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.MsgActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.SearchActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
@@ -48,7 +56,11 @@ import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.SharePopupWindow;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -487,25 +499,63 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     @Override
     public boolean handleMessage(Message msg) {
         switch (msg.what) {
-            case Contant.SWITCH_UI:
+            case Contant.SWITCH_UI: {
+                String tag = msg.obj.toString ( );
+                if ( tag.equals ( Contant.TAG_1 ) ) {
+                    application.mFragManager.setCurrentFrag ( FragManager.FragType.HOME );
+                }
+                else if ( tag.equals ( Contant.TAG_2 ) ) {
+                    application.mFragManager.setCurrentFrag ( FragManager.FragType.NEWEST );
+                }
+                else if ( tag.equals ( Contant.TAG_3 ) ) {
+                    application.mFragManager.setCurrentFrag ( FragManager.FragType.LIST );
+                }
+                else if ( tag.equals ( Contant.TAG_4 ) ) {
+                    application.mFragManager.setCurrentFrag ( FragManager.FragType.PROFILE );
+                }
+            }
+            break;
+            case Contant.CAROUSE_URL:
             {
-                String tag = msg.obj.toString ();
-                if(tag.equals(Contant.TAG_1))
-                {
-                    application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
-                }
-                else if(tag.equals(Contant.TAG_2))
-                {
-                    application.mFragManager.setCurrentFrag(FragManager.FragType.NEWEST);
-                }
-                else if(tag.equals(Contant.TAG_3))
-                {
-                    application.mFragManager.setCurrentFrag(FragManager.FragType.LIST);
-                }
-                else if(tag.equals(Contant.TAG_4))
-                {
-                    application.mFragManager.setCurrentFrag(FragManager.FragType.PROFILE);
-                }
+                long pid = ( long ) msg.obj;
+                String url = Contant.REQUEST_URL + Contant.GET_SLIDE_DETAIL;
+                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                Map<String, Object> maps = new HashMap<String, Object> ();
+                maps.put ( "slideId", String.valueOf ( pid ) );
+                String suffix = params.obtainGetParam(maps);
+                url = url + suffix;
+                HttpUtils httpUtils = new HttpUtils();
+                httpUtils.doVolleyGet (
+                        url, new Response.Listener< JSONObject > ( ) {
+
+                            @Override
+                            public
+                            void onResponse ( JSONObject response ) {
+                                JSONUtil<SlideDetailOutputModel > jsonUtil = new JSONUtil<SlideDetailOutputModel>();
+                                SlideDetailOutputModel slideDetail = new SlideDetailOutputModel();
+                                slideDetail = jsonUtil.toBean(response.toString(), slideDetail);
+                                if(null != slideDetail && null != slideDetail.getResultData() && (1==slideDetail.getResultCode()))
+                                {
+                                    String url = slideDetail.getResultData ().getData ();
+                                    Bundle bundle = new Bundle ( );
+                                    bundle.putString ( "title", "详情信息" );
+                                    bundle.putString ( "link", url );
+                                    ActivityUtils.getInstance ().showActivity ( HomeActivity.this, WebExhibitionActivity.class, bundle );
+                                }
+                                else
+                                {
+                                    ToastUtils.showLongToast ( HomeActivity.this, "打开链接失败" );
+                                }
+                            }
+                        }, new Response.ErrorListener ( ) {
+
+                            @Override
+                            public
+                            void onErrorResponse ( VolleyError error ) {
+                                ToastUtils.showLongToast ( HomeActivity.this, "打开链接失败" );
+                            }
+                        }
+                                      );
             }
             break;
             default:

@@ -78,6 +78,7 @@ public class Contant {
      * 立即夺宝
      */
     public static final int RAIDERS_NOW      = 0x00000040;
+    public static final int CAROUSE_URL     = 0x00000041;
 
     /**
      * 菜单标记1

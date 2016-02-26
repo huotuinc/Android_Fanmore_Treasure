@@ -583,7 +583,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         }
         initDots();
         //通过适配器引入图片
-        homeViewPager.setAdapter(new HomeViewPagerAdapter(adDataList, getActivity()));
+        homeViewPager.setAdapter(new HomeViewPagerAdapter(adDataList, getActivity(), rootAty.mHandler));
         int centerValue=Integer.MAX_VALUE/2;
         int value=centerValue%adDataList.size();
         homeViewPager.setCurrentItem(centerValue - value);
