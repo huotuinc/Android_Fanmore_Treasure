@@ -29,6 +29,7 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
+import com.huotu.fanmore.pinkcatraiders.model.CarouselModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
@@ -56,6 +57,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -76,7 +78,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     ViewPager homeViewPager;
     @Bind(R.id.dot)
     LinearLayout dot;
-    List<AdEntity> adDataList = null;
+    List<CarouselModel> adDataList = null;
     @Bind(R.id.homeHornText)
     MarqueenTextView homeHornText;
     @Bind(R.id.productsL)
@@ -571,11 +573,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     private void initSwitchImg()
     {
-        homeHornText.requestFocus();
-        adDataList = new ArrayList<AdEntity>();
-        adDataList.add(new AdEntity(R.mipmap.home_switch_imgg1));
-        adDataList.add(new AdEntity(R.mipmap.home_switch_imgg2));
-        adDataList.add(new AdEntity(R.mipmap.home_switch_imgg3));
+        homeHornText.requestFocus ( );
+        adDataList = new ArrayList<CarouselModel> (  );
+        //读取轮播图片实体
+        Iterator<CarouselModel> iterator = CarouselModel.findAll ( CarouselModel.class );
+        while ( iterator.hasNext () )
+        {
+            adDataList.add ( iterator.next () );
+        }
         initDots();
         //通过适配器引入图片
         homeViewPager.setAdapter(new HomeViewPagerAdapter(adDataList, getActivity()));
