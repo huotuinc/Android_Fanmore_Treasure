@@ -23,6 +23,7 @@ class FunPopWin1 extends PopupWindow {
     private Activity      aty;
 
     private WindowManager wManager;
+    TextView msg;
 
     public
     FunPopWin1 ( Context context, Activity aty, WindowManager wManager ) {
@@ -41,6 +42,7 @@ class FunPopWin1 extends PopupWindow {
                 null
                                                             );
         TextView funOpBtn = (TextView) view.findViewById(R.id.funOpBtn);
+        msg = (TextView) view.findViewById(R.id.allSelect);
         funOpBtn.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -55,6 +57,11 @@ class FunPopWin1 extends PopupWindow {
         this.setHeight ((int)resources.getDimension(R.dimen.bottom_height));
         // 设置SelectPicPopupWindow弹出窗体可点击
         this.setFocusable(false);
+    }
+
+    public void setMsg(String num, String amount)
+    {
+        msg.setText ( "共"+num+"件奖品，总计："+amount+"元" );
     }
 
     public void dismissView()

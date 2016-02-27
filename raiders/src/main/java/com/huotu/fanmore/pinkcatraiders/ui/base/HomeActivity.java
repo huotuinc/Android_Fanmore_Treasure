@@ -183,6 +183,12 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     public List< ProductModel > totalProducts;
 
     public int label = 0;
+    //清单选中删除的数量
+    public long deleteAllNum = 0;
+    //清单结算数量
+    public long payAllNum = 0;
+    //清单结算总金额
+    public long payAllAmount = 0;
 
     @Override
     protected
@@ -563,16 +569,49 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             case Contant.CART_SELECT:
             {
                 CartModel cart = ( CartModel ) msg.obj;
-                int type = cart.getType ();
-                if(0 == type)
+                if(0 == label)
                 {
-                    //结算模式
-
+                    if(0==msg.arg1)
+                    {
+                        //结算模式添加
+                        payAllNum ++;
+                    }
+                    else if(1==msg.arg1)
+                    {
+                        //结算模式删除
+                        if(0>=payAllNum)
+                        {
+                            payAllNum=0;
+                        }
+                        else
+                        {
+                            payAllNum--;
+                        }
+                    }
+                    funcPopWin1.setMsg ( String.valueOf (payAllNum), "22" );
                 }
-                else
+                else if(1 == label)
                 {
                     //编辑模式
+                    if(0==msg.arg1)
+                    {
+                        //编辑模式添加
+                        deleteAllNum++;
 
+                    }
+                    else if(1==msg.arg1)
+                    {
+                        //编辑模式删除
+                        if(0>=deleteAllNum)
+                        {
+                            deleteAllNum=0;
+                        }
+                        else
+                        {
+                            deleteAllNum--;
+                        }
+                    }
+                    funcPopWin.setMsg ( String.valueOf ( deleteAllNum ) );
                 }
 
             }

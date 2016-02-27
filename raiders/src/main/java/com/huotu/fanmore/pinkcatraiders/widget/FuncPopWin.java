@@ -24,6 +24,7 @@ public class FuncPopWin extends PopupWindow {
     private Context context;
     private Activity aty;
     private WindowManager wManager;
+    TextView msg;
 
     public FuncPopWin(Context context, Activity aty, WindowManager wManager)
     {
@@ -35,12 +36,13 @@ public class FuncPopWin extends PopupWindow {
     public
     void showLayout ( )
     {
-        Resources resources = context.getResources();
+        Resources resources = context.getResources ( );
         View view = LayoutInflater.from(context).inflate (
                 R.layout.func_pop_ui,
                 null
         );
         TextView funBtn = (TextView) view.findViewById(R.id.funBtn);
+        msg = (TextView) view.findViewById(R.id.totalSelect);
         SystemTools.loadBackground(funBtn, resources.getDrawable(R.mipmap.unselect));
         TextView funOpBtn = (TextView) view.findViewById(R.id.funOpBtn);
         funOpBtn.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +59,11 @@ public class FuncPopWin extends PopupWindow {
         this.setHeight ((int)resources.getDimension(R.dimen.bottom_height));
         // 设置SelectPicPopupWindow弹出窗体可点击
         this.setFocusable(false);
+    }
+
+    public void setMsg(String num)
+    {
+        msg.setText ( "共选择"+num+"件商品" );
     }
 
     public void dismissView()

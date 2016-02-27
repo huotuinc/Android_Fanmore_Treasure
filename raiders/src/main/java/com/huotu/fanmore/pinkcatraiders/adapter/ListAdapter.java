@@ -37,14 +37,12 @@ public class ListAdapter extends BaseAdapter {
     private Context context;
     private
     Handler mHandler;
-    private int type;
 
-    public ListAdapter(List<ListModel> lists, Context context, Handler mHandler, int type)
+    public ListAdapter(List<ListModel> lists, Context context, Handler mHandler)
     {
         this.lists = lists;
         this.context = context;
         this.mHandler = mHandler;
-        this.type = type;
     }
 
     @Override
@@ -103,8 +101,11 @@ public class ListAdapter extends BaseAdapter {
                                                         @Override
                                                         public
                                                         void onClick ( View v ) {
+                                                            Message message = mHandler.obtainMessage ();
                                                             if(0 == editBtn.getTag ())
                                                             {
+                                                                //添加
+                                                                message.arg1=0;
                                                                 editBtn.setTag ( 1 );
                                                                 SystemTools.loadBackground (
                                                                         editBtn, draw2);
@@ -112,6 +113,8 @@ public class ListAdapter extends BaseAdapter {
                                                             }
                                                             else if(1 == editBtn.getTag ())
                                                             {
+                                                                //删除
+                                                                message.arg1=1;
                                                                 editBtn.setTag ( 0 );
                                                                 SystemTools.loadBackground (
                                                                         editBtn, draw1);
@@ -120,8 +123,6 @@ public class ListAdapter extends BaseAdapter {
                                                             //选择项目
                                                             CartModel cart = new CartModel ();
                                                             cart.setProduct ( list );
-                                                            cart.setType ( type );
-                                                            Message message = mHandler.obtainMessage ();
                                                             message.what = Contant.CART_SELECT;
                                                             message.obj = cart;
                                                             mHandler.sendMessage ( message );
