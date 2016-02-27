@@ -74,7 +74,7 @@ public class ProgressFrag extends BaseFragment {
 
         //初始化数据
         rootAty.progressProducts = new ArrayList<ProductModel>();
-        rootAty.progressAdapter = new MyGridAdapter(rootAty.progressProducts, getActivity(), getActivity());
+        rootAty.progressAdapter = new MyGridAdapter(rootAty.progressProducts, getActivity(), getActivity(), rootAty.mHandler);
         progressGrid.setAdapter(rootAty.progressAdapter);
     }
 

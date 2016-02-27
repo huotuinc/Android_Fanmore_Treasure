@@ -72,7 +72,7 @@ public class TotalRequiredFrag extends BaseFragment {
     private void initGrid()
     {
         rootAty.totalProducts = new ArrayList<ProductModel>();
-        rootAty.totalAdapter = new MyGridAdapter(rootAty.totalProducts, getActivity(), getActivity());
+        rootAty.totalAdapter = new MyGridAdapter(rootAty.totalProducts, getActivity(), getActivity(), rootAty.mHandler);
         totalGrid.setAdapter(rootAty.totalAdapter);
     }
 

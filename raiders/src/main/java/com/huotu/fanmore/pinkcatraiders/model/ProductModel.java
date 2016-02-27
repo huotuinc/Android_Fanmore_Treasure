@@ -10,11 +10,24 @@ public class ProductModel extends BaseModel {
     private long areaAmount;
     private String pictureUrl;
     private long pid;
+    private long issueId;
     private String title;
     private long toAmount;
     private long remainAmount;
     private long stepAmount;
     private List<String> imgs;
+
+    public
+    long getIssueId ( ) {
+
+        return issueId;
+    }
+
+    public
+    void setIssueId ( long issueId ) {
+
+        this.issueId = issueId;
+    }
 
     public List<String> getImgs() {
         return imgs;

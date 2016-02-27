@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -14,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.ui.product.ProductDetailActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -36,12 +39,15 @@ public class MyGridAdapter extends BaseAdapter {
     private List<ProductModel> productModels;
     private Context mContext;
     private Activity aty;
+    private
+    Handler mHandler;
 
-    public MyGridAdapter(List<ProductModel> productModels, Context mContext, Activity aty)
+    public MyGridAdapter(List<ProductModel> productModels, Context mContext, Activity aty, Handler mHandler)
     {
         this.productModels = productModels;
         this.mContext = mContext;
         this.aty = aty;
+        this.mHandler = mHandler;
     }
 
     @Override
@@ -92,19 +98,37 @@ public class MyGridAdapter extends BaseAdapter {
             BigDecimal decimal = new BigDecimal((product.getToAmount()-product.getRemainAmount())/(double)product.getToAmount());
             double value =  decimal.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
             holder.lotterySchedule.setText("开奖进度" + (value > 1 ? 100 : 100 * value) + "%");
-            holder.lotteryScheduleProgress.setMax((int)product.getToAmount());
-            holder.lotteryScheduleProgress.setProgress((int) (product.getToAmount()-product.getRemainAmount()));
+            holder.lotteryScheduleProgress.setMax ( ( int ) product.getToAmount ( ) );
+            holder.lotteryScheduleProgress.setProgress ( ( int ) ( product.getToAmount ( ) -
+                                                                   product.getRemainAmount ( ) ) );
 
-            holder.iconL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Bundle bundle = new Bundle();
-                    bundle.putLong("goodsId", product.getPid());
-                    bundle.putStringArrayList("imgs", (ArrayList<String>) product.getImgs());
-                    //跳转到商品详情界面
-                    ActivityUtils.getInstance().showActivity(aty, ProductDetailActivity.class, bundle);
-                }
-            });
+            holder.iconL.setOnClickListener (
+                    new View.OnClickListener ( ) {
+
+                        @Override
+                        public
+                        void onClick ( View v ) {
+
+                            Bundle bundle = new Bundle ( );
+                            bundle.putLong ( "goodsId", product.getPid ( ) );
+                            bundle.putStringArrayList ( "imgs", ( ArrayList< String > ) product.getImgs ( ) );
+                            //跳转到商品详情界面
+                            ActivityUtils.getInstance ( ).showActivity ( aty, ProductDetailActivity.class, bundle );
+                        }
+                    }
+                                            );
+            holder.addBtn.setOnClickListener ( new View.OnClickListener ( ) {
+
+                                                   @Override
+                                                   public
+                                                   void onClick ( View v ) {
+
+                                                       Message message = mHandler.obtainMessage ();
+                                                       message.what = Contant.ADD_LIST;
+                                                       message.obj = product;
+                                                       mHandler.sendMessage ( message );
+                                                   }
+                                               } );
         }
         else
         {

@@ -12,6 +12,8 @@ import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
@@ -19,14 +21,24 @@ import com.huotu.fanmore.pinkcatraiders.adapter.ListAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.RaidersAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
+import com.huotu.fanmore.pinkcatraiders.model.ListOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
+import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -44,7 +56,6 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
     @Bind(R.id.menuList)
     PullToRefreshListView menuList;
     View emptyView = null;
-    public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public List<ListModel> lists;
     public ListAdapter adapter;
 
@@ -98,21 +109,14 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
 
     private void initList()
     {
-        menuList.setMode(PullToRefreshBase.Mode.BOTH);
-        menuList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.REFRESH;
-                loadData();
-            }
+        menuList.setOnRefreshListener ( new PullToRefreshBase.OnRefreshListener< ListView > ( ) {
 
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.LOADMORE;
-                loadData();
-
-            }
-        });
+                                            @Override
+                                            public
+                                            void onRefresh ( PullToRefreshBase< ListView > pullToRefreshBase ) {
+                                                loadData ();
+                                            }
+                                        } );
         lists = new ArrayList<ListModel>();
         adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, rootAty.label);
         menuList.setAdapter(adapter);
@@ -126,7 +130,6 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                 if (getActivity().isFinishing()) {
                     return;
                 }
-                operateType = OperateTypeEnum.REFRESH;
                 menuList.setRefreshing(true);
             }
         }, 1000);
@@ -134,43 +137,63 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
 
     private void loadData()
     {
-        /*if(null!=lists&&!lists.isEmpty())
-        {*/
-            menuList.onRefreshComplete();
-            ListModel list1 = new ListModel();
-            list1.setPid(1);
-            list1.setToAmount(1000);
-            list1.setAreaAmount(10);
-            list1.setTitle("想嘻嘻嘻嘻嘻嘻嘻嘻嘻想发大苏打倒萨大苏打啊大大实打实大苏打阿斯顿阿德阿斯顿阿德啊大苏打大苏打大苏打三大");
-            list1.setPictureUrl("http://imgk.zol.com.cn/dcbbs/2342/a2341460.jpg");
-            list1.setRemainAmount(155);
-            list1.setStepAmount(10);
-            lists.add(list1);
-            ListModel list2 = new ListModel();
-            list2.setPid(2);
-            list2.setToAmount(1000);
-            list2.setAreaAmount(10);
-            list2.setTitle("想嘻嘻嘻嘻嘻嘻嘻嘻嘻想发大苏打倒萨大苏打啊大大实打实大苏打阿斯顿阿德阿斯顿阿德啊大苏打大苏打大苏打三大");
-            list2.setPictureUrl("http://imgk.zol.com.cn/dcbbs/2342/a2341460.jpg");
-            list2.setRemainAmount(155);
-            list2.setStepAmount(10);
-            lists.add(list2);
-            ListModel list3 = new ListModel();
-            list3.setPid(3);
-            list3.setToAmount(1000);
-            list3.setAreaAmount(10);
-            list3.setTitle("想嘻嘻嘻嘻嘻嘻嘻嘻嘻想发大苏打倒萨大苏打啊大大实打实大苏打阿斯顿阿德阿斯顿阿德啊大苏打大苏打大苏打三大");
-            list3.setPictureUrl("http://imgk.zol.com.cn/dcbbs/2342/a2341460.jpg");
-            list3.setRemainAmount(155);
-            list3.setStepAmount(10);
-            lists.add(list3);
-        /*}
-        else
-        {
-            menuList.onRefreshComplete();
-            menuList.setEmptyView(emptyView);
-            rootAty.funcPopWin.dismissView();
-        }*/
+
+        if( false == rootAty.canConnect() ){
+            rootAty.mHandler.post(new Runnable() {
+                                      @Override
+                                      public void run() {
+                                          menuList.onRefreshComplete();
+                                      }
+                                  });
+            return;
+        }
+        String url = Contant.REQUEST_URL + Contant.GET_SHOPPING_LIST;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
+        Map<String, Object> maps = new HashMap<String, Object> ();
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject >() {
+                                  @Override
+                                  public void onResponse(JSONObject response) {
+                                      menuList.onRefreshComplete();
+                                      if(rootAty.isFinishing())
+                                      {
+                                          return;
+                                      }
+                                      JSONUtil<ListOutputModel > jsonUtil = new JSONUtil<ListOutputModel>();
+                                      ListOutputModel listOutputs = new ListOutputModel();
+                                      listOutputs = jsonUtil.toBean(response.toString(), listOutputs);
+                                      if(null != listOutputs && null != listOutputs.getResultData() && (1==listOutputs.getResultCode()))
+                                      {
+                                          if(null != listOutputs.getResultData().getList() && !listOutputs.getResultData().getList().isEmpty())
+                                          {
+                                              lists.clear();
+                                              lists.addAll(listOutputs.getResultData().getList());
+                                              adapter.notifyDataSetChanged();
+                                          }
+                                          else
+                                          {
+                                              menuList.setEmptyView(emptyView);
+                                          }
+                                      }
+                                      else
+                                      {
+                                          //异常处理，自动切换成无数据
+                                          menuList.setEmptyView(emptyView);
+                                      }
+                                  }
+                              }, new Response.ErrorListener() {
+                                  @Override
+                                  public void onErrorResponse(VolleyError error) {
+                                      menuList.onRefreshComplete();
+                                      if(rootAty.isFinishing())
+                                      {
+                                          return;
+                                      }
+                                      menuList.setEmptyView(emptyView);
+                                  }
+                              });
     }
 
 
