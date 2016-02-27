@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 
 /**
@@ -35,6 +36,7 @@ public class AddAndSubView extends LinearLayout
     int editTextMinimumHeight; // editText视图的最小高度
     int editTextMinHeight; // editText文本区域的最小高度
     int editTextHeight; // editText文本区域的高度
+    public int step=1;//设置增减步长
 
     public AddAndSubView(Context context)
     {
@@ -63,10 +65,10 @@ public class AddAndSubView extends LinearLayout
      */
     public AddAndSubView(Context context, AttributeSet attrs)
     {
-        super(context, attrs);
+        super ( context, attrs );
         this.context = context;
         num = 0;
-        control();
+        control ( );
     }
 
     /**
@@ -75,10 +77,15 @@ public class AddAndSubView extends LinearLayout
     private void control()
     {
         initTextWithHeight();
-        initialise(); // 实例化内部view
+        initialise ( ); // 实例化内部view
         setViewsLayoutParm(); // 设置内部view的布局参数
         insertView(); // 将子view放入linearlayout中
-        setViewListener();
+        setViewListener ( );
+    }
+
+    public void setStep(int num)
+    {
+        step = num;
     }
 
     /**
@@ -108,12 +115,12 @@ public class AddAndSubView extends LinearLayout
         editText = new EditText(context);
 
         addButton.setText("+");
-        subButton.setText("-");
-        addButton.setTag("+");
+        subButton.setText ( "-" );
+        addButton.setTag ( "+" );
         subButton.setTag("-");
         // 设置输入类型为数字
-        editText.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
-        editText.setText(String.valueOf(num));
+        editText.setInputType ( android.text.InputType.TYPE_CLASS_NUMBER );
+        editText.setText ( String.valueOf ( num ) );
     }
 
     /**
@@ -128,23 +135,23 @@ public class AddAndSubView extends LinearLayout
         addButton.setLayoutParams(viewLayoutParams);
         subButton.setLayoutParams(viewLayoutParams);
         editText.setLayoutParams(viewLayoutParams);
-        editText.setGravity(Gravity.CENTER);
-        setTextWidthHeight();
+        editText.setGravity ( Gravity.CENTER );
+        setTextWidthHeight ( );
 
-        viewLayoutParams.gravity = Gravity.CENTER;
-        centerLinearLayout.setLayoutParams(viewLayoutParams);
         // 让editText不自动获得焦点
-        centerLinearLayout.setFocusable(true);
-        centerLinearLayout.setFocusableInTouchMode(true);
+        centerLinearLayout.setFocusable ( true );
+        centerLinearLayout.setFocusableInTouchMode ( true );
 
         viewLayoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT;
         viewLayoutParams.weight = 1.0f;
-        leftLinearLayout.setLayoutParams(viewLayoutParams); // 参数：宽、高、比重，比重为1.0
-        rightLinearLayout.setLayoutParams(viewLayoutParams); // 参数：宽、高、比重，比重为1.0
+        viewLayoutParams.gravity = Gravity.CENTER;
+        centerLinearLayout.setLayoutParams(viewLayoutParams);
+        leftLinearLayout.setLayoutParams ( viewLayoutParams ); // 参数：宽、高、比重，比重为1.0
+        rightLinearLayout.setLayoutParams ( viewLayoutParams ); // 参数：宽、高、比重，比重为1.0
 
         viewLayoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
-        mainLinearLayout.setLayoutParams(viewLayoutParams);
-        mainLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        mainLinearLayout.setLayoutParams ( viewLayoutParams );
+        mainLinearLayout.setOrientation ( LinearLayout.HORIZONTAL );
     }
 
     /**
@@ -178,6 +185,8 @@ public class AddAndSubView extends LinearLayout
 
         addButton.setLayoutParams(viewLayoutParams);
         subButton.setLayoutParams(viewLayoutParams);
+        editText.setLayoutParams(viewLayoutParams);
+        centerLinearLayout.setLayoutParams(viewLayoutParams);
         leftLinearLayout.setLayoutParams(viewLayoutParams);
         rightLinearLayout.setLayoutParams(viewLayoutParams);
     }
@@ -236,10 +245,10 @@ public class AddAndSubView extends LinearLayout
         // 设置视图最小宽度
         if (editTextMinimumWidth < 0)
         {
-            editTextMinimumWidth = dip2px(context, 80f);
+            editTextMinimumWidth = dip2px(context, 20f);
         }
-        editText.setMinimumWidth(dip2px(context, editTextMinimumWidth));
-        centerLinearLayout.setMinimumWidth(dip2px(context, editTextMinimumWidth));
+        editText.setMinimumWidth ( dip2px ( context, editTextMinimumWidth ) );
+        centerLinearLayout.setMinimumWidth ( dip2px ( context, editTextMinimumWidth ) );
 
         // 设置文本区域高度
         if (editTextHeight > 0)
@@ -289,15 +298,15 @@ public class AddAndSubView extends LinearLayout
      */
     private void insertView()
     {
-        mainLinearLayout.addView(leftLinearLayout, 0);
-        mainLinearLayout.addView(centerLinearLayout, 1);
+        mainLinearLayout.addView ( leftLinearLayout, 0 );
+        mainLinearLayout.addView ( centerLinearLayout, 1 );
         mainLinearLayout.addView(rightLinearLayout, 2);
 
         leftLinearLayout.addView(addButton);
         centerLinearLayout.addView(editText);
         rightLinearLayout.addView(subButton);
 
-        addView(mainLinearLayout); // 将整块视图添加进当前AddAndSubView中
+        addView ( mainLinearLayout ); // 将整块视图添加进当前AddAndSubView中
     }
 
     /**
@@ -308,7 +317,7 @@ public class AddAndSubView extends LinearLayout
     public void setNum(int num)
     {
         this.num = num;
-        editText.setText(String.valueOf(num));
+        editText.setText ( String.valueOf ( num ) );
     }
 
     /**
@@ -339,7 +348,7 @@ public class AddAndSubView extends LinearLayout
         if (editTextMinimumWidth > 0)
         {
             this.editTextMinimumWidth = editTextMinimumWidth;
-            editText.setMinimumWidth(dip2px(context, editTextMinimumWidth));
+            editText.setMinimumWidth ( dip2px ( context, editTextMinimumWidth ) );
         }
 
     }
@@ -356,7 +365,7 @@ public class AddAndSubView extends LinearLayout
         if (editTextMinimumHeight > 0)
         {
             this.editTextMinimumHeight = editTextMinimumHeight;
-            editText.setMinimumHeight(dip2px(context, editTextMinimumHeight));
+            editText.setMinimumHeight ( dip2px ( context, editTextMinimumHeight ) );
         }
     }
 
@@ -372,7 +381,7 @@ public class AddAndSubView extends LinearLayout
         if (editTextMinHeight > 0)
         {
             this.editTextMinHeight = editTextMinHeight;
-            editText.setMinHeight(dip2px(context, editTextMinHeight));
+            editText.setMinHeight ( dip2px ( context, editTextMinHeight ) );
         }
     }
 
@@ -409,7 +418,7 @@ public class AddAndSubView extends LinearLayout
     public void setEditTextLayoutHeight(int editTextLayoutHeight)
     {
         this.editTextLayoutHeight = editTextLayoutHeight;
-        setTextWidthHeight();
+        setTextWidthHeight ( );
     }
 
 
@@ -419,7 +428,7 @@ public class AddAndSubView extends LinearLayout
      */
     public void setTextSize(int spValue)
     {
-        editText.setTextSize(spValue);
+        editText.setTextSize ( spValue );
     }
 
     /**
@@ -431,11 +440,12 @@ public class AddAndSubView extends LinearLayout
      *            减号背景图
      */
     public void setButtonBgDrawable(Drawable addBtnDrawable,
+                                    Drawable editDrawable,
                                     Drawable subBtnDrawable)
     {
-        // 不推荐用setBackgroundDrawable，新API推荐用setBackground（在API 16中）
-        addButton.setBackgroundDrawable(addBtnDrawable);
-        subButton.setBackgroundDrawable(subBtnDrawable);
+        SystemTools.loadBackground ( addButton, addBtnDrawable );
+        SystemTools.loadBackground ( subButton, subBtnDrawable );
+        SystemTools.loadBackground ( editText, subBtnDrawable );
     }
 
     /**
@@ -509,14 +519,14 @@ public class AddAndSubView extends LinearLayout
             {
                 if (v.getTag().equals("+"))
                 {
-                    if (++num < 1) // 先加，再判断
+                    if ((num+step) < 1) // 先加，再判断
                     {
-                        num--;
-                        ToastUtils.showShortToast(context, "亲，数量至少为1哦~");
-                        editText.setText("1");
+                        num = num-step;
+                        ToastUtils.showShortToast(context, "亲，数量至少为"+step+"哦~");
+                        editText.setText(String.valueOf ( step));
                     } else
                     {
-                        editText.setText(String.valueOf(num));
+                        editText.setText(String.valueOf(num+step));
 
                         if (onNumChangeListener != null)
                         {
@@ -526,14 +536,14 @@ public class AddAndSubView extends LinearLayout
                     }
                 } else if (v.getTag().equals("-"))
                 {
-                    if (--num < 1) // 先减，再判断
+                    if ((num-step) < 1) // 先减，再判断
                     {
-                        num++;
-                        ToastUtils.showShortToast(context, "亲，数量至少为1哦~");
-                        editText.setText("1");
+                        num=num+step;
+                        ToastUtils.showShortToast(context, "亲，数量至少为"+step+"哦~");
+                        editText.setText(String.valueOf ( step));
                     } else
                     {
-                        editText.setText(String.valueOf(num));
+                        editText.setText(String.valueOf(num-step));
                         if (onNumChangeListener != null)
                         {
                             onNumChangeListener.onNumChange(AddAndSubView.this,

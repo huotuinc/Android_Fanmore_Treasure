@@ -96,44 +96,55 @@ public class ListAdapter extends BaseAdapter {
             final Drawable draw2 = resources.getDrawable ( R.mipmap.unselected );
             editBtn.setTag ( 0 );
             SystemTools.loadBackground ( holder.editBtn, draw1 );
-            editBtn.setOnClickListener ( new View.OnClickListener ( ) {
+            editBtn.setOnClickListener (
+                    new View.OnClickListener ( ) {
 
-                                                        @Override
-                                                        public
-                                                        void onClick ( View v ) {
-                                                            Message message = mHandler.obtainMessage ();
-                                                            if(0 == editBtn.getTag ())
-                                                            {
-                                                                //添加
-                                                                message.arg1=0;
-                                                                editBtn.setTag ( 1 );
-                                                                SystemTools.loadBackground (
-                                                                        editBtn, draw2);
+                        @Override
+                        public
+                        void onClick ( View v ) {
 
-                                                            }
-                                                            else if(1 == editBtn.getTag ())
-                                                            {
-                                                                //删除
-                                                                message.arg1=1;
-                                                                editBtn.setTag ( 0 );
-                                                                SystemTools.loadBackground (
-                                                                        editBtn, draw1);
-                                                            }
+                            Message message = mHandler.obtainMessage ( );
+                            if ( 0 == editBtn.getTag ( ) ) {
+                                //添加
+                                message.arg1 = 0;
+                                editBtn.setTag ( 1 );
+                                SystemTools.loadBackground (
+                                        editBtn, draw2
+                                                           );
 
-                                                            //选择项目
-                                                            CartModel cart = new CartModel ();
-                                                            cart.setProduct ( list );
-                                                            message.what = Contant.CART_SELECT;
-                                                            message.obj = cart;
-                                                            mHandler.sendMessage ( message );
-                                                        }
-                                                    } );
-            holder.totalRequired.setText("总需" + list.getToAmount() + "人次");
-            holder.surplusRequired.setText("剩余" + list.getRemainAmount() + "人次");
-            holder.addAndSub.setTextSize((int) resources.getDimension(R.dimen.text_size_4));
-            holder.addAndSub.setViewsLayoutParm((int) resources.getDimension(R.dimen.add_sub_width), (int) resources.getDimension(R.dimen.add_sub_height));
-            holder.addAndSub.setButtonBgDrawable(resources.getDrawable(R.drawable.add_sub_bg), resources.getDrawable(R.drawable.add_sub_bg));
-            holder.addAndSub.setNum((int)list.getStepAmount());
+                            }
+                            else if ( 1 == editBtn.getTag ( ) ) {
+                                //删除
+                                message.arg1 = 1;
+                                editBtn.setTag ( 0 );
+                                SystemTools.loadBackground (
+                                        editBtn, draw1
+                                                           );
+                            }
+
+                            //选择项目
+                            CartModel cart = new CartModel ( );
+                            cart.setProduct ( list );
+                            message.what = Contant.CART_SELECT;
+                            message.obj = cart;
+                            mHandler.sendMessage ( message );
+                        }
+                    }
+                                       );
+            holder.totalRequired.setText ( "总需" + list.getToAmount ( ) + "人次" );
+            holder.surplusRequired.setText ( "剩余" + list.getRemainAmount ( ) + "人次" );
+            holder.addAndSub.setTextSize ( ( int ) resources.getDimension ( R.dimen.text_size_4 ) );
+            holder.addAndSub.setViewsLayoutParm ( ( int ) resources.getDimension ( R.dimen.add_sub_width ), ( int ) resources.getDimension ( R.dimen.add_sub_height ) );
+            holder.addAndSub.setButtonLayoutParm ( ( int ) resources.getDimension ( R.dimen.add_sub_width ) / 3, ( int ) resources.getDimension ( R.dimen.add_sub_height ) );
+            holder.addAndSub.setButtonBgDrawable (
+                    resources.getDrawable (
+                            R.drawable.add_sub_bg
+                                          ), resources.getDrawable
+                            ( R.drawable.add_sub_bg_edit ), resources.getDrawable
+                            ( R.drawable.add_sub_bg )
+                                                 );
+            holder.addAndSub.setNum ( ( int ) list.getStepAmount ( ) );
+            holder.addAndSub.setStep ( (int)list.getStepAmount () );
             if(1==list.getStepAmount())
             {
                 holder.stepTag.setVisibility(View.GONE);

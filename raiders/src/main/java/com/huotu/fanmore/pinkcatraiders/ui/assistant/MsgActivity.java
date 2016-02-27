@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by lenovo on 2016/2/23.
+ * 系统消息列表
  */
 public
 class MsgActivity extends BaseActivity implements Handler.Callback, View.OnClickListener {
@@ -124,6 +124,7 @@ class MsgActivity extends BaseActivity implements Handler.Callback, View.OnClick
 
     private void loadData()
     {
+        msgList.onRefreshComplete ();
         msgList.setEmptyView ( emptyView );
     }
 
