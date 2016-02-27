@@ -32,6 +32,7 @@ import com.huotu.fanmore.pinkcatraiders.fragment.ListFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.NewestFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.ProfileFragment;
 
+import com.huotu.fanmore.pinkcatraiders.model.CartModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.MsgActivity;
@@ -180,7 +181,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     public List< ProductModel > totalProducts;
 
-    private int label = 0;
+    public int label = 0;
 
     @Override
     protected
@@ -556,6 +557,23 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                             }
                         }
                                       );
+            }
+            break;
+            case Contant.CART_SELECT:
+            {
+                CartModel cart = ( CartModel ) msg.obj;
+                int type = cart.getType ();
+                if(0 == type)
+                {
+                    //结算模式
+
+                }
+                else
+                {
+                    //编辑模式
+
+                }
+
             }
             break;
             default:

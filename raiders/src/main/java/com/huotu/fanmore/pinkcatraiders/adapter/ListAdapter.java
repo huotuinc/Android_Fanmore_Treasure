@@ -3,6 +3,8 @@ package com.huotu.fanmore.pinkcatraiders.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -11,6 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.CartModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
@@ -31,14 +35,15 @@ public class ListAdapter extends BaseAdapter {
 
     private List<ListModel> lists;
     private Context context;
-    //0 编辑模式
-    //1 结算模式
+    private
+    Handler mHandler;
     private int type;
 
-    public ListAdapter(List<ListModel> lists, Context context, int type)
+    public ListAdapter(List<ListModel> lists, Context context, Handler mHandler, int type)
     {
         this.lists = lists;
         this.context = context;
+        this.mHandler = mHandler;
         this.type = type;
     }
 
@@ -73,7 +78,7 @@ public class ListAdapter extends BaseAdapter {
         }
         if(null!=lists&&!lists.isEmpty()&&null!=lists.get(position))
         {
-            ProductModel list = lists.get(position);
+            final ProductModel list = lists.get(position);
             BitmapLoader.create().displayUrl(context, holder.listProductIcon, list.getPictureUrl(), R.mipmap.ic_launcher);
             if(10==list.getAreaAmount())
             {
@@ -87,15 +92,13 @@ public class ListAdapter extends BaseAdapter {
             }
 
             holder.listProductName.setText(list.getTitle());
-            if(0==type)
-            {
-                //编辑模式
-                final TextView editBtn = holder.editBtn;
-                final Drawable draw1 = resources.getDrawable ( R.mipmap.unselect );
-                final Drawable draw2 = resources.getDrawable ( R.mipmap.unselected );
-                editBtn.setTag ( 0 );
-                SystemTools.loadBackground ( holder.editBtn, draw1 );
-                editBtn.setOnClickListener ( new View.OnClickListener ( ) {
+            //编辑模式
+            final TextView editBtn = holder.editBtn;
+            final Drawable draw1 = resources.getDrawable ( R.mipmap.unselect );
+            final Drawable draw2 = resources.getDrawable ( R.mipmap.unselected );
+            editBtn.setTag ( 0 );
+            SystemTools.loadBackground ( holder.editBtn, draw1 );
+            editBtn.setOnClickListener ( new View.OnClickListener ( ) {
 
                                                         @Override
                                                         public
@@ -105,6 +108,7 @@ public class ListAdapter extends BaseAdapter {
                                                                 editBtn.setTag ( 1 );
                                                                 SystemTools.loadBackground (
                                                                         editBtn, draw2);
+
                                                             }
                                                             else if(1 == editBtn.getTag ())
                                                             {
@@ -112,13 +116,17 @@ public class ListAdapter extends BaseAdapter {
                                                                 SystemTools.loadBackground (
                                                                         editBtn, draw1);
                                                             }
+
+                                                            //选择项目
+                                                            CartModel cart = new CartModel ();
+                                                            cart.setProduct ( list );
+                                                            cart.setType ( type );
+                                                            Message message = mHandler.obtainMessage ();
+                                                            message.what = Contant.CART_SELECT;
+                                                            message.obj = cart;
+                                                            mHandler.sendMessage ( message );
                                                         }
                                                     } );
-            }
-            else if(1==type)
-            {
-                holder.editBtn.setVisibility(View.GONE);
-            }
             holder.totalRequired.setText("总需" + list.getToAmount() + "人次");
             holder.surplusRequired.setText("剩余" + list.getRemainAmount() + "人次");
             holder.addAndSub.setTextSize((int) resources.getDimension(R.dimen.text_size_4));

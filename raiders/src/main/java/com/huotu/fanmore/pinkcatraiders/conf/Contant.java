@@ -79,6 +79,7 @@ public class Contant {
      */
     public static final int RAIDERS_NOW      = 0x00000040;
     public static final int CAROUSE_URL     = 0x00000041;
+    public static final int CART_SELECT     = 0x00000042;
 
     /**
      * 菜单标记1
