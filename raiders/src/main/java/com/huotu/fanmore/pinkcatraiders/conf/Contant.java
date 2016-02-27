@@ -81,6 +81,7 @@ public class Contant {
     public static final int CAROUSE_URL     = 0x00000041;
     public static final int CART_SELECT     = 0x00000042;
     public static final int ADD_LIST    = 0x00000043;
+    public static final int BILLING    = 0x00000044;
 
     /**
      * 菜单标记1

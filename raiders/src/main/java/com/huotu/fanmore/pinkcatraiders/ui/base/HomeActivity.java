@@ -43,6 +43,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 
+import com.huotu.fanmore.pinkcatraiders.ui.orders.ConfirmOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
@@ -211,8 +212,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         //设置沉浸模式
         setImmerseLayout ( this.findViewById ( R.id.titleLayoutL ) );
         wManager = this.getWindowManager ( );
-        funcPopWin = new FuncPopWin ( HomeActivity.this, HomeActivity.this, wManager );
-        funcPopWin1 = new FunPopWin1 ( HomeActivity.this, HomeActivity.this, wManager );
+        funcPopWin = new FuncPopWin ( HomeActivity.this, HomeActivity.this, wManager, mHandler  );
+        funcPopWin1 = new FunPopWin1 ( HomeActivity.this, HomeActivity.this, wManager, mHandler );
         am = this.getAssets ( );
         //初始化title面板
         initTitle ( );
@@ -660,6 +661,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                             }
                         }
                                        );
+            }
+            break;
+            case Contant.BILLING:
+            {
+                ActivityUtils.getInstance ().showActivity ( HomeActivity.this, ConfirmOrderActivity.class );
             }
             break;
             default:

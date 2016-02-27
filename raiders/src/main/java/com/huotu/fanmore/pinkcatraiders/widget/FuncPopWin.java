@@ -3,6 +3,7 @@ package com.huotu.fanmore.pinkcatraiders.widget;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -21,29 +22,37 @@ import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
  */
 public class FuncPopWin extends PopupWindow {
 
-    private Context context;
-    private Activity aty;
+    private Context       context;
+
+    private Activity      aty;
+
     private WindowManager wManager;
+
     TextView msg;
 
-    public FuncPopWin(Context context, Activity aty, WindowManager wManager)
-    {
+    private
+    Handler mHandler;
+
+    public
+    FuncPopWin ( Context context, Activity aty, WindowManager wManager, Handler mHandler ) {
+
         this.aty = aty;
         this.context = context;
         this.wManager = wManager;
+        this.mHandler = mHandler;
     }
 
     public
-    void showLayout ( )
-    {
+    void showLayout ( ) {
+
         Resources resources = context.getResources ( );
-        View view = LayoutInflater.from(context).inflate (
+        View view = LayoutInflater.from ( context ).inflate (
                 R.layout.func_pop_ui,
                 null
-        );
-        TextView funBtn = (TextView) view.findViewById(R.id.funBtn);
-        msg = (TextView) view.findViewById(R.id.totalSelect);
-        SystemTools.loadBackground(funBtn, resources.getDrawable(R.mipmap.unselect));
+                                                            );
+        TextView funBtn = ( TextView ) view.findViewById ( R.id.funBtn );
+        msg = ( TextView ) view.findViewById ( R.id.totalSelect );
+        SystemTools.loadBackground ( funBtn, resources.getDrawable(R.mipmap.unselect));
         TextView funOpBtn = (TextView) view.findViewById(R.id.funOpBtn);
         funOpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
