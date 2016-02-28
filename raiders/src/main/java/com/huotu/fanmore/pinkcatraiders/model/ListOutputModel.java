@@ -3,9 +3,11 @@ package com.huotu.fanmore.pinkcatraiders.model;
 import java.util.List;
 
 /**
+<<<<<<< HEAD
  * Created by Administrator on 2016/2/26.
  */
 public class ListOutputModel extends BaseModel {
+
     private ListInnerModel resultData;
 
     public ListInnerModel getResultData() {
@@ -15,7 +17,8 @@ public class ListOutputModel extends BaseModel {
     public void setResultData(ListInnerModel resultData) {
         this.resultData = resultData;
     }
-    public class ListInnerModel{
+
+    public class ListInnerModel {
         private List<ListModel> list;
 
         public List<ListModel> getList() {
@@ -23,7 +26,10 @@ public class ListOutputModel extends BaseModel {
         }
 
         public void setList(List<ListModel> list) {
-            this.list = list;
+
+
         }
     }
 }
+
+

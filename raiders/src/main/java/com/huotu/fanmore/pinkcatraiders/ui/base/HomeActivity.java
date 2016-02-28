@@ -32,6 +32,8 @@ import com.huotu.fanmore.pinkcatraiders.fragment.ListFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.NewestFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.ProfileFragment;
 
+import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
+import com.huotu.fanmore.pinkcatraiders.model.CartModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.MsgActivity;
@@ -41,6 +43,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 
+import com.huotu.fanmore.pinkcatraiders.ui.orders.ConfirmOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
@@ -180,7 +183,13 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     public List< ProductModel > totalProducts;
 
-    private int label = 0;
+    public int label = 0;
+    //清单选中删除的数量
+    public long deleteAllNum = 0;
+    //清单结算数量
+    public long payAllNum = 0;
+    //清单结算总金额
+    public long payAllAmount = 0;
 
     @Override
     protected
@@ -203,8 +212,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         //设置沉浸模式
         setImmerseLayout ( this.findViewById ( R.id.titleLayoutL ) );
         wManager = this.getWindowManager ( );
-        funcPopWin = new FuncPopWin ( HomeActivity.this, HomeActivity.this, wManager );
-        funcPopWin1 = new FunPopWin1 ( HomeActivity.this, HomeActivity.this, wManager );
+        funcPopWin = new FuncPopWin ( HomeActivity.this, HomeActivity.this, wManager, mHandler  );
+        funcPopWin1 = new FunPopWin1 ( HomeActivity.this, HomeActivity.this, wManager, mHandler );
         am = this.getAssets ( );
         //初始化title面板
         initTitle ( );
@@ -556,6 +565,107 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                             }
                         }
                                       );
+            }
+            break;
+            case Contant.CART_SELECT:
+            {
+                CartModel cart = ( CartModel ) msg.obj;
+                if(0 == label)
+                {
+                    if(0==msg.arg1)
+                    {
+                        //结算模式添加
+                        payAllNum ++;
+                    }
+                    else if(1==msg.arg1)
+                    {
+                        //结算模式删除
+                        if(0>=payAllNum)
+                        {
+                            payAllNum=0;
+                        }
+                        else
+                        {
+                            payAllNum--;
+                        }
+                    }
+                    funcPopWin1.setMsg ( String.valueOf (payAllNum), "22" );
+                }
+                else if(1 == label)
+                {
+                    //编辑模式
+                    if(0==msg.arg1)
+                    {
+                        //编辑模式添加
+                        deleteAllNum++;
+
+                    }
+                    else if(1==msg.arg1)
+                    {
+                        //编辑模式删除
+                        if(0>=deleteAllNum)
+                        {
+                            deleteAllNum=0;
+                        }
+                        else
+                        {
+                            deleteAllNum--;
+                        }
+                    }
+                    funcPopWin.setMsg ( String.valueOf ( deleteAllNum ) );
+                }
+
+            }
+            break;
+            case Contant.ADD_LIST:
+            {
+                ProductModel product = ( ProductModel ) msg.obj;
+                progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
+                progress.showProgress ( "正在添加清单" );
+                progress.showAtLocation (titleLayoutL,
+                                         Gravity.CENTER, 0, 0
+                                        );
+                String url = Contant.REQUEST_URL + Contant.JOIN_SHOPPING_CART;
+                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                Map<String, Object> maps = new HashMap<String, Object> ();
+                maps.put ( "issueId", String.valueOf ( product.getIssueId () ) );
+                Map<String, Object> param = params.obtainPostParam(maps);
+                BaseModel base = new BaseModel ();
+                HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
+                httpUtils.doVolleyPost (
+                        base, url, param, new Response.Listener< BaseModel > ( ) {
+                            @Override
+                            public
+                            void onResponse ( BaseModel response ) {
+                                progress.dismissView ();
+                                BaseModel base = response;
+                                if(1==base.getResultCode ())
+                                {
+                                    //上传成功
+                                    ToastUtils.showLongToast ( HomeActivity.this, "添加清单成功");
+                                }
+                                else
+                                {
+                                    //上传失败
+                                    ToastUtils.showLongToast ( HomeActivity.this, "添加清单失败" );
+                                }
+                            }
+                        }, new Response.ErrorListener ( ) {
+
+                            @Override
+                            public
+                            void onErrorResponse ( VolleyError error ) {
+                                progress.dismissView ( );
+                                //系统级别错误
+                                ToastUtils.showLongToast ( HomeActivity.this, "添加清单失败" );
+                            }
+                        }
+                                       );
+            }
+            break;
+            case Contant.BILLING:
+            {
+                ActivityUtils.getInstance ().showActivity ( HomeActivity.this, ConfirmOrderActivity.class );
             }
             break;
             default:

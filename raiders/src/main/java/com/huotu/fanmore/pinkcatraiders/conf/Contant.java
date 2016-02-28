@@ -64,9 +64,6 @@ public class Contant {
 
     //更新专区数量
     public static final int LOAD_AREA_COUNT     = 0x00000012;
-    //更新全部商品和其他商品数量
-    public static final int LOAD_ALL_COUNT      = 0x00000013;
-
 
     /**
      * 上传图片
@@ -82,6 +79,9 @@ public class Contant {
      */
     public static final int RAIDERS_NOW      = 0x00000040;
     public static final int CAROUSE_URL     = 0x00000041;
+    public static final int CART_SELECT     = 0x00000042;
+    public static final int ADD_LIST    = 0x00000043;
+    public static final int BILLING    = 0x00000044;
 
     /**
      * 菜单标记1
@@ -140,9 +140,9 @@ public class Contant {
 
     //接口请求地址
     //loginapi
-    //public static final String REQUEST_URL = "http://192.168.3.67:8080/duobao/app/";
-    //public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
+   // public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
     public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
+    //public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
     //public static final String REQUEST_URL                 = "http://192.168.1.146:8081/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.3.13:8080/duobao/app/";
     //获取夺宝记录
@@ -150,18 +150,9 @@ public class Contant {
 
     //获取首页商品列表
     public static final String GET_GOODS_LIST_INDEX        = "getGoodsListByIndex";
-    //获取最新揭晓
-    public static final String GET_NEWOPEN_LIST=  "getNewOpenList";
-    //获取清单列表
-    public static final String GET_SHOPPING_LIST= "getShoppingList";
-    //获取专区商品列表//根据分类获取商品列表 type=0
+
+    //获取专区商品列表
     public static final String GET_GOODS_LIST_BY_AREA = "getGoodsListByArea";
-    //根据分类获取商品列表 type=1
-    public static final String GET_GOODS_LIST_BY_CATEGORY="getGoodsListByCategory";
-    //根据分类获取商品列表 type=2
-    public static final String GET_GOODS_LIST_BY_OTHER_CATEGORY="getGoodsListByOtherCategory";
-    //获取全部商品列表
-    public static final String GET_GOODS_LIST_BY_ALL_CATEGORY="getGoodsListByAllCategory";
     //获取分类浏览列表
     public static final String GET_CATE_GORY_LIST="getCategoryList";
     //获取商品详情信息
@@ -212,4 +203,8 @@ public class Contant {
     public static final String GET_SHARE_ORDER_DETAIL = "getShareOrderDetail";
     //喇叭通知
     public static final String GET_NOTICE_LIST = "getNoticeList";
+    //清单列表
+    public static final String GET_SHOPPING_LIST = "getShoppingList";
+    //添加清单
+    public static final String JOIN_SHOPPING_CART = "joinShoppingCart";
 }

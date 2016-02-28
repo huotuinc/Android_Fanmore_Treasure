@@ -74,7 +74,7 @@ public class PopularityFrag extends BaseFragment {
     {
         //初始化数据
         rootAty.popProducts = new ArrayList<ProductModel>();
-        rootAty.popAdapter = new MyGridAdapter(rootAty.popProducts, getActivity(), getActivity());
+        rootAty.popAdapter = new MyGridAdapter(rootAty.popProducts, getActivity(), getActivity(), rootAty.mHandler);
         popularGrid.setAdapter(rootAty.popAdapter);
     }
 

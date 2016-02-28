@@ -161,6 +161,15 @@
             android:name=".ui.assistant.WebExhibitionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <activity android:name=".ui.orders.ConfirmOrderActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme" />
+        <activity android:name=".ui.orders.PayOrderActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme" />
+        <activity android:name=".ui.orders.PayResultAtivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme" />
         <!-- 添加sqllite支持 -->
         <meta-data
             android:name="DATABASE"

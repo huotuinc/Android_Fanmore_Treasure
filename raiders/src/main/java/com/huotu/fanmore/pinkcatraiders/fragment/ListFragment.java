@@ -26,6 +26,7 @@ import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
+import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
@@ -55,7 +56,6 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
     @Bind(R.id.menuList)
     PullToRefreshListView menuList;
     View emptyView = null;
-    public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public List<ListModel> lists;
     public ListAdapter adapter;
 
@@ -109,22 +109,17 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
 
     private void initList()
     {
-        menuList.setMode(PullToRefreshBase.Mode.BOTH);
-        menuList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.REFRESH;
-                loadData();
-            }
+        menuList.setOnRefreshListener ( new PullToRefreshBase.OnRefreshListener< ListView > ( ) {
 
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.LOADMORE;
-                loadData();
-
-            }
-        });
-
+                                            @Override
+                                            public
+                                            void onRefresh ( PullToRefreshBase< ListView > pullToRefreshBase ) {
+                                                loadData ();
+                                            }
+                                        } );
+        lists = new ArrayList<ListModel>();
+        adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler);
+        menuList.setAdapter(adapter);
         firstGetData();
     }
 
@@ -135,7 +130,6 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                 if (getActivity().isFinishing()) {
                     return;
                 }
-                operateType = OperateTypeEnum.REFRESH;
                 menuList.setRefreshing(true);
             }
         }, 1000);
@@ -143,70 +137,63 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
 
     private void loadData()
     {
-        lists = new ArrayList<ListModel>();
-        adapter = new ListAdapter(lists, getActivity(), 1);
-        menuList.setAdapter(adapter);
-        if( false == rootAty.canConnect() ) {
+
+        if( false == rootAty.canConnect() ){
             rootAty.mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    menuList.onRefreshComplete();
-                }
-            });
+                                      @Override
+                                      public void run() {
+                                          menuList.onRefreshComplete();
+                                      }
+                                  });
             return;
         }
-        else
-        {
-            //加载数据
-            String url = Contant.REQUEST_URL + Contant.GET_SHOPPING_LIST;
-            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
-            Map<String, Object> maps = new HashMap<String, Object>();
-
-            String suffix = params.obtainGetParam(maps);
-            url = url + suffix;
-            HttpUtils httpUtils = new HttpUtils();
-            httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    menuList.onRefreshComplete();
-                    if (rootAty.isFinishing()) {
-                        return;
-                    }
-                    JSONUtil<ListOutputModel> jsonUtil = new JSONUtil<ListOutputModel>();
-                    ListOutputModel listOutputModel = new ListOutputModel();
-                    listOutputModel = jsonUtil.toBean(response.toString(), listOutputModel);
-                    if (null != listOutputModel && null != listOutputModel.getResultData() && (1 == listOutputModel.getResultCode())) {
-                        if (null != listOutputModel.getResultData().getList() && !listOutputModel.getResultData().getList().isEmpty()) {
-
-                            if (operateType == OperateTypeEnum.REFRESH) {
-                                lists.clear();
-                                lists.addAll(listOutputModel.getResultData().getList());
-                                adapter.notifyDataSetChanged();
-                            } else if (operateType == OperateTypeEnum.LOADMORE) {
-                                lists.addAll(listOutputModel.getResultData().getList());
-                                adapter.notifyDataSetChanged();
-                            }
-                        } else {
-                            //空数据处理
-                        }
-                    } else {
-                        //异常处理，自动切换成无数据
-                        //空数据处理
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    menuList.onRefreshComplete();
-                    if (rootAty.isFinishing()) {
-                        return;
-                    }
-                    //空数据处理
-                }
-            });
-
-
-        }
+        String url = Contant.REQUEST_URL + Contant.GET_SHOPPING_LIST;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
+        Map<String, Object> maps = new HashMap<String, Object> ();
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject >() {
+                                  @Override
+                                  public void onResponse(JSONObject response) {
+                                      menuList.onRefreshComplete();
+                                      if(rootAty.isFinishing())
+                                      {
+                                          return;
+                                      }
+                                      JSONUtil<ListOutputModel > jsonUtil = new JSONUtil<ListOutputModel>();
+                                      ListOutputModel listOutputs = new ListOutputModel();
+                                      listOutputs = jsonUtil.toBean(response.toString(), listOutputs);
+                                      if(null != listOutputs && null != listOutputs.getResultData() && (1==listOutputs.getResultCode()))
+                                      {
+                                          if(null != listOutputs.getResultData().getList() && !listOutputs.getResultData().getList().isEmpty())
+                                          {
+                                              lists.clear();
+                                              lists.addAll(listOutputs.getResultData().getList());
+                                              adapter.notifyDataSetChanged();
+                                          }
+                                          else
+                                          {
+                                              menuList.setEmptyView(emptyView);
+                                          }
+                                      }
+                                      else
+                                      {
+                                          //异常处理，自动切换成无数据
+                                          menuList.setEmptyView(emptyView);
+                                      }
+                                  }
+                              }, new Response.ErrorListener() {
+                                  @Override
+                                  public void onErrorResponse(VolleyError error) {
+                                      menuList.onRefreshComplete();
+                                      if(rootAty.isFinishing())
+                                      {
+                                          return;
+                                      }
+                                      menuList.setEmptyView(emptyView);
+                                  }
+                              });
     }
 
 

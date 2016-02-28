@@ -73,7 +73,7 @@ public class NewestProductFrag extends BaseFragment {
     {
         //初始化数据
         rootAty.newestProducts = new ArrayList<ProductModel>();
-        rootAty.newestAdapter = new MyGridAdapter(rootAty.newestProducts, getActivity(), getActivity());
+        rootAty.newestAdapter = new MyGridAdapter(rootAty.newestProducts, getActivity(), getActivity(), rootAty.mHandler);
         newestProGrid.setAdapter(rootAty.newestAdapter);
     }
 
