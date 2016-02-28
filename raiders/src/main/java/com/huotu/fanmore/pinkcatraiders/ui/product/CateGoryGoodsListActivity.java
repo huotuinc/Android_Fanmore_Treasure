@@ -109,10 +109,18 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
 
     private void initList()
     {
-        areaList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        areaList.setMode ( PullToRefreshBase.Mode.BOTH );
+        areaList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+                operateType = OperateTypeEnum.REFRESH;
                 loadData();
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+                operateType = OperateTypeEnum.LOADMORE;
+                loadData ( );
             }
         });
         products = new ArrayList<ProductModel>();
@@ -137,6 +145,20 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
             maps.put("categoryId", bundle.get("categoryId"));
+            if ( OperateTypeEnum.REFRESH == operateType )
+            {// 下拉
+                maps.put("lastSort", 0);
+            } else if (OperateTypeEnum.LOADMORE == operateType)
+            {// 上拉
+                if ( products != null && products.size() > 0)
+                {
+                    ProductModel product = products.get(products.size() - 1);
+                    maps.put("lastSort", product.getPid());
+                } else if (products != null && products.size() == 0)
+                {
+                    maps.put("lastSort", 0);
+                }
+            }
             String suffix = params.obtainGetParam(maps);
             url = url + suffix;
             HttpUtils httpUtils = new HttpUtils();
@@ -180,6 +202,20 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
             maps.put("categoryId", bundle.get("categoryId"));
+            if ( OperateTypeEnum.REFRESH == operateType )
+            {// 下拉
+                maps.put("lastSort", 0);
+            } else if (OperateTypeEnum.LOADMORE == operateType)
+            {// 上拉
+                if ( products != null && products.size() > 0)
+                {
+                    ProductModel product = products.get(products.size() - 1);
+                    maps.put("lastSort", product.getPid());
+                } else if (products != null && products.size() == 0)
+                {
+                    maps.put("lastSort", 0);
+                }
+            }
             String suffix = params.obtainGetParam(maps);
             url = url + suffix;
             HttpUtils httpUtils = new HttpUtils();
@@ -223,6 +259,20 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
             maps.put("lastSort", bundle.get("categoryId"));
+            if ( OperateTypeEnum.REFRESH == operateType )
+            {// 下拉
+                maps.put("lastSort", 0);
+            } else if (OperateTypeEnum.LOADMORE == operateType)
+            {// 上拉
+                if ( products != null && products.size() > 0)
+                {
+                    ProductModel product = products.get(products.size() - 1);
+                    maps.put("lastSort", products.size());
+                } else if (products != null && products.size() == 0)
+                {
+                    maps.put("lastSort", 0);
+                }
+            }
             String suffix = params.obtainGetParam(maps);
             url = url + suffix;
             HttpUtils httpUtils = new HttpUtils();
@@ -265,6 +315,20 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
             maps.put("lastSort", bundle.get("categoryId"));
+            if ( OperateTypeEnum.REFRESH == operateType )
+            {// 下拉
+                maps.put("lastSort", 0);
+            } else if (OperateTypeEnum.LOADMORE == operateType)
+            {// 上拉
+                if ( products != null && products.size() > 0)
+                {
+                    ProductModel product = products.get(products.size() - 1);
+                    maps.put("lastSort", product.getPid());
+                } else if (products != null && products.size() == 0)
+                {
+                    maps.put("lastSort", 0);
+                }
+            }
             String suffix = params.obtainGetParam(maps);
             url = url + suffix;
             HttpUtils httpUtils = new HttpUtils();

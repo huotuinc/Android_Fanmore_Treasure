@@ -64,6 +64,8 @@ public class Contant {
 
     //更新专区数量
     public static final int LOAD_AREA_COUNT     = 0x00000012;
+    //更新全部商品数量
+    public static final int LOAD_ALL_COUNT      =0x00000013;
 
     /**
      * 上传图片
@@ -193,6 +195,14 @@ public class Contant {
     public static final String GET_MY_LOTTERY_LIST = "getMyLotteryList";
     //预支付信息
     public static final String PUT_MONEY = "putMoney";
+    //获取最新揭晓
+    public static final String GET_NEWOPEN_LIST="getNewOpenList";
+    //获取普通分类商品
+    public static final String GET_GOODS_LIST_BY_CATEGORY="getGoodsListByCategory";
+    //获取全部商品
+    public static final String GET_GOODS_LIST_BY_ALL_CATEGORY="getGoodsListByAllCategory";
+    //获取其他商品列表
+    public static final String GET_GOODS_LIST_BY_OTHER_CATEGORY="getGoodsListByOtherCategory";
 
     //支付
     //微信支付
