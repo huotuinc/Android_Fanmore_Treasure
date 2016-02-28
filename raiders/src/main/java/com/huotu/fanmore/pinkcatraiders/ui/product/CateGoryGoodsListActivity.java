@@ -25,6 +25,7 @@ import com.huotu.fanmore.pinkcatraiders.adapter.AreaProductAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AreaProductsOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.GoodsListByOtherOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
@@ -131,48 +132,177 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
             });
             return;
         }
+        if (bundle.get("type").equals(0L)){
+            String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_AREA;
+            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
+            Map<String, Object> maps = new HashMap<String, Object>();
+            maps.put("categoryId", bundle.get("categoryId"));
+            String suffix = params.obtainGetParam(maps);
+            url = url + suffix;
+            HttpUtils httpUtils = new HttpUtils();
 
-        String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_CATEGORY;
-        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
-        Map<String, Object> maps = new HashMap<String, Object>();
-        maps.put("categoryId", bundle.get("categoryId"));
-        String suffix = params.obtainGetParam(maps);
-        url = url + suffix;
-        HttpUtils httpUtils = new HttpUtils();
+            httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    areaList.onRefreshComplete();
+                    if (CateGoryGoodsListActivity.this.isFinishing()) {
+                        return;
+                    }
+                    JSONUtil<AreaProductsOutputModel> jsonUtil = new JSONUtil<AreaProductsOutputModel>();
+                    AreaProductsOutputModel areaProductsOutputs = new AreaProductsOutputModel();
+                    areaProductsOutputs = jsonUtil.toBean(response.toString(), areaProductsOutputs);
+                    if (null != areaProductsOutputs && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList()) {
 
-        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                areaList.onRefreshComplete();
-                if (CateGoryGoodsListActivity.this.isFinishing()) {
-                    return;
+                        //修改记录总数
+                        Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, areaProductsOutputs.getResultData().getList().size());
+                        mHandler.sendMessage(message);
+                        products.clear();
+                        products.addAll(areaProductsOutputs.getResultData().getList());
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        //提示获取数据失败
+                        areaList.setEmptyView(emptyView);
+                    }
                 }
-                JSONUtil<AreaProductsOutputModel> jsonUtil = new JSONUtil<AreaProductsOutputModel>();
-                AreaProductsOutputModel areaProductsOutputs = new AreaProductsOutputModel();
-                areaProductsOutputs = jsonUtil.toBean(response.toString(), areaProductsOutputs);
-                if (null != areaProductsOutputs && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList()) {
-
-                    //修改记录总数
-                    Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, areaProductsOutputs.getResultData().getList().size());
-                    mHandler.sendMessage(message);
-                    products.clear();
-                    products.addAll(areaProductsOutputs.getResultData().getList());
-                    adapter.notifyDataSetChanged();
-                } else {
-                    //提示获取数据失败
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    areaList.onRefreshComplete();
+                    if (CateGoryGoodsListActivity.this.isFinishing()) {
+                        return;
+                    }
                     areaList.setEmptyView(emptyView);
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                areaList.onRefreshComplete();
-                if (CateGoryGoodsListActivity.this.isFinishing()) {
-                    return;
+            });
+        }
+        else if (bundle.get("type").equals(1L)) {
+            String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_CATEGORY;
+            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
+            Map<String, Object> maps = new HashMap<String, Object>();
+            maps.put("categoryId", bundle.get("categoryId"));
+            String suffix = params.obtainGetParam(maps);
+            url = url + suffix;
+            HttpUtils httpUtils = new HttpUtils();
+
+            httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    areaList.onRefreshComplete();
+                    if (CateGoryGoodsListActivity.this.isFinishing()) {
+                        return;
+                    }
+                    JSONUtil<AreaProductsOutputModel> jsonUtil = new JSONUtil<AreaProductsOutputModel>();
+                    AreaProductsOutputModel areaProductsOutputs = new AreaProductsOutputModel();
+                    areaProductsOutputs = jsonUtil.toBean(response.toString(), areaProductsOutputs);
+                    if (null != areaProductsOutputs && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList()) {
+
+                        //修改记录总数
+                        Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, areaProductsOutputs.getResultData().getList().size());
+                        mHandler.sendMessage(message);
+                        products.clear();
+                        products.addAll(areaProductsOutputs.getResultData().getList());
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        //提示获取数据失败
+                        areaList.setEmptyView(emptyView);
+                    }
                 }
-                areaList.setEmptyView(emptyView);
-            }
-        });
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    areaList.onRefreshComplete();
+                    if (CateGoryGoodsListActivity.this.isFinishing()) {
+                        return;
+                    }
+                    areaList.setEmptyView(emptyView);
+                }
+            });
+        }
+        else if (bundle.get("type").equals(3L)) {
+            String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_ALL_CATEGORY;
+            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
+            Map<String, Object> maps = new HashMap<String, Object>();
+            maps.put("lastSort", bundle.get("categoryId"));
+            String suffix = params.obtainGetParam(maps);
+            url = url + suffix;
+            HttpUtils httpUtils = new HttpUtils();
+
+            httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    areaList.onRefreshComplete();
+                    if (CateGoryGoodsListActivity.this.isFinishing()) {
+                        return;
+                    }
+                    JSONUtil<GoodsListByOtherOutputModel> jsonUtil = new JSONUtil<GoodsListByOtherOutputModel>();
+                    GoodsListByOtherOutputModel goodsListByOtherOutputModel = new GoodsListByOtherOutputModel();
+                    goodsListByOtherOutputModel = jsonUtil.toBean(response.toString(), goodsListByOtherOutputModel);
+                    if (null != goodsListByOtherOutputModel && null != goodsListByOtherOutputModel.getResultData() && null != goodsListByOtherOutputModel.getResultData().getList()) {
+
+                        //修改记录总数
+                        Message message = mHandler.obtainMessage(Contant.LOAD_ALL_COUNT, goodsListByOtherOutputModel.getResultData().getCount());
+                        mHandler.sendMessage(message);
+                        products.clear();
+                        products.addAll(goodsListByOtherOutputModel.getResultData().getList());
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        //提示获取数据失败
+                        areaList.setEmptyView(emptyView);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    areaList.onRefreshComplete();
+                    if (CateGoryGoodsListActivity.this.isFinishing()) {
+                        return;
+                    }
+                    areaList.setEmptyView(emptyView);
+                }
+            });
+        }else if (bundle.get("type").equals(2L)) {
+            String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_OTHER_CATEGORY;
+            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
+            Map<String, Object> maps = new HashMap<String, Object>();
+            maps.put("lastSort", bundle.get("categoryId"));
+            String suffix = params.obtainGetParam(maps);
+            url = url + suffix;
+            HttpUtils httpUtils = new HttpUtils();
+
+            httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    areaList.onRefreshComplete();
+                    if (CateGoryGoodsListActivity.this.isFinishing()) {
+                        return;
+                    }
+                    JSONUtil<GoodsListByOtherOutputModel> jsonUtil = new JSONUtil<GoodsListByOtherOutputModel>();
+                    GoodsListByOtherOutputModel goodsListByOtherOutputModel = new GoodsListByOtherOutputModel();
+                    goodsListByOtherOutputModel = jsonUtil.toBean(response.toString(), goodsListByOtherOutputModel);
+                    if (null != goodsListByOtherOutputModel && null != goodsListByOtherOutputModel.getResultData() && null != goodsListByOtherOutputModel.getResultData().getList()) {
+
+                        //修改记录总数
+                        Message message = mHandler.obtainMessage(Contant.LOAD_ALL_COUNT, goodsListByOtherOutputModel.getResultData().getCount());
+                        mHandler.sendMessage(message);
+                        products.clear();
+                        products.addAll(goodsListByOtherOutputModel.getResultData().getList());
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        //提示获取数据失败
+                        areaList.setEmptyView(emptyView);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    areaList.onRefreshComplete();
+                    if (CateGoryGoodsListActivity.this.isFinishing()) {
+                        return;
+                    }
+                    areaList.setEmptyView(emptyView);
+                }
+            });
+        }
     }
 
     protected void firstGetData(){
@@ -227,6 +357,10 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                 titleCount.setText("（"+count+"）");
             }
             break;
+
+            case Contant.LOAD_ALL_COUNT:
+                long count=(long) msg.obj;
+                titleCount.setText("（"+count+"）");
             default:
                 break;
         }

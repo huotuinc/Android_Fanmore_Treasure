@@ -103,18 +103,17 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
 
     private void initScroll()
     {
-        initData ( );
-        orderDetailRefresh.setOnRefreshListener (
-                new PullToRefreshBase.OnRefreshListener< ScrollView > ( ) {
+        initData();
+        orderDetailRefresh.setOnRefreshListener(
+                new PullToRefreshBase.OnRefreshListener<ScrollView>() {
 
                     @Override
-                    public
-                    void onRefresh ( PullToRefreshBase< ScrollView > pullToRefreshBase ) {
+                    public void onRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
 
-                        initData ( );
+                        initData();
                     }
                 }
-                                                );
+        );
     }
 
     private void initData()
@@ -134,55 +133,53 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         String url = Contant.REQUEST_URL + Contant.GET_SHARE_ORDER_DETAIL;
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), OrderDetailActivity.this);
         Map<String, Object> maps = new HashMap<String, Object> ();
-        maps.put ( "id", String.valueOf ( bundle.getLong ( "pid" ) ) );
+        maps.put ( "id",  bundle.getLong ( "pid"  ) );
         String suffix = params.obtainGetParam(maps);
         url = url + suffix;
         HttpUtils httpUtils = new HttpUtils();
-        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject >() {
-                                  @Override
-                                  public void onResponse(JSONObject response) {
-                                      orderDetailRefresh.onRefreshComplete();
-                                      if(OrderDetailActivity.this.isFinishing ( ))
-                                      {
-                                          return;
-                                      }
-                                      JSONUtil<OrderDetailOutputModel > jsonUtil = new JSONUtil<OrderDetailOutputModel>();
-                                      OrderDetailOutputModel OrderDetailOutputs = new OrderDetailOutputModel();
-                                      OrderDetailOutputs = jsonUtil.toBean(response.toString(), OrderDetailOutputs);
-                                      if(null != OrderDetailOutputs && null != OrderDetailOutputs.getResultData() && (1==OrderDetailOutputs.getResultCode()))
-                                      {
-                                          if(null != OrderDetailOutputs.getResultData().getData ( ) )
-                                          {
-                                              OrderModel order = OrderDetailOutputs.getResultData().getData ( );
-                                              orderTitle.setText(order.getShareOrderTitle ());
-                                              shareUserName.setText(order.getNickName ( ));
-                                              shareTime.setText( DateUtils.transformDataformat6 (
-                                                                         order.getTime ( ) ));
-                                              productName.setText("获奖商品："+order.getCharacters ());
-                                              productIusse.setText("商品期号："+order.getIssueNo ());
-                                              partners.setText("本期参与："+order.getAttendAmount ());
-                                              luckyNo.setText("幸运号码："+order.getLuckNumber ());
-                                              announcedTime.setText("揭晓时间："+DateUtils.transformDataformat6 ( order.getLotteryTime () ));
-                                              orderCon.setText(order.getContent ());
-                                          }
-                                          else
-                                          {
-                                          }
-                                      }
-                                      else
-                                      {
-                                          //异常处理，自动切换成无数据
-                                      }
-                                  }
-                              }, new Response.ErrorListener() {
-                                  @Override
-                                  public void onErrorResponse(VolleyError error) {
-                                      orderDetailRefresh.onRefreshComplete ( );
-                                      if(OrderDetailActivity.this.isFinishing() ) {
-                                          return;
-                                      }
-                                  }
-                              });
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                orderDetailRefresh.onRefreshComplete();
+                if (OrderDetailActivity.this.isFinishing()) {
+                    return;
+                }
+                JSONUtil<OrderDetailOutputModel> jsonUtil = new JSONUtil<OrderDetailOutputModel>();
+                OrderDetailOutputModel OrderDetailOutputs = new OrderDetailOutputModel();
+                OrderDetailOutputs = jsonUtil.toBean(response.toString(), OrderDetailOutputs);
+                if (null != OrderDetailOutputs && null != OrderDetailOutputs.getResultData() && (1 == OrderDetailOutputs.getResultCode())) {
+                    if (null != OrderDetailOutputs.getResultData().getData()) {
+                        OrderModel order = OrderDetailOutputs.getResultData().getData();
+                        orderTitle.setText(order.getShareOrderTitle());
+                        shareUserName.setText(order.getNickName());
+                        shareTime.setText(DateUtils.transformDataformat6(
+                                order.getTime()));
+                        productName.setText("获奖商品：" + order.getCharacters());
+                        productIusse.setText("商品期号：" + order.getIssueNo());
+                        partners.setText("本期参与：" + order.getAttendAmount());
+                        luckyNo.setText("幸运号码：" + order.getLuckNumber());
+                        if (order.getLotteryTime() != null) {
+                            announcedTime.setText("揭晓时间：" + DateUtils.transformDataformat6(order.getLotteryTime()));
+                        } else {
+                            announcedTime.setText("揭晓时间：");
+                        }
+
+                        orderCon.setText(order.getContent());
+                    } else {
+                    }
+                } else {
+                    //异常处理，自动切换成无数据
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                orderDetailRefresh.onRefreshComplete();
+                if (OrderDetailActivity.this.isFinishing()) {
+                    return;
+                }
+            }
+        });
     }
 
     @OnClick (R.id.titleLeftImage)

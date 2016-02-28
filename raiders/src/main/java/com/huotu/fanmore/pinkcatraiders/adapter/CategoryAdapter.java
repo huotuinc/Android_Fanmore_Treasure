@@ -72,6 +72,7 @@ public class CategoryAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
+                    bundle.putLong("type",CategoryList.getType());
                     bundle.putLong("categoryId", CategoryList.getPid());
                     bundle.putString("title",CategoryList.getTitle());
                     ActivityUtils.getInstance().showActivity((Activity)mContext, CateGoryGoodsListActivity.class, bundle);

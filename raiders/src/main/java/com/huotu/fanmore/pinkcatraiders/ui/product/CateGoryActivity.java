@@ -209,6 +209,7 @@ public class CateGoryActivity extends BaseActivity implements View.OnClickListen
     void getdata()
     {
         Bundle bundle = new Bundle();
+        bundle.putLong("type",3);
         bundle.putLong("categoryId", 0);
         bundle.putString("title","全部商品");
         ActivityUtils.getInstance().showActivity(this, CateGoryGoodsListActivity.class, bundle);
