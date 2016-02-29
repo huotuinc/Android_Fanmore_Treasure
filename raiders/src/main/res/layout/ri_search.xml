@@ -73,11 +73,17 @@
                     android:text="清空所有历史"/>
             </RelativeLayout>
         </RelativeLayout>
-        <com.handmark.pulltorefresh.library.PullToRefreshListView
-            android:id="@+id/searchList"
+        <GridView
+            android:id="@+id/searchGrid"
+            android:stretchMode="columnWidth"
+            android:listSelector="@null"
+            android:scrollbars="none"
+            android:background="@color/color_white"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:divider="@color/account_bg"
-            android:dividerHeight="10dp"/>
+            android:numColumns="2"
+            android:verticalSpacing="0dp"
+            android:horizontalSpacing="0dp">
+        </GridView>
     </RelativeLayout>
 </LinearLayout>

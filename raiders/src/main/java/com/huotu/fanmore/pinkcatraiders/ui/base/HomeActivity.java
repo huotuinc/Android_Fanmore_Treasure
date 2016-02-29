@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -243,6 +244,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         SystemTools.loadBackground ( titleRightImage, rightDraw );
         stubSearchBar.inflate ( );
         EditText searchL = ( EditText ) this.findViewById ( R.id.titleSearchBar );
+        searchL.setInputType ( InputType.TYPE_NULL );
         searchL.setOnClickListener (
                 new View.OnClickListener ( ) {
 
@@ -250,11 +252,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     public
                     void onClick ( View v ) {
 
-                        Bundle bundle = new Bundle ( );
-                        bundle.putInt ( "searchType", 0 );
                         ActivityUtils.getInstance ( ).showActivity (
                                 HomeActivity.this,
-                                SearchActivity.class, bundle );
+                                SearchActivity.class );
                     }
                 }
                                    );

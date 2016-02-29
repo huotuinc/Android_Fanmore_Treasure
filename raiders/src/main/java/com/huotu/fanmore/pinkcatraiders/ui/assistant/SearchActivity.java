@@ -13,26 +13,48 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.adapter.MyAddressAdapter;
+import com.huotu.fanmore.pinkcatraiders.adapter.MyGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
+import com.huotu.fanmore.pinkcatraiders.model.AddressOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.MyAddressListModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
+import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
+import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.SearchHistoryModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
+import com.huotu.fanmore.pinkcatraiders.widget.MyGridView;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -50,7 +72,7 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
     //handler对象
     public Handler mHandler;
 
-    public WindowManager   wManager;
+    public WindowManager wManager;
 
     public BaseApplication application;
 
@@ -74,8 +96,8 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
     /**
      * 搜索结构列表
      */
-    @Bind ( R.id.searchList )
-    PullToRefreshListView searchList;
+    @Bind ( R.id.searchGrid )
+    GridView searchGrid;
 
     @Bind ( R.id.searchHistoryTag )
     TextView searchHistoryTag;
@@ -86,12 +108,13 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
     @Bind ( R.id.commentDetailL )
     LinearLayout commentDetailL;
 
-    public Bundle bundle;
-
-    public OperateTypeEnum operateType = OperateTypeEnum.REFRESH;
-
     public LayoutInflater inflate;
+
     public EditText searchL;
+
+    public List< ProductModel > searchProducts;
+
+    public MyGridAdapter adapter;
 
     @Override
     public
@@ -113,20 +136,19 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
         super.onCreate ( savedInstanceState );
         this.setContentView ( R.layout.ri_search );
         ButterKnife.bind ( this );
-        inflate = LayoutInflater.from(SearchActivity.this);
+        inflate = LayoutInflater.from ( SearchActivity.this );
         application = ( BaseApplication ) this.getApplication ( );
         application.mFragManager = FragManager.getIns ( this, R.id.fragment_container );
         resources = this.getResources ( );
-        bundle = this.getIntent ( ).getExtras ( );
         wManager = this.getWindowManager ( );
         mHandler = new Handler ( this );
         emptyView = inflate.inflate ( R.layout.empty, null );
-        TextView emptyTag = (TextView) emptyView.findViewById(R.id.emptyTag);
-        emptyTag.setText("暂无搜索结果");
-        TextView emptyBtn = (TextView) emptyView.findViewById(R.id.emptyBtn);
-        emptyBtn.setVisibility(View.GONE);
+        TextView emptyTag = ( TextView ) emptyView.findViewById ( R.id.emptyTag );
+        emptyTag.setText ( "搜索不到商品信息" );
+        TextView emptyBtn = ( TextView ) emptyView.findViewById ( R.id.emptyBtn );
+        emptyBtn.setVisibility ( View.GONE );
         initTitle ( );
-        initView();
+        initView ( );
     }
 
     private
@@ -139,37 +161,44 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
         Drawable rightDraw = resources.getDrawable ( R.mipmap.search_in_result );
         SystemTools.loadBackground ( titleRightImage, rightDraw );
         stubSearchBar.inflate ( );
-        searchL = (EditText) this.findViewById(R.id.titleSearchBar);
+        searchL = ( EditText ) this.findViewById ( R.id.titleSearchBar );
     }
 
-    private void initView()
-    {
+    private
+    void initView ( ) {
         //查询搜索历史
-        Iterator<SearchHistoryModel > searchHistorys = SearchHistoryModel.findAll(SearchHistoryModel.class);
-        if(!searchHistorys.hasNext())
-        {
-            searchList.setVisibility(View.GONE);
-            commentDetailLL.setVisibility(View.GONE);
-            searchHistoryTag.setVisibility(View.VISIBLE);
+        Iterator< SearchHistoryModel > searchHistorys = SearchHistoryModel.findAll (
+                SearchHistoryModel.class
+                                                                                   );
+        if ( ! searchHistorys.hasNext ( ) ) {
+            searchGrid.setVisibility ( View.GONE );
+            commentDetailLL.setVisibility ( View.GONE );
+            searchHistoryTag.setVisibility ( View.VISIBLE );
         }
-        else
-        {
-            searchList.setVisibility(View.GONE);
-            commentDetailLL.setVisibility(View.VISIBLE);
-            searchHistoryTag.setVisibility(View.GONE);
+        else {
+            searchGrid.setVisibility ( View.GONE );
+            commentDetailLL.setVisibility ( View.VISIBLE );
+            searchHistoryTag.setVisibility ( View.GONE );
             //动态添加搜索历史
-            while (searchHistorys.hasNext())
-            {
-                SearchHistoryModel searchHistory = searchHistorys.next();
+            while ( searchHistorys.hasNext ( ) ) {
+                SearchHistoryModel searchHistory = searchHistorys.next ( );
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                         ViewGroup
                                                                                      .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                RelativeLayout searchLayout = (RelativeLayout) LayoutInflater.from(SearchActivity.this).inflate(R.layout.search_base, null);
+                RelativeLayout searchLayout = (RelativeLayout) LayoutInflater.from(SearchActivity.this).inflate ( R.layout.search_base, null );
                 TextView searchHistoryText = (TextView) searchLayout.findViewById(R.id.searchHistoryText);
-                searchHistoryText.setText(searchHistory.getSearchKey());
+                searchHistoryText.setText(searchHistory.getSearchKey ( ));
                 TextView searchHistoryTime = (TextView) searchLayout.findViewById(R.id.searchHistoryTime);
                 searchHistoryTime.setText(searchHistory.getTime());
-                searchLayout.setLayoutParams(lp);
+                searchLayout.setLayoutParams ( lp );
+                searchLayout.setOnClickListener ( new View.OnClickListener ( ) {
+
+                                                      @Override
+                                                      public
+                                                      void onClick ( View v ) {
+                                                          doSearch ( );
+                                                      }
+                                                  } );
                 commentDetailL.addView(searchLayout);
             }
         }
@@ -194,7 +223,7 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
     @OnClick ( R.id.titleRightImage )
     void doSearch ( ) {
 
-        searchList.setVisibility ( View.VISIBLE );
+        searchGrid.setVisibility ( View.VISIBLE );
         commentDetailLL.setVisibility ( View.GONE );
         searchHistoryTag.setVisibility ( View.GONE );
         key = searchL.getText ( ).toString ( );
@@ -257,46 +286,66 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
                     }
                 }
             }
-        }
-        try
-        {
-            key = URLEncoder.encode ( searchL.getText ( ).toString ( ), "UTF-8" );
-        } catch (UnsupportedEncodingException e)
-        {
-            ToastUtils.showShortToast(SearchActivity.this, "参数转码出错");
-            return;
-        }
-        //搜索类型
-        int type = (int) bundle.get("searchType");
-        switch (type)
-        {
-            case 1:
-            {
 
-            }
-            break;
-            case 2:
-            {
-
-            }
-            break;
-            default:
-                break;
+            initGrid ( );
         }
-
     }
 
-    protected void firstGetData(){
-        mHandler.postDelayed(new Runnable() {
-                                 @Override
-                                 public void run() {
-                                     if (SearchActivity.this.isFinishing()) {
-                                         return;
-                                     }
-                                     operateType = OperateTypeEnum.REFRESH;
-                                     searchList.setRefreshing(true);
-                                 }
-                             }, 1000);
+    private void initGrid()
+    {
+
+        searchProducts = new ArrayList<ProductModel> ();
+        initProducts();
+        adapter = new MyGridAdapter(searchProducts, SearchActivity.this, SearchActivity.this, mHandler);
+        searchGrid.setAdapter ( adapter );
+    }
+
+    private void initProducts()
+    {
+
+
+        if( false == SearchActivity.this.canConnect ( ) ){
+            return;
+        }
+        String url = Contant.REQUEST_URL + Contant.SEARCH_GOODS;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), SearchActivity.this);
+        Map<String, Object> maps = new HashMap<String, Object> ();
+        maps.put ( "title", key );
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject >() {
+                                  @Override
+                                  public void onResponse(JSONObject response) {
+                                      if(SearchActivity.this.isFinishing ( ))
+                                      {
+                                          return;
+                                      }
+                                      JSONUtil<ProductsOutputModel > jsonUtil = new JSONUtil<ProductsOutputModel>();
+                                      ProductsOutputModel productsOutput = new ProductsOutputModel();
+                                      productsOutput = jsonUtil.toBean(response.toString(), productsOutput);
+                                      if(null != productsOutput && null != productsOutput.getResultData() && (1==productsOutput.getResultCode()))
+                                      {
+                                          searchProducts.clear();
+                                          searchProducts.addAll(productsOutput.getResultData().getList());
+                                          adapter.notifyDataSetChanged();
+                                      }
+                                      else
+                                      {
+                                          //异常处理，自动切换成无数据
+                                          searchGrid.setEmptyView(emptyView);
+                                      }
+                                  }
+                              }, new Response.ErrorListener() {
+                                  @Override
+                                  public void onErrorResponse(VolleyError error) {
+                                      if(SearchActivity.this.isFinishing ( ))
+                                      {
+                                          return;
+                                      }
+                                      searchGrid.setEmptyView(emptyView);
+                                  }
+                              });
     }
 
     @Override

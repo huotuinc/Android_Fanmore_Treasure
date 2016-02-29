@@ -189,8 +189,7 @@ public class CateGoryActivity extends BaseActivity implements View.OnClickListen
     @OnClick(R.id.search)
     void toSearch()
     {
-        Bundle bundle = new Bundle (  );
-        ActivityUtils.getInstance ().showActivity ( CateGoryActivity.this, SearchActivity.class, bundle );
+        ActivityUtils.getInstance ().showActivity ( CateGoryActivity.this, SearchActivity.class );
     }
 
     protected void firstGetData(){

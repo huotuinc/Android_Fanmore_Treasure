@@ -228,4 +228,6 @@ public class Contant {
     public static final String GET_SHOPPING_LIST = "getShoppingList";
     //添加清单
     public static final String JOIN_SHOPPING_CART = "joinShoppingCart";
+    //搜索
+    public static final String SEARCH_GOODS = "searchGoods";
 }
