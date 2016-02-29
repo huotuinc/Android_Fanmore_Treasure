@@ -206,31 +206,4 @@ public class BaseApplication extends Application {
 
     }
 
-    public String readWxpayParentId()
-    {
-        return PreferenceHelper.readString ( getApplicationContext ( ), "WX_PAY_INFO", "WEIXIN_MERCHANT_ID" );
-    }
-
-    public String readWxpayAppId()
-    {
-        return PreferenceHelper.readString ( getApplicationContext (), "WX_PAY_INFO", "MERCHANT_WEIXIN_ID" );
-    }
-
-    public String readWxpayAppKey()
-    {
-        return PreferenceHelper.readString ( getApplicationContext ( ), "WX_PAY_INFO",
-                                             "MERCHANT_WEIXIN_ID" );
-    }
-    public String readAlipayAppKey()
-    {
-        return PreferenceHelper.readString (
-                getApplicationContext ( ), "ALI_PAY_INFO",
-                "ALIPAY_KEY"
-                                           );
-    }
-
-    public String readAlipayParentId()
-    {
-        return PreferenceHelper.readString ( getApplicationContext (), "ALI_PAY_INFO", "ALIPAY_MERCHANT_ID" );
-    }
 }

@@ -74,7 +74,7 @@ class WXPayUtilEx {
         this.req = new PayReq ( );
         this.application = application;
         msgApi = WXAPIFactory.createWXAPI ( context, null );
-        boolean isRegister = msgApi.registerApp ( application.readWxpayAppId ( ) );
+        boolean isRegister = msgApi.registerApp ( Contant.WXPAY_ID );
     }
 
     /**
@@ -209,7 +209,7 @@ class WXPayUtilEx {
             sb.append('&');
         }
         sb.append("key=");
-        sb.append(application.readWxpayAppKey ( ));
+        sb.append(Contant.WXPAY_KEY);
 
         String packageSign;
         packageSign = getMessageDigest(sb.toString().getBytes()).toUpperCase(
@@ -286,11 +286,11 @@ class WXPayUtilEx {
 
             xml.append ( "</xml>" );
             List<NameValuePair> packageParams = new LinkedList<NameValuePair> ();
-            packageParams.add(new BasicNameValuePair ("appid", application.readWxpayAppId ( )));
+            packageParams.add(new BasicNameValuePair ("appid", Contant.WXPAY_ID));
             packageParams.add(new BasicNameValuePair("attach", attach));
             packageParams.add(new BasicNameValuePair("body", body));
             packageParams.add(new BasicNameValuePair("mch_id",
-                                                     application.readWxpayParentId ()));
+                                                     Contant.WXPAY_PARTNER));
             packageParams.add(new BasicNameValuePair("nonce_str", nonceStr));
             packageParams.add(new BasicNameValuePair("notify_url",
                                                      this.wxpayNotifyUrl));
@@ -331,7 +331,7 @@ class WXPayUtilEx {
             sb.append('&');
         }
         sb.append("key=");
-        sb.append(application.readWxpayAppKey ( ));
+        sb.append(Contant.WXPAY_KEY);
 
         this.sb.append("sign str\n" + sb.toString() + "\n\n");
         String appSign = getMessageDigest(sb.toString().getBytes())
@@ -342,8 +342,8 @@ class WXPayUtilEx {
     private void genPayReq()
     {
 
-        req.appId = application.readWxpayAppId ();// Constant.WX_APPID;
-        req.partnerId = application.readWxpayParentId ();// WXPayUtil.PARTERID;
+        req.appId = Contant.WXPAY_ID;// Constant.WX_APPID;
+        req.partnerId = Contant.WXPAY_PARTNER;// WXPayUtil.PARTERID;
         req.prepayId = prepay_id;
         req.packageValue = "Sign=WXPay";
         req.nonceStr = genNonceStr();

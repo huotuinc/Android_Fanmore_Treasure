@@ -16,6 +16,7 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
 import com.huotu.fanmore.pinkcatraiders.model.PayModel;
+import com.huotu.fanmore.pinkcatraiders.uitls.PayFunc;
 import com.huotu.fanmore.pinkcatraiders.uitls.WindowUtils;
 
 
@@ -61,6 +62,16 @@ class PayPopWindow extends PopupWindow {
                     public
                     void onClick ( View v ) {
                             dismissView ( );
+                        progress.showProgress ( "正在加载支付信息" );
+                        progress.showAtLocation (
+                                aty.findViewById ( R.id.titleText ),
+                                Gravity.CENTER, 0, 0
+                                                );
+                        payModel.setAttach ( payModel.getOrderNo ( ) + "_0" );
+                        //添加微信回调路径
+                        PayFunc payFunc = new PayFunc ( context, payModel, application, mHandler, aty, progress );
+                        payFunc.wxPay ( );
+                        dismissView ( );
                     }
                 } );
         alipayBtn.setOnClickListener ( new View.OnClickListener ( ) {

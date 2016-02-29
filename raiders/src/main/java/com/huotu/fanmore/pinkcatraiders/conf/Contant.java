@@ -32,9 +32,20 @@ public class Contant {
 
     public static final String APPKEY           = "123456";
 
+    //支付环节------------------------------------------
     //微信支付ID
-    public static final String WXPAY_ID    = "wx2f2604e380cf6be1";
-    public static final String WXPAY_SECRT = "ae3a7d851f24bfc97047954fa3975cec";
+    public static final String WXPAY_ID    = "wxd8c58460d0199dd5";
+    public static final String WXPAY_SECRT = "8ad99de44bd96a323eb40dc161e7d8e8";
+    public static final String WXPAY_KEY = "NzfP6pfeljyHeY08LO9p8YAKZCGLz8akO4lCGdXZOGnVsJqfo8jeuYB7C0GoFJGEKZMDVGKWYnbbJj3pCpvJzd4iY7bVglaNz54XAD26tiCr5DZGLjZFoRxbqe8i3HT5";
+    public static final String WXPAY_PARTNER = "1220397601";
+    //支付宝支付
+    //商户ID
+    public static final String ALIPAY_PARTNER = "2088211251545121";
+    //商户收款账号
+    public static final String ALIPAY_SELLER = "2088211251545121";
+    //APPkEY
+    public static final String ALIPAY_KEY = "2088211251545121";
+    //支付环节------------------------------------------
 
     //微信登录:用户存在
     public static final int    MSG_USERID_FOUND = 0x00000001;

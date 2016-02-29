@@ -6,6 +6,7 @@ import android.os.Message;
 
 import com.alipay.sdk.app.PayTask;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.PayModel;
 
 import java.io.UnsupportedEncodingException;
@@ -137,10 +138,10 @@ class AliPayUtil {
      */
     public String getOrderInfo( String subject, String body, String price ) {
         // 签约合作者身份ID
-        String orderInfo = "partner=" + "\"" + application.readAlipayParentId () + "\"";
+        String orderInfo = "partner=" + "\"" + Contant.ALIPAY_PARTNER + "\"";
 
         // 签约卖家支付宝账号
-        orderInfo += "&seller_id=" + "\"" + application.readAlipayAppKey () + "\"";
+        orderInfo += "&seller_id=" + "\"" + Contant.ALIPAY_KEY + "\"";
 
         // 商户网站唯一订单号
         this.out_trade_no=getOutTradeNo();

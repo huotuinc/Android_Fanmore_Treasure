@@ -182,7 +182,7 @@ class WXPayUtil {
 
         PayReq req = new PayReq ( );
         req.appId = Contant.WXPAY_ID;
-        req.partnerId = application.readWxpayParentId ( );
+        req.partnerId = Contant.WXPAY_PARTNER;
         req.prepayId = result.prepayId;
         req.nonceStr = nonceStr;
         req.timeStamp = String.valueOf(timeStamp);
@@ -362,7 +362,7 @@ class WXPayUtil {
             packageParams.add(new BasicNameValuePair("input_charset", "UTF-8"));
             packageParams.add(new BasicNameValuePair("notify_url", NotifyUrl));
             packageParams.add(new BasicNameValuePair("out_trade_no", genOutTradNo()));
-            packageParams.add(new BasicNameValuePair("partner", application.readWxpayParentId ()));
+            packageParams.add(new BasicNameValuePair("partner", Contant.WXPAY_PARTNER));
             packageParams.add(new BasicNameValuePair("spbill_create_ip", getIP() ));
             packageParams.add(new BasicNameValuePair("total_fee", fee));
             String packageValue = genPackage(packageParams);
