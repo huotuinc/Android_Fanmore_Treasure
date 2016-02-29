@@ -129,6 +129,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     public long issueId;
     public List<PartnerHistorysModel> partnerHistorys;
     public String detailUrl;
+    public long pid;
     public boolean isInflate = true;
 
     @Override
@@ -201,6 +202,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                         ProductDetailModel productDetail = productDetailsOutput.getResultData().getData();
                         issueId = productDetail.getIssueId();
                         detailUrl = productDetail.getLink();
+                        pid=productDetail.getPid();
                         if (0 == productDetail.getStatus()) {
                             productDetailNameLabel.setText("进行中");
                         } else if (1 == productDetail.getStatus()) {
@@ -606,6 +608,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         return super.onKeyDown(keyCode, event);
     }
 
+    @OnClick(R.id.historys)
+   void tohistorys (){
+        Bundle bundle = new Bundle ( );
+        bundle.putLong("goodsId", pid);
+        ActivityUtils.getInstance ().showActivity ( ProductDetailActivity.this, HistorysActivity.class,bundle);
+
+
+    }
     @Override
     public void onClick(View v) {
 
