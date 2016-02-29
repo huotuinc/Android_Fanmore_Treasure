@@ -166,6 +166,8 @@ public class Contant {
 
     //获取专区商品列表
     public static final String GET_GOODS_LIST_BY_AREA = "getGoodsListByArea";
+    //获取往期揭晓（商品每期的中奖列表） 排序依据 期号
+    public static final String GET_PAST_LIST          =   "getPastList";
     //获取分类浏览列表
     public static final String GET_CATE_GORY_LIST="getCategoryList";
     //获取商品详情信息

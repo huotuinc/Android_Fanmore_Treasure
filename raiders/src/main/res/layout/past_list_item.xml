@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="@color/color_white">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/gray_backg"
+        >
+        <TextView
+            android:id="@+id/issueId"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="期号：5434354(揭晓时间：2016-01-03 17：14：50)"
+            android:textSize="15sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/LL1"
+        android:background="@color/color_white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="2px"
+            android:background="@color/gray_backg"
+            android:layout_height="match_parent" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <com.huotu.fanmore.pinkcatraiders.widget.CircleImageView
+            android:layout_width="50dp"
+            android:id="@+id/userlogo"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="获奖者:" />
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/color_blue"
+            android:id="@+id/nickName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="dasdsd"/>
+        </LinearLayout>
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ip"
+            android:text="(杭州市 ip:198.168.1.1)"/>
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/userId"
+            android:text="用户id:45464565"/>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="幸运号:" />
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/title_bg"
+                android:id="@+id/luckyNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="dasdsd"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="本期参与:" />
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/title_bg"
+                android:id="@+id/attendAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="人次"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+        <ImageView
+            android:layout_gravity="right"
+            android:layout_width="2px"
+            android:background="@color/gray_backg"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:background="@color/gray_backg"
+        android:layout_height="2px" />
+</LinearLayout>

@@ -32,6 +32,8 @@ import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.WinnerOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
@@ -108,7 +110,8 @@ public class WinLogActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public
                     void onClick ( View v ) {
-                        closeSelf ( WinLogActivity.this );
+                        ActivityUtils.getInstance().showActivity(WinLogActivity.this,HomeActivity.class);
+                        closeSelf(WinLogActivity.this);
                     }
                 }
                                     );

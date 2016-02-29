@@ -22,4 +22,5 @@
     <color name="driver_color">#FFF2F2F2</color>
     <color name="transparent">#FFFFFFFF</color>
     <color name="bg_1">#FFE7E7E7</color>
+    <color name="gray_backg">#e7e7e7</color>
 </resources>

@@ -23,6 +23,8 @@ import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogAllFrag;
 import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogDoneFrag;
 import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogFrag;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
@@ -254,7 +256,12 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
             break;
             case Contant.RAIDERS_NOW:
             {
-                closeSelf ( RaidesLogActivity.this );
+
+                                ActivityUtils.getInstance().showActivity(RaidesLogActivity.this, HomeActivity.class);
+                                closeSelf(RaidesLogActivity.this);
+
+
+
             }
             break;
             default:
