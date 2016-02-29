@@ -220,6 +220,8 @@ public class Contant {
     public static final String WX_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
     //晒单列表
     public static final String GET_SHARE_ORDER_LIST = "getShareOrderList";
+    //首页晒单列表
+    public static final String GET_SHARE_ORDER_LIST_BY_GOOSID = "getShareOrderListByGoodsId";
     //获取晒单详情
     public static final String GET_SHARE_ORDER_DETAIL = "getShareOrderDetail";
     //喇叭通知
@@ -230,4 +232,6 @@ public class Contant {
     public static final String JOIN_SHOPPING_CART = "joinShoppingCart";
     //搜索
     public static final String SEARCH_GOODS = "searchGoods";
+    //发布晒单
+    public static final String ADD_SHARE_ORDER = "addShareOrder";
 }

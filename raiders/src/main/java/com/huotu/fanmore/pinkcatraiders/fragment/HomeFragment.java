@@ -233,7 +233,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @OnClick ( R.id.sdL )
     void showSdUi ( ) {
         //ToastUtils.showLongToast(getActivity(), "弹出晒单界面");
-        ActivityUtils.getInstance().showActivity(getActivity(), ShowOrderActivity.class);
+        Bundle bundle = new Bundle (  );
+        //首页晒单
+        bundle.putInt ( "type", 0 );
+        bundle.putLong ( "goodsId", 20 );
+        ActivityUtils.getInstance().showActivity(getActivity(), ShowOrderActivity.class, bundle);
     }
 
     @OnClick(R.id.wtL)

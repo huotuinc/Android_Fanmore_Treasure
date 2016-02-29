@@ -31,16 +31,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15sp"
+        android:id="@+id/orderTitle"
         android:hint="晒单主题，不少于6个字"/>
         <com.huotu.android.library.libedittext.EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/orderMsg"
             android:hint="获奖感言，不少于30个字"
             android:textSize="15dp"/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
+            android:id="@+id/addImgBtn"
             android:layout_marginTop="50dp"
             android:background="@mipmap/shoreorder"/>
     </LinearLayout>

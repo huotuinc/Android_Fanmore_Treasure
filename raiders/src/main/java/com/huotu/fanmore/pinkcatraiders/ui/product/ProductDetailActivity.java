@@ -42,6 +42,7 @@ import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.ShareOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
@@ -130,6 +131,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     public List<PartnerHistorysModel> partnerHistorys;
     public String detailUrl;
     public boolean isInflate = true;
+    public ProductDetailModel productDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,18 +206,21 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                         if ( ProductDetailActivity.this.isFinishing ( ) ) {
                             return;
                         }
-                        JSONUtil< ProductDetailsOutputModel > jsonUtil             = new
+                        JSONUtil< ProductDetailsOutputModel > jsonUtil = new
                                 JSONUtil< ProductDetailsOutputModel > ( );
-                        ProductDetailsOutputModel             productDetailsOutput = new
+                        ProductDetailsOutputModel productDetailsOutput = new
                                 ProductDetailsOutputModel ( );
-                        productDetailsOutput = jsonUtil.toBean ( response.toString ( ),
-                                                                 productDetailsOutput );
+                        productDetailsOutput = jsonUtil.toBean (
+                                response.toString ( ),
+                                productDetailsOutput
+                                                               );
                         if ( null != productDetailsOutput && null != productDetailsOutput
-                                .getResultData ( ) && ( 1 == productDetailsOutput.getResultCode (
-                                                                                                )
+                                .getResultData ( ) && (
+                                     1 == productDetailsOutput.getResultCode (
+                                                                             )
                              ) ) {
                             if ( null != productDetailsOutput.getResultData ( ).getData ( ) ) {
-                                ProductDetailModel productDetail = productDetailsOutput
+                                productDetail = productDetailsOutput
                                         .getResultData ( ).getData ( );
                                 issueId = productDetail.getIssueId ( );
                                 detailUrl = productDetail.getLink ( );
@@ -242,7 +247,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
                                                     @Override
                                                     public
-                                                    void onInflate ( ViewStub stub, View inflated
+                                                    void onInflate (
+                                                            ViewStub stub, View inflated
                                                                    ) {
 
                                                         isInflate = false;
@@ -255,22 +261,32 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                         noLabel.setText ( "期号：" + productDetail.getIssueId ( ) );
                                         ProgressBar progressBar = ( ProgressBar )
                                                 ProductDetailActivity.this.findViewById ( R.id.partnerProgress );
-                                        progressBar.setProgress ( ( int ) ( productDetail
-                                                                                    .getToAmount
-                                                                                            ( ) -
-                                                                            productDetail
-                                                                                    .getRemainAmount ( ) ) );
-                                        progressBar.setMax ( ( int ) productDetail.getToAmount (
-                                                                                               ) );
+                                        progressBar.setProgress (
+                                                ( int ) (
+                                                        productDetail
+                                                                .getToAmount
+                                                                        ( ) -
+                                                        productDetail
+                                                                .getRemainAmount ( )
+                                                )
+                                                                );
+                                        progressBar.setMax (
+                                                ( int ) productDetail.getToAmount (
+                                                                                  )
+                                                           );
                                         TextView totalRequiredLabel = ( TextView )
                                                 ProductDetailActivity.this.findViewById ( R.id.totalRequiredLabel );
-                                        totalRequiredLabel.setText ( "总需人数：" + productDetail
-                                                                             .getToAmount ( ) +
-                                                                     "次" );
+                                        totalRequiredLabel.setText (
+                                                "总需人数：" + productDetail
+                                                        .getToAmount ( ) +
+                                                "次"
+                                                                   );
                                         TextView surplusLabel = ( TextView )
                                                 ProductDetailActivity.this.findViewById ( R.id.surplusLabel );
-                                        surplusLabel.setText ( "剩余：" + productDetail
-                                                                       .getRemainAmount ( ) );
+                                        surplusLabel.setText (
+                                                "剩余：" + productDetail
+                                                        .getRemainAmount ( )
+                                                             );
                                         TextView parentCount = ( TextView ) ProductDetailActivity
                                                 .this.findViewById ( R.id.parentCount );
                                         parentCount.setText ( "您参与了：1人次" );
@@ -288,7 +304,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
                                                     @Override
                                                     public
-                                                    void onInflate ( ViewStub stub, View inflated
+                                                    void onInflate (
+                                                            ViewStub stub, View inflated
                                                                    ) {
 
                                                         isInflate = false;
@@ -301,7 +318,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                 ProductDetailActivity.this, accountLogo,
                                                 "http://v1.qzone"
                                                 + ".cc/avatar/201404/10/00/12/534571832f9ea304"
-                                                + ".jpg!200x200.jpg", R.mipmap.ic_launcher );
+                                                + ".jpg!200x200.jpg", R.mipmap.ic_launcher
+                                                                               );
                                         TextView winnerName = ( TextView ) ProductDetailActivity
                                                 .this.findViewById ( R.id.winnerName );
                                         winnerName.setText ( "中奖者：百晓生" );
@@ -337,7 +355,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
                                                     @Override
                                                     public
-                                                    void onInflate ( ViewStub stub, View inflated
+                                                    void onInflate (
+                                                            ViewStub stub, View inflated
                                                                    ) {
 
                                                         isInflate = false;
@@ -349,22 +368,32 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                         noLabel.setText ( "期号：" + productDetail.getIssueId ( ) );
                                         ProgressBar progressBar = ( ProgressBar )
                                                 ProductDetailActivity.this.findViewById ( R.id.partnerProgress );
-                                        progressBar.setProgress ( ( int ) ( productDetail
-                                                                                    .getToAmount
-                                                                                            ( ) -
-                                                                            productDetail
-                                                                                    .getRemainAmount ( ) ) );
-                                        progressBar.setMax ( ( int ) productDetail.getToAmount (
-                                                                                               ) );
+                                        progressBar.setProgress (
+                                                ( int ) (
+                                                        productDetail
+                                                                .getToAmount
+                                                                        ( ) -
+                                                        productDetail
+                                                                .getRemainAmount ( )
+                                                )
+                                                                );
+                                        progressBar.setMax (
+                                                ( int ) productDetail.getToAmount (
+                                                                                  )
+                                                           );
                                         TextView totalRequiredLabel = ( TextView )
                                                 ProductDetailActivity.this.findViewById ( R.id.totalRequiredLabel );
-                                        totalRequiredLabel.setText ( "总需人数：" + productDetail
-                                                                             .getToAmount ( ) +
-                                                                     "次" );
+                                        totalRequiredLabel.setText (
+                                                "总需人数：" + productDetail
+                                                        .getToAmount ( ) +
+                                                "次"
+                                                                   );
                                         TextView surplusLabel = ( TextView )
                                                 ProductDetailActivity.this.findViewById ( R.id.surplusLabel );
-                                        surplusLabel.setText ( "剩余：" + productDetail
-                                                                       .getRemainAmount ( ) );
+                                        surplusLabel.setText (
+                                                "剩余：" + productDetail
+                                                        .getRemainAmount ( )
+                                                             );
                                     }
                                     else {
                                         //揭晓
@@ -376,26 +405,38 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
                                                     @Override
                                                     public
-                                                    void onInflate ( ViewStub stub, View inflated
+                                                    void onInflate (
+                                                            ViewStub stub, View inflated
                                                                    ) {
 
                                                         isInflate = false;
                                                     }
                                                 }
                                                                              );
-                                        CircleImageView accountLogo = ( CircleImageView ) ProductDetailActivity.this.findViewById ( R.id.accountLogo );
-                                        BitmapLoader.create ( ).loadRoundImage ( ProductDetailActivity.this, accountLogo, "http://v1.qzone.cc/avatar/201404/10/00/12/534571832f9ea304.jpg!200x200.jpg", R.mipmap.ic_launcher );
-                                        TextView winnerName = ( TextView ) ProductDetailActivity.this.findViewById ( R.id.winnerName );
+                                        CircleImageView accountLogo = ( CircleImageView )
+                                                ProductDetailActivity.this.findViewById ( R.id.accountLogo );
+                                        BitmapLoader.create ( ).loadRoundImage (
+                                                ProductDetailActivity.this, accountLogo,
+                                                "http://v1.qzone"
+                                                + ".cc/avatar/201404/10/00/12/534571832f9ea304"
+                                                + ".jpg!200x200.jpg", R.mipmap.ic_launcher );
+                                        TextView winnerName = ( TextView ) ProductDetailActivity
+                                                .this.findViewById ( R.id.winnerName );
                                         winnerName.setText ( "中奖者：百晓生" );
-                                        TextView winnerIp = ( TextView ) ProductDetailActivity.this.findViewById ( R.id.winnerIp );
+                                        TextView winnerIp = ( TextView ) ProductDetailActivity
+                                                .this.findViewById ( R.id.winnerIp );
                                         winnerIp.setText ( "铁岭：10.10.123.45" );
-                                        TextView winnerId = ( TextView ) ProductDetailActivity.this.findViewById ( R.id.winnerId );
+                                        TextView winnerId = ( TextView ) ProductDetailActivity
+                                                .this.findViewById ( R.id.winnerId );
                                         winnerId.setText ( "用户ID：23000909" );
-                                        TextView partnerUser = ( TextView ) ProductDetailActivity.this.findViewById ( R.id.partnerUser );
+                                        TextView partnerUser = ( TextView ) ProductDetailActivity
+                                                .this.findViewById ( R.id.partnerUser );
                                         partnerUser.setText ( "本期参与：3000次" );
-                                        TextView partnerTime = ( TextView ) ProductDetailActivity.this.findViewById ( R.id.partnerTime );
+                                        TextView partnerTime = ( TextView ) ProductDetailActivity
+                                                .this.findViewById ( R.id.partnerTime );
                                         partnerTime.setText ( "揭晓时间：2015-12-11 14:20:11" );
-                                        TextView luckyNo = ( TextView ) ProductDetailActivity.this.findViewById ( R.id.luckyNo );
+                                        TextView luckyNo = ( TextView ) ProductDetailActivity
+                                                .this.findViewById ( R.id.luckyNo );
                                         luckyNo.setText ( "幸运号：32890" );
                                         TextView calculationDetail = ( TextView ) ProductDetailActivity.this.findViewById ( R.id.calculationDetail );
                                         calculationDetail.setText ( "幸运号：32890" );
@@ -442,7 +483,15 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         Bundle bundle = new Bundle();
         bundle.putString("link", detailUrl);
         bundle.putString("title", "图文详情");
-        ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, WebExhibitionActivity.class, bundle);
+        ActivityUtils.getInstance().showActivity ( ProductDetailActivity.this, WebExhibitionActivity.class, bundle );
+    }
+
+    @OnClick(R.id.sdL)
+    void doShareOrder()
+    {
+        Bundle bundle = new Bundle (  );
+        bundle.putLong ( "issue", productDetail.getIssueId () );
+        ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, ShareOrderActivity.class, bundle);
     }
 
     private void getCommentLog()

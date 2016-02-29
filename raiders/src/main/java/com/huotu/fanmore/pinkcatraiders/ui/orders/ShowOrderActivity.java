@@ -39,6 +39,8 @@ import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
+import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
+import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 
 import org.json.JSONObject;
 
@@ -56,76 +58,102 @@ import butterknife.OnClick;
  */
 public class ShowOrderActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
 
-    public Handler mHandler;
+    public Handler       mHandler;
+
     public WindowManager wManager;
+
     public
     AssetManager am;
-    public Resources res;
+
+    public Resources       res;
+
     public BaseApplication application;
-    @Bind(R.id.orderList)
+
+    @Bind ( R.id.orderList )
     PullToRefreshListView orderList;
-    @Bind(R.id.titleLayoutL)
-    RelativeLayout titleLayoutL;
-    @Bind(R.id.stubTitleText)
-    ViewStub stubTitleText;
-    @Bind(R.id.titleLeftImage)
-    ImageView titleLeftImage;
+
+    @Bind ( R.id.titleLayoutL )
+    RelativeLayout        titleLayoutL;
+
+    @Bind ( R.id.stubTitleText )
+    ViewStub              stubTitleText;
+
+    @Bind ( R.id.titleLeftImage )
+    ImageView             titleLeftImage;
+
     View emptyView = null;
-    public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
-    public List<OrderModel> orders;
-    public OrderAdapter adapter;
-    public LayoutInflater inflate;
+
+    public OperateTypeEnum operateType = OperateTypeEnum.REFRESH;
+
+    public List< OrderModel > orders;
+
+    public OrderAdapter       adapter;
+
+    public LayoutInflater     inflate;
+
+    public Bundle             bundle;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.show_order);
-        ButterKnife.bind(this);
+    protected
+    void onCreate ( Bundle savedInstanceState ) {
+
+        super.onCreate ( savedInstanceState );
+        setContentView ( R.layout.show_order );
+        ButterKnife.bind ( this );
         mHandler = new Handler ( this );
-        am = this.getAssets();
-        inflate = LayoutInflater.from(ShowOrderActivity.this);
-        res = this.getResources();
-        application = (BaseApplication) this.getApplication ();
-        wManager = this.getWindowManager();
-        emptyView = inflate.inflate(R.layout.empty, null);
-        TextView emptyTag = (TextView) emptyView.findViewById(R.id.emptyTag);
-        emptyTag.setText("暂无晒单信息");
-        TextView emptyBtn = (TextView) emptyView.findViewById(R.id.emptyBtn);
-        emptyBtn.setVisibility(View.GONE);
-        initTitle();
-        initList();
+        am = this.getAssets ( );
+        inflate = LayoutInflater.from ( ShowOrderActivity.this );
+        res = this.getResources ( );
+        application = ( BaseApplication ) this.getApplication ( );
+        wManager = this.getWindowManager ( );
+        emptyView = inflate.inflate ( R.layout.empty, null );
+        bundle = this.getIntent ( ).getExtras ( );
+        TextView emptyTag = ( TextView ) emptyView.findViewById ( R.id.emptyTag );
+        emptyTag.setText ( "暂无晒单信息" );
+        TextView emptyBtn = ( TextView ) emptyView.findViewById ( R.id.emptyBtn );
+        emptyBtn.setVisibility ( View.GONE );
+        initTitle ( );
+        initList ( );
     }
 
-    private void initTitle()
-    {
+    private
+    void initTitle ( ) {
         //背景色
-        Drawable bgDraw = res.getDrawable(R.drawable.account_bg_bottom);
+        Drawable bgDraw = res.getDrawable ( R.drawable.account_bg_bottom );
         SystemTools.loadBackground ( titleLayoutL, bgDraw );
-        Drawable leftDraw = res.getDrawable(R.mipmap.back_gray);
+        Drawable leftDraw = res.getDrawable ( R.mipmap.back_gray );
         SystemTools.loadBackground ( titleLeftImage, leftDraw );
         stubTitleText.inflate ( );
-        TextView titleText = (TextView) this.findViewById(R.id.titleText);
+        TextView titleText = ( TextView ) this.findViewById ( R.id.titleText );
         titleText.setText ( "晒单分享" );
     }
 
-    private void initList()
-    {
-        orderList.setMode(PullToRefreshBase.Mode.BOTH);
-        orderList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.REFRESH;
-                loadData();
-            }
+    private
+    void initList ( ) {
 
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-                operateType = OperateTypeEnum.LOADMORE;
-                loadData();
-            }
-        });
-        orders = new ArrayList<OrderModel>();
-        adapter = new OrderAdapter(orders, ShowOrderActivity.this);
+        orderList.setMode ( PullToRefreshBase.Mode.BOTH );
+        orderList.setOnRefreshListener (
+                new PullToRefreshBase.OnRefreshListener2< ListView > ( ) {
+
+                    @Override
+                    public
+                    void onPullDownToRefresh ( PullToRefreshBase< ListView > pullToRefreshBase ) {
+
+                        operateType = OperateTypeEnum.REFRESH;
+                        loadData ( );
+                    }
+
+                    @Override
+                    public
+                    void onPullUpToRefresh ( PullToRefreshBase< ListView > pullToRefreshBase ) {
+
+                        operateType = OperateTypeEnum.LOADMORE;
+                        loadData ( );
+                    }
+                }
+                                       );
+        orders = new ArrayList< OrderModel > ( );
+        adapter = new OrderAdapter ( orders, ShowOrderActivity.this );
         orderList.setAdapter ( adapter );
         orderList.setOnItemClickListener (
                 new AdapterView.OnItemClickListener ( ) {
@@ -163,9 +191,24 @@ public class ShowOrderActivity extends BaseActivity implements View.OnClickListe
                                   });
             return;
         }
-        String url = Contant.REQUEST_URL + Contant.GET_SHARE_ORDER_LIST;
+        String url = null;
+        if(0==bundle.getInt ( "type" ))
+        {
+            //首页晒单
+            url = Contant.REQUEST_URL + Contant.GET_SHARE_ORDER_LIST_BY_GOOSID;
+
+        }
+        else if(1==bundle.getInt ( "type" ))
+        {
+            //个人中心晒单
+            url = Contant.REQUEST_URL + Contant.GET_SHARE_ORDER_LIST;
+        }
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ShowOrderActivity.this);
         Map<String, Object> maps = new HashMap<String, Object> ();
+        if(1==bundle.getInt ( "type" ))
+        {
+            maps.put("goodsId", bundle.getLong ( "goodsId" ));
+        }
         if ( OperateTypeEnum.REFRESH == operateType )
         {// 下拉
             maps.put("lastId", 0);
