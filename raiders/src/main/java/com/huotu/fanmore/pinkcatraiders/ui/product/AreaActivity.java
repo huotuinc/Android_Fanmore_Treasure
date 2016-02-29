@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.huotu.fanmore.pinkcatraiders.adapter.AreaProductAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AreaProductsOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
@@ -33,7 +35,9 @@ import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
+import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 
 import org.json.JSONObject;
 
@@ -57,6 +61,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
     public Handler mHandler;
     public
     WindowManager wManager;
+    public ProgressPopupWindow progress;
 
     @Bind(R.id.titleLayoutL)
     RelativeLayout titleLayoutL;
@@ -126,7 +131,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
             }
         });
         products = new ArrayList<ProductModel>();
-        adapter = new AreaProductAdapter(products, AreaActivity.this);
+        adapter = new AreaProductAdapter(mHandler,products, AreaActivity.this);
         areaList.setAdapter(adapter);
         firstGetData();
     }
@@ -236,6 +241,52 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
             {
                 int count = (int) msg.obj;
                 titleCount.setText("（"+count+"）");
+            }
+            break;
+            case Contant.ADD_LIST:
+            {
+                ProductModel product = ( ProductModel ) msg.obj;
+                progress = new ProgressPopupWindow( AreaActivity.this, AreaActivity.this, wManager );
+                progress.showProgress ( "正在添加清单" );
+                progress.showAtLocation (titleLayoutL,
+                        Gravity.CENTER, 0, 0
+                );
+                String url = Contant.REQUEST_URL + Contant.JOIN_SHOPPING_CART;
+                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), AreaActivity.this);
+                Map<String, Object> maps = new HashMap<String, Object> ();
+                maps.put ( "issueId", String.valueOf ( product.getIssueId () ) );
+                Map<String, Object> param = params.obtainPostParam(maps);
+                BaseModel base = new BaseModel ();
+                HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
+                httpUtils.doVolleyPost (
+                        base, url, param, new Response.Listener< BaseModel > ( ) {
+                            @Override
+                            public
+                            void onResponse ( BaseModel response ) {
+                                progress.dismissView ();
+                                BaseModel base = response;
+                                if(1==base.getResultCode ())
+                                {
+                                    //上传成功
+                                    ToastUtils.showLongToast(AreaActivity.this, "添加清单成功");
+                                }
+                                else
+                                {
+                                    //上传失败
+                                    ToastUtils.showLongToast ( AreaActivity.this, "添加清单失败" );
+                                }
+                            }
+                        }, new Response.ErrorListener ( ) {
+
+                            @Override
+                            public
+                            void onErrorResponse ( VolleyError error ) {
+                                progress.dismissView ( );
+                                //系统级别错误
+                                ToastUtils.showLongToast ( AreaActivity.this, "添加清单失败" );
+                            }
+                        }
+                );
             }
             break;
             default:

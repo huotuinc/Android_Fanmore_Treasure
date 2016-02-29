@@ -10,8 +10,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
-import com.huotu.fanmore.pinkcatraiders.model.NewestProduct;
+import com.huotu.fanmore.pinkcatraiders.model.NewOpenListModel;
+
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
+import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 
 import java.util.List;
@@ -24,9 +26,9 @@ import butterknife.ButterKnife;
  */
 public class NewestProductAdapter extends BaseAdapter {
 
-    private List<NewestProduct> newestProducts;
+    private List<NewOpenListModel> newestProducts;
     private Context context;
-    public NewestProductAdapter(List<NewestProduct> newestProducts, Context context)
+    public NewestProductAdapter(List<NewOpenListModel> newestProducts, Context context)
     {
         this.newestProducts = newestProducts;
         this.context = context;
@@ -63,27 +65,42 @@ public class NewestProductAdapter extends BaseAdapter {
         }
         if(null!=newestProducts&&!newestProducts.isEmpty()&&null!=newestProducts.get(position))
         {
-            final NewestProduct product = newestProducts.get(position);
+            final NewOpenListModel product = newestProducts.get(position);
             BitmapLoader.create().displayUrl(context, holder.newestProductIcon, product.getPictureUrl(), R.mipmap.ic_launcher);
-            if(0==product.getAreaAmount())
+
+            if(0==product.getAreaAmount().intValue())
             {
                 holder.newestProductTag.setText("十元\n专区");
                 SystemTools.loadBackground(holder.newestProductTag, resources.getDrawable(R.mipmap.area_1));
             }
-            else if(1==product.getAreaAmount())
+            else if(1==product.getAreaAmount().intValue())
             {
                 holder.newestProductTag.setText("五元\n专区");
                 SystemTools.loadBackground(holder.newestProductTag, resources.getDrawable(R.mipmap.area_2));
             }
-            else
-            {
-                holder.newestProductTag.setVisibility(View.GONE);
-            }
+            else {
 
+                holder.newestProductTag.setVisibility(View.GONE);
+
+            }
+            if (1==product.getStatus()) {
+                holder.Rl1.setVisibility(View.VISIBLE);
+                holder.Rl2.setVisibility(View.GONE);
+                holder.announcedTag.setText("即将揭晓");
+                holder.countdown.setText(String.valueOf(product.getToAwardingTime()));
+            }  else if (2==product.getStatus()){
+                holder.Rl1.setVisibility(View.GONE);
+                holder.Rl2.setVisibility(View.VISIBLE);
+                holder.nickName.setText(product.getNickName());
+                holder.attendAmount.setText("参与人次:"+String.valueOf(product.getAttendAmount()));
+                holder.luckyNumber.setText(String.valueOf(product.getLuckyNumber()));
+                holder.time.setText("揭晓时间:"+ DateUtils.transformDataformat2(product.getTime()));
+
+            }else {
+
+            }
             holder.newestProductName.setText(product.getTitle());
-            holder.newestIssue.setText("期号："+product.getIssueId());
-            holder.announcedTag.setText("即将揭晓");
-            holder.countdown.setText("09:32:46");
+            holder.newestIssue.setText("期号:" + product.getIssueId());
         }
         return convertView;
     }
@@ -108,5 +125,17 @@ public class NewestProductAdapter extends BaseAdapter {
         TextView announcedTag;
         @Bind(R.id.countdown)
         TextView countdown;
+        @Bind(R.id.Rl1)
+        RelativeLayout Rl1;
+        @Bind(R.id.Rl2)
+        RelativeLayout Rl2;
+        @Bind(R.id.nickName)
+        TextView nickName;
+        @Bind(R.id.attendAmount)
+        TextView attendAmount;
+        @Bind(R.id.luckyNumber)
+        TextView luckyNumber;
+        @Bind(R.id.time)
+        TextView time;
     }
 }

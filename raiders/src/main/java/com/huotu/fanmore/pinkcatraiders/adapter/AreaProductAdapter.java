@@ -2,6 +2,8 @@ package com.huotu.fanmore.pinkcatraiders.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -10,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
@@ -26,8 +29,11 @@ public class AreaProductAdapter extends BaseAdapter {
 
     private List<ProductModel> products;
     private Context mContext;
-    public AreaProductAdapter(List<ProductModel> products, Context mContext)
+    private
+    Handler mHandler;
+    public AreaProductAdapter(Handler mHandler,List<ProductModel> products, Context mContext)
     {
+        this.mHandler = mHandler;
         this.products = products;
         this.mContext = mContext;
     }
@@ -63,7 +69,7 @@ public class AreaProductAdapter extends BaseAdapter {
         }
         if(null!=products&&!products.isEmpty()&&null!=products.get(position))
         {
-            ProductModel product = products.get(position);
+            final ProductModel product = products.get(position);
             BitmapLoader.create().displayUrl(mContext, holder.icon, product.getPictureUrl(), R.mipmap.ic_launcher);
             if(10==product.getAreaAmount())
             {
@@ -77,10 +83,21 @@ public class AreaProductAdapter extends BaseAdapter {
             }
 
             holder.productName.setText(product.getTitle());
-            holder.lotteryScheduleProgress.setMax((int)product.getToAmount());
-            holder.lotteryScheduleProgress.setProgress((int) (product.getToAmount()-product.getRemainAmount()));
-            holder.totalRequired.setText("总需："+product.getToAmount());
+            holder.lotteryScheduleProgress.setMax((int) product.getToAmount());
+            holder.lotteryScheduleProgress.setProgress((int) (product.getToAmount() - product.getRemainAmount()));
+            holder.totalRequired.setText("总需：" + product.getToAmount());
             holder.surplus.setText("剩余："+ product.getRemainAmount());
+            holder.addBtn.setOnClickListener (new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    Message message = mHandler.obtainMessage();
+                    message.what = Contant.ADD_LIST;
+                    message.obj = product;
+                    mHandler.sendMessage(message);
+                }
+            });
         }
         else
         {

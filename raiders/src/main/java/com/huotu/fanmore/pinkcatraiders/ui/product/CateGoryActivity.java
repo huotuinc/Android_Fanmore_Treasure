@@ -1,6 +1,7 @@
 package com.huotu.fanmore.pinkcatraiders.ui.product;
 
 
+import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -203,6 +204,15 @@ public class CateGoryActivity extends BaseActivity implements View.OnClickListen
                 cateList.setRefreshing(true);
             }
         }, 1000);
+    }
+    @OnClick(R.id.allL)
+    void getdata()
+    {
+        Bundle bundle = new Bundle();
+        bundle.putLong("type",3);
+        bundle.putLong("categoryId", 0);
+        bundle.putString("title","全部商品");
+        ActivityUtils.getInstance().showActivity(this, CateGoryGoodsListActivity.class, bundle);
     }
     @OnClick(R.id.titleLeftImage)
     void doBack()

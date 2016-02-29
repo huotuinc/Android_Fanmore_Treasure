@@ -12,20 +12,32 @@ import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.AreaProductAdapter;
+import com.huotu.fanmore.pinkcatraiders.adapter.MyGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.NewestProductAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
-import com.huotu.fanmore.pinkcatraiders.model.NewestProduct;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.NewOpenListModel;
+import com.huotu.fanmore.pinkcatraiders.model.NewOpenOutputModel;
+
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
-import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -44,7 +56,7 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
     PullToRefreshGridView newestGrid;
     View emptyView = null;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
-    public List<NewestProduct> newestProducts;
+    public List<NewOpenListModel> newestProducts;
     public NewestProductAdapter adapter;
 
     @Override
@@ -97,7 +109,8 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
 
     private void initGrid()
     {
-        /*newestGrid.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
+
+        newestGrid.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<GridView> pullToRefreshBase) {
                 operateType = OperateTypeEnum.REFRESH;
@@ -109,72 +122,90 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
                 operateType = OperateTypeEnum.LOADMORE;
                 initProducts();
             }
-        });*/
-        newestProducts = new ArrayList<NewestProduct>();
-        NewestProduct newestProduct1 = new NewestProduct();
-        newestProduct1.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
-        newestProduct1.setPid(1);
-        newestProduct1.setTitle("迷你小飞机");
-        newestProduct1.setIssueId(100018);
-        newestProduct1.setRemainSecond(1222209);
-        newestProduct1.setAreaAmount(10);
-        newestProducts.add(newestProduct1);
-        NewestProduct newestProduct2 = new NewestProduct();
-        newestProduct2.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
-        newestProduct2.setPid(2);
-        newestProduct2.setTitle("迷你小飞机2");
-        newestProduct2.setIssueId(100018);
-        newestProduct2.setRemainSecond(1222209);
-        newestProduct2.setAreaAmount(5);
-        newestProducts.add(newestProduct2);
-        NewestProduct newestProduct3 = new NewestProduct();
-        newestProduct3.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
-        newestProduct3.setPid(3);
-        newestProduct3.setTitle("迷你小飞机3");
-        newestProduct3.setIssueId(100018);
-        newestProduct3.setRemainSecond(1222209);
-        newestProducts.add(newestProduct3);
-        adapter = new NewestProductAdapter(newestProducts, getActivity());
-        newestGrid.setAdapter(adapter);
-        //firstGetData();
+        });
+
+       firstGetData();
     }
 
     private void initProducts()
     {
-        /*if(null == newestProducts||newestProducts.isEmpty())
-        {
-            newestGrid.onRefreshComplete();
-            newestGrid.setEmptyView(emptyView);
+        newestProducts = new ArrayList<NewOpenListModel>();
+        adapter = new NewestProductAdapter(newestProducts,getActivity());
+        newestGrid.setAdapter(adapter);
+        if( false == rootAty.canConnect() ) {
+            rootAty.mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    newestGrid.onRefreshComplete();
+                }
+            });
+            return;
         }
         else
-        {*/
+        {
             //加载数据
-            newestGrid.onRefreshComplete();
-            newestProducts = new ArrayList<NewestProduct>();
-            NewestProduct newestProduct1 = new NewestProduct();
-            newestProduct1.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
-            newestProduct1.setPid(1);
-            newestProduct1.setTitle("迷你小飞机");
-            newestProduct1.setIssueId(100018);
-            newestProduct1.setRemainSecond(1222209);
-            newestProduct1.setAreaAmount(10);
-            newestProducts.add(newestProduct1);
-            NewestProduct newestProduct2 = new NewestProduct();
-            newestProduct2.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
-            newestProduct2.setPid(2);
-            newestProduct2.setTitle("迷你小飞机2");
-            newestProduct2.setIssueId(100018);
-            newestProduct2.setRemainSecond(1222209);
-            newestProduct2.setAreaAmount(5);
-            newestProducts.add(newestProduct2);
-            NewestProduct newestProduct3 = new NewestProduct();
-            newestProduct3.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
-            newestProduct3.setPid(3);
-            newestProduct3.setTitle("迷你小飞机3");
-            newestProduct3.setIssueId(100018);
-            newestProduct3.setRemainSecond(1222209);
-            newestProducts.add(newestProduct3);
-       // }
+            String url = Contant.REQUEST_URL + Contant.GET_NEWOPEN_LIST;
+            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
+            Map<String, Object> maps = new HashMap<String, Object>();
+            if ( OperateTypeEnum.REFRESH == operateType )
+            {// 下拉
+                maps.put("lastId", 0);
+            } else if (OperateTypeEnum.LOADMORE == operateType)
+            {// 上拉
+                if ( newestProducts != null &&newestProducts.size() > 0)
+                {
+                    NewOpenListModel product = newestProducts.get(newestProducts.size() - 1);
+                    maps.put("lastId",1);
+                } else if (newestProducts != null && newestProducts.size() == 0)
+                {
+                    maps.put("lastId",1);
+                }
+            }
+            String suffix = params.obtainGetParam(maps);
+            url = url + suffix;
+            HttpUtils httpUtils = new HttpUtils();
+            httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    newestGrid.onRefreshComplete();
+                    if (rootAty.isFinishing()) {
+                        return;
+                    }
+                    JSONUtil<NewOpenOutputModel> jsonUtil = new JSONUtil<NewOpenOutputModel>();
+                    NewOpenOutputModel productsOutputs = new NewOpenOutputModel();
+                    productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
+                    if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
+                        if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
+
+                            if (operateType == OperateTypeEnum.REFRESH) {
+                                newestProducts.clear();
+                                newestProducts.addAll(productsOutputs.getResultData().getList());
+                                adapter.notifyDataSetChanged();
+                            } else if (operateType == OperateTypeEnum.LOADMORE) {
+                                newestProducts.addAll(productsOutputs.getResultData().getList());
+                                adapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            //空数据处理
+                        }
+                    } else {
+                        //异常处理，自动切换成无数据
+                        //空数据处理
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    newestGrid.onRefreshComplete();
+                    if (rootAty.isFinishing()) {
+                        return;
+                    }
+                    //空数据处理
+                }
+            });
+
+
+        }
     }
 
     /**

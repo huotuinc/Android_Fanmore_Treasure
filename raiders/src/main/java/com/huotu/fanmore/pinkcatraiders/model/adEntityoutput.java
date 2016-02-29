@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/2/24.
  */
-public class AdEntityoutput extends BaseModel {
+public class adEntityoutput extends BaseModel {
     private AdEntityInnerModel resultData;
 
     public AdEntityInnerModel getResultData() {
