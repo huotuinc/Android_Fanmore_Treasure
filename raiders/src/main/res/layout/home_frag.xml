@@ -280,7 +280,7 @@
                         android:layout_marginLeft="2dp"
                         android:layout_height="@dimen/icon_size_2"
                         android:layout_centerVertical="true"
-                        android:background="@mipmap/sort"/>
+                        android:background="@mipmap/sort_down"/>
                     </RelativeLayout>
                 </RelativeLayout>
             </LinearLayout>

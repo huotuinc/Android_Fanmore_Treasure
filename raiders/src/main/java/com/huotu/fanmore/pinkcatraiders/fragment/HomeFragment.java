@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -120,6 +121,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Bind ( R.id.jdLabel )
     TextView                jdLabel;
 
+    @Bind ( R.id.zxrsLogo )
+    ImageView zxrsLogo;
     @Bind ( R.id.zxrsLabel )
     TextView                zxrsLabel;
 
@@ -131,6 +134,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     public WindowManager wManager;
 
     public OperateTypeEnum operateType = OperateTypeEnum.REFRESH;
+
 
     @Override
     public
@@ -159,6 +163,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         application.proFragManager = FragManager.getIns ( getActivity ( ), R.id.productsL );
         application.proFragManager.setCurrentFrag ( FragManager.FragType.POPULAR );
         wManager = getActivity ( ).getWindowManager ( );
+        //初始化总需
+        zxrsInnerL.setTag ( 0 );
+        SystemTools.loadBackground ( zxrsLogo, resources.getDrawable ( R.mipmap.sort_down ) );
         initView ( );
         iniScroll ( );
         return rootView;
@@ -444,7 +451,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             });
         } else if(3==currentIndex)
         {
-            //总需
+            //总需倒序
             String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_INDEX;
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
             Map<String, Object> maps = new HashMap<String, Object>();
@@ -505,6 +512,70 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     //空数据处理
                 }
             });
+        }
+        else if(4==currentIndex)
+        {
+            //总需正序
+            String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_INDEX;
+            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
+            Map<String, Object> maps = new HashMap<String, Object>();
+            maps.put("type", "5");
+            if ( OperateTypeEnum.REFRESH == operateType )
+            {// 下拉
+                maps.put("lastSort", 0);
+            } else if (OperateTypeEnum.LOADMORE == operateType)
+            {// 上拉
+                if ( rootAty.totalProducts != null && rootAty.totalProducts.size() > 0)
+                {
+                    ProductModel product = rootAty.totalProducts.get(rootAty.totalProducts.size() - 1);
+                    maps.put("lastSort", product.getPid());
+                } else if (rootAty.totalProducts != null && rootAty.totalProducts.size() == 0)
+                {
+                    maps.put("lastSort", 0);
+                }
+            }
+            String suffix = params.obtainGetParam(maps);
+            url = url + suffix;
+            HttpUtils httpUtils = new HttpUtils();
+            httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                                      @Override
+                                      public void onResponse(JSONObject response) {
+                                          homePullRefresh.onRefreshComplete();
+                                          if (rootAty.isFinishing()) {
+                                              return;
+                                          }
+                                          JSONUtil<ProductsOutputModel> jsonUtil = new JSONUtil<ProductsOutputModel>();
+                                          ProductsOutputModel productsOutputs = new ProductsOutputModel();
+                                          productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
+                                          if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
+                                              if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
+
+                                                  if (operateType == OperateTypeEnum.REFRESH) {
+                                                      rootAty.totalProducts.clear();
+                                                      rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
+                                                      rootAty.totalAdapter.notifyDataSetChanged();
+                                                  } else if (operateType == OperateTypeEnum.LOADMORE) {
+                                                      rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
+                                                      rootAty.totalAdapter.notifyDataSetChanged();
+                                                  }
+                                              } else {
+                                                  //空数据处理
+                                              }
+                                          } else {
+                                              //异常处理，自动切换成无数据
+                                              //空数据处理
+                                          }
+                                      }
+                                  }, new Response.ErrorListener() {
+                                      @Override
+                                      public void onErrorResponse(VolleyError error) {
+                                          homePullRefresh.onRefreshComplete();
+                                          if (rootAty.isFinishing()) {
+                                              return;
+                                          }
+                                          //空数据处理
+                                      }
+                                  });
         }
 
     }
@@ -572,18 +643,43 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @OnClick(R.id.zxrsInnerL)
     void clickZxrsl()
     {
-        currentIndex = 3;
-        application.proFragManager.setCurrentFrag(FragManager.FragType.TOTAL);
-        Drawable normal = resources.getDrawable(R.drawable.switch_normal);
-        Drawable press = resources.getDrawable ( R.drawable.switch_press );
-        rqLabel.setTextColor(resources.getColor(R.color.text_black));
-        zxLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
-        jdLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
-        zxrsLabel.setTextColor(resources.getColor(R.color.deep_red));
-        SystemTools.loadBackground ( rqInnerL, normal );
-        SystemTools.loadBackground ( zxInnerL, normal );
-        SystemTools.loadBackground ( jdInnerL, normal );
-        SystemTools.loadBackground ( zxrsInnerL, press );
+        if(0 == zxrsInnerL.getTag ( ))
+        {
+            //转换成UP
+            zxrsInnerL.setTag ( 1 );
+            SystemTools.loadBackground ( zxrsLogo, resources.getDrawable ( R.mipmap.sort_up ) );
+            currentIndex = 4;
+            application.proFragManager.setCurrentFrag(FragManager.FragType.TOTAL);
+            Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+            Drawable press = resources.getDrawable ( R.drawable.switch_press );
+            rqLabel.setTextColor(resources.getColor(R.color.text_black));
+            zxLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
+            jdLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
+            zxrsLabel.setTextColor(resources.getColor(R.color.deep_red));
+            SystemTools.loadBackground ( rqInnerL, normal );
+            SystemTools.loadBackground ( zxInnerL, normal );
+            SystemTools.loadBackground ( jdInnerL, normal );
+            SystemTools.loadBackground ( zxrsInnerL, press );
+        }
+        else if(1 == zxrsInnerL.getTag ())
+        {
+            //转换成DOWN
+            zxrsInnerL.setTag ( 0 );
+            SystemTools.loadBackground ( zxrsLogo, resources.getDrawable ( R.mipmap.sort_down ) );
+            currentIndex = 3;
+            application.proFragManager.setCurrentFrag(FragManager.FragType.TOTAL);
+            Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+            Drawable press = resources.getDrawable ( R.drawable.switch_press );
+            rqLabel.setTextColor(resources.getColor(R.color.text_black));
+            zxLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
+            jdLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
+            zxrsLabel.setTextColor(resources.getColor(R.color.deep_red));
+            SystemTools.loadBackground ( rqInnerL, normal );
+            SystemTools.loadBackground ( zxInnerL, normal );
+            SystemTools.loadBackground ( jdInnerL, normal );
+            SystemTools.loadBackground ( zxrsInnerL, press );
+        }
+
         if(null==rootAty.totalProducts || rootAty.totalProducts.isEmpty())
         {
             initProduct();

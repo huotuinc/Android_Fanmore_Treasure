@@ -97,7 +97,7 @@ public class MyGridAdapter extends BaseAdapter {
             holder.productName.setText(product.getTitle());
             BigDecimal decimal = new BigDecimal((product.getToAmount()-product.getRemainAmount())/(double)product.getToAmount());
             double value =  decimal.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
-            holder.lotterySchedule.setText("开奖进度" + (value > 1 ? 100 : 100 * value) + "%");
+            holder.lotterySchedule.setText("开奖进度" + (value > 1 ? 100 : (int)(100 * value)) + "%");
             holder.lotteryScheduleProgress.setMax ( ( int ) product.getToAmount ( ) );
             holder.lotteryScheduleProgress.setProgress ( ( int ) ( product.getToAmount ( ) -
                                                                    product.getRemainAmount ( ) ) );
