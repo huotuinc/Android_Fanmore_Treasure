@@ -1,5 +1,7 @@
 package com.huotu.fanmore.pinkcatraiders.ui.login;
 
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -7,8 +9,11 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -28,6 +33,7 @@ import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
 import com.huotu.fanmore.pinkcatraiders.model.AppWXLoginModel;
 import com.huotu.fanmore.pinkcatraiders.model.GetCode;
 import com.huotu.fanmore.pinkcatraiders.model.LoginOutputsModel;
+import com.huotu.fanmore.pinkcatraiders.ui.assistant.ModifyInfoActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -36,6 +42,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.EncryptUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.GsonRequest;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.CountDownTimerButton;
@@ -49,6 +56,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2016/1/22.
@@ -58,86 +66,141 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
 
     // 按钮倒计时控件
     private CountDownTimerButton countDownBtn;
-    @Bind(R.id.edtPhone)
+
+    @Bind ( R.id.titleLayoutL )
+    RelativeLayout titleLayoutL;
+
+    @Bind ( R.id.stubTitleText )
+    ViewStub stubTitleText;
+
+    @Bind ( R.id.titleLeftImage )
+    ImageView titleLeftImage;
+
+    @Bind ( R.id.edtPhone )
     EditText edtPhone;
-    @Bind(R.id.edtCode)
+
+    @Bind ( R.id.edtCode )
     EditText edtCode;
-    @Bind(R.id.btn_code)
+
+    @Bind ( R.id.btn_code )
     TextView btn_code;
-    @Bind(R.id.btn_commit)
+
+    @Bind ( R.id.btn_commit )
     Button btn_commit;
-    GetCode getVCResult=null;
+
+    GetCode getVCResult = null;
+
+    public Resources res;
+
     public
     ProgressPopupWindow progress;
+
     public
     ProgressPopupWindow successProgress;
+
     //windows类
     WindowManager wManager;
+
     public
     NoticePopWindow noticePop;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.mobilereg_forgetpsd_ui);
-        ButterKnife.bind(this);
-        edtPhone.setText("18767152078");
-        btn_commit.setOnClickListener(this);
-        btn_code.setOnClickListener(this);
-        wManager = this.getWindowManager();
-        progress = new ProgressPopupWindow ( MobileRegActivity.this, MobileRegActivity.this, wManager );
-    }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ButterKnife.unbind(this);
-        VolleyUtil.cancelAllRequest();
-        if (null != countDownBtn)
-        {
-            countDownBtn.Stop();
+    protected
+    void onCreate ( Bundle savedInstanceState ) {
+
+        super.onCreate ( savedInstanceState );
+        setContentView ( R.layout.mobilereg_forgetpsd_ui );
+        ButterKnife.bind ( this );
+        res = this.getResources ();
+        btn_commit.setOnClickListener ( this );
+        btn_code.setOnClickListener ( this );
+        wManager = this.getWindowManager ( );
+        progress = new ProgressPopupWindow (
+                MobileRegActivity.this, MobileRegActivity.this,
+                wManager
+        );
+        initTitle ( );
+    }
+
+    private
+    void initTitle ( ) {
+        //背景色
+        Drawable bgDraw = res.getDrawable ( R.drawable.account_bg_bottom );
+        SystemTools.loadBackground ( titleLayoutL, bgDraw );
+        Drawable leftDraw = res.getDrawable ( R.mipmap.back_gray );
+        SystemTools.loadBackground ( titleLeftImage, leftDraw );
+        stubTitleText.inflate ( );
+        TextView titleText = ( TextView ) this.findViewById ( R.id.titleText );
+        titleText.setText ( "手机注册" );
+    }
+
+    @OnClick(R.id.titleLeftImage)
+    void doBack()
+    {
+        closeSelf ( MobileRegActivity.this );
+    }
+
+
+    @Override
+    protected
+    void onDestroy ( ) {
+
+        super.onDestroy ( );
+        ButterKnife.unbind ( this );
+        VolleyUtil.cancelAllRequest ( );
+        if ( null != countDownBtn ) {
+            countDownBtn.Stop ( );
         }
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK
-                && event.getAction() == KeyEvent.ACTION_DOWN)
-        {
+    public
+    boolean onKeyDown ( int keyCode, KeyEvent event ) {
+
+        if ( keyCode == KeyEvent.KEYCODE_BACK
+             && event.getAction ( ) == KeyEvent.ACTION_DOWN ) {
             //关闭
-            this.closeSelf(MobileRegActivity.this);
+            this.closeSelf ( MobileRegActivity.this );
         }
-        return super.onKeyDown(keyCode, event);
+        return super.onKeyDown ( keyCode, event );
     }
 
-    private void checkAuthCode(){
-        if (TextUtils.isEmpty(edtPhone.getText()))
-        {
-            ToastUtils.showLongToast(MobileRegActivity.this, "请输入邮箱或者手机号");
+    private
+    void checkAuthCode ( ) {
+
+        if ( TextUtils.isEmpty ( edtPhone.getText ( ) ) ) {
+            ToastUtils.showLongToast ( MobileRegActivity.this, "请输入邮箱或者手机号" );
             return;
         }
-        else if(TextUtils.isEmpty(edtCode.getText()))
-        {
-            ToastUtils.showLongToast(MobileRegActivity.this, "请输入验证码");
+        else if ( TextUtils.isEmpty ( edtCode.getText ( ) ) ) {
+            ToastUtils.showLongToast ( MobileRegActivity.this, "请输入验证码" );
             return;
         }
-        else{
-            progress.showProgress("正在提交验证码");
-            progress.showAtLocation(btn_commit, Gravity.CENTER, 0, 0);
+        else {
+            progress.showProgress ( "正在提交验证码" );
+            progress.showAtLocation ( btn_commit, Gravity.CENTER, 0, 0 );
             //登录接口
             String url = Contant.REQUEST_URL + "checkAuthCode";
-            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), MobileRegActivity.this);
-            Map<String, Object> maps = new HashMap<String, Object>();
-            maps.put("phone", edtPhone.getText().toString());
-            maps.put("authcode", edtCode.getText().toString());
-            maps.put("type","1");
-            String suffix = params.obtainGetParam(maps);
+            AuthParamUtils params = new AuthParamUtils (
+                    application, System.currentTimeMillis (
+                                                          ),
+                    MobileRegActivity.this );
+            Map< String, Object > maps = new HashMap< String, Object > ( );
+            maps.put ( "phone", edtPhone.getText ( ).toString ( ) );
+            maps.put ( "authcode", edtCode.getText ( ).toString ( ) );
+            maps.put ( "type", "1" );
+            String suffix = params.obtainGetParam ( maps );
             url = url + suffix;
-            HttpUtils httpUtils = new HttpUtils();
-            httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    progress.dismissView();
-                    if(MobileRegActivity.this.isFinishing())
+            HttpUtils httpUtils = new HttpUtils ( );
+            httpUtils.doVolleyGet (
+                    url, new Response.Listener< JSONObject > ( ) {
+
+                        @Override
+                        public
+                        void onResponse ( JSONObject response ) {
+
+                            progress.dismissView ( );
+                            if(MobileRegActivity.this.isFinishing())
                     {
                         return;
                     }

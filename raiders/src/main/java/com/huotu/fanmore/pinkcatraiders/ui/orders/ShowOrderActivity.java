@@ -192,20 +192,25 @@ public class ShowOrderActivity extends BaseActivity implements View.OnClickListe
             return;
         }
         String url = null;
-        if(0==bundle.getInt ( "type" ))
+        if(2==bundle.getInt ( "type" ))
         {
-            //首页晒单
+            //产品晒单
             url = Contant.REQUEST_URL + Contant.GET_SHARE_ORDER_LIST_BY_GOOSID;
 
         }
+        else if(0==bundle.getInt ( "type" ))
+        {
+            //首页晒单
+            url = Contant.REQUEST_URL + Contant.GET_SHARE_ORDER_LIST;
+        }
         else if(1==bundle.getInt ( "type" ))
         {
-            //个人中心晒单
-            url = Contant.REQUEST_URL + Contant.GET_SHARE_ORDER_LIST;
+            //我的晒单
+            url = Contant.REQUEST_URL + Contant.GET_MY_SHARE_ORDER_LIST;
         }
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ShowOrderActivity.this);
         Map<String, Object> maps = new HashMap<String, Object> ();
-        if(1==bundle.getInt ( "type" ))
+        if(2==bundle.getInt ( "type" ))
         {
             maps.put("goodsId", bundle.getLong ( "goodsId" ));
         }

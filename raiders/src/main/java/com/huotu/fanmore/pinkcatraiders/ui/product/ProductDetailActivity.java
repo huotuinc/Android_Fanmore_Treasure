@@ -42,6 +42,7 @@ import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.orders.ShowOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.ShareOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
@@ -487,8 +488,10 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     void doShareOrder()
     {
         Bundle bundle = new Bundle (  );
-        bundle.putLong ( "issue", productDetail.getIssueId () );
-        ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, ShareOrderActivity.class, bundle);
+        //产品晒单
+        bundle.putInt ( "type", 2 );
+        bundle.putLong ( "goodsId",  productDetail.getPid ());
+        ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, ShowOrderActivity.class, bundle);
     }
 
     private void getCommentLog()

@@ -236,7 +236,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         Bundle bundle = new Bundle (  );
         //首页晒单
         bundle.putInt ( "type", 0 );
-        bundle.putLong ( "goodsId", 20 );
         ActivityUtils.getInstance().showActivity(getActivity(), ShowOrderActivity.class, bundle);
     }
 
