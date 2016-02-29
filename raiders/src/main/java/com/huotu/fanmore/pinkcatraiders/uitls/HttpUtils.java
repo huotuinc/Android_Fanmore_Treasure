@@ -31,6 +31,18 @@ public class HttpUtils<T> {
     }
 
     /**
+     * get请求(Utf)
+     * @param url
+     * @param listener
+     * @param errorListener
+     */
+    public void doVolleyGetUtf(String url, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener)
+    {
+        JsonUTF8Request request = new JsonUTF8Request(Request.Method.GET, url, null, listener, errorListener);
+        VolleyUtil.addRequest(request);
+    }
+
+    /**
      * post请求
      * @param t
      * @param url

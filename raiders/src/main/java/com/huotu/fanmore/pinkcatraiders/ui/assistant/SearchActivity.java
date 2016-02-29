@@ -309,9 +309,17 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
         }
         String url = Contant.REQUEST_URL + Contant.SEARCH_GOODS;
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), SearchActivity.this);
+        //中文字符特殊处理
+        //1 拼装参数
         Map<String, Object> maps = new HashMap<String, Object> ();
         maps.put ( "title", key );
-        String suffix = params.obtainGetParam(maps);
+        maps = params.obtainAllParamUTF8 ( maps );
+        //获取sign
+        String signStr = params.obtainSignUTF8 ( maps );
+        maps.put ( "title", URLEncoder.encode ( key ) );
+        maps.put ( "sign", signStr);
+        //拼装URL
+        String suffix = params.obtainGetParamUTF8 (maps);
         url = url + suffix;
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.doVolleyGet(url, new Response.Listener<JSONObject >() {

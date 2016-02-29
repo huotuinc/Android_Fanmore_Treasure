@@ -56,7 +56,7 @@ public class AuthParamUtils {
         //排序
         TreeMap<String, Object> orderMap = new TreeMap<String, Object>(signMap);
         StringBuilder builder = new StringBuilder();
-        Iterator iterator = orderMap.entrySet().iterator();
+        Iterator iterator = orderMap.entrySet().iterator ( );
         while (iterator.hasNext())
         {
             Map.Entry<String, Object> entry = (Map.Entry<String, Object>) iterator.next();
@@ -66,6 +66,34 @@ public class AuthParamUtils {
             }
         }
         return EncryptUtil.getInstance().encryptMd532(builder.toString());
+    }
+
+    public Map<String, Object> obtainAllParamUTF8(Map<String, Object> params)
+    {
+        //添加公共参数
+        Map<String, Object> allParams = appendParams ( params );
+        return allParams;
+    }
+
+    public String obtainSignUTF8(Map<String, Object> params)
+    {
+        return obtainSign(params);
+    }
+
+    public String obtainGetParamUTF8(Map<String, Object> params)
+    {
+        StringBuilder builder = new StringBuilder();
+        Iterator iterator = params.entrySet().iterator();
+        while (iterator.hasNext())
+        {
+            Map.Entry<String, Object> entry = (Map.Entry<String, Object>) iterator.next();
+            builder.append("&"+entry.getKey()+"="+entry.getValue());
+        }
+        String paramStr = builder.toString();
+        //替换第一个&为？
+        paramStr = paramStr.replaceFirst(String.valueOf(paramStr.charAt(0)), "?");
+
+        return paramStr;
     }
 
     /**
