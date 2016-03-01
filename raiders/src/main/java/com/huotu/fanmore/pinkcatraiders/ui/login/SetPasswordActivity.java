@@ -82,6 +82,8 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_password);
         ButterKnife.bind(this);
+        resources = this.getResources ();
+        application = ( BaseApplication ) this.getApplication ();
         btn_commitpsd.setOnClickListener(this);
         btnshow.setOnClickListener(this);
         wManager = this.getWindowManager();
@@ -149,6 +151,7 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
                                     application.writeUserInfo(regOutputsModel.getResultData().getUser());
                                     //跳转到首页
                                     ActivityUtils.getInstance().skipActivity(SetPasswordActivity.this, LoginActivity.class);
+
                                 } catch (Exception e)
                                 {
                                     //未获取该用户信息

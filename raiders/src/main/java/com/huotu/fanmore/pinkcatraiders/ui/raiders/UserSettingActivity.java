@@ -135,19 +135,18 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
     private
     void initSroll ( ) {
 
-        initData ( );
-        userSettingPullRefresh.setOnRefreshListener (
-                new PullToRefreshBase.OnRefreshListener< ScrollView > ( ) {
+        initData();
+        userSettingPullRefresh.setOnRefreshListener(
+                new PullToRefreshBase.OnRefreshListener<ScrollView>() {
 
 
                     @Override
-                    public
-                    void onRefresh ( PullToRefreshBase< ScrollView > pullToRefreshBase ) {
+                    public void onRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
 
-                        initData ( );
+                        initData();
                     }
                 }
-                                                    );
+        );
     }
 
     private
@@ -172,30 +171,30 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                                             )
                   : ""
                             );
-        userNickName.setText (
+        userNickName.setText(
                 (
-                        null != application.readNickName ( ) && ! TextUtils.isEmpty (
-                                application.readNickName ( )
-                                                                                    )
-                ) ? application.readNickName ( ) : ""
-                             );
-        userPhone.setText (
+                        null != application.readNickName() && !TextUtils.isEmpty(
+                                application.readNickName()
+                        )
+                ) ? application.readNickName() : ""
+        );
+        userPhone.setText(
                 (
-                        null != application.readMobile ( ) && ! TextUtils.isEmpty (
-                                application.readMobile ( )
-                                                                                  )
-                ) ? application.readMobile ( ) : "未设置手机号码"
-                          );
+                        null != application.readMobile() && !TextUtils.isEmpty(
+                                application.readMobile()
+                        )
+                ) ? application.readMobile() : "未设置手机号码"
+        );
     }
 
     private
     void initTitle ( ) {
         //背景色
         Drawable bgDraw = resources.getDrawable ( R.drawable.account_bg_bottom );
-        SystemTools.loadBackground ( titleLayoutL, bgDraw );
+        SystemTools.loadBackground(titleLayoutL, bgDraw);
         Drawable leftDraw = resources.getDrawable ( R.mipmap.back_gray );
-        SystemTools.loadBackground ( titleLeftImage, leftDraw );
-        stubTitleText.inflate ( );
+        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        stubTitleText.inflate();
         TextView titleText = ( TextView ) this.findViewById ( R.id.titleText );
         titleText.setText ( "个人资料" );
     }
@@ -203,12 +202,12 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
     @OnClick ( R.id.titleLeftImage )
     void doBack ( ) {
 
-        closeSelf ( UserSettingActivity.this );
+        closeSelf(UserSettingActivity.this);
     }
     @OnClick(R.id.userAddressL)
     void toaddress()
     {
-        ActivityUtils.getInstance().showActivity ( this, AddressListActivity.class );
+        ActivityUtils.getInstance().showActivity(this, AddressListActivity.class);
     }
     @OnClick(R.id.userLogoL)
     void doUserLogo()
@@ -236,10 +235,20 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
         commonPopWin.showAtLocation (titleLeftImage, Gravity.BOTTOM, 0, 0);
         commonPopWin.setOnDismissListener(new PoponDismissListener (UserSettingActivity.this));
     }
+    @OnClick(R.id.userPhone)
+    void modifyuserPhone()
+    {
+        //设置手机号码
+        Bundle bundle = new Bundle (  );
+        bundle.putString ( "profile", "手机" );
+        bundle.putString ( "content", userPhone.getText ().toString () );
+        ActivityUtils
+                .getInstance ( ).showActivity ( UserSettingActivity.this, ModifyInfoActivity.class, bundle );
+    }
     @OnClick(R.id.userNickNameL)
     void modifyNickName()
     {
-        //设置手机号码
+        //设置昵称
         Bundle bundle = new Bundle (  );
         bundle.putString ( "profile", "昵称" );
         bundle.putString ( "content", userNickName.getText ().toString () );

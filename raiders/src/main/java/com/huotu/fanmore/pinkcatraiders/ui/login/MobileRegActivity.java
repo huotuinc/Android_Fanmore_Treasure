@@ -20,36 +20,27 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
-import com.android.volley.Request;
+
 import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
+
 import com.android.volley.VolleyError;
 import com.huotu.android.library.libedittext.EditText;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
-import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
-import com.huotu.fanmore.pinkcatraiders.model.AppWXLoginModel;
+
 import com.huotu.fanmore.pinkcatraiders.model.GetCode;
-import com.huotu.fanmore.pinkcatraiders.model.LoginOutputsModel;
-import com.huotu.fanmore.pinkcatraiders.ui.assistant.ModifyInfoActivity;
+
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
-import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
-import com.huotu.fanmore.pinkcatraiders.uitls.EncryptUtil;
-import com.huotu.fanmore.pinkcatraiders.uitls.GsonRequest;
+
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
-import com.huotu.fanmore.pinkcatraiders.widget.CountDownTimerButton;
+
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 
@@ -122,8 +113,9 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mobilereg_forgetpsd_ui);
-        ButterKnife.bind ( this );
+        ButterKnife.bind(this);
         res = this.getResources ();
+        application = ( BaseApplication ) this.getApplication ();
         btn_commit.setOnClickListener ( this );
         btn_code.setOnClickListener ( this );
         wManager = this.getWindowManager ( );

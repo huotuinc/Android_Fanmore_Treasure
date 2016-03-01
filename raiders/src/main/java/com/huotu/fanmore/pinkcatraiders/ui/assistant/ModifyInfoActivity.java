@@ -144,14 +144,18 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
         else
        {
            //弹出执行进度条
-           progress.showProgress ( "正在修改用户昵称" );
-           progress.showAtLocation (titleLayoutL,
-                                    Gravity.CENTER, 0, 0
-                                   );
+           progress.showProgress ( "正在修改用户"+bundle.get("profile"));
+           progress.showAtLocation(titleLayoutL,
+                   Gravity.CENTER, 0, 0
+           );
            String url = Contant.REQUEST_URL + Contant.UPDATE_PROFILE;
            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ModifyInfoActivity.this);
            Map<String, Object> maps = new HashMap<String, Object> ();
-           maps.put("profileType", "1");
+           if (bundle.get("profile")=="昵称") {
+               maps.put("profileType", "1");
+           }else if (bundle.get("profile")=="手机"){
+           maps.put("profileType", "2");
+       }
            maps.put ( "profileData",  modityTextInput.getText ().toString ( ));
            Map<String, Object> param = params.obtainPostParam(maps);
            UpdateProfileModel updateProfile = new UpdateProfileModel ();
@@ -166,7 +170,7 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
                            if(1==updateProfile.getResultCode ())
                            {
                                //上传成功
-                               noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户昵称修改成功");
+                               noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户"+bundle.get("profile")+"修改成功");
                                noticePop.showNotice ( );
                                noticePop.showAtLocation (
                                        findViewById ( R.id.titleLayout ),
@@ -179,7 +183,7 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
                            else
                            {
                                //上传失败
-                               noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户昵称修改失败");
+                               noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户"+bundle.get("profile")+"修改失败");
                                noticePop.showNotice ( );
                                noticePop.showAtLocation (
                                        findViewById ( R.id.titleLayout ),
