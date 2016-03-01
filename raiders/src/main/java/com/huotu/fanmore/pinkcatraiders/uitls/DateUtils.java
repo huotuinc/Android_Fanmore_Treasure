@@ -18,6 +18,10 @@ public class DateUtils {
      */
     public static String transformDataformat1(String timeStamp)
     {
+        if("".equals(timeStamp) || null == timeStamp)
+        {
+            timeStamp = String.valueOf(System.currentTimeMillis());
+        }
         DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         return format.format(new Date(Long.parseLong(timeStamp)));
     }
@@ -29,6 +33,10 @@ public class DateUtils {
      */
     public static String transformDataformat3(String timeStamp)
     {
+        if("".equals(timeStamp) || null == timeStamp)
+        {
+            timeStamp = String.valueOf(System.currentTimeMillis());
+        }
         DateFormat format = new SimpleDateFormat("MM-dd HH:mm");
         return format.format(new Date(Long.parseLong(timeStamp)));
     }
@@ -40,6 +48,7 @@ public class DateUtils {
      */
     public static String transformDataformat2(long timeStamp)
     {
+
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return format.format(new Date(timeStamp));
     }
@@ -51,6 +60,10 @@ public class DateUtils {
      */
     public static String transformDataformat6(String timeStamp)
     {
+        if("".equals(timeStamp) || null == timeStamp)
+        {
+            timeStamp = String.valueOf(System.currentTimeMillis());
+        }
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return format.format(new Date(Long.parseLong(timeStamp)));
     }
@@ -73,6 +86,10 @@ public class DateUtils {
      */
     public static String transformDataformat4(String timeStamp)
     {
+        if("".equals(timeStamp) || null == timeStamp)
+        {
+            timeStamp = String.valueOf(System.currentTimeMillis());
+        }
         DateFormat format = new SimpleDateFormat("yyyy/MM");
         return format.format(new Date(Long.parseLong(timeStamp)));
     }
@@ -84,6 +101,10 @@ public class DateUtils {
      */
     public static String transformDataformat5(String timeStamp)
     {
+        if("".equals(timeStamp) || null == timeStamp)
+        {
+            timeStamp = String.valueOf(System.currentTimeMillis());
+        }
         DateFormat format = new SimpleDateFormat("MM/dd HH:mm");
         return format.format(new Date(Long.parseLong(timeStamp)));
     }
@@ -106,6 +127,10 @@ public class DateUtils {
      */
     public static String transformDataformat7(String timeStamp)
     {
+        if("".equals(timeStamp) || null == timeStamp)
+        {
+            timeStamp = String.valueOf(System.currentTimeMillis());
+        }
         DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         return format.format(new Date(Long.parseLong(timeStamp)));
     }
@@ -161,6 +186,10 @@ public class DateUtils {
      */
     public static boolean isExpired(String endTime)
     {
+        if("".equals(endTime) || null == endTime)
+        {
+            endTime = String.valueOf(System.currentTimeMillis());
+        }
         return (System.currentTimeMillis () - Long.parseLong ( endTime ))>=0?false:true;
     }
 
