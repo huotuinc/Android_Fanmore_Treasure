@@ -1,18 +1,25 @@
 package com.huotu.fanmore.pinkcatraiders.ui.login;
 
 
+import android.content.res.AssetManager;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.huotu.android.library.libedittext.EditText;
 import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
 import com.huotu.fanmore.pinkcatraiders.model.AppWXLoginModel;
@@ -25,6 +32,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.EncryptUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
@@ -39,6 +47,19 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SetPasswordActivity extends BaseActivity implements View.OnClickListener {
+
+    public
+    Resources resources;
+    public BaseApplication application;
+
+    public
+    AssetManager am;
+    @Bind(R.id.titleLayoutL)
+    RelativeLayout titleLayoutL;
+    @Bind(R.id.titleLeftImage)
+    ImageView titleLeftImage;
+    @Bind(R.id.stubTitleText)
+    ViewStub stubTitleText;
     @Bind(R.id.edtpsd)
     EditText edtpsd;
     @Bind(R.id.btnshow)
@@ -65,7 +86,20 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
         btnshow.setOnClickListener(this);
         wManager = this.getWindowManager();
         progress = new ProgressPopupWindow ( SetPasswordActivity.this, SetPasswordActivity.this, wManager );
+        initTitle();
     }
+    private void initTitle()
+    {
+        //背景色
+        Drawable bgDraw = resources.getDrawable(R.drawable.account_bg_bottom);
+        SystemTools.loadBackground(titleLayoutL, bgDraw);
+        Drawable leftDraw = resources.getDrawable(R.mipmap.back_gray);
+        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        stubTitleText.inflate();
+        TextView titleText = (TextView) this.findViewById(R.id.titleText);
+        titleText.setText("设置密码");
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
