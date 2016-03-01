@@ -201,11 +201,16 @@ public class LoginActivity extends BaseActivity
 
                     GsonRequest<AppWXLoginModel> loginRequest = new GsonRequest<AppWXLoginModel>(
                             Request.Method.GET,
-                            url ,
+                            url,
                             AppWXLoginModel.class,
                             null,
                             loginListener,
-                            this
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    ToastUtils.showShortToast(LoginActivity.this, "登陆失败");
+                                }
+                            }
                     );
 
                     VolleyUtil.addRequest(loginRequest);
@@ -340,6 +345,7 @@ public class LoginActivity extends BaseActivity
                     loginOutputs = jsonUtil.toBean(response.toString(), loginOutputs);
                     if(null != loginOutputs && null != loginOutputs.getResultData() && (1==loginOutputs.getResultCode()))
                     {
+
                         if(null!=loginOutputs.getResultData().getUser())
                         {
                             try {

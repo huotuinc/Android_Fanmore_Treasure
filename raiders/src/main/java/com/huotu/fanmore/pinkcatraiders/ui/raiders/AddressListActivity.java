@@ -319,9 +319,19 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
                                       addressOutput = jsonUtil.toBean(response.toString(), addressOutput);
                                       if(null != addressOutput && null != addressOutput.getResultData() && (1==addressOutput.getResultCode()))
                                       {
-                                          lists.clear();
-                                          lists.addAll(addressOutput.getResultData().getList());
-                                          adapter.notifyDataSetChanged();
+                                          List<MyAddressListModel> list = addressOutput.getResultData().getList();
+                                          if(null!=list&&!list.isEmpty())
+                                          {
+                                              lists.clear();
+                                              lists.addAll(addressOutput.getResultData().getList());
+                                              adapter.notifyDataSetChanged();
+                                          }
+                                          else
+                                          {
+                                              //异常处理，自动切换成无数据
+                                              addressList.setEmptyView(emptyView);
+                                          }
+
                                       }
                                       else
                                       {
