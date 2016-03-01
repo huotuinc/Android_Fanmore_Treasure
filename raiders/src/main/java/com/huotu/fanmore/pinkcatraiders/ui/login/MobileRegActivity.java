@@ -1,5 +1,9 @@
 package com.huotu.fanmore.pinkcatraiders.ui.login;
 
+import com.huotu.fanmore.pinkcatraiders.widget.CountDownTimerButton;
+
+
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -63,18 +67,16 @@ import butterknife.OnClick;
  */
 public class MobileRegActivity extends BaseActivity implements Handler.Callback,View.OnClickListener {
 
+    public
+    Resources resources;
+    public BaseApplication application;
 
+    public
+    AssetManager am;
     // 按钮倒计时控件
     private CountDownTimerButton countDownBtn;
 
-    @Bind ( R.id.titleLayoutL )
-    RelativeLayout titleLayoutL;
 
-    @Bind ( R.id.stubTitleText )
-    ViewStub stubTitleText;
-
-    @Bind ( R.id.titleLeftImage )
-    ImageView titleLeftImage;
 
     @Bind ( R.id.edtPhone )
     EditText edtPhone;
@@ -88,9 +90,18 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
     @Bind ( R.id.btn_commit )
     Button btn_commit;
 
+    @Bind(R.id.titleLayoutL)
+    RelativeLayout titleLayoutL;
+    @Bind(R.id.titleLeftImage)
+    ImageView titleLeftImage;
+    @Bind(R.id.stubTitleText)
+    ViewStub stubTitleText;
+
+
     GetCode getVCResult = null;
 
     public Resources res;
+
 
     public
     ProgressPopupWindow progress;
@@ -104,12 +115,13 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
     public
     NoticePopWindow noticePop;
 
-    @Override
+
+
     protected
     void onCreate ( Bundle savedInstanceState ) {
 
-        super.onCreate ( savedInstanceState );
-        setContentView ( R.layout.mobilereg_forgetpsd_ui );
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.mobilereg_forgetpsd_ui);
         ButterKnife.bind ( this );
         res = this.getResources ();
         btn_commit.setOnClickListener ( this );
@@ -132,6 +144,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
         stubTitleText.inflate ( );
         TextView titleText = ( TextView ) this.findViewById ( R.id.titleText );
         titleText.setText ( "手机注册" );
+
     }
 
     @OnClick(R.id.titleLeftImage)
