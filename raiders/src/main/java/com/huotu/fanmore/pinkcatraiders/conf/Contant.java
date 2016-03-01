@@ -238,4 +238,6 @@ public class Contant {
     public static final String SEARCH_GOODS = "searchGoods";
     //发布晒单
     public static final String ADD_SHARE_ORDER = "addShareOrder";
+    //查看夺宝号码
+    public static final String GET_MY_RAIDER_NUMBER = "getMyRaiderNumbers";
 }
