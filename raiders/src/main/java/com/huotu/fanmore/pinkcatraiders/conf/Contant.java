@@ -153,8 +153,13 @@ public class Contant {
 
     //接口请求地址
     //loginapi
+
     //public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
     public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
+
+    // public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
+    //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
+
     //public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
     //public static final String REQUEST_URL                 = "http://192.168.1.146:8081/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.3.13:8080/duobao/app/";
@@ -220,9 +225,11 @@ public class Contant {
     //支付
     //微信支付
     public static final String WX_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-    //晒单列表
-    public static final String GET_SHARE_ORDER_LIST = "getShareOrderList";
     //首页晒单列表
+    public static final String GET_SHARE_ORDER_LIST = "getShareOrderList";
+    //我的晒单
+    public static final String GET_MY_SHARE_ORDER_LIST = "getMyShareOrderList";
+    //商品晒单
     public static final String GET_SHARE_ORDER_LIST_BY_GOOSID = "getShareOrderListByGoodsId";
     //获取晒单详情
     public static final String GET_SHARE_ORDER_DETAIL = "getShareOrderDetail";
