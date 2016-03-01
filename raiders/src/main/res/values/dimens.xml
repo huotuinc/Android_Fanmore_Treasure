@@ -74,4 +74,5 @@
     <dimen name="common_icon_size_4">30dp</dimen>
     <dimen name="common_icon_size_6">10dp</dimen>
     <dimen name="money_height">30dp</dimen>
+    <dimen name="order_img_height">80dp</dimen>
 </resources>
