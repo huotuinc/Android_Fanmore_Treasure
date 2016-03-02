@@ -134,8 +134,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                     if ( SplashActivity.this.isFinishing ( ) ) {
                                         return;
                                     }
-                                    JSONUtil< InitOutputsModel > jsonUtil    = new JSONUtil<
-                                            InitOutputsModel > ( );
+                                    JSONUtil< InitOutputsModel > jsonUtil    = new JSONUtil<InitOutputsModel > ( );
                                     InitOutputsModel             initOutputs = new
                                             InitOutputsModel ( );
                                     initOutputs = jsonUtil.toBean ( response.toString ( ),

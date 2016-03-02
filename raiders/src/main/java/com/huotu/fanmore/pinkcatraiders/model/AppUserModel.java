@@ -6,19 +6,13 @@ import java.math.BigDecimal;
  * 用户实体
  */
 public class AppUserModel extends BaseModel  {
-    boolean enabled;
+    int enabled;
     Long userId;
     String moblie;
-    boolean mobileBanded;
+    int mobileBanded;
     BigDecimal money;
 
-    public boolean isEnabled() {
-        return enabled;
-    }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
 
     public Long getUserId() {
         return userId;
@@ -36,11 +30,19 @@ public class AppUserModel extends BaseModel  {
         this.moblie = moblie;
     }
 
-    public boolean isMobileBanded() {
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
+    }
+
+    public int getMobileBanded() {
         return mobileBanded;
     }
 
-    public void setMobileBanded(boolean mobileBanded) {
+    public void setMobileBanded(int mobileBanded) {
         this.mobileBanded = mobileBanded;
     }
 

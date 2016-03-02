@@ -91,13 +91,13 @@ public class InitOutputsModel extends BaseModel {
             private String updateMD5;
             private String updateTips;
             private String updateUrl;
-            private UpdateType updateType;
+            private String updateType;
 
-            public UpdateType getUpdateType() {
+            public String getUpdateType() {
                 return updateType;
             }
 
-            public void setUpdateType(UpdateType updateType) {
+            public void setUpdateType(String updateType) {
                 this.updateType = updateType;
             }
 
