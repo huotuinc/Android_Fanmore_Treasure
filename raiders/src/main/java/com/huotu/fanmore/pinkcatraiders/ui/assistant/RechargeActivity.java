@@ -24,6 +24,7 @@ import com.huotu.fanmore.pinkcatraiders.adapter.MoneyAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
+import com.huotu.fanmore.pinkcatraiders.model.PayModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RechargeOutputModel;
@@ -31,6 +32,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+import com.huotu.fanmore.pinkcatraiders.uitls.PayFunc;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
@@ -98,8 +100,6 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
     public List<Long> moneys;
     public long money = -1;
     public int payType = -1;
-    public
-    PayPopWindow payPopWin;
 
 
     @Override
@@ -294,11 +294,37 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                             payOutput = jsonUtil.toBean ( response.toString ( ), payOutput );
                             if ( null != payOutput && null != payOutput.getResultData ( )
                                  && ( 1 == payOutput.getResultCode ( ) ) ) {
-                                payPopWin = new PayPopWindow ( RechargeActivity.this, RechargeActivity.this, mHandler, application, payOutput.getResultData ().getData () );
-                                payPopWin.showAtLocation (
-                                        rechargeBtn,
-                                        Gravity.BOTTOM, 0, 0
-                                                            );
+                                PayModel payModel = payOutput.getResultData().getData();
+                                //payType:0微信 1支付宝
+                                if(0==payType)
+                                {
+                                    progress.showProgress ( "等待微信支付跳转" );
+                                    progress.showAtLocation (
+                                            RechargeActivity.this.findViewById ( R.id.titleText ),
+                                            Gravity.CENTER, 0, 0
+                                    );
+                                    //微信支付
+                                    payModel.setAttach ( payModel.getOrderNo ( ) + "_0" );
+                                    //添加微信回调路径
+                                    PayFunc payFunc = new PayFunc ( RechargeActivity.this, payModel, application, mHandler, RechargeActivity.this, progress );
+                                    payFunc.wxPay ( );
+                                }
+                                else if(1==payType)
+                                {
+                                    //支付宝支付
+                                    progress.showProgress("等待支付宝支付跳转");
+                                    progress.showAtLocation(
+                                            RechargeActivity.this.findViewById(R.id.titleText),
+                                            Gravity.CENTER, 0, 0
+                                    );
+                                    PayFunc payFunc = new PayFunc ( RechargeActivity.this, payModel, application, mHandler, RechargeActivity.this, progress );
+                                    payFunc.aliPay();
+                                }
+                                else
+                                {
+                                    //无效支付
+                                    ToastUtils.showShortToast ( RechargeActivity.this, "无效支付信息" );
+                                }
                             }
                             else {
                                 //异常处理，自动切换成无数据

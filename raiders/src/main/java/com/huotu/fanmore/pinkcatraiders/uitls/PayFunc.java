@@ -50,7 +50,7 @@ class PayFunc {
     void wxPay ( ) {
         //根据订单号获取支付信息
         String body        = payModel.getDetail ( );
-        String price       = String.valueOf ( payModel.getFee ( ) );
+        String price       = String.valueOf ( 100*payModel.getFee ( ) );
         int    productType = 0;
         long   productId   = 0;
         progress.dismissView ();
@@ -68,6 +68,6 @@ class PayFunc {
         int productType= 0;
         long productId= 0;
         progress.dismissView ();
-        aliPay.pay(subject, body, price, payModel.getAlipayCallbackUrl (), productType, productId);
+        aliPay.pay(subject, body, price, payModel.getAlipayCallbackUrl (), productType, productId, payModel.getOrderNo());
     }
 }
