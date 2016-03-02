@@ -98,17 +98,13 @@ public class AppUserModel extends BaseModel  {
     String userHead;
     String username;
 
-    private MyAddressListModel addressModel;
+    private MyAddressListModel appMyAddressListModel;
 
-    public
-    MyAddressListModel getAddressModel ( ) {
-
-        return addressModel;
+    public MyAddressListModel getAppMyAddressListModel() {
+        return appMyAddressListModel;
     }
 
-    public
-    void setAddressModel ( MyAddressListModel addressModel ) {
-
-        this.addressModel = addressModel;
+    public void setAppMyAddressListModel(MyAddressListModel appMyAddressListModel) {
+        this.appMyAddressListModel = appMyAddressListModel;
     }
 }

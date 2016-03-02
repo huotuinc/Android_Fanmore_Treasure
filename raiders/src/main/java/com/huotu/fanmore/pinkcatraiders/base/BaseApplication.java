@@ -183,7 +183,7 @@ public class BaseApplication extends Application {
         PreferenceHelper.writeString(getApplicationContext(),"update_info","updateMD5",update.getUpdateMD5());
         PreferenceHelper.writeString(getApplicationContext(),"update_info","updateTips",update.getUpdateTips());
         PreferenceHelper.writeString(getApplicationContext(),"update_info","updateUrl",update.getUpdateUrl());
-        PreferenceHelper.writeString(getApplicationContext(),"update_info","updateType",update.getUpdateType().getName());
+        PreferenceHelper.writeString(getApplicationContext(),"update_info","updateType",update.getUpdateType());
     }
     //判断是否登录
     public boolean isLogin()
