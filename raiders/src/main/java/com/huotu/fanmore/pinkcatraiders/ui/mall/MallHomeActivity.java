@@ -58,9 +58,9 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
     @Bind(R.id.titleLayoutL)
     RelativeLayout titleLayoutL;
     @Bind(R.id.underwebView)
-    private WebView underwebView;
+     WebView underwebView;
     @Bind(R.id.progressBar)
-    private ProgressBar bar;
+     ProgressBar bar;
     @Bind(R.id.titleLeftImage)
     ImageView titleLeftImage;
     @Bind(R.id.stubTitleText)
