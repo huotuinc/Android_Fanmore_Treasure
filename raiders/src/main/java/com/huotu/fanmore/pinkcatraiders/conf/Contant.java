@@ -34,10 +34,10 @@ public class Contant {
 
     //支付环节------------------------------------------
     //微信支付ID
-    public static final String WXPAY_ID    = "wxd8c58460d0199dd5";
+    public static final String WXPAY_ID    = "wxaeda2d5603b12302";
     public static final String WXPAY_SECRT = "8ad99de44bd96a323eb40dc161e7d8e8";
-    public static final String WXPAY_KEY = "NzfP6pfeljyHeY08LO9p8YAKZCGLz8akO4lCGdXZOGnVsJqfo8jeuYB7C0GoFJGEKZMDVGKWYnbbJj3pCpvJzd4iY7bVglaNz54XAD26tiCr5DZGLjZFoRxbqe8i3HT5";
-    public static final String WXPAY_PARTNER = "1220397601";
+    public static final String WXPAY_KEY = "0db0d4908a6ae6a09b0a7727878f0ca6";
+    public static final String WXPAY_PARTNER = "1251040401";
     //支付宝支付
     //商户ID
     public static final String ALIPAY_PARTNER = "2088211251545121";
@@ -249,4 +249,6 @@ public class Contant {
     public static final String ADD_SHARE_ORDER = "addShareOrder";
     //查看夺宝号码
     public static final String GET_MY_RAIDER_NUMBER = "getMyRaiderNumbers";
+    public static final int PAY_ERROR = 3003;
+    public static final int PAY_OK    = 3004;
 }

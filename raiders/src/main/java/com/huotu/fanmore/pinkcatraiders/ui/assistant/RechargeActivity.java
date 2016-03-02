@@ -28,7 +28,10 @@ import com.huotu.fanmore.pinkcatraiders.model.PayModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RechargeOutputModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.orders.PayResultAtivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
@@ -54,7 +57,7 @@ import butterknife.OnClick;
 /**
  * 充值界面
  */
-public class RechargeActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+public class RechargeActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, MyBroadcastReceiver.BroadcastListener {
 
     public Handler       mHandler;
 
@@ -100,6 +103,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
     public List<Long> moneys;
     public long money = -1;
     public int payType = -1;
+    private MyBroadcastReceiver myBroadcastReceiver;
 
 
     @Override
@@ -120,13 +124,14 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
     void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate ( savedInstanceState );
-        setContentView ( R.layout.recharge );
-        ButterKnife.bind ( this );
+        setContentView(R.layout.recharge);
+        ButterKnife.bind(this);
         mHandler = new Handler ( this );
         am = this.getAssets ( );
-        res = this.getResources ( );
+        res = this.getResources();
         application = ( BaseApplication ) this.getApplication ( );
         wManager = this.getWindowManager ( );
+        myBroadcastReceiver = new MyBroadcastReceiver(RechargeActivity.this, RechargeActivity.this, MyBroadcastReceiver.ACTION_PAY_SUCCESS);
         initTitle ( );
         initView ( );
     }
@@ -236,6 +241,10 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
         super.onDestroy ( );
         ButterKnife.unbind ( this );
         VolleyUtil.cancelAllRequest ( );
+        if( null != myBroadcastReceiver)
+        {
+            myBroadcastReceiver.unregisterReceiver();
+        }
     }
 
     @Override
@@ -348,5 +357,14 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
 
         }
 
+    }
+
+    @Override
+    public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
+        if(type == MyBroadcastReceiver.ReceiverType.wxPaySuccess)
+        {
+            //跳转到成功界面
+            ActivityUtils.getInstance().showActivity(RechargeActivity.this, PayResultAtivity.class);
+        }
     }
 }
