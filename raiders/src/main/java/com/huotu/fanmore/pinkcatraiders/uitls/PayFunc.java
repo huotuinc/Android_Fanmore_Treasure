@@ -9,6 +9,8 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.model.PayModel;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 
+import java.math.BigDecimal;
+
 /**
  * Created by lenovo on 2016/2/25.
  */
@@ -50,12 +52,13 @@ class PayFunc {
     void wxPay ( ) {
         //根据订单号获取支付信息
         String body        = payModel.getDetail ( );
-        String price       = String.valueOf ( payModel.getFee ( ) );
+        BigDecimal price = payModel.getFee().multiply(new BigDecimal(100)); //单位分，正数
+        String priceStr       = String.valueOf ( price.intValue() );
         int    productType = 0;
         long   productId   = 0;
         progress.dismissView ();
         //调用微信支付模块
-        new WXPayAsyncTask (handler, body, price, productType, productId, context, application, payModel.getWxCallbackUrl ( ), payModel.getAttach (), payModel.getOrderNo ( )).execute();
+        new WXPayAsyncTask (handler, body, priceStr, productType, productId, context, application, payModel.getWxCallbackUrl ( ), payModel.getAttach (), payModel.getOrderNo ( )).execute();
     }
 
     public void aliPay()
@@ -68,6 +71,6 @@ class PayFunc {
         int productType= 0;
         long productId= 0;
         progress.dismissView ();
-        aliPay.pay(subject, body, price, payModel.getAlipayCallbackUrl (), productType, productId);
+        aliPay.pay(subject, body, price, payModel.getAlipayCallbackUrl (), productType, productId, payModel.getOrderNo());
     }
 }

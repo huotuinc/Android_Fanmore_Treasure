@@ -62,7 +62,7 @@ class PayPopWindow extends PopupWindow {
                     @Override
                     public
                     void onClick ( View v ) {
-                            dismissView ( );
+                        dismissView ( );
                         progress.showProgress ( "等待微信支付跳转" );
                         progress.showAtLocation (
                                 aty.findViewById ( R.id.titleText ),
@@ -72,7 +72,6 @@ class PayPopWindow extends PopupWindow {
                         //添加微信回调路径
                         PayFunc payFunc = new PayFunc ( context, payModel, application, mHandler, aty, progress );
                         payFunc.wxPay ( );
-                        dismissView ( );
                     }
                 } );
         alipayBtn.setOnClickListener ( new View.OnClickListener ( ) {
@@ -85,9 +84,8 @@ class PayPopWindow extends PopupWindow {
                                                        aty.findViewById(R.id.titleText),
                                                        Gravity.CENTER, 0, 0
                                                );
-                                               AliPayUtil aliPay = new AliPayUtil(aty, mHandler, application);
-
-
+                                               PayFunc payFunc = new PayFunc ( context, payModel, application, mHandler, aty, progress );
+                                               payFunc.aliPay();
                                            }
                                        } );
         cancelBtn.setOnClickListener ( new View.OnClickListener ( ) {
