@@ -121,9 +121,9 @@ public class BaseApplication extends Application {
     public void writeUserInfo(AppUserModel user)
     {
         PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_REALNAME,user.getRealName());
-        PreferenceHelper.writeBoolean(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_ENABLED,user.isEnabled());
+        PreferenceHelper.writeInt(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_ENABLED,user.getEnabled());
         PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_MOBILE,user.getMoblie());
-        PreferenceHelper.writeBoolean(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MOBILEBANDED, user.isMobileBanded());
+        PreferenceHelper.writeInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MOBILEBANDED, user.getMobileBanded());
         PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MONEY, String.valueOf(user.getMoney()));
         PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_TOKEN,user.getToken());
         PreferenceHelper.writeInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_USERFORMTYPE, user.getUserFormType());

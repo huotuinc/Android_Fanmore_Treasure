@@ -317,7 +317,7 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
                                       JSONUtil<AddressOutputModel> jsonUtil = new JSONUtil<AddressOutputModel>();
                                       AddressOutputModel addressOutput = new AddressOutputModel();
                                       addressOutput = jsonUtil.toBean(response.toString(), addressOutput);
-                                      if(null != addressOutput && null != addressOutput.getResultData() && (1==addressOutput.getResultCode()))
+                                      if(null != addressOutput && null != addressOutput.getResultData() && (1==addressOutput.getResultCode())&&null!=addressOutput.getResultData().getList())
                                       {
                                           List<MyAddressListModel> list = addressOutput.getResultData().getList();
                                           if(null!=list&&!list.isEmpty())

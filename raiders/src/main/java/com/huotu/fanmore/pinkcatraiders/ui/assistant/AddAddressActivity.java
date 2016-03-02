@@ -201,7 +201,7 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
             }
             else
             {
-                defauleBtn.setTag ( 1 );
+                defauleBtn.setTag ( 0 );
             }
             if(1==defauleBtn.getTag ())
             {
@@ -215,7 +215,7 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
         }
         else
         {
-            defauleBtn.setTag ( 1 );
+            defauleBtn.setTag ( 0 );
         }
 
 
@@ -259,16 +259,16 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
     @OnClick(R.id.defauleBtn)
     void settingDefault()
     {
-        if(1 == defauleBtn.getTag ())
+        if(0 == defauleBtn.getTag ())
         {
             //设置默认背景
-            defauleBtn.setTag ( 0 );
+            defauleBtn.setTag ( 1 );
             SystemTools.loadBackground ( defauleBtn, resources.getDrawable ( R.mipmap.setting_default_a ) );
         }
-        else if(0 == defauleBtn.getTag ())
+        else if(1 == defauleBtn.getTag ())
         {
             //设置非默认背景
-            defauleBtn.setTag ( 1 );
+            defauleBtn.setTag ( 0 );
             SystemTools.loadBackground ( defauleBtn, resources.getDrawable ( R.mipmap.setting_default_b ) );
         }
     }

@@ -115,6 +115,10 @@ public class Contant {
      * 菜单标记4
      */
     public final static String TAG_4 = "profile";
+    /**
+     * 菜单标记5
+     */
+    public final static String TAG_5 = "mall";
 
     /**
      * capCode
@@ -155,12 +159,10 @@ public class Contant {
     //loginapi
 
     //public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
-    public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
-
+    //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
     // public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
-
-    //public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
+    public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
     //public static final String REQUEST_URL                 = "http://192.168.1.146:8081/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.3.13:8080/duobao/app/";
     //获取夺宝记录
@@ -191,6 +193,8 @@ public class Contant {
 
     //登录
     public static final String LOGIN                       = "login";
+    //qq 微信授权登录
+    public static final String AUTHLOGIN= "authLogin";
 
     public static final String REG                         = "reg";
     //修改用户信息资料

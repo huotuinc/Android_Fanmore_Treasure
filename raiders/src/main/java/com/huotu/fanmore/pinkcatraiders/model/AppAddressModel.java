@@ -5,7 +5,7 @@ package com.huotu.fanmore.pinkcatraiders.model;
  */
 public class AppAddressModel {
     int cityId;
-    boolean defaultAddress;
+    int defaultAddress;
     String details;
     long addressId ;
     String mobile;
@@ -19,12 +19,11 @@ public class AppAddressModel {
         this.cityId = cityId;
     }
 
-
-    public boolean isDefaultAddress() {
+    public int getDefaultAddress() {
         return defaultAddress;
     }
 
-    public void setDefaultAddress(boolean defaultAddress) {
+    public void setDefaultAddress(int defaultAddress) {
         this.defaultAddress = defaultAddress;
     }
 

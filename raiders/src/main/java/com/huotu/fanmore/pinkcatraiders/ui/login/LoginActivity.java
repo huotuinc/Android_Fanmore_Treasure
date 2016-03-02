@@ -190,30 +190,80 @@ public class LoginActivity extends BaseActivity
 
                 if( msg.arg1 == 1 ) {
                     LoginQQModel qqModel = (LoginQQModel) msg.obj;
-                    AuthParamUtils paramUtils = new AuthParamUtils( application, System.currentTimeMillis (),  LoginActivity.this );
-                    Map<String,Object> qqlogin =new HashMap<>();
-                    qqlogin.put("username",qqModel.getNickname());
-                    qqlogin.put("unionId",qqModel.getOpenid());
-                    qqlogin.put("head",qqModel.getIcon());
-                    qqlogin.put("type", "2");
-                    String str=paramUtils.obtainGetParam(qqlogin);
-                    String url=Contant.REQUEST_URL+"authLogin"+str;
-
-                    GsonRequest<AppWXLoginModel> loginRequest = new GsonRequest<AppWXLoginModel>(
-                            Request.Method.GET,
-                            url,
-                            AppWXLoginModel.class,
-                            null,
-                            loginListener,
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    ToastUtils.showShortToast(LoginActivity.this, "登陆失败");
+                    String url = Contant.REQUEST_URL + Contant.AUTHLOGIN;
+                    AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), LoginActivity.this);
+                    Map<String, Object> maps = new HashMap<String, Object>();
+                    maps.put("username",qqModel.getNickname());
+                    maps.put("unionId",qqModel.getOpenid());
+                    maps.put("head",qqModel.getIcon());
+                    maps.put("type", 2);
+                    String suffix = params.obtainGetParam(maps);
+                    url = url + suffix;
+                    HttpUtils httpUtils = new HttpUtils();
+                    httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            progress.dismissView();
+                            if(LoginActivity.this.isFinishing())
+                            {
+                                return;
+                            }
+                            JSONUtil<AppWXLoginModel> jsonUtil = new JSONUtil<AppWXLoginModel>();
+                            AppWXLoginModel appWXLoginModel = new AppWXLoginModel();
+                            appWXLoginModel = jsonUtil.toBean(response.toString(), appWXLoginModel);
+                            if(null != appWXLoginModel && null != appWXLoginModel.getResultData() && (1==appWXLoginModel.getResultCode()))
+                            {
+                                if(null!=appWXLoginModel.getResultData().getUser())
+                                {
+                                    try {
+                                        //加载用户信息
+                                        application.writeUserInfo(appWXLoginModel.getResultData().getUser());
+                                        //跳转到首页
+                                        ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                                    } catch (Exception e)
+                                    {
+                                        //未获取该用户信息
+                                        noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "用户数据存在非法字符");
+                                        noticePop.showNotice ( );
+                                        noticePop.showAtLocation (titleLayoutL,
+                                                Gravity.CENTER, 0, 0
+                                        );
+                                    }
+                                }
+                                else
+                                {
+                                    //未获取该用户信息
+                                    noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "未获取该用户信息");
+                                    noticePop.showNotice ( );
+                                    noticePop.showAtLocation (titleLayoutL,
+                                            Gravity.CENTER, 0, 0
+                                    );
                                 }
                             }
-                    );
+                            else
+                            {
+                                //异常处理，自动切换成无数据
+                                noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "登录失败");
+                                noticePop.showNotice ( );
+                                noticePop.showAtLocation(titleLayoutL,
+                                        Gravity.CENTER, 0, 0
+                                );
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            progress.dismissView();
+                            //初始化失败
+                            //异常处理，自动切换成无数据
+                            noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "登录失败");
+                            noticePop.showNotice ( );
+                            noticePop.showAtLocation(titleLayoutL,
+                                    Gravity.CENTER, 0, 0
+                            );
+                        }
+                    });
 
-                    VolleyUtil.addRequest(loginRequest);
                 }
                 else if( msg.arg1 == 2 ) {
                     LoginWXModel loginWXModel = (LoginWXModel) msg.obj;
@@ -222,7 +272,7 @@ public class LoginActivity extends BaseActivity
                     wxlogin.put("username",loginWXModel.getNickname());
                     wxlogin.put("unionId",loginWXModel.getUnionid());
                     wxlogin.put("head",loginWXModel.getHeadimgurl());
-                    wxlogin.put("type", "1");
+                    wxlogin.put("type", 1);
                     String str=paramUtils.obtainGetParam(wxlogin);
                     String url=Contant.REQUEST_URL+"authLogin"+str;
 
@@ -232,7 +282,8 @@ public class LoginActivity extends BaseActivity
                             AppWXLoginModel.class,
                             null,
                             loginListener,
-                            this
+                            errorListener
+
                     );
 
                     VolleyUtil.addRequest(loginRequest);
@@ -296,7 +347,7 @@ public class LoginActivity extends BaseActivity
         Drawable bgDraw = res.getDrawable(R.color.title_bg);
         stubTitleText.inflate();
         TextView titleText= (TextView) findViewById(R.id.titleText);
-        titleText.setText("登  录");
+        titleText.setText("用户登录");
         titleText.setTextColor(getResources().getColor(R.color.color_white));
         btn_wx.setOnClickListener(this);
         tv_qq.setOnClickListener(this);
@@ -444,9 +495,16 @@ public class LoginActivity extends BaseActivity
 
     }
 
+     Response.ErrorListener errorListener =new Response.ErrorListener() {
+         @Override
+         public void onErrorResponse(VolleyError error) {
+             noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "登录失败");
+             noticePop.showNotice();
+             noticePop.showAtLocation(titleLayoutL,
+                     Gravity.CENTER, 0, 0);
+         }
 
-
-
+     };
 
     Response.Listener<AppWXLoginModel> loginListener = new Response.Listener<AppWXLoginModel>() {
         @Override
@@ -475,6 +533,7 @@ public class LoginActivity extends BaseActivity
                 BaseApplication.getInstance().writeUserInfo(user);
 
                 ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class );
+                finish();
             }
             else
             {

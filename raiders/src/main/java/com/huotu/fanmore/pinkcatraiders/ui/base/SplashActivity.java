@@ -37,6 +37,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.MsgPopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
@@ -390,6 +391,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
     @Override
     protected void onDestroy () {
         super.onDestroy();
+        VolleyUtil.cancelAllRequest();
         ButterKnife.unbind(this);
     }
 
