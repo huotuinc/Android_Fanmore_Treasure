@@ -127,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_below="@+id/orderCon"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
                     <!--动态加载晒单图片-->
 
                 </LinearLayout>

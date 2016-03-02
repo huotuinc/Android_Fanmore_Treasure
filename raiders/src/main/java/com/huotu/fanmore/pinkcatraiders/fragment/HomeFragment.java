@@ -49,6 +49,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.product.ProductDetailActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.BuyLogActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.redpackage.ReadPackageActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
@@ -147,7 +148,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     public
     void onCreate ( Bundle savedInstanceState ) {
 
-        super.onCreate ( savedInstanceState );
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -228,6 +229,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         Bundle bundle = new Bundle ( );
         bundle.putLong ( "step", 10 );
         ActivityUtils.getInstance ( ).showActivity ( getActivity ( ), AreaActivity.class, bundle );
+    }
+
+    @OnClick ( R.id.redPackageL )
+    void showRadPackageUi ( ) {
+
+        Bundle bundle = new Bundle ( );
+        ActivityUtils.getInstance ( ).showActivity ( getActivity ( ), ReadPackageActivity.class, bundle );
     }
 
     @OnClick ( R.id.sdL )

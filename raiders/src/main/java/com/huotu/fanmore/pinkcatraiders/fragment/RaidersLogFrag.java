@@ -106,7 +106,7 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
             }
         });
         raiders = new ArrayList<RaidersModel>();
-        adapter = new RaidersAdapter(raiders, getActivity());
+        adapter = new RaidersAdapter(raiders, getActivity(), getActivity());
         raidersLogList.setAdapter(adapter);
         firstGetData();
     }

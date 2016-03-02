@@ -87,8 +87,9 @@
                 android:layout_marginTop="5dp"/>
             <LinearLayout
                 android:id="@+id/orderImgs"
+                android:paddingTop="10dp"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/order_img_height"
                 android:layout_below="@+id/orderDetail"
                 android:orientation="horizontal">
                 <!--动态加载晒单图片-->

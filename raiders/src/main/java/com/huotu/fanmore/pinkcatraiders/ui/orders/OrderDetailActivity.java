@@ -9,6 +9,7 @@ import android.os.Message;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -30,6 +31,8 @@ import com.huotu.fanmore.pinkcatraiders.model.OrderModel;
 import com.huotu.fanmore.pinkcatraiders.model.OrderOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
+import com.huotu.fanmore.pinkcatraiders.uitls.BitmapUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
@@ -149,6 +152,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                 OrderDetailOutputs = jsonUtil.toBean(response.toString(), OrderDetailOutputs);
                 if (null != OrderDetailOutputs && null != OrderDetailOutputs.getResultData() && (1 == OrderDetailOutputs.getResultCode())) {
                     if (null != OrderDetailOutputs.getResultData().getData()) {
+                        orderImgs.removeAllViews();
                         OrderModel order = OrderDetailOutputs.getResultData().getData();
                         orderTitle.setText(order.getShareOrderTitle());
                         shareUserName.setText(order.getNickName());
@@ -165,6 +169,20 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                         }
 
                         orderCon.setText(order.getContent());
+                        //动态加载图片
+                        int size = order.getPictureUrls().size();
+                        size = size >= 4 ? 4 : size;
+                        for(int i = 0 ; i < size ; i++)
+                        {
+                            int width = wManager.getDefaultDisplay().getWidth() - BitmapUtils.dip2px(OrderDetailActivity.this, 10);
+                            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, 100);
+                            ImageView orderImg = (ImageView) LayoutInflater.from(OrderDetailActivity.this).inflate ( R.layout.order_img, null );
+                            BitmapLoader.create().displayUrl(OrderDetailActivity.this, orderImg,
+                                    order.getPictureUrls().get(i), R.mipmap.error);
+                            orderImg.setLayoutParams(lp);
+                            orderImgs.addView(orderImg);
+                        }
+
                     } else {
                     }
                 } else {

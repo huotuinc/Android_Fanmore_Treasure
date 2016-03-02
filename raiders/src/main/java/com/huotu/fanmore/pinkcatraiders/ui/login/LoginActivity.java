@@ -347,7 +347,7 @@ public class LoginActivity extends BaseActivity
         Drawable bgDraw = res.getDrawable(R.color.title_bg);
         stubTitleText.inflate();
         TextView titleText= (TextView) findViewById(R.id.titleText);
-        titleText.setText("登  录");
+        titleText.setText("用户登录");
         titleText.setTextColor(getResources().getColor(R.color.color_white));
         btn_wx.setOnClickListener(this);
         tv_qq.setOnClickListener(this);
@@ -396,6 +396,7 @@ public class LoginActivity extends BaseActivity
                     loginOutputs = jsonUtil.toBean(response.toString(), loginOutputs);
                     if(null != loginOutputs && null != loginOutputs.getResultData() && (1==loginOutputs.getResultCode()))
                     {
+
                         if(null!=loginOutputs.getResultData().getUser())
                         {
                             try {

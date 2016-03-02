@@ -3,6 +3,7 @@ package com.huotu.fanmore.pinkcatraiders.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -15,7 +16,10 @@ import android.widget.TextView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidersDetailActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidersNumberActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
@@ -36,11 +40,14 @@ public class RaidersAdapter extends BaseAdapter {
 
     private List<RaidersModel> raiders;
     private Context mContext;
+    private Activity aty;
+    public RaidersModel raider;
 
-    public RaidersAdapter(List<RaidersModel> raiders, Context mContext)
+    public RaidersAdapter(List<RaidersModel> raiders, Context mContext, Activity aty)
     {
         this.raiders = raiders;
         this.mContext = mContext;
+        this.aty = aty;
     }
 
     @Override
@@ -75,7 +82,7 @@ public class RaidersAdapter extends BaseAdapter {
         if(null!=raiders&&!raiders.isEmpty()&&null!=raiders.get(position))
         {
             try {
-                RaidersModel raider = raiders.get(position);
+                raider = raiders.get(position);
                 BitmapLoader.create().displayUrl(mContext, holder.raidersIcon, raider.getPictureUrl(), R.mipmap.ic_launcher);
                 if (2 != raider.getStatus()) {
                     //进行中
@@ -106,6 +113,25 @@ public class RaidersAdapter extends BaseAdapter {
                     holder.luckyNo.setText("幸运号：" + raider.getLunkyNumber());
                     holder.announcedTime.setText("揭晓时间：" + DateUtils.transformDataformat1(raider.getAwardingDate()));
                 }
+
+                holder.raidersNoLeftL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //点击查看夺宝详情
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("raider", raider);
+                        ActivityUtils.getInstance().showActivity(aty, RaidersDetailActivity.class, bundle);
+                    }
+                });
+                //查看号码
+                holder.showPhone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bundle bundle = new Bundle();
+                        bundle.putLong("issuId", raider.getIssueId());
+                        ActivityUtils.getInstance().showActivity(aty, RaidersNumberActivity.class, bundle);
+                    }
+                });
             }catch (Exception e)
             {
                 ToastUtils.showLongToast(mContext, "列表数据加载失败");
@@ -152,5 +178,7 @@ public class RaidersAdapter extends BaseAdapter {
         TextView luckyNo;
         @Bind(R.id.announcedTime)
         TextView announcedTime;
+        @Bind(R.id.raidersNoLeftL)
+        RelativeLayout raidersNoLeftL;
     }
 }

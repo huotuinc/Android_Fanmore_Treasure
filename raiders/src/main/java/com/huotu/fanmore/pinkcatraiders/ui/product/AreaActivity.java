@@ -91,10 +91,10 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
         wManager = this.getWindowManager();
         emptyView = LayoutInflater.from(AreaActivity.this).inflate(R.layout.empty, null);
         TextView label = (TextView) emptyView.findViewById(R.id.emptyTag);
-        label.setText("暂无数据");
         TextView contrl = (TextView) emptyView.findViewById(R.id.emptyBtn);
         contrl.setVisibility(View.GONE);
         bundle = this.getIntent().getExtras();
+        label.setText("暂无"+bundle.getLong("step")+"元专区数据");
         initTitle();
         initList();
     }
@@ -166,7 +166,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
                 JSONUtil<AreaProductsOutputModel> jsonUtil = new JSONUtil<AreaProductsOutputModel>();
                 AreaProductsOutputModel areaProductsOutputs = new AreaProductsOutputModel();
                 areaProductsOutputs = jsonUtil.toBean(response.toString(), areaProductsOutputs);
-                if (null != areaProductsOutputs && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList()) {
+                if (null != areaProductsOutputs && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList() && !areaProductsOutputs.getResultData().getList().isEmpty()) {
 
                     //修改记录总数
                     Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, areaProductsOutputs.getResultData().getList().size());

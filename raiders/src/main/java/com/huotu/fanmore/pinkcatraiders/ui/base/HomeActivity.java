@@ -44,6 +44,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 
+import com.huotu.fanmore.pinkcatraiders.ui.mall.MallHomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.ConfirmOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -132,6 +133,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     @Bind ( R.id.listL )
     RelativeLayout listL;
+    @Bind ( R.id.mallL )
+    RelativeLayout mallL;
 
     @Bind ( R.id.profileL )
     RelativeLayout profileL;
@@ -154,11 +157,18 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     @Bind ( R.id.listLabel )
     TextView       listLabel;
 
+    @Bind ( R.id.mall )
+    ImageView      mall;
+
+    @Bind ( R.id.mallLabel )
+    TextView       mallLabel;
+
     @Bind ( R.id.profile )
     ImageView      profile;
 
     @Bind ( R.id.profileLabel )
     TextView       profileLabel;
+
 
     @Bind ( R.id.homeBottom )
     LinearLayout   homeBottom;
@@ -328,6 +338,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_normal);
         SystemTools.loadBackground(list, listDraw);
         listLabel.setTextColor(resources.getColor(R.color.text_black));
+        Drawable mallDraw = resources.getDrawable(R.mipmap.mall_icon_common);
+        SystemTools.loadBackground(mall, mallDraw);
+        mallLabel.setTextColor(resources.getColor(R.color.text_black));
         Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
         SystemTools.loadBackground(profile, profileDraw);
         profileLabel.setTextColor(resources.getColor(R.color.text_black));
@@ -352,9 +365,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 obBuyLabel.setTextColor(resources.getColor(R.color.title_bg));
                 //标题栏右图标
                 //消息模式
-                titleRightImage.setTag ( 0 );
+                titleRightImage.setTag(0);
                 Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
-                SystemTools.loadBackground ( titleRightImage, rightDraw );
+                SystemTools.loadBackground(titleRightImage, rightDraw);
                 //重置其他
                 Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
                 SystemTools.loadBackground(newest, newestDraw);
@@ -364,8 +377,12 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 listLabel.setTextColor(resources.getColor(R.color.text_black));
                 Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
                 SystemTools.loadBackground(profile, profileDraw);
+                Drawable mallDraw = resources.getDrawable(R.mipmap.mall_icon_common);
+                SystemTools.loadBackground(mall, mallDraw);
+                mallLabel.setTextColor(resources.getColor(R.color.text_black));
                 profileLabel.setTextColor(resources.getColor(R.color.text_black));
                 funcPopWin1.dismissView();
+                funcPopWin.dismissView();
                 //切换内容
                 String tag = Contant.TAG_1;
                 //加载具体的页面
@@ -383,7 +400,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 //消息模式
                 titleRightImage.setTag ( 0 );
                 Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
-                SystemTools.loadBackground ( titleRightImage, rightDraw );
+                SystemTools.loadBackground(titleRightImage, rightDraw);
                 //重置其他
                 Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_press);
                 SystemTools.loadBackground(newest, newestDraw);
@@ -391,10 +408,14 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_normal);
                 SystemTools.loadBackground(list, listDraw);
                 listLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable mallDraw = resources.getDrawable(R.mipmap.mall_icon_common);
+                SystemTools.loadBackground(mall, mallDraw);
+                mallLabel.setTextColor(resources.getColor(R.color.text_black));
                 Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
                 SystemTools.loadBackground(profile, profileDraw);
                 profileLabel.setTextColor(resources.getColor(R.color.text_black));
                 funcPopWin1.dismissView();
+                funcPopWin.dismissView();
                 //切换内容
                 String tag = Contant.TAG_2;
                 //加载具体的页面
@@ -412,7 +433,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 //编辑模式
                 titleRightImage.setTag ( 1 );
                 Drawable rightDraw = resources.getDrawable(R.mipmap.title_edit);
-                SystemTools.loadBackground ( titleRightImage, rightDraw );
+                SystemTools.loadBackground(titleRightImage, rightDraw);
                 //重置其他
                 Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
                 SystemTools.loadBackground(newest, newestDraw);
@@ -420,15 +441,53 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_press);
                 SystemTools.loadBackground(list, listDraw);
                 listLabel.setTextColor(resources.getColor(R.color.title_bg));
+                Drawable mallDraw = resources.getDrawable(R.mipmap.mall_icon_common);
+                SystemTools.loadBackground(mall, mallDraw);
+                mallLabel.setTextColor(resources.getColor(R.color.text_black));
                 Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
                 SystemTools.loadBackground(profile, profileDraw);
                 profileLabel.setTextColor(resources.getColor(R.color.text_black));
 
                 //显示清单操作弹出框
                 funcPopWin1.showLayout();
-                funcPopWin1.showAsDropDown(homeBottom, 0, -(2*(int)resources.getDimension(R.dimen.bottom_height)));
+                funcPopWin1.showAsDropDown(homeBottom, 0, -(2 * (int) resources.getDimension(R.dimen.bottom_height)));
                 //切换内容
                 String tag = Contant.TAG_3;
+                //加载具体的页面
+                Message msg = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
+                mHandler.sendMessage(msg);
+            }
+            break;
+            case R.id.mallL:
+            {
+                //设置选中状态
+                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal );
+                SystemTools.loadBackground(oneBuy, oneBuyDraw);
+                obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
+                //标题栏右图标
+                //编辑模式
+                titleRightImage.setTag ( 0 );
+                Drawable rightDraw = resources.getDrawable(R.mipmap.title_edit);
+                SystemTools.loadBackground(titleRightImage, rightDraw);
+                //重置其他
+                Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
+                SystemTools.loadBackground(newest, newestDraw);
+                newestLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_normal);
+                SystemTools.loadBackground(list, listDraw);
+                listLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable mallDraw = resources.getDrawable(R.mipmap.mall_icon_clicked);
+                SystemTools.loadBackground(mall, mallDraw);
+                mallLabel.setTextColor(resources.getColor(R.color.title_bg));
+                Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
+                SystemTools.loadBackground(profile, profileDraw);
+                profileLabel.setTextColor(resources.getColor(R.color.text_black));
+
+                //显示清单操作弹出框
+                funcPopWin1.dismissView();
+                funcPopWin.dismissView();
+                //切换内容
+                String tag = Contant.TAG_5;
                 //加载具体的页面
                 Message msg = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
                 mHandler.sendMessage(msg);
@@ -447,9 +506,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
                     //标题栏右图标
                     //消息模式
-                    titleRightImage.setTag ( 0 );
+                    titleRightImage.setTag(0);
                     Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
-                    SystemTools.loadBackground ( titleRightImage, rightDraw );
+                    SystemTools.loadBackground(titleRightImage, rightDraw);
                     //重置其他
                     Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
                     SystemTools.loadBackground(newest, newestDraw);
@@ -457,10 +516,14 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_normal);
                     SystemTools.loadBackground(list, listDraw);
                     listLabel.setTextColor(resources.getColor(R.color.text_black));
+                    Drawable mallDraw = resources.getDrawable(R.mipmap.mall_icon_common);
+                    SystemTools.loadBackground(mall, mallDraw);
+                    mallLabel.setTextColor(resources.getColor(R.color.text_black));
                     Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_press);
                     SystemTools.loadBackground(profile, profileDraw);
                     profileLabel.setTextColor(resources.getColor(R.color.title_bg));
                     funcPopWin1.dismissView();
+                    funcPopWin.dismissView();
                     //切换内容
                     String tag = Contant.TAG_4;
                     //加载具体的页面
@@ -521,6 +584,13 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
                 else if ( tag.equals ( Contant.TAG_4 ) ) {
                     application.mFragManager.setCurrentFrag ( FragManager.FragType.PROFILE );
+                }
+                else if ( tag.equals ( Contant.TAG_5 ) ) {
+                    AuthParamUtils paramUtils = new AuthParamUtils ( application, System.currentTimeMillis(),HomeActivity.this );
+                    //String url = paramUtils.obtainUrl();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("url","http://cosytest.51flashmall.com/");
+                    ActivityUtils.getInstance().showActivity(HomeActivity.this, MallHomeActivity.class, bundle);
                 }
             }
             break;

@@ -5,6 +5,8 @@ import android.content.Context;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -25,6 +27,7 @@ public class AuthParamUtils {
     {
         this.timestamp = timestamp;
         this.context = context;
+
         this.application = application;
     }
 
@@ -41,6 +44,53 @@ public class AuthParamUtils {
         allParams.put("sign", signStr);
         return allParams;
     }
+//    public String obtainUrl()
+//    {
+//        StringBuilder builder = new StringBuilder (  );
+//        try {
+//            Map< String, String > paramMap = new HashMap< String, String > ( );
+//
+//
+//
+//
+//            //paramMap.put ( "version", application.getAppVersion ( context ) );
+//            // paramMap.put ( "operation", Constant.OPERATION_CODE );
+//            paramMap.put ( "buserId", application.readUserId() );
+//            paramMap.put ( "customerid", application.readMerchantId() );
+//            //添加额外固定参数
+//            //1、timestamp
+//            paramMap.put ( "timestamp", URLEncoder.encode(String.valueOf(timestamp), "UTF-8") );
+//            //appid
+//            paramMap.put ( "appid", URLEncoder.encode ( Constant.APP_ID , "UTF-8" ));
+//            //unionid
+//            paramMap.put (
+//                    "unionid", URLEncoder.encode(
+//                            application.readUserUnionId(),
+//                            "UTF-8") );
+//            //生成sigin
+//            paramMap.put("sign", getSign(paramMap));
+//              String url="cosytest.51flashmall.com";
+//            builder.append ( url );
+//            builder.append ( "?timestamp=" + paramMap.get ( "timestamp" ) );
+//            builder.append ( "&customerid="+application.readMerchantId ( ) );
+//            builder.append ( "&appid="+paramMap.get ( "appid" ) );
+//            builder.append ( "&unionid="+paramMap.get ( "unionid" ) );
+//            builder.append ( "&sign="+paramMap.get ( "sign" ) );
+//            builder.append ( "&buserId="+application.readUserId ( ) );
+////                builder.append ( "&version=" + application.getAppVersion ( context ) );
+////                builder.append ( "&operation=" + Constant.OPERATION_CODE );
+//
+//
+//            return builder.toString ();
+//        }
+//        catch ( UnsupportedEncodingException e)
+//        {
+//            // TODO Auto-generated catch blockL
+//            L.e ( e.getMessage ( ) );
+//            return null;
+//        }
+//
+//    }
 
     /**
      * 生成sign
