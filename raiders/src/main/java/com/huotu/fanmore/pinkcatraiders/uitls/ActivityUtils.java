@@ -47,6 +47,14 @@ public class ActivityUtils
         aty.finish();
     }
 
+    public void skipActivity(Activity aty, Class clazz, Bundle bundle)
+    {
+        Intent i = new Intent(aty, clazz);
+        i.putExtras(bundle);
+        aty.startActivity(i);
+        aty.finish();
+    }
+
     public void skipActivity(Activity aty, Class clazz, int task)
     {
         Intent i = new Intent(aty, clazz);

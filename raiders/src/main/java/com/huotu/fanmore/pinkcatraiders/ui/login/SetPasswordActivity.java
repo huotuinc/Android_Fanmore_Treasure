@@ -23,6 +23,7 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
 import com.huotu.fanmore.pinkcatraiders.model.AppWXLoginModel;
+import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.LoginOutputsModel;
 import com.huotu.fanmore.pinkcatraiders.model.RegOutputsModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
@@ -72,9 +73,7 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
     NoticePopWindow noticePop;
     //windows类
     WindowManager wManager;
-
-
-
+    public Bundle bundle;
 
 
     @Override
@@ -88,6 +87,7 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
         btnshow.setOnClickListener(this);
         wManager = this.getWindowManager();
         progress = new ProgressPopupWindow ( SetPasswordActivity.this, SetPasswordActivity.this, wManager );
+        bundle = this.getIntent().getExtras();
         initTitle();
     }
     private void initTitle()
@@ -122,79 +122,122 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 else {
+                    if(0==bundle.getInt("type"))
+                    {
+                        String url = Contant.REQUEST_URL + Contant.REG;
+                        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), SetPasswordActivity.this);
+                        Map<String, Object> maps = new HashMap<String, Object>();
+                        maps.put("phone", bundle.getString("phone"));
+                        maps.put("password", EncryptUtil.getInstance().encryptMd532(edtpsd.getText().toString()));
+                        String suffix = params.obtainGetParam(maps);
+                        url = url + suffix;
+                        HttpUtils httpUtils = new HttpUtils();
+                        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                progress.dismissView();
+                                if (SetPasswordActivity.this.isFinishing()) {
+                                    return;
+                                }
+                                JSONUtil<RegOutputsModel> jsonUtil = new JSONUtil<RegOutputsModel>();
+                                RegOutputsModel regOutputsModel = new RegOutputsModel();
+                                regOutputsModel = jsonUtil.toBean(response.toString(), regOutputsModel);
+                                if (null != regOutputsModel && null != regOutputsModel.getResultData() && (1 == regOutputsModel.getResultCode())) {
+                                    if (null != regOutputsModel.getResultData().getUser()) {
+                                        try {
+                                            //加载用户信息
+                                            application.writeUserInfo(regOutputsModel.getResultData().getUser());
+                                            //跳转到首页
+                                            ActivityUtils.getInstance().skipActivity(SetPasswordActivity.this, LoginActivity.class);
 
-                String url = Contant.REQUEST_URL + Contant.REG;
-                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), SetPasswordActivity.this);
-                Map<String, Object> maps = new HashMap<String, Object>();
-                maps.put("phone", getIntent().getStringExtra("phone"));
-                maps.put("password", EncryptUtil.getInstance().encryptMd532(edtpsd.getText().toString()));
-                String suffix = params.obtainGetParam(maps);
-                url = url + suffix;
-                HttpUtils httpUtils = new HttpUtils();
-                httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        progress.dismissView();
-                        if(SetPasswordActivity.this.isFinishing())
-                        {
-                            return;
-                        }
-                        JSONUtil<RegOutputsModel> jsonUtil = new JSONUtil<RegOutputsModel>();
-                        RegOutputsModel regOutputsModel = new RegOutputsModel();
-                        regOutputsModel = jsonUtil.toBean(response.toString(), regOutputsModel);
-                        if(null != regOutputsModel && null != regOutputsModel.getResultData() && (1==regOutputsModel.getResultCode()))
-                        {
-                            if(null!=regOutputsModel.getResultData().getUser())
-                            {
-                                try {
-                                    //加载用户信息
-                                    application.writeUserInfo(regOutputsModel.getResultData().getUser());
-                                    //跳转到首页
-                                    ActivityUtils.getInstance().skipActivity(SetPasswordActivity.this, LoginActivity.class);
-
-                                } catch (Exception e)
-                                {
-                                    //未获取该用户信息
-                                    noticePop = new NoticePopWindow( SetPasswordActivity.this, SetPasswordActivity.this, wManager, "用户数据存在非法字符");
-                                    noticePop.showNotice ( );
-                                    noticePop.showAtLocation (edtpsd,
+                                        } catch (Exception e) {
+                                            //未获取该用户信息
+                                            noticePop = new NoticePopWindow(SetPasswordActivity.this, SetPasswordActivity.this, wManager, "用户数据存在非法字符");
+                                            noticePop.showNotice();
+                                            noticePop.showAtLocation(edtpsd,
+                                                    Gravity.CENTER, 0, 0
+                                            );
+                                        }
+                                    } else {
+                                        //未获取该用户信息
+                                        noticePop = new NoticePopWindow(SetPasswordActivity.this, SetPasswordActivity.this, wManager, "未获取该用户信息");
+                                        noticePop.showNotice();
+                                        noticePop.showAtLocation(edtpsd,
+                                                Gravity.CENTER, 0, 0
+                                        );
+                                    }
+                                } else if (54001 == regOutputsModel.getResultCode()) {
+                                    //异常处理，自动切换成无数据
+                                    noticePop = new NoticePopWindow(SetPasswordActivity.this, SetPasswordActivity.this, wManager, regOutputsModel.getResultDescription());
+                                    noticePop.showNotice();
+                                    noticePop.showAtLocation(edtpsd,
                                             Gravity.CENTER, 0, 0
                                     );
                                 }
                             }
-                            else
-                            {
-                                //未获取该用户信息
-                                noticePop = new NoticePopWindow ( SetPasswordActivity.this, SetPasswordActivity.this, wManager, "未获取该用户信息");
-                                noticePop.showNotice ( );
-                                noticePop.showAtLocation (edtpsd,
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                progress.dismissView();
+                                //初始化失败
+                                //异常处理，自动切换成无数据
+                                noticePop = new NoticePopWindow(SetPasswordActivity.this, SetPasswordActivity.this, wManager, "登录失败");
+                                noticePop.showNotice();
+                                noticePop.showAtLocation(edtpsd,
                                         Gravity.CENTER, 0, 0
                                 );
                             }
-                        }
-                        else if (54001==regOutputsModel.getResultCode())
-                        {
-                            //异常处理，自动切换成无数据
-                            noticePop = new NoticePopWindow ( SetPasswordActivity.this, SetPasswordActivity.this, wManager, regOutputsModel.getResultDescription());
-                            noticePop.showNotice();
-                            noticePop.showAtLocation(edtpsd,
-                                    Gravity.CENTER, 0, 0
-                            );
-                        }
+                        });
                     }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        progress.dismissView();
-                        //初始化失败
-                        //异常处理，自动切换成无数据
-                        noticePop = new NoticePopWindow ( SetPasswordActivity.this, SetPasswordActivity.this, wManager, "登录失败");
-                        noticePop.showNotice ( );
-                        noticePop.showAtLocation(edtpsd,
-                                Gravity.CENTER, 0, 0
-                        );
+                    else if(1==bundle.getInt("type"))
+                    {
+                        String url = Contant.REQUEST_URL + "forgetPassword";
+                        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), SetPasswordActivity.this);
+                        Map<String, Object> maps = new HashMap<String, Object>();
+                        maps.put("phone", bundle.getString("phone"));
+                        maps.put("password", EncryptUtil.getInstance().encryptMd532(edtpsd.getText().toString()));
+                        String suffix = params.obtainGetParam(maps);
+                        url = url + suffix;
+                        HttpUtils httpUtils = new HttpUtils();
+                        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                progress.dismissView();
+                                if (SetPasswordActivity.this.isFinishing()) {
+                                    return;
+                                }
+                                JSONUtil<BaseModel> jsonUtil = new JSONUtil<BaseModel>();
+                                BaseModel base = new BaseModel();
+                                base = jsonUtil.toBean(response.toString(), base);
+                                if (null != base && (1 == base.getResultCode())) {
+
+                                    ToastUtils.showShortToast(SetPasswordActivity.this, "修改密码成功");
+                                    ActivityUtils.getInstance().skipActivity(SetPasswordActivity.this, LoginActivity.class);
+                                } else if (54001 == base.getResultCode()) {
+                                    //异常处理，自动切换成无数据
+                                    noticePop = new NoticePopWindow(SetPasswordActivity.this, SetPasswordActivity.this, wManager, base.getResultDescription());
+                                    noticePop.showNotice();
+                                    noticePop.showAtLocation(edtpsd,
+                                            Gravity.CENTER, 0, 0
+                                    );
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                progress.dismissView();
+                                //初始化失败
+                                //异常处理，自动切换成无数据
+                                noticePop = new NoticePopWindow(SetPasswordActivity.this, SetPasswordActivity.this, wManager, "登录失败");
+                                noticePop.showNotice();
+                                noticePop.showAtLocation(edtpsd,
+                                        Gravity.CENTER, 0, 0
+                                );
+                            }
+                        });
                     }
-                });}
+
+               }
             }
             break;
             default:

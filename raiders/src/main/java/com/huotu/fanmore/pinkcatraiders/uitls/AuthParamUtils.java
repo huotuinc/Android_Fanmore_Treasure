@@ -27,7 +27,6 @@ public class AuthParamUtils {
     {
         this.timestamp = timestamp;
         this.context = context;
-
         this.application = application;
     }
 

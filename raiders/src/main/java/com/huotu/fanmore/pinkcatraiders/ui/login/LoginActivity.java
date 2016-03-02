@@ -453,7 +453,10 @@ public class LoginActivity extends BaseActivity
     @OnClick(R.id.btn_phonereg)
     void doReg()
     {
-        ActivityUtils.getInstance().showActivity(LoginActivity.this, MobileRegActivity.class);
+        //注册
+        Bundle bundle = new Bundle();
+        bundle.putInt("type", 0);
+        ActivityUtils.getInstance().showActivity(LoginActivity.this, MobileRegActivity.class, bundle);
     }
 
     @Override
@@ -487,7 +490,10 @@ public class LoginActivity extends BaseActivity
             break;
             case R.id.tv_forgetpsd:
             {
-                ActivityUtils.getInstance().showActivity(LoginActivity.this, MobileRegActivity.class);
+                //修改密码
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", 1);
+                ActivityUtils.getInstance().showActivity(LoginActivity.this, MobileRegActivity.class, bundle);
             }
            default:
                break;
