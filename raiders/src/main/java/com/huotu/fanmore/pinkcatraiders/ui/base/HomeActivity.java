@@ -35,8 +35,10 @@ import com.huotu.fanmore.pinkcatraiders.fragment.ProfileFragment;
 
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartModel;
+import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.MsgActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.SearchActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
@@ -63,7 +65,9 @@ import com.huotu.fanmore.pinkcatraiders.widget.SharePopupWindow;
 
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -293,18 +297,25 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 SystemTools.loadBackground ( titleRightImage, resources.getDrawable ( R.mipmap.title_cancel ) );
                 label = 1;
                 //显示清单操作弹出框
-                funcPopWin1.dismissView ();
-                funcPopWin.showLayout ( );
-                funcPopWin.showAsDropDown(homeBottom, 0, -(2*(int)resources.getDimension(R.dimen.bottom_height)));
-
+                funcPopWin1.dismissView();
+                funcPopWin.showLayout();
+                funcPopWin.showAsDropDown(homeBottom, 0, -(2 * (int) resources.getDimension(R.dimen.bottom_height)));
+                //改变列表状态-编辑模式
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", 1);
+                MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
             }
             else if(1 == label)
             {
                 SystemTools.loadBackground ( titleRightImage, resources.getDrawable ( R.mipmap.title_edit ) );
                 label = 0;
-                funcPopWin.dismissView ();
-                funcPopWin1.showLayout ( );
-                funcPopWin1.showAsDropDown(homeBottom, 0, -(2*(int)resources.getDimension(R.dimen.bottom_height)));
+                funcPopWin.dismissView();
+                funcPopWin1.showLayout();
+                funcPopWin1.showAsDropDown(homeBottom, 0, -(2 * (int) resources.getDimension(R.dimen.bottom_height)));
+                //改变列表状态-结算模式
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", 0);
+                MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
             }
         }
 
@@ -639,39 +650,33 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case Contant.CART_SELECT:
             {
-                CartModel cart = ( CartModel ) msg.obj;
-                if(0 == label)
+                if(0==msg.arg1)
                 {
-                    if(0==msg.arg1)
+                    //结算模式
+                    List<ListModel> lists = (List<ListModel>) msg.obj;
+                    Iterator<ListModel> it = lists.iterator();
+                    double prices = 0;
+                    while (it.hasNext())
                     {
-                        //结算模式添加
-                        payAllNum ++;
+                        ListModel list = it.next();
+                        double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double total = price*list.getUserBuyAmount();
+                        prices=+total;
                     }
-                    else if(1==msg.arg1)
-                    {
-                        //结算模式删除
-                        if(0>=payAllNum)
-                        {
-                            payAllNum=0;
-                        }
-                        else
-                        {
-                            payAllNum--;
-                        }
-                    }
-                    funcPopWin1.setMsg ( String.valueOf (payAllNum), "22" );
+
+                    funcPopWin1.setMsg(String.valueOf(lists.size()), String.valueOf(prices));
                 }
-                else if(1 == label)
+                else if(1==msg.arg1)
                 {
                     //编辑模式
-                    if(0==msg.arg1)
+                    if(0==msg.arg2)
                     {
-                        //编辑模式添加
+                        //结算模式添加
                         deleteAllNum++;
-
                     }
-                    else if(1==msg.arg1)
+                    else if(1==msg.arg2)
                     {
+                        //结算模式删除
                         //编辑模式删除
                         if(0>=deleteAllNum)
                         {
@@ -683,6 +688,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         }
                     }
                     funcPopWin.setMsg ( String.valueOf ( deleteAllNum ) );
+
                 }
 
             }
