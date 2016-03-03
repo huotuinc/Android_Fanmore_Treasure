@@ -320,8 +320,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState)
     {
-        savedInstanceState.putSerializable("curFragType",
-                application.mFragManager.getCurrentFragType());
+        /*savedInstanceState.putSerializable("curFragType",
+                application.mFragManager.getCurrentFragType());*/
         // TODO Auto-generated method stub
         super.onSaveInstanceState(savedInstanceState);
     }

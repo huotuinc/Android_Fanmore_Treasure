@@ -158,7 +158,7 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
         SystemTools.loadBackground ( titleLayoutL, bgDraw );
         Drawable leftDraw = resources.getDrawable ( R.mipmap.back_gray );
         SystemTools.loadBackground ( titleLeftImage, leftDraw );
-        Drawable rightDraw = resources.getDrawable ( R.mipmap.search_in_result );
+        Drawable rightDraw = resources.getDrawable ( R.mipmap.search_btn );
         SystemTools.loadBackground ( titleRightImage, rightDraw );
         stubSearchBar.inflate ( );
         searchL = ( EditText ) this.findViewById ( R.id.titleSearchBar );
