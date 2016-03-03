@@ -76,7 +76,7 @@ public class ListAdapter extends BaseAdapter {
         }
         if(null!=lists&&!lists.isEmpty()&&null!=lists.get(position))
         {
-            final ProductModel list = lists.get(position);
+            final ListModel list = lists.get(position);
             BitmapLoader.create().displayUrl(context, holder.listProductIcon, list.getPictureUrl(), R.mipmap.ic_launcher);
             if(10==list.getAreaAmount())
             {
@@ -143,7 +143,7 @@ public class ListAdapter extends BaseAdapter {
                             ( R.drawable.add_sub_bg_edit ), resources.getDrawable
                             ( R.drawable.add_sub_bg )
                                                  );
-            holder.addAndSub.setNum ( ( int ) list.getStepAmount ( ) );
+            holder.addAndSub.setNum ( ( int ) list.getUserBuyAmount() );
             holder.addAndSub.setStep ( (int)list.getStepAmount () );
             if(1==list.getStepAmount())
             {

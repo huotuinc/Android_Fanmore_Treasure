@@ -6,19 +6,15 @@ package com.huotu.fanmore.pinkcatraiders.model;
 public class ListModel extends ProductModel {
 
     private long attendAmount;
-    private long buyAmount;
+    private long userBuyAmount;
     private boolean isSelect;
 
-    public
-    long getBuyAmount ( ) {
-
-        return buyAmount;
+    public long getUserBuyAmount() {
+        return userBuyAmount;
     }
 
-    public
-    void setBuyAmount ( long buyAmount ) {
-
-        this.buyAmount = buyAmount;
+    public void setUserBuyAmount(long userBuyAmount) {
+        this.userBuyAmount = userBuyAmount;
     }
 
     public

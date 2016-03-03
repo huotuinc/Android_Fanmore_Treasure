@@ -1,7 +1,9 @@
 package com.huotu.fanmore.pinkcatraiders.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -10,12 +12,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.NewOpenListModel;
 
+import com.huotu.fanmore.pinkcatraiders.ui.product.ProductDetailActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
+import com.huotu.fanmore.pinkcatraiders.widget.CountDownTimerButton;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -28,10 +38,13 @@ public class NewestProductAdapter extends BaseAdapter {
 
     private List<NewOpenListModel> newestProducts;
     private Context context;
-    public NewestProductAdapter(List<NewOpenListModel> newestProducts, Context context)
+    private Activity aty;
+    private CountDownTimerButton countDownBtn;
+    public NewestProductAdapter(List<NewOpenListModel> newestProducts,Activity aty,Context context)
     {
         this.newestProducts = newestProducts;
         this.context = context;
+        this.aty = aty;
     }
 
     @Override
@@ -87,24 +100,59 @@ public class NewestProductAdapter extends BaseAdapter {
                 holder.Rl1.setVisibility(View.VISIBLE);
                 holder.Rl2.setVisibility(View.GONE);
                 holder.announcedTag.setText("即将揭晓");
-                holder.countdown.setText(String.valueOf(product.getToAwardingTime()));
+
+                long millSec = product.getToAwardingTime();
+
+                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+
+                Date date= new Date(millSec);
+
+
+                holder.countdown.setText(sdf.format(date));
+//                countDownBtn = new CountDownTimerButton( holder.countdown,sdf.format(date),
+//                        "获取验证码",  product.getToAwardingTime(), new CountDownFinish());
+//                countDownBtn.start();
+
             }  else if (2==product.getStatus()){
                 holder.Rl1.setVisibility(View.GONE);
                 holder.Rl2.setVisibility(View.VISIBLE);
                 holder.nickName.setText(product.getNickName());
                 holder.attendAmount.setText("参与人次:"+String.valueOf(product.getAttendAmount()));
                 holder.luckyNumber.setText(String.valueOf(product.getLuckyNumber()));
-                holder.time.setText("揭晓时间:"+ DateUtils.transformDataformat2(product.getTime()));
+                holder.time.setText("揭晓时间:" + DateUtils.transformDataformat2(product.getTime()));
 
             }else {
-
             }
             holder.newestProductName.setText(product.getTitle());
             holder.newestIssue.setText("期号:" + product.getIssueId());
+            holder.newestProductLL.setOnClickListener(
+                    new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle ( );
+                    bundle.putInt("tip",2);
+                    bundle.putLong("issueId", product.getIssueId());
+                    bundle.putStringArrayList("imgs", (ArrayList<String>) product.getImgs());
+                    ActivityUtils.getInstance().showActivity ( aty, ProductDetailActivity.class, bundle );
+                }
+            });
+
         }
         return convertView;
     }
-
+//    class CountDownFinish  implements CountDownTimerButton.CountDownFinishListener {
+//
+//        @Override
+//        public void finish()
+//        {
+//            if( String.valueOf(product.getToAwardingTime()=="0")){
+//                // 刷新获取按钮状态，设置为可获取语音
+//                holder.countdown.setText("即将揭晓...");
+//
+//            }
+//        }
+//
+//    }
     class ViewHolder
     {
         public ViewHolder(View view)
@@ -137,5 +185,7 @@ public class NewestProductAdapter extends BaseAdapter {
         TextView luckyNumber;
         @Bind(R.id.time)
         TextView time;
+        @Bind(R.id.newestProductLL)
+        RelativeLayout newestProductLL;
     }
 }
