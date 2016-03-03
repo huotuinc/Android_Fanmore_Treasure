@@ -58,6 +58,7 @@ import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -192,12 +193,20 @@ public class LoginActivity extends BaseActivity
                     LoginQQModel qqModel = (LoginQQModel) msg.obj;
                     String url = Contant.REQUEST_URL + Contant.AUTHLOGIN;
                     AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), LoginActivity.this);
-                    Map<String, Object> maps = new HashMap<String, Object>();
+                    //中文字符特殊处理
+                    //1 拼装参数
+                    Map<String, Object> maps = new HashMap<String, Object> ();
                     maps.put("username",qqModel.getNickname());
                     maps.put("unionId",qqModel.getOpenid());
                     maps.put("head",qqModel.getIcon());
                     maps.put("type", 2);
-                    String suffix = params.obtainGetParam(maps);
+                    maps = params.obtainAllParamUTF8 ( maps );
+                    //获取sign
+                    String signStr = params.obtainSignUTF8 ( maps );
+                    maps.put("username", URLEncoder.encode(qqModel.getNickname()));
+                    maps.put ( "sign", signStr);
+                    //拼装URL
+                    String suffix = params.obtainGetParamUTF8 (maps);
                     url = url + suffix;
                     HttpUtils httpUtils = new HttpUtils();
                     httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
@@ -268,13 +277,21 @@ public class LoginActivity extends BaseActivity
                 else if( msg.arg1 == 2 ) {
                     LoginWXModel loginWXModel = (LoginWXModel) msg.obj;
                     AuthParamUtils paramUtils = new AuthParamUtils( application, System.currentTimeMillis (),  LoginActivity.this );
-                    Map<String,Object> wxlogin =new HashMap<>();
-                    wxlogin.put("username",loginWXModel.getNickname());
-                    wxlogin.put("unionId",loginWXModel.getUnionid());
-                    wxlogin.put("head",loginWXModel.getHeadimgurl());
-                    wxlogin.put("type", 1);
-                    String str=paramUtils.obtainGetParam(wxlogin);
-                    String url=Contant.REQUEST_URL+"authLogin"+str;
+                    //中文字符特殊处理
+                    //1 拼装参数
+                    Map<String, Object> maps = new HashMap<String, Object> ();
+                    maps.put("username",loginWXModel.getNickname());
+                    maps.put("unionId",loginWXModel.getUnionid());
+                    maps.put("head", loginWXModel.getHeadimgurl());
+                    maps.put("type", 1);
+                    maps = paramUtils.obtainAllParamUTF8 ( maps );
+                    //获取sign
+                    String signStr = paramUtils.obtainSignUTF8 ( maps );
+                    maps.put("username", URLEncoder.encode(loginWXModel.getNickname()));
+                    maps.put ( "sign", signStr);
+                    //拼装URL
+                    String suffix = paramUtils.obtainGetParamUTF8 (maps);
+                    String url=Contant.REQUEST_URL+"authLogin"+suffix;
 
                     GsonRequest<AppWXLoginModel> loginRequest = new GsonRequest<AppWXLoginModel>(
                             Request.Method.GET,

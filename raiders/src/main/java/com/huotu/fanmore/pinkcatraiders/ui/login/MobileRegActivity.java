@@ -291,6 +291,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
         else if(1==bundle.getInt("type"))
         {
             maps.put("type","2");
+            maps.put("userName", edtPhone.getText().toString());
         }
         maps.put("codeType","0");
         String suffix = params.obtainGetParam(maps);
