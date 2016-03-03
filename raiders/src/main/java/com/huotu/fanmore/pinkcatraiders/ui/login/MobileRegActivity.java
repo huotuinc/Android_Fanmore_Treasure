@@ -142,8 +142,6 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
         {
             titleText.setText ( "忘记密码" );
         }
-
-
     }
 
     @OnClick(R.id.titleLeftImage)
