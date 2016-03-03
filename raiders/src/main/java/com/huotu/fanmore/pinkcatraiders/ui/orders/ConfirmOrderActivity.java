@@ -23,6 +23,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.AppBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.OrderDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.OrderModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
@@ -95,6 +96,9 @@ class ConfirmOrderActivity extends BaseActivity implements View.OnClickListener,
     @Bind ( R.id.funOpBtn )
     TextView                funOpBtn;
 
+    public Bundle bundle;
+    public AppBalanceModel balance;
+
 
 
     @Override
@@ -115,13 +119,15 @@ class ConfirmOrderActivity extends BaseActivity implements View.OnClickListener,
     void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate ( savedInstanceState );
-        setContentView ( R.layout.confirm_order );
-        ButterKnife.bind ( this );
+        setContentView(R.layout.confirm_order);
+        ButterKnife.bind(this);
         mHandler = new Handler ( this );
         am = this.getAssets ( );
-        resources = this.getResources ( );
+        resources = this.getResources();
         application = ( BaseApplication ) this.getApplication ( );
         wManager = this.getWindowManager ( );
+        bundle = this.getIntent().getExtras();
+        balance = (AppBalanceModel) bundle.getSerializable("balance");
         initTitle ( );
         initScroll();
     }

@@ -168,6 +168,7 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                                       rootAty.deleteIds.clear();
                                       rootAty.payAllNum = 0;
                                       rootAty.prices = 0;
+                                      rootAty.payNum=0;
                                       menuList.onRefreshComplete();
                                       if(rootAty.isFinishing())
                                       {

@@ -256,4 +256,6 @@ public class Contant {
 
     //删除购物车
     public static final String DELETE_CART = "deleteShoppingCart";
+    //购物车结算
+    public static final String BALANCE = "balance";
 }

@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.ListAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.MyGridAdapter;
@@ -33,6 +34,8 @@ import com.huotu.fanmore.pinkcatraiders.fragment.ListFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.NewestFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.ProfileFragment;
 
+import com.huotu.fanmore.pinkcatraiders.model.AppBalanceModel;
+import com.huotu.fanmore.pinkcatraiders.model.BalanceOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
@@ -209,6 +212,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     //购物车删除ID列表
     public List<Long> deleteIds = new ArrayList<Long>();
     public double prices = 0;
+    public int payNum = 0;
 
     @Override
     protected
@@ -659,6 +663,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     //结算模式
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
+                    payNum = lists.size();
                     while (it.hasNext())
                     {
                         ListModel list = it.next();
@@ -667,7 +672,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         prices=+total;
                     }
 
-                    funcPopWin1.setMsg(String.valueOf(lists.size()), String.valueOf(prices));
+                    funcPopWin1.setMsg(String.valueOf(payNum), String.valueOf(prices));
+                    funcPopWin1.setData(lists);
                 }
                 else if(1==msg.arg1)
                 {
@@ -749,7 +755,76 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case Contant.BILLING:
             {
-                ActivityUtils.getInstance ().showActivity ( HomeActivity.this, ConfirmOrderActivity.class );
+                List<CartBalanceModel> list = new ArrayList<CartBalanceModel>();
+                List<ListModel> datas = (List<ListModel>) msg.obj;
+                if(0==payNum||0==prices)
+                {
+                    ToastUtils.showShortToast(HomeActivity.this, "购物车为空");
+                }
+                else if(null==datas || datas.isEmpty())
+                {
+                    ToastUtils.showShortToast(HomeActivity.this, "购物车为空");
+                }
+                else
+                {
+                    Iterator<ListModel> it = datas.iterator();
+                    while (it.hasNext())
+                    {
+                        ListModel listModel = it.next();
+                        CartBalanceModel cartBalanceModel = new CartBalanceModel();
+                        cartBalanceModel.setPid(listModel.getSid());
+                        cartBalanceModel.setBuyAmount(listModel.getBuyAmount());
+                        list.add(cartBalanceModel);
+                    }
+                    //转成json格式参数
+                    Gson gson = new Gson();
+                    String carts = gson.toJson(list);
+                    String url = Contant.REQUEST_URL + Contant.BALANCE;
+                    AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                    Map<String, Object> maps = new HashMap<String, Object> ();
+                    maps.put ( "carts",  carts);
+                    Map<String, Object> param = params.obtainPostParam(maps);
+                    BalanceOutputModel base = new BalanceOutputModel ();
+                    HttpUtils<BalanceOutputModel> httpUtils = new HttpUtils<BalanceOutputModel> ();
+                    httpUtils.doVolleyPost(
+                            base, url, param, new Response.Listener<BalanceOutputModel>() {
+                                @Override
+                                public void onResponse(BalanceOutputModel response) {
+                                    BalanceOutputModel base = response;
+                                    if (1 == base.getResultCode() && null != base.getResultData() && null != base.getResultData().getData()) {
+                                        AppBalanceModel balance = base.getResultData().getData();
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable("balance", balance);
+                                        ActivityUtils.getInstance ().showActivity(HomeActivity.this, ConfirmOrderActivity.class, bundle );
+                                    } else {
+                                        progress.dismissView();
+                                        VolleyUtil.cancelAllRequest();
+                                        //上传失败
+                                        noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "结算失败");
+                                        noticePop.showNotice();
+                                        noticePop.showAtLocation(
+                                                findViewById(R.id.titleLayout),
+                                                Gravity.CENTER, 0, 0
+                                        );
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    progress.dismissView();
+                                    VolleyUtil.cancelAllRequest();
+                                    //系统级别错误
+                                    noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "结算失败");
+                                    noticePop.showNotice();
+                                    noticePop.showAtLocation(
+                                            findViewById(R.id.titleLayout),
+                                            Gravity.CENTER, 0, 0
+                                    );
+                                }
+                            }
+                    );
+                }
             }
             break;
             case Contant.LIST_DELETE:
@@ -828,5 +903,27 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     @Override
     public void onClick(View v) {
+    }
+
+    public class CartBalanceModel
+    {
+        private long pid;
+        private long buyAmount;
+
+        public long getPid() {
+            return pid;
+        }
+
+        public void setPid(long pid) {
+            this.pid = pid;
+        }
+
+        public long getBuyAmount() {
+            return buyAmount;
+        }
+
+        public void setBuyAmount(long buyAmount) {
+            this.buyAmount = buyAmount;
+        }
     }
 }

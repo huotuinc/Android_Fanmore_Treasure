@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,7 +13,10 @@ import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+
+import java.util.List;
 
 /**
  * 结算弹出框
@@ -28,6 +32,7 @@ class FunPopWin1 extends PopupWindow {
     TextView msg;
     private
     Handler mHandler;
+    public List<ListModel> allDatas;
 
     public
     FunPopWin1 ( Context context, Activity aty, WindowManager wManager, Handler mHandler ) {
@@ -51,7 +56,10 @@ class FunPopWin1 extends PopupWindow {
         funOpBtn.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            mHandler.sendEmptyMessage ( Contant.BILLING );
+                                            Message message = mHandler.obtainMessage();
+                                            message.what = Contant.BILLING;
+                                            message.obj = allDatas;
+                                            mHandler.sendMessage(message);
                                         }
                                     });
         // 设置SelectPicPopupWindow的View
@@ -69,6 +77,10 @@ class FunPopWin1 extends PopupWindow {
         msg.setText ( "共"+num+"件奖品，总计："+amount+"元" );
     }
 
+    public void setData(List<ListModel> datas)
+    {
+        allDatas = datas;
+    }
     public void dismissView()
     {
         dismiss ();
