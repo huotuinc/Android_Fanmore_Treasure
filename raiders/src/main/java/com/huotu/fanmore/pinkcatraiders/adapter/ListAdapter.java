@@ -78,7 +78,7 @@ public class ListAdapter extends BaseAdapter {
         }
         if(null!=lists&&!lists.isEmpty()&&null!=lists.get(position))
         {
-            final ProductModel list = lists.get(position);
+            final ListModel list = lists.get(position);
             BitmapLoader.create().displayUrl(context, holder.listProductIcon, list.getPictureUrl(), R.mipmap.ic_launcher);
             if(10==list.getAreaAmount())
             {
@@ -138,11 +138,9 @@ public class ListAdapter extends BaseAdapter {
                                 }
 
                                 //选择项目
-                                CartModel cart = new CartModel ( );
-                                cart.setProduct ( list );
                                 message.what = Contant.CART_SELECT;
                                 message.arg1 = 1;
-                                message.obj = cart;
+                                message.obj = list;
                                 mHandler.sendMessage ( message );
                             }
                         }

@@ -12,6 +12,15 @@ public class ListModel extends ProductModel {
     private boolean isSelect;
     private long userBuyAmount;
     private BigDecimal pricePercentAmount;
+    private long sid;
+
+    public long getSid() {
+        return sid;
+    }
+
+    public void setSid(long sid) {
+        this.sid = sid;
+    }
 
     public long getUserBuyAmount() {
         return userBuyAmount;

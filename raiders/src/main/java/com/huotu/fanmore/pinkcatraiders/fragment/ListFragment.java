@@ -163,6 +163,11 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
         httpUtils.doVolleyGet(url, new Response.Listener<JSONObject >() {
                                   @Override
                                   public void onResponse(JSONObject response) {
+                                      //刷新列表重置业务数据
+                                      rootAty.deleteAllNum = 0;
+                                      rootAty.deleteIds.clear();
+                                      rootAty.payAllNum = 0;
+                                      rootAty.prices = 0;
                                       menuList.onRefreshComplete();
                                       if(rootAty.isFinishing())
                                       {
@@ -181,6 +186,7 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                                           }
                                           else
                                           {
+                                              lists.clear();
                                               menuList.setEmptyView(emptyView);
                                           }
                                       }
