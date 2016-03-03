@@ -130,7 +130,7 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
     private void initProducts()
     {
         newestProducts = new ArrayList<NewOpenListModel>();
-        adapter = new NewestProductAdapter(newestProducts,getActivity());
+        adapter = new NewestProductAdapter(newestProducts,getActivity(),getActivity());
         newestGrid.setAdapter(adapter);
         if( false == rootAty.canConnect() ) {
             rootAty.mHandler.post(new Runnable() {

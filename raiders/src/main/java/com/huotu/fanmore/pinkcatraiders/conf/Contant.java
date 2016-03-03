@@ -181,7 +181,8 @@ public class Contant {
     public static final String GET_CATE_GORY_LIST="getCategoryList";
     //获取商品详情信息
     public static final String GET_GOODS_DTAIL_BY_GOODS_ID = "getGoodsDetailByGoodsId";
-
+    //获取商品详情ByIssueId
+    public static final String GET_GOODS_DETAIL_BY_ISSUEID = "getGoodsDetailByIssueId";
     //获取参与历史
     public static final String GET_BUY_LIST                = "getBuyList";
 

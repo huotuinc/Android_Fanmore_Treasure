@@ -110,6 +110,7 @@ public class MyGridAdapter extends BaseAdapter {
                         void onClick ( View v ) {
 
                             Bundle bundle = new Bundle ( );
+                            bundle.putInt("tip",1);
                             bundle.putLong ( "goodsId", product.getPid ( ) );
                             bundle.putStringArrayList ( "imgs", ( ArrayList< String > ) product.getImgs ( ) );
                             //跳转到商品详情界面

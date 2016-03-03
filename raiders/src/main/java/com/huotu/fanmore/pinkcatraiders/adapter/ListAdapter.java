@@ -158,7 +158,7 @@ public class ListAdapter extends BaseAdapter {
                             ( R.drawable.add_sub_bg_edit ), resources.getDrawable
                             ( R.drawable.add_sub_bg )
                                                  );
-            holder.addAndSub.setNum ( ( int ) list.getStepAmount ( ) );
+            holder.addAndSub.setNum ( ( int ) list.getUserBuyAmount() );
             holder.addAndSub.setStep ( (int)list.getStepAmount () );
             if(1==list.getStepAmount())
             {

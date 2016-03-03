@@ -17,14 +17,15 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/account_bg">
-    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
-        xmlns:ptr= "http://schemas.android.com/apk/res-auto"
-        android:id="@+id/productDetailPullRefresh"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        ptr:ptrAnimationStyle= "flip"
-        android:layout_above="@+id/bottomL"
-        ptr:ptrMode= "both">
+
+        <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+            xmlns:ptr= "http://schemas.android.com/apk/res-auto"
+            android:id="@+id/productDetailPullRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            ptr:ptrAnimationStyle= "flip"
+            android:layout_above="@+id/bottomL"
+            ptr:ptrMode= "both">
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -99,36 +100,46 @@
             android:layout_below="@+id/productDetailNameLL"
             android:background="@color/color_white">
             <!--登录状态-->
-            <ViewStub
+            <RelativeLayout
                 android:id="@+id/loginedDetail"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout="@layout/login_detail">
-            </ViewStub>
+                android:visibility="gone">
+                <include
+                    layout="@layout/login_detail"/>
+            </RelativeLayout>
+
             <!--登录状态-->
             <!--未登录全价-->
-            <ViewStub
-                android:id="@+id/unloginFullPrice"
-                android:layout_width="fill_parent"
+            <RelativeLayout
+                android:id="@+id/unlogin_funllprice"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout="@layout/unlogin_funllprice">
-            </ViewStub>
+                android:visibility="gone">
+            <include
+               layout="@layout/unlogin_funllprice"/>
+            </RelativeLayout>
+
             <!--未登录全价-->
             <!--未登录-->
-            <ViewStub
+            <RelativeLayout
                 android:id="@+id/unlogin"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout="@layout/unlogin">
-            </ViewStub>
+                android:visibility="gone">
+                <include
+                    layout="@layout/unlogin"/>
+            </RelativeLayout>
             <!--未登录-->
             <!--揭晓详情-->
-            <ViewStub
+            <RelativeLayout
                 android:id="@+id/announcedDetail"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout="@layout/announced_detail">
-            </ViewStub>
+                android:visibility="gone">
+                <include
+                    layout="@layout/announced_detail"/>
+            </RelativeLayout>
             <!--揭晓详情-->
         </RelativeLayout>
         <!--功能列表-->
@@ -332,6 +343,7 @@
 
     </RelativeLayout>
     </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+
     <RelativeLayout
         android:id="@+id/bottomL"
         android:layout_width="fill_parent"
