@@ -27,7 +27,10 @@ import com.huotu.fanmore.pinkcatraiders.model.ListOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.orders.PayResultAtivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
@@ -39,6 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,7 +50,7 @@ import butterknife.ButterKnife;
 /**
  * 清单fragment
  */
-public class ListFragment extends BaseFragment implements Handler.Callback, View.OnClickListener{
+public class ListFragment extends BaseFragment implements Handler.Callback, View.OnClickListener, MyBroadcastReceiver.BroadcastListener{
 
     View rootView;
     public Resources resources;
@@ -58,6 +62,8 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
     View emptyView = null;
     public List<ListModel> lists;
     public ListAdapter adapter;
+
+    private MyBroadcastReceiver myBroadcastReceiver;
 
     @Override
     public void onReshow() {
@@ -103,6 +109,7 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
         emptyTag.setText("暂无清单信息");
         TextView emptyBtn = (TextView) emptyView.findViewById(R.id.emptyBtn);
         emptyBtn.setVisibility(View.GONE);
+        myBroadcastReceiver = new MyBroadcastReceiver(getActivity(), this, MyBroadcastReceiver.SHOP_CART);
         initList();
         return rootView;
     }
@@ -118,7 +125,7 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                                             }
                                         } );
         lists = new ArrayList<ListModel>();
-        adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler);
+        adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 0);
         menuList.setAdapter(adapter);
         firstGetData();
     }
@@ -156,6 +163,12 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
         httpUtils.doVolleyGet(url, new Response.Listener<JSONObject >() {
                                   @Override
                                   public void onResponse(JSONObject response) {
+                                      //刷新列表重置业务数据
+                                      rootAty.deleteAllNum = 0;
+                                      rootAty.deleteIds.clear();
+                                      rootAty.payAllNum = 0;
+                                      rootAty.prices = 0;
+                                      rootAty.payNum=0;
                                       menuList.onRefreshComplete();
                                       if(rootAty.isFinishing())
                                       {
@@ -174,6 +187,7 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                                           }
                                           else
                                           {
+                                              lists.clear();
                                               menuList.setEmptyView(emptyView);
                                           }
                                       }
@@ -207,5 +221,30 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
+        if(type == MyBroadcastReceiver.ReceiverType.shopCart)
+        {
+            //清单结算模式
+            Bundle bundle = (Bundle) msg;
+            int types = bundle.getInt("type");
+            if(1==types)
+            {
+                //编辑模式
+                adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 1);
+                menuList.setAdapter(adapter);
+                firstGetData();
+            }
+            else if(0==types)
+            {
+                //结算模式
+                adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 0);
+                menuList.setAdapter(adapter);
+                firstGetData();
+            }
+
+        }
     }
 }

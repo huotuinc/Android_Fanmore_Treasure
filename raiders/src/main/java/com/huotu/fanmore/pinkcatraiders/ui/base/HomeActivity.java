@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.ListAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.MyGridAdapter;
@@ -33,10 +34,15 @@ import com.huotu.fanmore.pinkcatraiders.fragment.ListFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.NewestFragment;
 import com.huotu.fanmore.pinkcatraiders.fragment.ProfileFragment;
 
+import com.huotu.fanmore.pinkcatraiders.model.AppBalanceModel;
+import com.huotu.fanmore.pinkcatraiders.model.BalanceOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.BaseBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartModel;
+import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.MsgActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.SearchActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
@@ -46,6 +52,7 @@ import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 
 import com.huotu.fanmore.pinkcatraiders.ui.mall.MallHomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.ConfirmOrderActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.orders.PayOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
@@ -63,7 +70,10 @@ import com.huotu.fanmore.pinkcatraiders.widget.SharePopupWindow;
 
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -201,6 +211,10 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     public long payAllNum = 0;
     //清单结算总金额
     public long payAllAmount = 0;
+    //购物车删除ID列表
+    public List<Long> deleteIds = new ArrayList<Long>();
+    public double prices = 0;
+    public int payNum = 0;
 
     @Override
     protected
@@ -293,18 +307,25 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 SystemTools.loadBackground ( titleRightImage, resources.getDrawable ( R.mipmap.title_cancel ) );
                 label = 1;
                 //显示清单操作弹出框
-                funcPopWin1.dismissView ();
-                funcPopWin.showLayout ( );
-                funcPopWin.showAsDropDown(homeBottom, 0, -(2*(int)resources.getDimension(R.dimen.bottom_height)));
-
+                funcPopWin1.dismissView();
+                funcPopWin.showLayout();
+                funcPopWin.showAsDropDown(homeBottom, 0, -(2 * (int) resources.getDimension(R.dimen.bottom_height)));
+                //改变列表状态-编辑模式
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", 1);
+                MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
             }
             else if(1 == label)
             {
                 SystemTools.loadBackground ( titleRightImage, resources.getDrawable ( R.mipmap.title_edit ) );
                 label = 0;
-                funcPopWin.dismissView ();
-                funcPopWin1.showLayout ( );
-                funcPopWin1.showAsDropDown(homeBottom, 0, -(2*(int)resources.getDimension(R.dimen.bottom_height)));
+                funcPopWin.dismissView();
+                funcPopWin1.showLayout();
+                funcPopWin1.showAsDropDown(homeBottom, 0, -(2 * (int) resources.getDimension(R.dimen.bottom_height)));
+                //改变列表状态-结算模式
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", 0);
+                MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
             }
         }
 
@@ -320,8 +341,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState)
     {
-        savedInstanceState.putSerializable("curFragType",
-                application.mFragManager.getCurrentFragType());
+        /*savedInstanceState.putSerializable("curFragType",
+                application.mFragManager.getCurrentFragType());*/
         // TODO Auto-generated method stub
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -639,50 +660,51 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case Contant.CART_SELECT:
             {
-                CartModel cart = ( CartModel ) msg.obj;
-                if(0 == label)
+                if(0==msg.arg1)
                 {
-                    if(0==msg.arg1)
+                    //结算模式
+                    List<ListModel> lists = (List<ListModel>) msg.obj;
+                    Iterator<ListModel> it = lists.iterator();
+                    payNum = lists.size();
+                    while (it.hasNext())
+                    {
+                        ListModel list = it.next();
+                        double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double total = price*list.getUserBuyAmount();
+                        prices=+total;
+                    }
+
+                    funcPopWin1.setMsg(String.valueOf(payNum), String.valueOf(prices));
+                    funcPopWin1.setData(lists);
+                }
+                else if(1==msg.arg1)
+                {
+                    ListModel list = (ListModel) msg.obj;
+                    //编辑模式
+                    if(0==msg.arg2)
                     {
                         //结算模式添加
-                        payAllNum ++;
+                        deleteAllNum++;
+                        deleteIds.add(list.getSid());
                     }
-                    else if(1==msg.arg1)
+                    else if(1==msg.arg2)
                     {
                         //结算模式删除
-                        if(0>=payAllNum)
-                        {
-                            payAllNum=0;
-                        }
-                        else
-                        {
-                            payAllNum--;
-                        }
-                    }
-                    funcPopWin1.setMsg ( String.valueOf (payAllNum), "22" );
-                }
-                else if(1 == label)
-                {
-                    //编辑模式
-                    if(0==msg.arg1)
-                    {
-                        //编辑模式添加
-                        deleteAllNum++;
-
-                    }
-                    else if(1==msg.arg1)
-                    {
                         //编辑模式删除
                         if(0>=deleteAllNum)
                         {
                             deleteAllNum=0;
+                            deleteIds.clear();
                         }
                         else
                         {
                             deleteAllNum--;
+                            deleteIds.remove(list.getSid());
                         }
                     }
                     funcPopWin.setMsg ( String.valueOf ( deleteAllNum ) );
+                    funcPopWin.setDeletes(deleteIds);
+
                 }
 
             }
@@ -735,7 +757,156 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case Contant.BILLING:
             {
-                ActivityUtils.getInstance ().showActivity ( HomeActivity.this, ConfirmOrderActivity.class );
+                List<CartBalanceModel> list = new ArrayList<CartBalanceModel>();
+                List<ListModel> datas = (List<ListModel>) msg.obj;
+                if(0==payNum||0==prices)
+                {
+                    ToastUtils.showShortToast(HomeActivity.this, "购物车为空");
+                }
+                else if(null==datas || datas.isEmpty())
+                {
+                    ToastUtils.showShortToast(HomeActivity.this, "购物车为空");
+                }
+                else
+                {
+                    Iterator<ListModel> it = datas.iterator();
+                    while (it.hasNext())
+                    {
+                        ListModel listModel = it.next();
+                        CartBalanceModel cartBalanceModel = new CartBalanceModel();
+                        cartBalanceModel.setPid(listModel.getSid());
+                        cartBalanceModel.setBuyAmount(listModel.getUserBuyAmount());
+                        list.add(cartBalanceModel);
+                    }
+                    //转成json格式参数
+                    Gson gson = new Gson();
+                    String carts = gson.toJson(list);
+                    String url = Contant.REQUEST_URL + Contant.BALANCE;
+                    AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                    Map<String, Object> maps = new HashMap<String, Object> ();
+                    maps.put ( "carts",  carts);
+                    Map<String, Object> param = params.obtainPostParam(maps);
+                    BalanceOutputModel base = new BalanceOutputModel ();
+                    HttpUtils<BalanceOutputModel> httpUtils = new HttpUtils<BalanceOutputModel> ();
+                    httpUtils.doVolleyPost(
+                            base, url, param, new Response.Listener<BalanceOutputModel>() {
+                                @Override
+                                public void onResponse(BalanceOutputModel response) {
+                                    BalanceOutputModel base = response;
+                                    if (1 == base.getResultCode() && null != base.getResultData() && null != base.getResultData().getData()) {
+                                        AppBalanceModel balance = base.getResultData().getData();
+                                        BaseBalanceModel baseBalance = new BaseBalanceModel();
+                                        baseBalance.setMoney(balance.getMoney());
+                                        baseBalance.setRedPacketsEndTime(balance.getRedPacketsEndTime());
+                                        baseBalance.setRedPacketsFullMoney(balance.getRedPacketsFullMoney());
+                                        baseBalance.setRedPacketsId(balance.getRedPacketsId());
+                                        baseBalance.setRedPacketsMinusMoney(balance.getRedPacketsMinusMoney());
+                                        baseBalance.setRedPacketsNumber(balance.getRedPacketsNumber());
+                                        baseBalance.setRedPacketsRemark(balance.getRedPacketsRemark());
+                                        baseBalance.setRedPacketsStartTime(balance.getRedPacketsStartTime());
+                                        baseBalance.setRedPacketsStatus(balance.getRedPacketsStatus().getName());
+                                        baseBalance.setTotalMoney(balance.getTotalMoney());
+                                        baseBalance.setRedPacketsTitle(balance.getRedPacketsTitle());
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable("baseBalance", baseBalance);
+                                        ActivityUtils.getInstance ().showActivity(HomeActivity.this, PayOrderActivity.class, bundle );
+                                    } else {
+                                        progress.dismissView();
+                                        VolleyUtil.cancelAllRequest();
+                                        //上传失败
+                                        noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "结算失败");
+                                        noticePop.showNotice();
+                                        noticePop.showAtLocation(
+                                                findViewById(R.id.titleLayout),
+                                                Gravity.CENTER, 0, 0
+                                        );
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    progress.dismissView();
+                                    VolleyUtil.cancelAllRequest();
+                                    //系统级别错误
+                                    noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "结算失败");
+                                    noticePop.showNotice();
+                                    noticePop.showAtLocation(
+                                            findViewById(R.id.titleLayout),
+                                            Gravity.CENTER, 0, 0
+                                    );
+                                }
+                            }
+                    );
+                }
+            }
+            break;
+            case Contant.LIST_DELETE:
+            {
+                if(1==msg.arg1)
+                {
+                    ToastUtils.showShortToast(HomeActivity.this, "未选择删除的商品");
+                }
+                else if(0==msg.arg1)
+                {
+                    //删除清单数据
+                    progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
+                    progress.showProgress ( "正在删除选中的商品" );
+                    progress.showAtLocation (titleLayoutL,
+                            Gravity.CENTER, 0, 0
+                    );
+                    final List<Long> deletes = (List<Long>) msg.obj;
+                    for(int i=0; i<deletes.size(); i++)
+                    {
+                        Long chartId = deletes.get(i);
+                        String url = Contant.REQUEST_URL + Contant.DELETE_CART;
+                        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                        Map<String, Object> maps = new HashMap<String, Object> ();
+                        maps.put ( "shoppingCartId",  String.valueOf(chartId));
+                        Map<String, Object> param = params.obtainPostParam(maps);
+                        BaseModel base = new BaseModel ();
+                        HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
+                        httpUtils.doVolleyPost(
+                                base, url, param, new Response.Listener<BaseModel>() {
+                                    @Override
+                                    public void onResponse(BaseModel response) {
+                                        BaseModel base = response;
+                                        if (1 == base.getResultCode()) {
+
+                                        } else {
+                                            progress.dismissView();
+                                            VolleyUtil.cancelAllRequest();
+                                            //上传失败
+                                            noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "删除购物车失败");
+                                            noticePop.showNotice();
+                                            noticePop.showAtLocation(
+                                                    findViewById(R.id.titleLayout),
+                                                    Gravity.CENTER, 0, 0
+                                            );
+                                        }
+                                    }
+                                }, new Response.ErrorListener() {
+
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        progress.dismissView();
+                                        VolleyUtil.cancelAllRequest();
+                                        //系统级别错误
+                                        noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "删除购物车失败");
+                                        noticePop.showNotice();
+                                        noticePop.showAtLocation(
+                                                findViewById(R.id.titleLayout),
+                                                Gravity.CENTER, 0, 0
+                                        );
+                                    }
+                                }
+                        );
+                }
+                    progress.dismissView();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("type", 1);
+                    MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
+                }
             }
             break;
             default:
@@ -746,5 +917,27 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     @Override
     public void onClick(View v) {
+    }
+
+    public class CartBalanceModel
+    {
+        private long pid;
+        private long buyAmount;
+
+        public long getPid() {
+            return pid;
+        }
+
+        public void setPid(long pid) {
+            this.pid = pid;
+        }
+
+        public long getBuyAmount() {
+            return buyAmount;
+        }
+
+        public void setBuyAmount(long buyAmount) {
+            this.buyAmount = buyAmount;
+        }
     }
 }

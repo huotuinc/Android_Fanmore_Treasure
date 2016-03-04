@@ -95,6 +95,8 @@ public class Contant {
     public static final int CART_SELECT     = 0x00000042;
     public static final int ADD_LIST    = 0x00000043;
     public static final int BILLING    = 0x00000044;
+    public static final int LIST_DELETE = 0x00000045;
+    public static final int LIST_PAY = 0x00000046;
 
     /**
      * 菜单标记1
@@ -140,6 +142,7 @@ public class Contant {
     public final static String LOGIN_AUTH_ENABLED      = "enabled";
 
     public final static String LOGIN_AUTH_MOBILE       = "mobile";
+    public final static String  LOGIN_DEFAULT_ADDRESS = "defaultAddress";
 
     public final static String LOGIN_AUTH_MOBILEBANDED = "mobileBanded";
 
@@ -252,4 +255,9 @@ public class Contant {
     public static final String GET_MY_RAIDER_NUMBER = "getMyRaiderNumbers";
     public static final int PAY_ERROR = 3003;
     public static final int PAY_OK    = 3004;
+
+    //删除购物车
+    public static final String DELETE_CART = "deleteShoppingCart";
+    //购物车结算
+    public static final String BALANCE = "balance";
 }

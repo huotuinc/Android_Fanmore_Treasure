@@ -37,12 +37,14 @@ public class ListAdapter extends BaseAdapter {
     private Context context;
     private
     Handler mHandler;
+    private int type;
 
-    public ListAdapter(List<ListModel> lists, Context context, Handler mHandler)
+    public ListAdapter(List<ListModel> lists, Context context, Handler mHandler, int type)
     {
         this.lists = lists;
         this.context = context;
         this.mHandler = mHandler;
+        this.type = type;
     }
 
     @Override
@@ -90,47 +92,60 @@ public class ListAdapter extends BaseAdapter {
             }
 
             holder.listProductName.setText(list.getTitle());
-            //编辑模式
-            final TextView editBtn = holder.editBtn;
-            final Drawable draw1 = resources.getDrawable ( R.mipmap.unselect );
-            final Drawable draw2 = resources.getDrawable ( R.mipmap.unselected );
-            editBtn.setTag ( 0 );
-            SystemTools.loadBackground ( holder.editBtn, draw1 );
-            editBtn.setOnClickListener (
-                    new View.OnClickListener ( ) {
+            if(0==type)
+            {
+                holder.editBtn.setVisibility(View.GONE);
+                //结算模式
+                //选择项目列表
+                Message message = mHandler.obtainMessage ( );
+                message.what = Contant.CART_SELECT;
+                message.arg1 = 0;
+                message.obj = lists;
+                mHandler.sendMessage ( message );
+            }
+            else if(1==type)
+            {
+                //编辑模式
+                final TextView editBtn = holder.editBtn;
+                final Drawable draw1 = resources.getDrawable ( R.mipmap.unselect );
+                final Drawable draw2 = resources.getDrawable ( R.mipmap.unselected );
+                editBtn.setTag ( 0 );
+                SystemTools.loadBackground ( holder.editBtn, draw1 );
+                editBtn.setOnClickListener (
+                        new View.OnClickListener ( ) {
 
-                        @Override
-                        public
-                        void onClick ( View v ) {
+                            @Override
+                            public
+                            void onClick ( View v ) {
 
-                            Message message = mHandler.obtainMessage ( );
-                            if ( 0 == editBtn.getTag ( ) ) {
-                                //添加
-                                message.arg1 = 0;
-                                editBtn.setTag ( 1 );
-                                SystemTools.loadBackground (
-                                        editBtn, draw2
-                                                           );
+                                Message message = mHandler.obtainMessage ( );
+                                if ( 0 == editBtn.getTag ( ) ) {
+                                    //添加
+                                    message.arg2 = 0;
+                                    editBtn.setTag ( 1 );
+                                    SystemTools.loadBackground (
+                                            editBtn, draw2
+                                    );
 
-                            }
-                            else if ( 1 == editBtn.getTag ( ) ) {
-                                //删除
+                                }
+                                else if ( 1 == editBtn.getTag ( ) ) {
+                                    //删除
+                                    message.arg2 = 1;
+                                    editBtn.setTag ( 0 );
+                                    SystemTools.loadBackground (
+                                            editBtn, draw1
+                                    );
+                                }
+
+                                //选择项目
+                                message.what = Contant.CART_SELECT;
                                 message.arg1 = 1;
-                                editBtn.setTag ( 0 );
-                                SystemTools.loadBackground (
-                                        editBtn, draw1
-                                                           );
+                                message.obj = list;
+                                mHandler.sendMessage ( message );
                             }
-
-                            //选择项目
-                            CartModel cart = new CartModel ( );
-                            cart.setProduct ( list );
-                            message.what = Contant.CART_SELECT;
-                            message.obj = cart;
-                            mHandler.sendMessage ( message );
                         }
-                    }
-                                       );
+                );
+            }
             holder.totalRequired.setText ( "总需" + list.getToAmount ( ) + "人次" );
             holder.surplusRequired.setText ( "剩余" + list.getRemainAmount ( ) + "人次" );
             holder.addAndSub.setTextSize ( ( int ) resources.getDimension ( R.dimen.text_size_4 ) );

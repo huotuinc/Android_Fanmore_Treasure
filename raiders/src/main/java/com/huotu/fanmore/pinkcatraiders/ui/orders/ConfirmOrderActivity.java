@@ -23,6 +23,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.AppBalanceModel;
+import com.huotu.fanmore.pinkcatraiders.model.BaseBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.OrderDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.OrderModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
@@ -95,6 +97,9 @@ class ConfirmOrderActivity extends BaseActivity implements View.OnClickListener,
     @Bind ( R.id.funOpBtn )
     TextView                funOpBtn;
 
+    public Bundle bundle;
+    public BaseBalanceModel balance;
+
 
 
     @Override
@@ -115,13 +120,15 @@ class ConfirmOrderActivity extends BaseActivity implements View.OnClickListener,
     void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate ( savedInstanceState );
-        setContentView ( R.layout.confirm_order );
-        ButterKnife.bind ( this );
+        setContentView(R.layout.confirm_order);
+        ButterKnife.bind(this);
         mHandler = new Handler ( this );
         am = this.getAssets ( );
-        resources = this.getResources ( );
+        resources = this.getResources();
         application = ( BaseApplication ) this.getApplication ( );
         wManager = this.getWindowManager ( );
+        bundle = this.getIntent().getExtras();
+        balance = (BaseBalanceModel) bundle.getSerializable("baseBalance");
         initTitle ( );
         initScroll();
     }
@@ -150,6 +157,13 @@ class ConfirmOrderActivity extends BaseActivity implements View.OnClickListener,
 
     private void initData()
     {
+        confirmOrderRefresh.onRefreshComplete();
+        receiverName.setText(application.readRealName());
+        receiverPhone.setText((null==application.readUerPhone() || "".equals(application.readUerPhone()))?"未设置手机":application.readUerPhone());
+        receiverAddress.setText(application.readAddress());
+        redPackageShow.setText((null==balance.getRedPacketsRemark() || "".equals(balance.getRedPacketsRemark()))?"暂无可使用的红包":balance.getRedPacketsRemark());
+        totalMoney.setText(String.valueOf(balance.getTotalMoney()));
+        money.setText(String.valueOf(balance.getMoney()));
     }
 
     @OnClick(R.id.funOpBtn)

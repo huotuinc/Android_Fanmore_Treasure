@@ -44,7 +44,7 @@ public class BaseApplication extends Application {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged ( newConfig );
+        super.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class BaseApplication extends Application {
         CrashHandler crashHandler = CrashHandler.getInstance ();
         crashHandler.init(getApplicationContext());
         //加载数据库初始化模块
-        SugarContext.init ( getApplicationContext ( ) );
+        SugarContext.init(getApplicationContext());
     }
 
     //判断是否为4.4版本。可设置沉浸模式
@@ -120,16 +120,16 @@ public class BaseApplication extends Application {
 
     public void writeUserInfo(AppUserModel user)
     {
-        PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_REALNAME,user.getRealName());
-        PreferenceHelper.writeInt(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_ENABLED,user.getEnabled());
-        PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_MOBILE,user.getMoblie());
+        PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_REALNAME, user.getRealName());
+        PreferenceHelper.writeInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_ENABLED, user.getEnabled());
+        PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MOBILE, user.getMoblie());
         PreferenceHelper.writeInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MOBILEBANDED, user.getMobileBanded());
         PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MONEY, String.valueOf(user.getMoney()));
-        PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_TOKEN,user.getToken());
+        PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_TOKEN, user.getToken());
         PreferenceHelper.writeInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_USERFORMTYPE, user.getUserFormType());
-        PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_UDERHEAD,user.getUserHead());
+        PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_UDERHEAD, user.getUserHead());
         PreferenceHelper.writeLong(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_USERID, user.getUserId());
-
+        PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_DEFAULT_ADDRESS, user.getAppMyAddressListModel().getDetails());
         PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_USERNAME,user.getUsername());
     }
     //获取头像
@@ -141,14 +141,30 @@ public class BaseApplication extends Application {
     //获取userId
     public Long readUerId()
     {
-        return PreferenceHelper.readLong ( getApplicationContext ( ), Contant.LOGIN_USER_INFO,
-                                           Contant.LOGIN_AUTH_USERID );
+        return PreferenceHelper.readLong(getApplicationContext(), Contant.LOGIN_USER_INFO,
+                Contant.LOGIN_AUTH_USERID);
     }
 
     //获取user账号
     public String readAccount()
     {
-        return PreferenceHelper.readString ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_USERNAME );
+        return PreferenceHelper.readString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_USERNAME);
+    }
+
+    //获取user账号
+    public String readRealName()
+    {
+        return PreferenceHelper.readString ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_REALNAME );
+    }
+    //获取用户手机号码
+    public String readUerPhone()
+    {
+        return PreferenceHelper.readString ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_MOBILE );
+    }
+    //获取默认地址
+    public String readAddress()
+    {
+        return PreferenceHelper.readString ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_DEFAULT_ADDRESS );
     }
 
     //获取user昵称
