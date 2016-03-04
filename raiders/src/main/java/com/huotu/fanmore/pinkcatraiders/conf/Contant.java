@@ -142,6 +142,7 @@ public class Contant {
     public final static String LOGIN_AUTH_ENABLED      = "enabled";
 
     public final static String LOGIN_AUTH_MOBILE       = "mobile";
+    public final static String  LOGIN_DEFAULT_ADDRESS = "defaultAddress";
 
     public final static String LOGIN_AUTH_MOBILEBANDED = "mobileBanded";
 

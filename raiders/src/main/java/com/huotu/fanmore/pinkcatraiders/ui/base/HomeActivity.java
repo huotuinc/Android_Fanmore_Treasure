@@ -36,6 +36,7 @@ import com.huotu.fanmore.pinkcatraiders.fragment.ProfileFragment;
 
 import com.huotu.fanmore.pinkcatraiders.model.AppBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BalanceOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.BaseBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
@@ -51,6 +52,7 @@ import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 
 import com.huotu.fanmore.pinkcatraiders.ui.mall.MallHomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.ConfirmOrderActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.orders.PayOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
@@ -773,7 +775,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         ListModel listModel = it.next();
                         CartBalanceModel cartBalanceModel = new CartBalanceModel();
                         cartBalanceModel.setPid(listModel.getSid());
-                        cartBalanceModel.setBuyAmount(listModel.getBuyAmount());
+                        cartBalanceModel.setBuyAmount(listModel.getUserBuyAmount());
                         list.add(cartBalanceModel);
                     }
                     //转成json格式参数
@@ -793,9 +795,21 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                     BalanceOutputModel base = response;
                                     if (1 == base.getResultCode() && null != base.getResultData() && null != base.getResultData().getData()) {
                                         AppBalanceModel balance = base.getResultData().getData();
+                                        BaseBalanceModel baseBalance = new BaseBalanceModel();
+                                        baseBalance.setMoney(balance.getMoney());
+                                        baseBalance.setRedPacketsEndTime(balance.getRedPacketsEndTime());
+                                        baseBalance.setRedPacketsFullMoney(balance.getRedPacketsFullMoney());
+                                        baseBalance.setRedPacketsId(balance.getRedPacketsId());
+                                        baseBalance.setRedPacketsMinusMoney(balance.getRedPacketsMinusMoney());
+                                        baseBalance.setRedPacketsNumber(balance.getRedPacketsNumber());
+                                        baseBalance.setRedPacketsRemark(balance.getRedPacketsRemark());
+                                        baseBalance.setRedPacketsStartTime(balance.getRedPacketsStartTime());
+                                        baseBalance.setRedPacketsStatus(balance.getRedPacketsStatus().getName());
+                                        baseBalance.setTotalMoney(balance.getTotalMoney());
+                                        baseBalance.setRedPacketsTitle(balance.getRedPacketsTitle());
                                         Bundle bundle = new Bundle();
-                                        bundle.putSerializable("balance", balance);
-                                        ActivityUtils.getInstance ().showActivity(HomeActivity.this, ConfirmOrderActivity.class, bundle );
+                                        bundle.putSerializable("baseBalance", baseBalance);
+                                        ActivityUtils.getInstance ().showActivity(HomeActivity.this, PayOrderActivity.class, bundle );
                                     } else {
                                         progress.dismissView();
                                         VolleyUtil.cancelAllRequest();

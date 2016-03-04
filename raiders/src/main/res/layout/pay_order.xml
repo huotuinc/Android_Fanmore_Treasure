@@ -53,8 +53,35 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:id="@+id/moneyL"
+            android:id="@+id/redPackageL"
             android:layout_marginTop="10dp"
+            android:layout_height="@dimen/profile_item_height"
+            android:orientation="horizontal"
+            android:background="@drawable/account_bg_top_bottom">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/redPackage"
+                android:layout_marginRight="10dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_16"
+                android:text="红包支付"/>
+            <TextView
+                android:id="@+id/redPackageMoney"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/title_bg"
+                android:textSize="@dimen/text_size_16"
+                android:gravity="right"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/moneyL"
             android:layout_height="@dimen/profile_item_height"
             android:orientation="horizontal"
             android:background="@drawable/account_bg_top_bottom">
@@ -178,7 +205,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:gravity="center"
-            android:text="确认充值"
+            android:text="确认支付"
             android:textColor="@color/color_white"
             android:textSize="@dimen/text_size_18"
             android:background="@color/title_bg"/>

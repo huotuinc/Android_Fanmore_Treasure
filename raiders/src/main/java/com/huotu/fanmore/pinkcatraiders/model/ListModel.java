@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 public class ListModel extends ProductModel {
 
     private long attendAmount;
-    private long userBuyAmount;
     private boolean isSelect;
     private long userBuyAmount;
     private BigDecimal pricePercentAmount;
@@ -20,14 +19,6 @@ public class ListModel extends ProductModel {
 
     public void setSid(long sid) {
         this.sid = sid;
-    }
-
-    public long getUserBuyAmount() {
-        return userBuyAmount;
-    }
-
-    public void setUserBuyAmount(long userBuyAmount) {
-        this.userBuyAmount = userBuyAmount;
     }
 
     public BigDecimal getPricePercentAmount() {
