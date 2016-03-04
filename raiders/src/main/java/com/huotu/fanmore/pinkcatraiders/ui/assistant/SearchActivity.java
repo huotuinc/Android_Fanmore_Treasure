@@ -342,6 +342,7 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
                                       {
                                           //异常处理，自动切换成无数据
                                           searchGrid.setEmptyView(emptyView);
+                                          ToastUtils.showLongToast(SearchActivity.this,"没有搜索到该商品！~");
                                       }
                                   }
                               }, new Response.ErrorListener() {

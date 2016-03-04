@@ -146,7 +146,7 @@ public class WinLogActivity extends BaseActivity implements View.OnClickListener
                 }
                                         );
         winners = new ArrayList<AppUserBuyFlowModel> ();
-        adapter = new WinAdapter (winners, WinLogActivity.this);
+        adapter = new WinAdapter (winners, WinLogActivity.this,WinLogActivity.this);
         winLogList.setAdapter ( adapter );
         firstGetData ( );
     }

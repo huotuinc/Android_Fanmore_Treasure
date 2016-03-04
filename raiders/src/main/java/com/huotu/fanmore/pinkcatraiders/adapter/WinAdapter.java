@@ -1,5 +1,6 @@
 package com.huotu.fanmore.pinkcatraiders.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.view.View;
@@ -14,6 +15,8 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.model.AppUserBuyFlowModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RedPacketsModel;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.WinLogDetailActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
@@ -31,9 +34,11 @@ public class WinAdapter extends BaseAdapter {
     private List< AppUserBuyFlowModel> winners;
 
     private Context                     mContext;
+    private Activity aty;
 
     public
-    WinAdapter ( List< AppUserBuyFlowModel > winners, Context mContext ) {
+    WinAdapter ( List< AppUserBuyFlowModel > winners, Context mContext,Activity aty ) {
+        this.aty=aty;
 
         this.winners = winners;
         this.mContext = mContext;
@@ -80,21 +85,22 @@ public class WinAdapter extends BaseAdapter {
         {
             AppUserBuyFlowModel winner = winners.get(position);
             BitmapLoader.create().displayUrl (
-                    mContext, holder.raidersIcon, winner
+                    mContext, holder.pictureUrl, winner
                             .getDefaultPictureUrl ( ), R.mipmap.ic_launcher
                                              );
-            holder.raidersName.setText ( winner.getTitle ( ) );
-            holder.partnerNo.setText ( "参与期号：" + winner.getIssueId ( ) );
-            holder.totalRequired.setText ( "总需："+winner.getToAmount ( ) );
-            holder.showPhone.setText ( String.valueOf ( winner.getLuckyNumber () ));
-            holder.benqicanyu.setText ( "本期参与人数："+ winner.getAmount () );
-            holder.jiexiaoshijian.setText ( DateUtils.transformDataformat6 ( winner.getAwardingDate () ) );
+            holder.title.setText ( winner.getTitle ( ) );
+            holder.issueId.setText ( "参与期号：" + winner.getIssueId ( ) );
+            holder.toAmount.setText ( "总需："+winner.getToAmount ( ) );
+            holder.lunkyNumber.setText ( String.valueOf ( winner.getLuckyNumber () ));
+            holder.attendAmount.setText ( "本期参与人数："+ winner.getAmount () );
+            holder.awardingDate.setText ( DateUtils.transformDataformat6 ( winner.getAwardingDate () ) );
             holder.addBtn.setOnClickListener ( new View.OnClickListener ( ) {
 
                                                    @Override
                                                    public
                                                    void onClick ( View v ) {
 
+                                                       ActivityUtils.getInstance().showActivity(aty, WinLogDetailActivity.class);
                                                    }
                                                } );
         }
@@ -107,23 +113,21 @@ public class WinAdapter extends BaseAdapter {
            ButterKnife.bind(this, view);
         }
 
-        @Bind ( R.id.raidersIcon )
-        ImageView raidersIcon;
-        @Bind ( R.id.raidersName )
-        TextView raidersName;
-        @Bind ( R.id.partnerNo )
-        TextView partnerNo;
-        @Bind ( R.id.totalRequired )
-        TextView totalRequired;
+        @Bind ( R.id.pictureUrl )
+        ImageView pictureUrl;
+        @Bind ( R.id.title )
+        TextView title;
+        @Bind ( R.id.issueId )
+        TextView issueId;
+        @Bind ( R.id.toAmount )
+        TextView toAmount;
         @Bind ( R.id.addBtn )
         TextView addBtn;
-        @Bind ( R.id.partnerCount )
-        TextView partnerCount;
-        @Bind ( R.id.showPhone )
-        TextView showPhone;
-        @Bind ( R.id.benqicanyu )
-        TextView benqicanyu;
-        @Bind ( R.id.jiexiaoshijian )
-        TextView jiexiaoshijian;
+        @Bind ( R.id.lunkyNumber )
+        TextView lunkyNumber;
+        @Bind ( R.id.attendAmount )
+        TextView attendAmount;
+        @Bind ( R.id.awardingDate )
+        TextView awardingDate;
     }
 }
