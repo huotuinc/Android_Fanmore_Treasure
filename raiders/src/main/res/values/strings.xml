@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">粉猫夺宝</string>
+    <string name="app_name">奇兵夺宝</string>
     <string name="db_name">fmdb.db</string>
     <!--微信支付-->
     <string name="app_tip">支付提示</string>

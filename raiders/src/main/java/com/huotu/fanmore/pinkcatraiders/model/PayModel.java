@@ -9,7 +9,25 @@ public
 class PayModel extends BaseModel {
 
     private String alipayCallbackUrl;
-    private BigDecimal fee;
+    private String alipayFee;
+    private String wxFee;
+
+    public String getAlipayFee() {
+        return alipayFee;
+    }
+
+    public void setAlipayFee(String alipayFee) {
+        this.alipayFee = alipayFee;
+    }
+
+    public String getWxFee() {
+        return wxFee;
+    }
+
+    public void setWxFee(String wxFee) {
+        this.wxFee = wxFee;
+    }
+
     private String orderNo;
     private String remainPayUrl;
     private String wxCallbackUrl;
@@ -89,14 +107,6 @@ class PayModel extends BaseModel {
     void setAlipayCallbackUrl ( String alipayCallbackUrl ) {
 
         this.alipayCallbackUrl = alipayCallbackUrl;
-    }
-
-    public BigDecimal getFee() {
-        return fee;
-    }
-
-    public void setFee(BigDecimal fee) {
-        this.fee = fee;
     }
 
     public

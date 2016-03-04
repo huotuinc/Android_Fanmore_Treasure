@@ -52,8 +52,7 @@ class PayFunc {
     void wxPay ( ) {
         //根据订单号获取支付信息
         String body        = payModel.getDetail ( );
-        BigDecimal price = payModel.getFee().multiply(new BigDecimal(100)); //单位分，正数
-        String priceStr       = String.valueOf ( price.intValue() );
+        String priceStr       = payModel.getWxFee();
         int    productType = 0;
         long   productId   = 0;
         progress.dismissView ();
@@ -66,7 +65,7 @@ class PayFunc {
         AliPayUtil aliPay = new AliPayUtil(aty, handler, application);
         //根据订单号获取订单信息
         String body = payModel.getDetail ( );
-        String price = String.valueOf ( payModel.getFee () );
+        String price = payModel.getAlipayFee ();
         String subject = payModel.getDetail ();
         int productType= 0;
         long productId= 0;
