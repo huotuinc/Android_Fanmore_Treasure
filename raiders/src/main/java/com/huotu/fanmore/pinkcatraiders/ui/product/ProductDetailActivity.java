@@ -47,6 +47,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.raiders.ShareOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
+import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
@@ -168,7 +169,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                     public void onPullUpToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
 
                         operateType = OperateTypeEnum.LOADMORE;
-                         getCommentLog();
+                        getCommentLog();
                     }
                 }
         );
@@ -636,8 +637,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     {
         Bundle bundle = new Bundle (  );
         //产品晒单
-        bundle.putInt ( "type", 2 );
-        bundle.putLong ( "goodsId",  productDetail.getPid ());
+        bundle.putInt("type", 2);
+        bundle.putLong("goodsId", productDetail.getPid());
         ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, ShowOrderActivity.class, bundle);
     }
 
@@ -668,6 +669,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 maps.put("lastId", partnerHistory.getPid());
             } else if (partnerHistorys != null && partnerHistorys.size() == 0)
             {
+                maps.put("lastId", 0);
+            }else if (partnerHistorys==null){
                 maps.put("lastId", 0);
             }
         }
@@ -709,7 +712,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                             TextView partnerCount = (TextView) parntersLayout.findViewById(R.id.partnerCount);
                             partnerCount.setText("参与了" + partnerLog.getAttendAmount() + "人次");
                             TextView partnerTime = (TextView) parntersLayout.findViewById(R.id.partnerTime);
-                            partnerTime.setText(partnerLog.getDate());
+                            partnerTime.setText(DateUtils.transformDataformat2(partnerLog.getDate()));
                             lp.setMargins(0, 0, 0, 0);
                             parntersLayout.setLayoutParams(lp);
                             partnerLogL.addView(parntersLayout);
@@ -732,36 +735,6 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             }
         });
     }
-
-    /*private void initLog()
-    {
-        partnerLogs = new ArrayList<PartnerLogModel>();
-        PartnerLogModel partnerLog1 = new PartnerLogModel();
-        partnerLog1.setGroupTime("2016-02-11");
-        partnerLog1.setPartnerCount("参与了3人次");
-        partnerLog1.setPartnerIp("（杭州市 IP 172.0.0.1）");
-        partnerLog1.setPartnerLogo("http://v1.qzone.cc/avatar/201404/10/00/12/534571832f9ea304.jpg!200x200.jpg");
-        partnerLog1.setPartnerTime("2016-02-11 12:23:23");
-        partnerLog1.setPartnerName("小鸡鸡");
-        partnerLogs.add(partnerLog1);
-        PartnerLogModel partnerLog2 = new PartnerLogModel();
-        partnerLog2.setGroupTime("2016-02-11");
-        partnerLog2.setPartnerCount("参与了4人次");
-        partnerLog2.setPartnerIp("（铁岭市 IP 172.0.0.1）");
-        partnerLog2.setPartnerLogo("http://v1.qzone.cc/avatar/201404/10/00/12/534571832f9ea304.jpg!200x200.jpg");
-        partnerLog2.setPartnerTime("2016-02-11 09:23:23");
-        partnerLog2.setPartnerName("小丫丫");
-        partnerLogs.add(partnerLog2);
-        if(null!=partnerLogs && !partnerLogs.isEmpty())
-        {
-
-        }
-        else
-        {
-            //显示暂无参与历史记录
-
-        }
-    }*/
 
     /**
      * 初始化加载数据
@@ -902,7 +875,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     @OnClick(R.id.historys)
    void tohistorys (){
         Bundle bundle = new Bundle ( );
-        bundle.putLong("goodsId", pid);
+        bundle.putLong("goodsId",  productDetail.getPid());
         ActivityUtils.getInstance ().showActivity ( ProductDetailActivity.this, HistorysActivity.class,bundle);
 
 
