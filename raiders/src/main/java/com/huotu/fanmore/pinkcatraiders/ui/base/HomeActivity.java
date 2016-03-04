@@ -607,11 +607,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     application.mFragManager.setCurrentFrag ( FragManager.FragType.PROFILE );
                 }
                 else if ( tag.equals ( Contant.TAG_5 ) ) {
-                    AuthParamUtils paramUtils = new AuthParamUtils ( application, System.currentTimeMillis(),HomeActivity.this );
+                    /*AuthParamUtils paramUtils = new AuthParamUtils ( application, System.currentTimeMillis(),HomeActivity.this );
                     //String url = paramUtils.obtainUrl();
                     Bundle bundle = new Bundle();
                     bundle.putString("url","http://cosytest.51flashmall.com/");
-                    ActivityUtils.getInstance().showActivity(HomeActivity.this, MallHomeActivity.class, bundle);
+                    ActivityUtils.getInstance().showActivity(HomeActivity.this, MallHomeActivity.class, bundle);*/
                 }
             }
             break;

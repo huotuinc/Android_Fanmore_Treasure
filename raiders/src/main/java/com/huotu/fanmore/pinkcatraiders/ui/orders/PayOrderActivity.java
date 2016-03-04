@@ -54,7 +54,6 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
 
 
     public Handler mHandler;
-
     public WindowManager wManager;
 
     public
@@ -185,7 +184,7 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
     void doPay()
     {
         moneyTag = balance1.getMoney().longValue();
-        if(-1 == moneyTag)
+        if(-1 == moneyTag || 0==moneyTag)
         {
             ToastUtils.showShortToast(PayOrderActivity.this, "购买金额为空");
             return;

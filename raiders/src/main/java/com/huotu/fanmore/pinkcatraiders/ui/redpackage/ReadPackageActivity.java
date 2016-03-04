@@ -12,6 +12,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
  * 红包接口
  */
 public class ReadPackageActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+
     @Override
     public boolean handleMessage(Message msg) {
         return false;

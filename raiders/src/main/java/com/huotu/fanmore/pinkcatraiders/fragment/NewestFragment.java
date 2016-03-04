@@ -109,7 +109,6 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
 
     private void initGrid()
     {
-
         newestGrid.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<GridView> pullToRefreshBase) {
@@ -123,15 +122,14 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
                 initProducts();
             }
         });
-
+        newestProducts = new ArrayList<NewOpenListModel>();
+        adapter = new NewestProductAdapter(newestProducts,getActivity(),getActivity());
+        newestGrid.setAdapter(adapter);
        firstGetData();
     }
 
     private void initProducts()
     {
-        newestProducts = new ArrayList<NewOpenListModel>();
-        adapter = new NewestProductAdapter(newestProducts,getActivity(),getActivity());
-        newestGrid.setAdapter(adapter);
         if( false == rootAty.canConnect() ) {
             rootAty.mHandler.post(new Runnable() {
                 @Override
@@ -155,10 +153,10 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
                 if ( newestProducts != null &&newestProducts.size() > 0)
                 {
                     NewOpenListModel product = newestProducts.get(newestProducts.size() - 1);
-                    maps.put("lastId",1);
-                } else if (newestProducts != null && newestProducts.size() == 0)
+                    maps.put("lastId",product.getPid());
+                } else
                 {
-                    maps.put("lastId",1);
+                    maps.put("lastId",0);
                 }
             }
             String suffix = params.obtainGetParam(maps);
