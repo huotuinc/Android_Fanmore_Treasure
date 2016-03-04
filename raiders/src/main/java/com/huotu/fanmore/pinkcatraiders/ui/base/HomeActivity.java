@@ -804,7 +804,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                         baseBalance.setRedPacketsNumber(balance.getRedPacketsNumber());
                                         baseBalance.setRedPacketsRemark(balance.getRedPacketsRemark());
                                         baseBalance.setRedPacketsStartTime(balance.getRedPacketsStartTime());
-                                        baseBalance.setRedPacketsStatus(balance.getRedPacketsStatus().getName());
+                                        baseBalance.setRedPacketsStatus(null==balance.getRedPacketsStatus()?null:balance.getRedPacketsStatus().getName());
                                         baseBalance.setTotalMoney(balance.getTotalMoney());
                                         baseBalance.setRedPacketsTitle(balance.getRedPacketsTitle());
                                         Bundle bundle = new Bundle();

@@ -195,6 +195,31 @@
                 android:textColor="@color/text_black"
                 android:textSize="@dimen/text_size_16"/>
         </RelativeLayout>
+        <RelativeLayout
+            android:background="@drawable/account_bg_bottom"
+            android:layout_width="fill_parent"
+            android:paddingTop="20dp"
+            android:paddingRight="10dp"
+            android:id="@+id/balanceL"
+            android:paddingBottom="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="@dimen/common_icon_size_5"
+                android:layout_height="@dimen/common_icon_size_5"
+                android:id="@+id/moneyMethodIcon3"
+                android:layout_centerVertical="true"
+                android:background="@mipmap/unselect"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/moneyMethodIcon3"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:text="余额支付"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_16"/>
+        </RelativeLayout>
         </LinearLayout>
         <TextView
             android:id="@+id/rechargeBtn"

@@ -21,6 +21,7 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.BaseBalanceModel;
+import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayOutputModel;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
@@ -30,6 +31,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.PayFunc;
+import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
@@ -85,6 +87,8 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
     ImageView moneyMethodIcon1;
     @Bind(R.id.moneyMethodIcon2)
     ImageView moneyMethodIcon2;
+    @Bind(R.id.moneyMethodIcon3)
+    ImageView moneyMethodIcon3;
     public Bundle bundle;
     public BaseBalanceModel balance1;
 
@@ -131,17 +135,18 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
     private void initData()
     {
         totalMoney.setText(String.valueOf(balance1.getTotalMoney()));
-        redPackageMoney.setText((0==balance1.getRedPacketsFullMoney().compareTo(BigDecimal.ZERO) || null==balance1.getRedPacketsFullMoney())?"无可食用红包":balance1.getRedPacketsFullMoney()+"元");
-        balance.setText("余额支付(余额：0元)");
-        money.setText(balance1.getMoney()+"元");
+        redPackageMoney.setText(null==balance1.getRedPacketsMinusMoney() || (0==balance1.getRedPacketsMinusMoney().compareTo(BigDecimal.ZERO))?"无可使用红包":balance1.getRedPacketsMinusMoney()+"元");
+        String balanceStr = PreferenceHelper.readString(PayOrderActivity.this, Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MONEY);
+        balance.setText("余额支付(余额：" + ((null != balanceStr && !balanceStr.isEmpty() && !"null".equals(balanceStr)) ? balanceStr : 0) + "元)");
+        money.setText(balance1.getMoney() + "元");
     }
 
     private
     void initTitle ( ) {
         //背景色
         Drawable bgDraw = resources.getDrawable ( R.drawable.account_bg_bottom );
-        SystemTools.loadBackground(titleLayoutL, bgDraw );
-        Drawable leftDraw = resources.getDrawable ( R.mipmap.back_gray );
+        SystemTools.loadBackground(titleLayoutL, bgDraw);
+        Drawable leftDraw = resources.getDrawable(R.mipmap.back_gray);
         SystemTools.loadBackground ( titleLeftImage, leftDraw );
         stubTitleText.inflate();
         TextView titleText = (TextView) this.findViewById(R.id.titleText);
@@ -153,6 +158,7 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
     {
         SystemTools.loadBackground(moneyMethodIcon1, resources.getDrawable(R.mipmap.money_select));
         SystemTools.loadBackground(moneyMethodIcon2, resources.getDrawable(R.mipmap.unselect));
+        SystemTools.loadBackground(moneyMethodIcon3, resources.getDrawable(R.mipmap.unselect));
         payType = 0;
 
     }
@@ -162,7 +168,18 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
     {
         SystemTools.loadBackground ( moneyMethodIcon1, resources.getDrawable ( R.mipmap.unselect ) );
         SystemTools.loadBackground(moneyMethodIcon2, resources.getDrawable(R.mipmap.money_select));
+        SystemTools.loadBackground(moneyMethodIcon3, resources.getDrawable(R.mipmap.unselect));
         payType = 1;
+    }
+
+    @OnClick(R.id.balanceL)
+    void selectbalance()
+    {
+        SystemTools.loadBackground(moneyMethodIcon1, resources.getDrawable(R.mipmap.unselect));
+        SystemTools.loadBackground(moneyMethodIcon2, resources.getDrawable(R.mipmap.unselect));
+        SystemTools.loadBackground(moneyMethodIcon3, resources.getDrawable(R.mipmap.money_select));
+        payType = 2;
+
     }
 
     @Override
@@ -199,31 +216,28 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
             progress = new ProgressPopupWindow ( PayOrderActivity.this, PayOrderActivity.this, wManager );
             progress.showProgress ( "正在提交支付信息" );
             progress.showAtLocation ( rechargeBtn, Gravity.CENTER, 0, 0 );
-            String                url    = Contant.REQUEST_URL + Contant.PUT_MONEY;
+            String                url    = Contant.REQUEST_URL + Contant.PAY;
             AuthParamUtils params = new AuthParamUtils ( application, System.currentTimeMillis
                     ( ), PayOrderActivity.this );
             Map< String, Object > maps   = new HashMap< String, Object >( );
             maps.put ( "money", String.valueOf ( moneyTag ) );
             maps.put ( "payType", String.valueOf ( payType ) );
-            String                suffix = params.obtainGetParam ( maps );
-            url = url + suffix;
-            HttpUtils httpUtils = new HttpUtils ( );
-            httpUtils.doVolleyGet (
-                    url, new Response.Listener<JSONObject> ( ) {
+            maps.put ( "redPacketsId", String.valueOf ( balance1.getRedPacketsId() ) );
+            Map<String, Object> param = params.obtainPostParam(maps);
+            PayOutputModel payOutput = new PayOutputModel();
+            HttpUtils<PayOutputModel> httpUtils = new HttpUtils<PayOutputModel> ();
+            httpUtils.doVolleyPost (
+                    payOutput, url, param, new Response.Listener<PayOutputModel> ( ) {
 
                         @Override
                         public
-                        void onResponse ( JSONObject response ) {
+                        void onResponse ( PayOutputModel response ) {
                             progress.dismissView ();
 
                             if ( PayOrderActivity.this.isFinishing ( ) ) {
                                 return;
                             }
-                            JSONUtil< PayOutputModel > jsonUtil = new JSONUtil<
-                                    PayOutputModel > ( );
-                            PayOutputModel payOutput = new PayOutputModel
-                                    ( );
-                            payOutput = jsonUtil.toBean ( response.toString ( ), payOutput );
+                            PayOutputModel payOutput = response;
                             if ( null != payOutput && null != payOutput.getResultData ( )
                                     && ( 1 == payOutput.getResultCode ( ) ) ) {
                                 PayModel payModel = payOutput.getResultData().getData();
@@ -251,6 +265,53 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                                     );
                                     PayFunc payFunc = new PayFunc ( PayOrderActivity.this, payModel, application, mHandler, PayOrderActivity.this, progress );
                                     payFunc.aliPay();
+                                }
+                                else if(2==payType)
+                                {
+                                    //余额支付
+                                    String balanceStr = PreferenceHelper.readString(PayOrderActivity.this, Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MONEY);
+                                    if(null != balanceStr && !balanceStr.isEmpty() && !"null".equals(balanceStr) && !"0".equals(balanceStr))
+                                    {
+                                        progress.showProgress("等待余额支付跳转");
+
+                                        String                url    = Contant.REQUEST_URL + Contant.REMAINPAY;
+                                        AuthParamUtils params = new AuthParamUtils ( application, System.currentTimeMillis
+                                                ( ), PayOrderActivity.this );
+                                        Map< String, Object > maps   = new HashMap< String, Object >( );
+                                        maps.put ( "orderNo", payModel.getOrderNo() );
+                                        maps.put ( "money", payModel.getAlipayFee() );
+                                        Map<String, Object> param = params.obtainPostParam(maps);
+                                        BaseModel base = new BaseModel();
+                                        HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
+                                        httpUtils.doVolleyPost(base, url, param, new Response.Listener<BaseModel>() {
+                                            @Override
+                                            public void onResponse(BaseModel response) {
+                                                if(1==response.getResultCode())
+                                                {
+                                                    //支付成功
+                                                    ActivityUtils.getInstance().skipActivity(PayOrderActivity.this, PayResultAtivity.class);
+                                                }
+                                                else
+                                                {
+                                                    //余额支付失败
+                                                    ToastUtils.showShortToast(PayOrderActivity.this, "余额支付失败");
+
+                                                }
+                                            }
+                                        }, new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+
+                                            }
+                                        });
+
+                                    }
+                                    else
+                                    {
+                                        ToastUtils.showShortToast(PayOrderActivity.this, "您账户的余额不足");
+                                    }
+
+
                                 }
                                 else
                                 {

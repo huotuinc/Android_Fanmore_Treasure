@@ -221,8 +221,12 @@ public class Contant {
     public static final String GET_MY_REDPACKAGES_LIST = "getMyRedPacketsList";
     //获取中奖纪录列表
     public static final String GET_MY_LOTTERY_LIST = "getMyLotteryList";
-    //预支付信息
+    //预支付信息-充值
     public static final String PUT_MONEY = "putMoney";
+    //预支付信息-订单支付
+    public static final String PAY = "pay";
+    //余额支付
+    public static final String REMAINPAY = "remainPay";
     //获取最新揭晓
     public static final String GET_NEWOPEN_LIST="getNewOpenList";
     //获取普通分类商品
