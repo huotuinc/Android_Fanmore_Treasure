@@ -46,7 +46,7 @@ class MyPushReceiver extends BroadcastReceiver
             //将imei注册为别名
             //将remote别名传递给
             String url = Contant.REQUEST_URL + Contant.UPDATE_DEVICE_TOKEN;
-            AuthParamUtils params = new AuthParamUtils(BaseApplication.getInstance(), System.currentTimeMillis(), context);
+            AuthParamUtils params = new AuthParamUtils(BaseApplication.getInstance(), System.currentTimeMillis(), context.getApplicationContext());
             Map<String, Object> maps = new HashMap<String, Object>();
             maps.put("deviceToken", imei);
             Map<String, Object> param = params.obtainPostParam(maps);
@@ -60,7 +60,7 @@ class MyPushReceiver extends BroadcastReceiver
                             if (1 == base.getResultCode()) {
                                 //上传成功
                                 //与jpush remote
-                                JPushInterface.setAliasAndTags(context, imei, null, new TagAliasCallback() {
+                                JPushInterface.setAlias(context.getApplicationContext(), imei, new TagAliasCallback() {
                                     @Override
                                     public void gotResult(int code, String s, Set<String> set) {
 

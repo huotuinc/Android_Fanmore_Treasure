@@ -51,6 +51,8 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * 启动界面
  */
@@ -408,6 +410,10 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
     @Override
     protected void onResume() {
         super.onResume();
+        if(  JPushInterface.isPushStopped(SplashActivity.this))
+        {
+            JPushInterface.resumePush(SplashActivity.this);
+        }
     }
 
     //设置网络点击事件

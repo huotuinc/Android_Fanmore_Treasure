@@ -100,7 +100,6 @@
             android:name=".ui.base.HomeActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:launchMode="singleTop"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.orders.ShowOrderActivity"
