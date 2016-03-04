@@ -5,12 +5,12 @@
     android:background="@color/color_white"
     android:padding="5dp">
         <ImageView
-            android:id="@+id/raidersIcon"
+            android:id="@+id/pictureUrl"
             android:layout_width="@dimen/icon_size_4"
             android:layout_height="@dimen/icon_size_4" />
 
         <TextView
-            android:layout_toRightOf="@+id/raidersIcon"
+            android:layout_toRightOf="@+id/pictureUrl"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"
@@ -18,25 +18,25 @@
             android:text="qqwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"
             android:textSize="@dimen/text_size_16"
             android:textColor="@color/text_black"
-            android:id="@+id/raidersName"/>
+            android:id="@+id/title"/>
 
 
                 <TextView
-                    android:layout_below="@+id/raidersName"
-                    android:layout_toRightOf="@+id/raidersIcon"
+                    android:layout_below="@+id/title"
+                    android:layout_toRightOf="@+id/pictureUrl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/partnerNo"
+                    android:id="@+id/issueId"
                     android:textColor="@color/text_gray"
                     android:textSize="@dimen/text_size_14"
                     android:text="参与期号:2314141"/>
                 <TextView
-                    android:layout_toRightOf="@+id/raidersIcon"
+                    android:layout_toRightOf="@+id/pictureUrl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/totalRequired"
+                    android:id="@+id/toAmount"
                     android:layout_marginTop="3dp"
-                    android:layout_below="@+id/partnerNo"
+                    android:layout_below="@+id/issueId"
                     android:textColor="@color/text_gray"
                     android:textSize="@dimen/text_size_14"
                     android:text="总需:50"/>
@@ -59,40 +59,40 @@
 
 
         <TextView
-            android:layout_toRightOf="@+id/raidersIcon"
+            android:layout_toRightOf="@+id/pictureUrl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/partnerCount"
             android:layout_marginTop="3dp"
-            android:layout_below="@+id/totalRequired"
+            android:layout_below="@+id/toAmount"
             android:textColor="@color/text_gray"
             android:textSize="@dimen/text_size_16"
             android:text="幸运号码:"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/showPhone"
+            android:id="@+id/lunkyNumber"
             android:layout_marginTop="3dp"
-            android:layout_below="@+id/totalRequired"
+            android:layout_below="@+id/toAmount"
             android:layout_toRightOf="@id/partnerCount"
             android:textColor="@color/color_blue"
             android:textSize="@dimen/text_size_16"
             android:text="11111111"/>
         <TextView
-            android:layout_toRightOf="@+id/raidersIcon"
+            android:layout_toRightOf="@+id/pictureUrl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/benqicanyu"
+            android:id="@+id/attendAmount"
             android:layout_below="@+id/partnerCount"
             android:textColor="@color/text_gray"
             android:textSize="@dimen/text_size_14"
             android:text="本期参与:3人次"/>
         <TextView
-            android:layout_toRightOf="@+id/raidersIcon"
+            android:layout_toRightOf="@+id/pictureUrl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/jiexiaoshijian"
-            android:layout_below="@+id/benqicanyu"
+            android:id="@+id/awardingDate"
+            android:layout_below="@+id/attendAmount"
             android:textColor="@color/text_gray"
             android:textSize="@dimen/text_size_14"
             android:text="揭晓时间:2016-01-24  10:04:00"/>
@@ -100,7 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:id="@+id/line_gray"
-            android:layout_below="@+id/jiexiaoshijian"
+            android:layout_below="@+id/awardingDate"
             android:background="@color/text_gray"/>
 
 
