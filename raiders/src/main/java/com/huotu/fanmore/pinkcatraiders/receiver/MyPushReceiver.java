@@ -4,10 +4,25 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
+import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 /**
  * 激光推送处理广播类
@@ -15,7 +30,6 @@ import cn.jpush.android.api.JPushInterface;
 public
 class MyPushReceiver extends BroadcastReceiver
 {
-    public BaseApplication application;
 
     private String imei = null;
 
@@ -24,14 +38,57 @@ class MyPushReceiver extends BroadcastReceiver
     @Override
     public
     void onReceive ( final Context context, Intent intent ) {
-
         Bundle bundle = intent.getExtras ( );
         if ( JPushInterface.ACTION_REGISTRATION_ID.equals ( intent.getAction ( ) ) ) {
             // 注册后获取极光全局ID
             regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
-            imei = application.getPhoneIMEI(context);
-
+            imei = BaseApplication.getPhoneIMEI(context);
             //将imei注册为别名
+            //将remote别名传递给
+            String url = Contant.REQUEST_URL + Contant.UPDATE_DEVICE_TOKEN;
+            AuthParamUtils params = new AuthParamUtils(BaseApplication.getInstance(), System.currentTimeMillis(), context);
+            Map<String, Object> maps = new HashMap<String, Object>();
+            maps.put("deviceToken", imei);
+            Map<String, Object> param = params.obtainPostParam(maps);
+            BaseModel base = new BaseModel ();
+            HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
+            httpUtils.doVolleyPost(
+                    base, url, param, new Response.Listener<BaseModel>() {
+                        @Override
+                        public void onResponse(BaseModel response) {
+                            BaseModel base = response;
+                            if (1 == base.getResultCode()) {
+                                //上传成功
+                                //与jpush remote
+                                JPushInterface.setAliasAndTags(context, imei, null, new TagAliasCallback() {
+                                    @Override
+                                    public void gotResult(int code, String s, Set<String> set) {
+
+                                        // TODO Auto-generated method stub
+                                        switch (code) {
+                                            case 0:
+                                                PreferenceHelper.writeString(context, Contant.JPUSH_CONFIG, Contant.JPUSH_ALIAS, imei);
+                                                break;
+
+                                            case 6002:
+                                                break;
+
+                                            default:
+                                                break;
+                                        }
+                                    }
+                                });
+                            } else {
+                                //上传失败
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                        }
+                    }
+            );
 
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent
                                                                          .getAction()))

@@ -9,6 +9,10 @@
     <!--引导界面图片-->
     <string-array name="guide_icon">
         <item>newfeature_0</item>
+        <item>newfeature_1</item>
+        <item>newfeature_2</item>
+        <item>newfeature_3</item>
+        <item>newfeature_4</item>
     </string-array>
     <string name="title_activity_user__center">User_Center</string>
 </resources>

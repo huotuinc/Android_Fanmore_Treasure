@@ -157,6 +157,8 @@ public class Contant {
     public final static String LOGIN_AUTH_USERID       = "userId";
 
     public final static String LOGIN_AUTH_USERNAME     = "username";
+    public final static String JPUSH_CONFIG = "jpush_config";
+    public final static String JPUSH_ALIAS = "jpush_alias";
 
     //接口请求地址
     //loginapi
@@ -260,4 +262,6 @@ public class Contant {
     public static final String DELETE_CART = "deleteShoppingCart";
     //购物车结算
     public static final String BALANCE = "balance";
+    //jpush设置别名
+    public static final String UPDATE_DEVICE_TOKEN = "updateDeviceToken";
 }

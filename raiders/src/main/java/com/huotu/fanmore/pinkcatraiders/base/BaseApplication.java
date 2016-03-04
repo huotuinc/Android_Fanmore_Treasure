@@ -19,6 +19,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.orm.SugarContext;
 
+import cn.jpush.android.api.JPushInterface;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 
@@ -55,6 +56,8 @@ public class BaseApplication extends Application {
 
         ShareSDK.initSDK(getApplicationContext());
         VolleyUtil.init(getApplicationContext());
+        //极光推送
+        JPushInterface.init(getApplicationContext());
         //加载异常处理模块
         CrashHandler crashHandler = CrashHandler.getInstance ();
         crashHandler.init(getApplicationContext());
@@ -82,7 +85,7 @@ public class BaseApplication extends Application {
     /**
      * 获取手机IMEI码
      */
-    public String getPhoneIMEI ( Context cxt ) {
+    public static String getPhoneIMEI ( Context cxt ) {
         TelephonyManager tm = ( TelephonyManager ) cxt
                 .getSystemService ( Context.TELEPHONY_SERVICE );
         return tm.getDeviceId ( );
