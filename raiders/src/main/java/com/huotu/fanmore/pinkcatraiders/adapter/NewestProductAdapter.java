@@ -20,12 +20,11 @@ import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.TimeCount;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.widget.CountDownTimerButton;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -39,12 +38,13 @@ public class NewestProductAdapter extends BaseAdapter {
     private List<NewOpenListModel> newestProducts;
     private Context context;
     private Activity aty;
-    private CountDownTimerButton countDownBtn;
-    public NewestProductAdapter(List<NewOpenListModel> newestProducts,Activity aty,Context context)
+    private TimeCount tc;
+    public NewestProductAdapter(List<NewOpenListModel> newestProducts,Activity aty,Context context, TimeCount tc)
     {
         this.newestProducts = newestProducts;
         this.context = context;
         this.aty = aty;
+        this.tc = tc;
     }
 
     @Override
@@ -103,16 +103,8 @@ public class NewestProductAdapter extends BaseAdapter {
 
                 long millSec = product.getToAwardingTime();
 
-                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-
-                Date date= new Date(millSec);
-
-
-                holder.countdown.setText(sdf.format(date));
-//                countDownBtn = new CountDownTimerButton( holder.countdown,sdf.format(date),
-//                        "获取验证码",  product.getToAwardingTime(), new CountDownFinish());
-//                countDownBtn.start();
-
+                TimeCount tc = new TimeCount(millSec*1000, 100, holder.countdown);
+                tc.start();
             }  else if (2==product.getStatus()){
                 holder.Rl1.setVisibility(View.GONE);
                 holder.Rl2.setVisibility(View.VISIBLE);

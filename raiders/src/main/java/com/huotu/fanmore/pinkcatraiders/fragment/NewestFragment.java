@@ -31,6 +31,8 @@ import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+import com.huotu.fanmore.pinkcatraiders.uitls.TimeCount;
+import com.huotu.fanmore.pinkcatraiders.widget.CountDownTimerButton;
 
 import org.json.JSONObject;
 
@@ -58,7 +60,7 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public List<NewOpenListModel> newestProducts;
     public NewestProductAdapter adapter;
-
+    private TimeCount tc;
     @Override
     public void onReshow() {
 
@@ -123,7 +125,7 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
             }
         });
         newestProducts = new ArrayList<NewOpenListModel>();
-        adapter = new NewestProductAdapter(newestProducts,getActivity(),getActivity());
+        adapter = new NewestProductAdapter(newestProducts,getActivity(),getActivity(),  tc);
         newestGrid.setAdapter(adapter);
        firstGetData();
     }
@@ -224,6 +226,9 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
     public void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(getActivity());
+        if ( null != tc ) {
+            tc.Stop ( );
+        }
     }
 
     @Override

@@ -120,6 +120,12 @@ public class DateUtils {
         return format.format(timeStamp);
     }
 
+    public static String transformDataformat10(long timeStamp)
+    {
+        DateFormat format = new SimpleDateFormat("mm:ss:SSS");
+        return format.format(timeStamp);
+    }
+
     /**
      * 转换成 YYYY/MM/DD
      * @param timeStamp
