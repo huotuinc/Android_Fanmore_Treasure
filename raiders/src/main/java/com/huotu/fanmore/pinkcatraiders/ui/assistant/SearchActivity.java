@@ -332,7 +332,7 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
                                       JSONUtil<ProductsOutputModel > jsonUtil = new JSONUtil<ProductsOutputModel>();
                                       ProductsOutputModel productsOutput = new ProductsOutputModel();
                                       productsOutput = jsonUtil.toBean(response.toString(), productsOutput);
-                                      if(null != productsOutput && null != productsOutput.getResultData() && (1==productsOutput.getResultCode()))
+                                      if(null != productsOutput && null != productsOutput.getResultData() && (1==productsOutput.getResultCode())&& null!=productsOutput.getResultData().getList())
                                       {
                                           searchProducts.clear();
                                           searchProducts.addAll(productsOutput.getResultData().getList());
