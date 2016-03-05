@@ -75,4 +75,5 @@
     <dimen name="common_icon_size_6">10dp</dimen>
     <dimen name="money_height">30dp</dimen>
     <dimen name="order_img_height">80dp</dimen>
+    <dimen name="winner_confirm_height">60dp</dimen>
 </resources>

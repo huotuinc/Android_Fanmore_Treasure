@@ -164,8 +164,8 @@ public class Contant {
     //接口请求地址
     //loginapi
 
-    //public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
-    public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
+    public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
+    //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
     // public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
@@ -260,6 +260,8 @@ public class Contant {
     public static final String ADD_SHARE_ORDER = "addShareOrder";
     //查看夺宝号码
     public static final String GET_MY_RAIDER_NUMBER = "getMyRaiderNumbers";
+    //查看夺宝号码
+    public static final String GET_ONE_LOTTERY_INFO = "getOneLotteryInfo";
     public static final int PAY_ERROR = 3003;
     public static final int PAY_OK    = 3004;
 

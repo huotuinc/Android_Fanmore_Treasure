@@ -14,5 +14,12 @@
         <item>newfeature_3</item>
         <item>newfeature_4</item>
     </string-array>
+    <string-array name="logistics_status">
+        <item>获得奖品</item>
+        <item>确认收货地址</item>
+        <item>奖品派发</item>
+        <item>确认收货</item>
+        <item>已签收</item>
+    </string-array>
     <string name="title_activity_user__center">User_Center</string>
 </resources>
