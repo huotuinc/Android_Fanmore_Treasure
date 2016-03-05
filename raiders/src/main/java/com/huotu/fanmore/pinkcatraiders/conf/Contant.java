@@ -97,6 +97,7 @@ public class Contant {
     public static final int BILLING    = 0x00000044;
     public static final int LIST_DELETE = 0x00000045;
     public static final int LIST_PAY = 0x00000046;
+    public static final int APPAND_LIST = 0x00000047;
 
     /**
      * 菜单标记1

@@ -86,7 +86,7 @@ public class WinAdapter extends BaseAdapter {
             AppUserBuyFlowModel winner = winners.get(position);
             BitmapLoader.create().displayUrl (
                     mContext, holder.pictureUrl, winner
-                            .getDefaultPictureUrl ( ), R.mipmap.ic_launcher
+                            .getDefaultPictureUrl ( ), R.mipmap.error
                                              );
             holder.title.setText ( winner.getTitle ( ) );
             holder.issueId.setText ( "参与期号：" + winner.getIssueId ( ) );

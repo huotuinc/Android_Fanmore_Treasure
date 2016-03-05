@@ -82,7 +82,7 @@ public class MyGridAdapter extends BaseAdapter {
         if(null!=productModels&&!productModels.isEmpty()&&null!=productModels.get(position))
         {
             final ProductModel product = productModels.get(position);
-            BitmapLoader.create().displayUrl(mContext, holder.productIcon, product.getPictureUrl(), R.mipmap.ic_launcher);
+            BitmapLoader.create().displayUrl(mContext, holder.productIcon, product.getPictureUrl(), R.mipmap.error);
             if(0==product.getAreaAmount())
             {
                 holder.productTag.setText("十元\n专区");
@@ -133,7 +133,7 @@ public class MyGridAdapter extends BaseAdapter {
         }
         else
         {
-            Drawable drawable = resources.getDrawable(R.mipmap.ic_launcher);
+            Drawable drawable = resources.getDrawable(R.mipmap.error);
             SystemTools.loadBackground(holder.productLL, drawable);
         }
         return convertView;

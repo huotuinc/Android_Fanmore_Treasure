@@ -66,7 +66,7 @@ public class BuyItemAdapter extends BaseAdapter {
         if(null!=items&&!items.isEmpty()&&null!=items.get(position))
         {
             BuyItemModel item = items.get(position);
-            BitmapLoader.create().displayUrl(mContext, holder.buyIcon, item.getPictureUrl(), R.mipmap.ic_launcher);
+            BitmapLoader.create().displayUrl(mContext, holder.buyIcon, item.getPictureUrl(), R.mipmap.error);
             holder.productName.setText(item.getTitle());
             holder.price.setText("价格：" + item.getPrice());
             holder.amount.setText("数量：" + item.getAmount());

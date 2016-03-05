@@ -103,7 +103,7 @@ public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback 
             }
         });
         raiders = new ArrayList<RaidersModel>();
-        adapter = new RaidersAdapter(raiders, getActivity(), getActivity());
+        adapter = new RaidersAdapter(raiders, getActivity(), getActivity(), rootAty.mHandler);
         raidersLogList.setAdapter(adapter);
         firstGetData();
     }

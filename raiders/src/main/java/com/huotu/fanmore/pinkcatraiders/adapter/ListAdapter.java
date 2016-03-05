@@ -79,7 +79,7 @@ public class ListAdapter extends BaseAdapter {
         if(null!=lists&&!lists.isEmpty()&&null!=lists.get(position))
         {
             final ListModel list = lists.get(position);
-            BitmapLoader.create().displayUrl(context, holder.listProductIcon, list.getPictureUrl(), R.mipmap.ic_launcher);
+            BitmapLoader.create().displayUrl(context, holder.listProductIcon, list.getPictureUrl(), R.mipmap.error);
             if(10==list.getAreaAmount())
             {
                 holder.productTag.setText("十元\n专区");
