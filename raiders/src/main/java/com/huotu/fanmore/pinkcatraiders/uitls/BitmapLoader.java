@@ -55,7 +55,7 @@ public class BitmapLoader
     public void displayUrl(Context context, NetworkImageView imageView,
             String imageUrl)
     {
-        displayUrl(context, imageView, imageUrl , R.mipmap.ic_launcher, R.mipmap.error);
+        displayUrl(context, imageView, imageUrl , R.mipmap.error, R.mipmap.error);
     }
 
     //加载圆形图片

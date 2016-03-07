@@ -17,6 +17,7 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
@@ -60,6 +61,7 @@ public class RaidersDetailActivity extends BaseActivity implements View.OnClickL
     TextView parentCount;
     @Bind(R.id.showNum)
     TextView showNum;
+    private RaidersModel raider;
 
     @Override
     public boolean handleMessage(Message msg) {
@@ -99,7 +101,7 @@ public class RaidersDetailActivity extends BaseActivity implements View.OnClickL
 
     private void initData()
     {
-        RaidersModel raider = (RaidersModel) bundle.getSerializable("raider");
+        raider = (RaidersModel) bundle.getSerializable("raider");
         productName.setText(raider.getTitle());
         productIssue.setText("期号："+raider.getIssueId());
         partnerCount.setText("参与了"+raider.getAttendAmount()+"人次");
@@ -111,7 +113,9 @@ public class RaidersDetailActivity extends BaseActivity implements View.OnClickL
     void showNumber()
     {
         //
-
+        Bundle bundle = new Bundle();
+        bundle.putLong("issuId", raider.getIssueId());
+        ActivityUtils.getInstance().showActivity(RaidersDetailActivity.this, RaidersNumberActivity.class, bundle);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.huotu.fanmore.pinkcatraiders.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -83,26 +84,26 @@ public class WinAdapter extends BaseAdapter {
         }
         if(null!=winners&&!winners.isEmpty()&&null!=winners.get(position))
         {
-            AppUserBuyFlowModel winner = winners.get(position);
-            BitmapLoader.create().displayUrl (
+            final AppUserBuyFlowModel winner = winners.get(position);
+            BitmapLoader.create().displayUrl(
                     mContext, holder.pictureUrl, winner
-                            .getDefaultPictureUrl ( ), R.mipmap.ic_launcher
-                                             );
-            holder.title.setText ( winner.getTitle ( ) );
-            holder.issueId.setText ( "参与期号：" + winner.getIssueId ( ) );
-            holder.toAmount.setText ( "总需："+winner.getToAmount ( ) );
+                            .getDefaultPictureUrl(), R.mipmap.error
+            );
+            holder.title.setText(winner.getTitle());
+            holder.issueId.setText("参与期号：" + winner.getIssueId());
+            holder.toAmount.setText ( "总需："+winner.getToAmount() );
             holder.lunkyNumber.setText ( String.valueOf ( winner.getLuckyNumber () ));
-            holder.attendAmount.setText ( "本期参与人数："+ winner.getAmount () );
-            holder.awardingDate.setText ( DateUtils.transformDataformat6 ( winner.getAwardingDate () ) );
-            holder.addBtn.setOnClickListener ( new View.OnClickListener ( ) {
+            holder.attendAmount.setText ( "本期参与人数："+ winner.getAmount() );
+            holder.awardingDate.setText("揭晓时间：" + DateUtils.transformDataformat6(winner.getAwardingDate()));
+            holder.addBtn.setOnClickListener(new View.OnClickListener() {
 
-                                                   @Override
-                                                   public
-                                                   void onClick ( View v ) {
-
-                                                       ActivityUtils.getInstance().showActivity(aty, WinLogDetailActivity.class);
-                                                   }
-                                               } );
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("winner", winner);
+                    ActivityUtils.getInstance().showActivity(aty, WinLogDetailActivity.class, bundle);
+                }
+            });
         }
         return convertView;
     }

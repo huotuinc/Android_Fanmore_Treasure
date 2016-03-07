@@ -187,10 +187,12 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
                             }
                         } else {
                             //空数据处理
+                            newestGrid.setEmptyView(emptyView);
                         }
                     } else {
                         //异常处理，自动切换成无数据
                         //空数据处理
+                        newestGrid.setEmptyView(emptyView);
                     }
                 }
             }, new Response.ErrorListener() {
@@ -201,6 +203,7 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
                         return;
                     }
                     //空数据处理
+                    newestGrid.setEmptyView(emptyView);
                 }
             });
 

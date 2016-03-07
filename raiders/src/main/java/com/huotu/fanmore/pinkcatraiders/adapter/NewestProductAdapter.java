@@ -79,7 +79,7 @@ public class NewestProductAdapter extends BaseAdapter {
         if(null!=newestProducts&&!newestProducts.isEmpty()&&null!=newestProducts.get(position))
         {
             final NewOpenListModel product = newestProducts.get(position);
-            BitmapLoader.create().displayUrl(context, holder.newestProductIcon, product.getPictureUrl(), R.mipmap.ic_launcher);
+            BitmapLoader.create().displayUrl(context, holder.newestProductIcon, product.getPictureUrl(), R.mipmap.error);
 
             if(0==product.getAreaAmount().intValue())
             {

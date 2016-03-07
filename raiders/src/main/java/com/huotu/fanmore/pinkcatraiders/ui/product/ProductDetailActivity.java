@@ -283,7 +283,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     ProductDetailActivity.this, accountLogo,
                                                     "http://v1.qzone"
                                                             + ".cc/avatar/201404/10/00/12/534571832f9ea304"
-                                                            + ".jpg!200x200.jpg", R.mipmap.ic_launcher
+                                                            + ".jpg!200x200.jpg", R.mipmap.error
                                             );
                                             TextView winnerName = (TextView) ProductDetailActivity
                                                     .this.findViewById(R.id.winnerName);
@@ -353,7 +353,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     ProductDetailActivity.this, accountLogo,
                                                     "http://v1.qzone"
                                                             + ".cc/avatar/201404/10/00/12/534571832f9ea304"
-                                                            + ".jpg!200x200.jpg", R.mipmap.ic_launcher);
+                                                            + ".jpg!200x200.jpg", R.mipmap.error);
                                             TextView winnerName = (TextView) ProductDetailActivity
                                                     .this.findViewById(R.id.winnerName);
                                             winnerName.setText("中奖者：百晓生");
@@ -495,7 +495,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     ProductDetailActivity.this, accountLogo,
                                                     "http://v1.qzone"
                                                             + ".cc/avatar/201404/10/00/12/534571832f9ea304"
-                                                            + ".jpg!200x200.jpg", R.mipmap.ic_launcher
+                                                            + ".jpg!200x200.jpg", R.mipmap.error
                                             );
                                             TextView winnerName = (TextView) ProductDetailActivity
                                                     .this.findViewById(R.id.winnerName);
@@ -566,7 +566,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     ProductDetailActivity.this, accountLogo,
                                                     "http://v1.qzone"
                                                             + ".cc/avatar/201404/10/00/12/534571832f9ea304"
-                                                            + ".jpg!200x200.jpg", R.mipmap.ic_launcher);
+                                                            + ".jpg!200x200.jpg", R.mipmap.error);
                                             TextView winnerName = (TextView) ProductDetailActivity
                                                     .this.findViewById(R.id.winnerName);
                                             winnerName.setText("中奖者：百晓生");
@@ -704,7 +704,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                             TextView bgLine = (TextView) parntersLayout.findViewById(R.id.bgLine);
                             bgLine.setMinimumHeight(200);
                             CircleImageView partnerLogo = (CircleImageView) parntersLayout.findViewById(R.id.partnerLogo);
-                            BitmapLoader.create().loadRoundImage(ProductDetailActivity.this, partnerLogo, partnerLog.getUserHeadUrl(), R.mipmap.ic_launcher);
+                            BitmapLoader.create().loadRoundImage(ProductDetailActivity.this, partnerLogo, partnerLog.getUserHeadUrl(), R.mipmap.error);
                             TextView partnerName = (TextView) parntersLayout.findViewById(R.id.partnerName);
                             partnerName.setText(partnerLog.getNickName());
                             TextView partnerIp = (TextView) parntersLayout.findViewById(R.id.partnerIp);

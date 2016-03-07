@@ -26,6 +26,16 @@ public class DateUtils {
         return format.format(new Date(Long.parseLong(timeStamp)));
     }
 
+    public static String transformDataformat11(String timeStamp)
+    {
+        if("".equals(timeStamp) || null == timeStamp)
+        {
+            timeStamp = String.valueOf(System.currentTimeMillis());
+        }
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        return format.format(new Date(Long.parseLong(timeStamp)));
+    }
+
     /**
      * 转换成 2015/12/12 10:00:00格式
      * @param timeStamp

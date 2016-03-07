@@ -97,6 +97,7 @@ public class Contant {
     public static final int BILLING    = 0x00000044;
     public static final int LIST_DELETE = 0x00000045;
     public static final int LIST_PAY = 0x00000046;
+    public static final int APPAND_LIST = 0x00000047;
 
     /**
      * 菜单标记1
@@ -171,12 +172,9 @@ public class Contant {
     //接口请求地址
     //loginapi
 
-    //public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
-    public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
-    // public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
+    public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
-    //public static final String REQUEST_URL                 = "http://192.168.1.146:8081/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.3.13:8080/duobao/app/";
     //获取夺宝记录
     public static final String GET_MY_RAIDER_LIST          = "getMyRaiderList";
@@ -271,6 +269,8 @@ public class Contant {
     public static final String ADD_SHARE_ORDER = "addShareOrder";
     //查看夺宝号码
     public static final String GET_MY_RAIDER_NUMBER = "getMyRaiderNumbers";
+    //查看夺宝号码
+    public static final String GET_ONE_LOTTERY_INFO = "getOneLotteryInfo";
     public static final int PAY_ERROR = 3003;
     public static final int PAY_OK    = 3004;
 

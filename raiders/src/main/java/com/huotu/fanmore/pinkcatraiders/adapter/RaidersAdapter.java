@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -14,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidersDetailActivity;
@@ -42,12 +45,14 @@ public class RaidersAdapter extends BaseAdapter {
     private Context mContext;
     private Activity aty;
     public RaidersModel raider;
+    private Handler mHandler;
 
-    public RaidersAdapter(List<RaidersModel> raiders, Context mContext, Activity aty)
+    public RaidersAdapter(List<RaidersModel> raiders, Context mContext, Activity aty, Handler mHandler)
     {
         this.raiders = raiders;
         this.mContext = mContext;
         this.aty = aty;
+        this.mHandler = mHandler;
     }
 
     @Override
@@ -83,7 +88,7 @@ public class RaidersAdapter extends BaseAdapter {
         {
             try {
                 raider = raiders.get(position);
-                BitmapLoader.create().displayUrl(mContext, holder.raidersIcon, raider.getPictureUrl(), R.mipmap.ic_launcher);
+                BitmapLoader.create().displayUrl(mContext, holder.raidersIcon, raider.getPictureUrl(), R.mipmap.error);
                 if (2 != raider.getStatus()) {
                     //进行中
                     holder.lotteryScheduleProgress.setVisibility(View.VISIBLE);
@@ -130,6 +135,16 @@ public class RaidersAdapter extends BaseAdapter {
                         Bundle bundle = new Bundle();
                         bundle.putLong("issuId", raider.getIssueId());
                         ActivityUtils.getInstance().showActivity(aty, RaidersNumberActivity.class, bundle);
+                    }
+                });
+                //追加
+                holder.addBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Message message = mHandler.obtainMessage();
+                        message.what = Contant.APPAND_LIST;
+                        message.obj = raider;
+                        mHandler.sendMessage(message);
                     }
                 });
             }catch (Exception e)

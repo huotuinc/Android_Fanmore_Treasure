@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewStub;
@@ -15,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.TabPagerAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
@@ -22,15 +25,23 @@ import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogAllFrag;
 import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogDoneFrag;
 import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogFrag;
+import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
+import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
+import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -78,6 +89,7 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
     public NoticePopWindow noticePopWin;
     int index;
+    public ProgressPopupWindow progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,6 +274,53 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
 
 
 
+            }
+            break;
+            case Contant.APPAND_LIST:
+            {
+                //夺宝记录追加
+                RaidersModel raider = (RaidersModel) msg.obj;
+                progress = new ProgressPopupWindow( RaidesLogActivity.this, RaidesLogActivity.this, wManager );
+                progress.showProgress ( "正在追加清单" );
+                progress.showAtLocation (titleLayoutL,
+                        Gravity.CENTER, 0, 0
+                );
+                String url = Contant.REQUEST_URL + Contant.JOIN_SHOPPING_CART;
+                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), RaidesLogActivity.this);
+                Map<String, Object> maps = new HashMap<String, Object>();
+                maps.put ( "issueId", String.valueOf ( raider.getIssueId () ) );
+                Map<String, Object> param = params.obtainPostParam(maps);
+                BaseModel base = new BaseModel ();
+                HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
+                httpUtils.doVolleyPost (
+                        base, url, param, new Response.Listener< BaseModel > ( ) {
+                            @Override
+                            public
+                            void onResponse ( BaseModel response ) {
+                                progress.dismissView ();
+                                BaseModel base = response;
+                                if(1==base.getResultCode ())
+                                {
+                                    //上传成功
+                                    ToastUtils.showLongToast(RaidesLogActivity.this, "追加清单成功");
+                                }
+                                else
+                                {
+                                    //上传失败
+                                    ToastUtils.showLongToast ( RaidesLogActivity.this, "追加清单失败" );
+                                }
+                            }
+                        }, new Response.ErrorListener ( ) {
+
+                            @Override
+                            public
+                            void onErrorResponse ( VolleyError error ) {
+                                progress.dismissView ( );
+                                //系统级别错误
+                                ToastUtils.showLongToast ( RaidesLogActivity.this, "追加清单失败" );
+                            }
+                        }
+                );
             }
             break;
             default:
