@@ -50,7 +50,17 @@ public class InitOutputsModel extends BaseModel {
             private String customerServicePhone;
             private String helpURL;
             private String serverUrl;
+
+            public String getRedRules() {
+                return redRules;
+            }
+
+            public void setRedRules(String redRules) {
+                this.redRules = redRules;
+            }
+
             private boolean voiceSupported;
+            private String redRules;
 
             public String getHelpURL() {
                 return helpURL;

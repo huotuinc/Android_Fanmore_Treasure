@@ -191,6 +191,7 @@ public class BaseApplication extends Application {
 
     public void loadGlobalData(InitOutputsModel.InitInnerModel.GlobalModel globalModel)
     {
+        PreferenceHelper.writeString(getApplicationContext(),"global_info","redRules",globalModel.getRedRules());
         PreferenceHelper.writeString(getApplicationContext(),"global_info","customerServicePhone",globalModel.getCustomerServicePhone());
         PreferenceHelper.writeString(getApplicationContext(),"global_info","helpURL",globalModel.getHelpURL());
         PreferenceHelper.writeString(getApplicationContext(),"global_info","serverUrl",globalModel.getServerUrl());

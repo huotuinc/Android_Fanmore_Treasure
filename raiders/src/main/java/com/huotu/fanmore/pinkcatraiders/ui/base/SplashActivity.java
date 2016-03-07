@@ -267,17 +267,15 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                                                     //使用默认图片
                                                                     CarouselModel carousel1 = new CarouselModel (  );
                                                                     carousel1.setGoodsId ( 0 );
-                                                                    carousel1.setPictureUrl (
-                                                                            "http://i2.sinaimg"
-                                                                            + ".cn/IT/n/2011-07-29/1311925271_3WrwAI.jpg"
+                                                                    carousel1.setPictureUrl (""
+
                                                                                             );
                                                                     carousel1.setPid ( 0 );
                                                                     CarouselModel.save ( carousel1 );
                                                                     CarouselModel carousel2 = new CarouselModel (  );
                                                                     carousel2.setGoodsId ( 1 );
                                                                     carousel2.setPictureUrl (
-                                                                            "http://pic36.nipic"
-                                                                            + ".com/20131206/12954233_100711457187_2.jpg"
+                                                                           ""
                                                                                             );
                                                                     carousel2.setPid ( 1 );
                                                                     CarouselModel.save ( carousel2 );
