@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
@@ -15,20 +16,30 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.TabPagerAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
-import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogAllFrag;
-import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogDoneFrag;
-import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogFrag;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.RedEnvelopesnouseFrag;
 import com.huotu.fanmore.pinkcatraiders.fragment.RedEnvelopesuseFrag;
+import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
+import com.huotu.fanmore.pinkcatraiders.model.ShareOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -102,6 +113,67 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
         RedViewPager.setCurrentItem(1);
         changeIndex(RedViewPager.getCurrentItem());
     }
+    @OnClick(R.id.share_tv)
+    void share()
+    {
+        if( false == RedEnvelopesActivity.this.canConnect() ){
+
+        return;
+    }
+        String url = Contant.REQUEST_URL + Contant.SHARE_REF_PACKETS;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), RedEnvelopesActivity.this);
+        Map<String, Object> maps = new HashMap<String, Object>();
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if(RedEnvelopesActivity.this.isFinishing())
+                {
+                    return;
+                }
+                JSONUtil<ShareOutputModel> jsonUtil = new JSONUtil<ShareOutputModel>();
+                ShareOutputModel shareOutput = new ShareOutputModel();
+                shareOutput = jsonUtil.toBean(response.toString(), shareOutput);
+                if(null != shareOutput && null != shareOutput.getResultData() && (1==shareOutput.getResultCode()))
+                {
+                    if(null != shareOutput.getResultData().getShare()&&null!=shareOutput.getResultData() )
+                    {
+                        ToastUtils.showShortToast(RedEnvelopesActivity.this,"分享成功");
+                    }
+                    else
+                    {
+                        noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, shareOutput.getResultDescription());
+                        noticePopWin.showNotice();
+                        noticePopWin.showAtLocation(titleLayoutL,
+                                Gravity.CENTER, 0, 0
+                        );
+                    }
+                }
+                else
+                {
+                    //异常处理，自动切换成无数据
+                    noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, shareOutput.getResultDescription());
+                    noticePopWin.showNotice();
+                    noticePopWin.showAtLocation(titleLayoutL,
+                            Gravity.CENTER, 0, 0
+                    );
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                if(RedEnvelopesActivity.this.isFinishing())
+                {
+                    return;
+                }
+
+            }
+        });
+    }
+
     private void initSwitch()
     {
         RedEnvelopesuseFrag redEnvelopesuseFrag = new RedEnvelopesuseFrag();
