@@ -17,6 +17,9 @@ import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 
 import butterknife.Bind;
 
+/**
+ * 中奖详情界面
+ */
 public class WinLogDetailActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
 
     public
