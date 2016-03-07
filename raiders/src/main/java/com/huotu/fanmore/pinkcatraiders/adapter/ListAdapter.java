@@ -8,6 +8,7 @@ import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.widget.AddAndSubView;
 
 import org.w3c.dom.Text;
@@ -38,6 +40,8 @@ public class ListAdapter extends BaseAdapter {
     private
     Handler mHandler;
     private int type;
+    private EditText numView;
+    private long buyNum = 0;
 
     public ListAdapter(List<ListModel> lists, Context context, Handler mHandler, int type)
     {
@@ -146,20 +150,91 @@ public class ListAdapter extends BaseAdapter {
                         }
                 );
             }
-            holder.totalRequired.setText ( "总需" + list.getToAmount ( ) + "人次" );
-            holder.surplusRequired.setText ( "剩余" + list.getRemainAmount ( ) + "人次" );
-            holder.addAndSub.setTextSize ( ( int ) resources.getDimension ( R.dimen.text_size_4 ) );
-            holder.addAndSub.setViewsLayoutParm ( ( int ) resources.getDimension ( R.dimen.add_sub_width ), ( int ) resources.getDimension ( R.dimen.add_sub_height ) );
-            holder.addAndSub.setButtonLayoutParm ( ( int ) resources.getDimension ( R.dimen.add_sub_width ) / 3, ( int ) resources.getDimension ( R.dimen.add_sub_height ) );
-            holder.addAndSub.setButtonBgDrawable (
-                    resources.getDrawable (
-                            R.drawable.add_sub_bg
-                                          ), resources.getDrawable
-                            ( R.drawable.add_sub_bg_edit ), resources.getDrawable
-                            ( R.drawable.add_sub_bg )
-                                                 );
-            holder.addAndSub.setNum ( ( int ) list.getUserBuyAmount() );
-            holder.addAndSub.setStep ( (int)list.getStepAmount () );
+            holder.totalRequired.setText("总需" + list.getToAmount() + "人次");
+            holder.surplusRequired.setText("剩余" + list.getRemainAmount() + "人次");
+            //加减控件
+            numView = holder.num;
+            //数量
+
+            buyNum = list.getUserBuyAmount();
+            numView.setText(String.valueOf(buyNum));
+            //加
+            holder.addBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //获取数据源
+                    String numString = numView.getText().toString();
+                    if (numString == null || numString.equals("")) {
+                        buyNum = 1;
+                        numView.setText("1");
+                    } else
+                    {
+                        if ((buyNum+list.getStepAmount()) < 1) // 先加，再判断
+                        {
+                            buyNum  = buyNum-list.getStepAmount();
+                            ToastUtils.showShortToast(context, "亲，数量至少为" + list.getStepAmount() + "哦~");
+                            numView.setText(String.valueOf ( list.getStepAmount()));
+                        }
+                        else if((buyNum+list.getStepAmount()) > list.getToAmount())
+                        {
+                            buyNum  = buyNum-list.getStepAmount();
+                            ToastUtils.showShortToast(context, "亲，数量不能超过" + list.getToAmount() + "哦~");
+                            numView.setText(String.valueOf(buyNum));
+                        }
+                        else
+                        {
+                            buyNum=buyNum+list.getStepAmount();
+                            numView.setText(String.valueOf(buyNum));
+                            list.setUserBuyAmount(buyNum);
+                            Message message = mHandler.obtainMessage ( );
+                            message.what = Contant.CART_SELECT;
+                            message.arg1 = 0;
+                            message.obj = lists;
+                            mHandler.sendMessage(message);
+                        }
+                    }
+                }
+            });
+            //减
+            holder.subBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    //获取数据源
+                    String numString = numView.getText().toString();
+                    if (numString == null || numString.equals("")) {
+                        buyNum = 1;
+                        numView.setText("1");
+                    }
+                    else if((buyNum-list.getStepAmount()) > list.getToAmount())
+                    {
+                        buyNum  = buyNum+list.getStepAmount();
+                        ToastUtils.showShortToast(context, "亲，数量不能超过" + list.getToAmount() + "哦~");
+                        numView.setText(String.valueOf(buyNum));
+                    }
+                    else
+                    {
+
+                        if ((buyNum-list.getStepAmount()) < 1) // 先减，再判断
+                        {
+                            buyNum=buyNum+list.getStepAmount();
+                            ToastUtils.showShortToast(context, "亲，数量至少为"+list.getStepAmount()+"哦~");
+                            numView.setText(String.valueOf ( list.getStepAmount()));
+                        } else
+                        {
+                            buyNum = buyNum-list.getStepAmount();
+                            numView.setText(String.valueOf(buyNum));
+                            list.setUserBuyAmount(buyNum);
+                            Message message = mHandler.obtainMessage ( );
+                            message.what = Contant.CART_SELECT;
+                            message.arg1 = 0;
+                            message.obj = lists;
+                            mHandler.sendMessage(message);
+                        }
+                    }
+                }
+            });
+
             if(1==list.getStepAmount())
             {
                 holder.stepTag.setVisibility(View.GONE);
@@ -196,9 +271,14 @@ public class ListAdapter extends BaseAdapter {
         TextView surplusRequired;
         @Bind(R.id.partnerTag)
         TextView partnerTag;
-        @Bind(R.id.addAndSub)
-        AddAndSubView addAndSub;
         @Bind(R.id.stepTag)
         TextView stepTag;
+        //购物车加减控件
+        @Bind(R.id.addBtn)
+        TextView addBtn;
+        @Bind(R.id.num)
+        EditText num;
+        @Bind(R.id.subBtn)
+        TextView subBtn;
     }
 }
