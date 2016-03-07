@@ -127,6 +127,12 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
     TextView status5Tag;
     @Bind(R.id.status5Time)
     TextView status5Time;
+    @Bind(R.id.status6Icon)
+    ImageView status6Icon;
+    @Bind(R.id.status6Tag)
+    TextView status6Tag;
+    @Bind(R.id.status6Time)
+    TextView status6Time;
     public
     ProgressPopupWindow progress;
     //引导图片资源
@@ -200,11 +206,162 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                         if ( null != deliveryOutput && null != deliveryOutput.getResultData ( )
                                 && ( 1 == deliveryOutput.getResultCode ( ) ) ) {
                             AppDeliveryModel deliveryModel = deliveryOutput.getResultData().getData();
-                            //加载地址信息
-                            userName.setText(deliveryModel.getReceiver());
-                            userPhone.setText(deliveryModel.getMobile());
-                            address.setText(deliveryModel.getDetails());
-
+                            if(0==deliveryModel.getDeliveryStatus())
+                            {
+                                //获得奖品
+                                SystemTools.loadBackground(status1Icon, resources.getDrawable(R.mipmap.prize_selected));
+                                status1Tag.setText("获得奖品");
+                                status1Time.setText((null != deliveryModel.getDeliveryTime() && !"".equals(deliveryModel.getDeliveryTime())) ? DateUtils.transformDataformat11(deliveryModel.getDeliveryTime()) : "获取时间失败");
+                                SystemTools.loadBackground(status2Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status2Tag.setText("确认收货地址");
+                                status2Time.setText("...");
+                                SystemTools.loadBackground(status3Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status3Tag.setText("等待奖品派发");
+                                status3Time.setText("...");
+                                SystemTools.loadBackground(status4Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status4Tag.setText("确认收货");
+                                status4Time.setText("...");
+                                SystemTools.loadBackground(status5Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status5Tag.setText("已收货");
+                                status5Time.setText("...");
+                                SystemTools.loadBackground(status6Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status6Tag.setText("已晒单");
+                                status6Time.setText("...");
+                                addressL.setVisibility(View.GONE);
+                            }
+                            else if(1==deliveryModel.getDeliveryStatus())
+                            {
+                                //确认收货地址
+                                SystemTools.loadBackground(status1Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status1Tag.setText("获得奖品");
+                                status1Time.setText((null != deliveryModel.getDeliveryTime() && !"".equals(deliveryModel.getDeliveryTime())) ? "获取时间失败" : DateUtils.transformDataformat1(deliveryModel.getDeliveryTime()));
+                                SystemTools.loadBackground(status2Icon, resources.getDrawable(R.mipmap.prize_selected));
+                                status2Tag.setText("确认收货地址");
+                                SystemTools.loadBackground(status2Time, resources.getDrawable(R.drawable.button_common_2));
+                                status2Time.setText("新增地址");
+                                SystemTools.loadBackground(status3Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status3Tag.setText("等待奖品派发");
+                                status3Time.setText("...");
+                                SystemTools.loadBackground(status4Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status4Tag.setText("确认收货");
+                                status4Time.setText("...");
+                                SystemTools.loadBackground(status5Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status5Tag.setText("已收货");
+                                status5Time.setText("...");
+                                SystemTools.loadBackground(status6Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status6Tag.setText("已晒单");
+                                status6Time.setText("...");
+                                addressL.setVisibility(View.VISIBLE);
+                                //加载地址信息
+                                userName.setText(deliveryModel.getReceiver());
+                                userPhone.setText(deliveryModel.getMobile());
+                                address.setText(deliveryModel.getDetails());
+                            }else if(2==deliveryModel.getDeliveryStatus())
+                            {
+                                //确认收货地址
+                                SystemTools.loadBackground(status1Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status1Tag.setText("获得奖品");
+                                status1Time.setText((null != deliveryModel.getDeliveryTime() && !"".equals(deliveryModel.getDeliveryTime())) ? "获取时间失败" : DateUtils.transformDataformat1(deliveryModel.getDeliveryTime()));
+                                SystemTools.loadBackground(status2Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status2Tag.setText("确认收货地址");
+                                status2Time.setText("...");
+                                SystemTools.loadBackground(status3Icon, resources.getDrawable(R.mipmap.prize_selected));
+                                status3Tag.setText("等待奖品派发");
+                                status3Time.setText("...");
+                                SystemTools.loadBackground(status4Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status4Tag.setText("确认收货");
+                                status4Time.setText("...");
+                                SystemTools.loadBackground(status5Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status5Tag.setText("已收货");
+                                status5Time.setText("...");
+                                SystemTools.loadBackground(status6Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status6Tag.setText("已晒单");
+                                status6Time.setText("...");
+                                addressL.setVisibility(View.VISIBLE);
+                                //加载地址信息
+                                userName.setText(deliveryModel.getReceiver());
+                                userPhone.setText(deliveryModel.getMobile());
+                                address.setText(deliveryModel.getDetails());
+                            }else if(4==deliveryModel.getDeliveryStatus())
+                            {
+                                //确认收货地址
+                                SystemTools.loadBackground(status1Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status1Tag.setText("获得奖品");
+                                status1Time.setText((null != deliveryModel.getDeliveryTime() && !"".equals(deliveryModel.getDeliveryTime())) ? "获取时间失败" : DateUtils.transformDataformat1(deliveryModel.getDeliveryTime()));
+                                SystemTools.loadBackground(status2Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status2Tag.setText("确认收货地址");
+                                status2Time.setText("...");
+                                SystemTools.loadBackground(status3Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status3Tag.setText("等待奖品派发");
+                                status3Time.setText("请等待");
+                                SystemTools.loadBackground(status4Icon, resources.getDrawable(R.mipmap.prize_selected));
+                                status4Tag.setText("确认收货");
+                                status4Time.setText("...");
+                                SystemTools.loadBackground(status5Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status5Tag.setText("已收货");
+                                status5Time.setText("...");
+                                SystemTools.loadBackground(status6Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status6Tag.setText("已晒单");
+                                status6Time.setText("...");
+                                addressL.setVisibility(View.VISIBLE);
+                                //加载地址信息
+                                userName.setText(deliveryModel.getReceiver());
+                                userPhone.setText(deliveryModel.getMobile());
+                                address.setText(deliveryModel.getDetails());
+                            }
+                            else if(5==deliveryModel.getDeliveryStatus())
+                            {
+                                //确认收货地址
+                                SystemTools.loadBackground(status1Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status1Tag.setText("获得奖品");
+                                status1Time.setText((null != deliveryModel.getDeliveryTime() && !"".equals(deliveryModel.getDeliveryTime())) ? "获取时间失败" : DateUtils.transformDataformat1(deliveryModel.getDeliveryTime()));
+                                SystemTools.loadBackground(status2Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status2Tag.setText("确认收货地址");
+                                status2Time.setText("...");
+                                SystemTools.loadBackground(status3Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status3Tag.setText("等待奖品派发");
+                                status3Time.setText("...");
+                                SystemTools.loadBackground(status4Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status4Tag.setText("确认收货");
+                                status4Time.setText("...");
+                                SystemTools.loadBackground(status5Icon, resources.getDrawable(R.mipmap.prize_selected));
+                                status5Tag.setText("已收货");
+                                status5Time.setText("...");
+                                SystemTools.loadBackground(status6Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status6Tag.setText("已晒单");
+                                status6Time.setText("...");
+                                addressL.setVisibility(View.VISIBLE);
+                                //加载地址信息
+                                userName.setText(deliveryModel.getReceiver());
+                                userPhone.setText(deliveryModel.getMobile());
+                                address.setText(deliveryModel.getDetails());
+                            }else if(6==deliveryModel.getDeliveryStatus())
+                            {
+                                //确认收货地址
+                                SystemTools.loadBackground(status1Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status1Tag.setText("获得奖品");
+                                status1Time.setText((null != deliveryModel.getDeliveryTime() && !"".equals(deliveryModel.getDeliveryTime())) ? "获取时间失败" : DateUtils.transformDataformat1(deliveryModel.getDeliveryTime()));
+                                SystemTools.loadBackground(status2Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status2Tag.setText("确认收货地址");
+                                status2Time.setText("...");
+                                SystemTools.loadBackground(status3Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status3Tag.setText("等待奖品派发");
+                                status3Time.setText("...");
+                                SystemTools.loadBackground(status4Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status4Tag.setText("确认收货");
+                                status4Time.setText("...");
+                                SystemTools.loadBackground(status5Icon, resources.getDrawable(R.mipmap.prize_unselect));
+                                status5Tag.setText("已收货");
+                                status5Time.setText("...");
+                                SystemTools.loadBackground(status6Icon, resources.getDrawable(R.mipmap.prize_selected));
+                                status6Tag.setText("已晒单");
+                                status6Time.setText("...");
+                                addressL.setVisibility(View.VISIBLE);
+                                //加载地址信息
+                                userName.setText(deliveryModel.getReceiver());
+                                userPhone.setText(deliveryModel.getMobile());
+                                address.setText(deliveryModel.getDetails());
+                            }
                             //加载奖品信息
                             BitmapLoader.create().displayUrl(WinLogDetailActivity.this, pictureUrl, winner.getDefaultPictureUrl(), R.mipmap.error);
                             title.setText(winner.getTitle());
