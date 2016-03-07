@@ -68,7 +68,9 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
+/**
+ * 晒单界面
+ */
 public class ShareOrderActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, CropperView.OnCropperBackListener  {
 
     public

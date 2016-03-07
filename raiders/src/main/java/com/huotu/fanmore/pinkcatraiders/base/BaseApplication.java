@@ -15,6 +15,7 @@ import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
 import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
 import com.huotu.fanmore.pinkcatraiders.model.InitOutputsModel;
+import com.huotu.fanmore.pinkcatraiders.model.ShareModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.orm.SugarContext;
@@ -121,6 +122,12 @@ public class BaseApplication extends Application {
         }
     }
 
+    public void writeShareinfo(ShareModel share){
+        PreferenceHelper.writeString(getApplicationContext(),Contant.SHARE_INFO,Contant.SHARE_INFO_IMGURL,share.getImageUrl());
+        PreferenceHelper.writeString(getApplicationContext(),Contant.SHARE_INFO,Contant.SHARE_INFO_TEXT,share.getText());
+        PreferenceHelper.writeString(getApplicationContext(),Contant.SHARE_INFO,Contant.SHARE_INFO_TITLE,share.getTitle());
+        PreferenceHelper.writeString(getApplicationContext(),Contant.SHARE_INFO,Contant.SHARE_INFO_URL,share.getUrl());
+    }
     public void writeUserInfo(AppUserModel user)
     {
         PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_REALNAME, user.getRealName());

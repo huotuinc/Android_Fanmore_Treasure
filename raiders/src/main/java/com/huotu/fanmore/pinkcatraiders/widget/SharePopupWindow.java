@@ -261,6 +261,8 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         sinaWeibo.share ( sp );
     }
 
+
+
     /**
      * 分享单元实体
      */

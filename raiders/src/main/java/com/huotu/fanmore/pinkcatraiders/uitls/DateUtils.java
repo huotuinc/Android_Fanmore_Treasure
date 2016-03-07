@@ -196,7 +196,7 @@ public class DateUtils {
         {
             endTime = String.valueOf(System.currentTimeMillis());
         }
-        return (System.currentTimeMillis () - Long.parseLong ( endTime ))>=0?false:true;
+        return (System.currentTimeMillis () - Long.parseLong ( endTime ))>=0?true:false;
     }
 
     public static String formatDate(Long currentTime, String fromat)

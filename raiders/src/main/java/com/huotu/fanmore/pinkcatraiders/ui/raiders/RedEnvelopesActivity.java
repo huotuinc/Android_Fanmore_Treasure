@@ -24,7 +24,10 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.RedEnvelopesnouseFrag;
 import com.huotu.fanmore.pinkcatraiders.fragment.RedEnvelopesuseFrag;
+import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
+import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
+import com.huotu.fanmore.pinkcatraiders.model.ShareModel;
 import com.huotu.fanmore.pinkcatraiders.model.ShareOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
@@ -33,6 +36,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
+import com.huotu.fanmore.pinkcatraiders.widget.SharePopupWindow;
 
 import org.json.JSONObject;
 
@@ -44,7 +48,9 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
+/**
+ * 红包列表界面
+ */
 public class RedEnvelopesActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
     public
     Resources resources;
@@ -76,6 +82,7 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
     public TabPagerAdapter tabPagerAdapter;
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
     public NoticePopWindow noticePopWin;
+    public SharePopupWindow sharePopupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +93,7 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
         resources = this.getResources();
         mHandler = new Handler ( this );
         wManager = this.getWindowManager();
+        sharePopupWindow= new SharePopupWindow(RedEnvelopesActivity.this,RedEnvelopesActivity.this,application);
         initTitle();
         initSwitch();
     }
@@ -140,10 +148,23 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
                 {
                     if(null != shareOutput.getResultData().getShare()&&null!=shareOutput.getResultData() )
                     {
-                        ToastUtils.showShortToast(RedEnvelopesActivity.this,"分享成功");
+                        //application.writeShareinfo(shareOutput.getResultData().getShare());
+                        ShareModel msgModel = new ShareModel ();
+                        msgModel.setImageUrl(shareOutput.getResultData().getShare().getImageUrl());
+                        msgModel.setText ( shareOutput.getResultData().getShare().getText());
+                        msgModel.setTitle ( shareOutput.getResultData().getShare().getTitle());
+                        msgModel.setUrl(shareOutput.getResultData().getShare().getUrl());
+                        sharePopupWindow.initShareParams(msgModel);
+                        sharePopupWindow.showShareWindow();
+                        sharePopupWindow.showAtLocation(titleLayoutL,
+                                Gravity.BOTTOM, 0, 0);
+                        sharePopupWindow.setOnDismissListener ( new PoponDismissListener( RedEnvelopesActivity.this ) );
+
+
                     }
                     else
                     {
+
                         noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, shareOutput.getResultDescription());
                         noticePopWin.showNotice();
                         noticePopWin.showAtLocation(titleLayoutL,
@@ -154,6 +175,7 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
                 else
                 {
                     //异常处理，自动切换成无数据
+
                     noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, shareOutput.getResultDescription());
                     noticePopWin.showNotice();
                     noticePopWin.showAtLocation(titleLayoutL,
@@ -238,6 +260,44 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
+  private void successshare(){
+        String url = Contant.REQUEST_URL + Contant.SUCCESS_SHARE_REDPACKETS;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), RedEnvelopesActivity.this);
+        Map<String, Object> maps = new HashMap<String, Object>();
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if (RedEnvelopesActivity.this.isFinishing()) {
+                    return;
+                }
+                JSONUtil<BaseModel> jsonUtil = new JSONUtil<BaseModel>();
+                BaseModel baseModel = new BaseModel();
+                baseModel = jsonUtil.toBean(response.toString(), baseModel);
+                if (null != baseModel && null != baseModel.getResultDescription() && (1 == baseModel.getResultCode())) {
+
+                }
+                else {
+                    noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, baseModel.getResultDescription());
+                    noticePopWin.showNotice();
+                    noticePopWin.showAtLocation(titleLayoutL,
+                            Gravity.CENTER, 0, 0);
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                if (RedEnvelopesActivity.this.isFinishing()) {
+                    return;
+                }
+
+            }
+        });
+    }
 
     @Override
     public boolean handleMessage(Message msg) {

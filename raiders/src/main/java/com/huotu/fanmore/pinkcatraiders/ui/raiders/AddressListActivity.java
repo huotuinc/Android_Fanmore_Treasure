@@ -58,6 +58,9 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+/**
+ * 添加地址
+ */
 
 public class AddressListActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
 

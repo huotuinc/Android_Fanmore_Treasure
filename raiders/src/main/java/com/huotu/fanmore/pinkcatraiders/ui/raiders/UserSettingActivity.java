@@ -64,6 +64,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 用户设置界面
+ */
 public class UserSettingActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, CropperView.OnCropperBackListener {
 
     public

@@ -127,6 +127,8 @@ public class Contant {
      */
     // 登录信息文件
     public final static String LOGIN_USER_INFO = "login_user_info";
+    //
+    public final static String SHARE_INFO="share_info";
 
     // 短信获取方式:文本
     public final static String SMS_TYPE_TEXT   = "0";
@@ -136,7 +138,13 @@ public class Contant {
 
     /**
      * token添加的类型
+     *
      */
+
+    public final static String SHARE_INFO_IMGURL="imgUrl";
+    public final static String SHARE_INFO_TEXT="text";
+    public final static String SHARE_INFO_TITLE="title";
+    public final static String SHARE_INFO_URL="url";
     public final static String LOGIN_AUTH_REALNAME     = "realName";
 
     public final static String LOGIN_AUTH_ENABLED      = "enabled";
@@ -221,6 +229,8 @@ public class Contant {
     public static final String GET_MY_REDPACKAGES_LIST = "getMyRedPacketsList";
     //分享红包
     public static final String SHARE_REF_PACKETS=  "shareRedPackets";
+    //成功分享后
+    public static final String SUCCESS_SHARE_REDPACKETS="successShareRedPackets";
     //获取中奖纪录列表
     public static final String GET_MY_LOTTERY_LIST = "getMyLotteryList";
     //预支付信息-充值
