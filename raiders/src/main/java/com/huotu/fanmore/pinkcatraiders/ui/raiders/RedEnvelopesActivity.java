@@ -27,6 +27,7 @@ import com.huotu.fanmore.pinkcatraiders.fragment.RedEnvelopesuseFrag;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
+import com.huotu.fanmore.pinkcatraiders.model.RedPacketOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.ShareModel;
 import com.huotu.fanmore.pinkcatraiders.model.ShareOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
@@ -67,6 +68,8 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
     ViewStub stubTitleText;
     @Bind(R.id.titleLeftImage)
     ImageView titleLeftImage;
+    @Bind(R.id.titleRightImage)
+    ImageView titleRightImage;
     @Bind(R.id.useL)
     RelativeLayout useL;
     @Bind(R.id.useLabel)
@@ -107,6 +110,8 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
         SystemTools.loadBackground(titleLayoutL, bgDraw);
         Drawable leftDraw = resources.getDrawable(R.mipmap.back_gray);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
+        Drawable rightDraw = resources.getDrawable(R.mipmap.title_share_redpackage);
+        SystemTools.loadBackground(titleRightImage, rightDraw);
         stubTitleText.inflate();
         TextView titleText = (TextView) this.findViewById(R.id.titleText);
         titleText.setText("我的红包");
@@ -124,7 +129,7 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
         RedViewPager.setCurrentItem(1);
         changeIndex(RedViewPager.getCurrentItem());
     }
-    @OnClick(R.id.share_tv)
+    @OnClick(R.id.titleRightImage)
     void share()
     {
         if( false == RedEnvelopesActivity.this.canConnect() ){
@@ -208,7 +213,7 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
                 {
                     //异常处理，自动切换成无数据
 
-                    noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, "数据请求失败");
+                    noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, shareOutput.getResultDescription());
                     noticePopWin.showNotice();
                     noticePopWin.showAtLocation(titleLayoutL,
                             Gravity.CENTER, 0, 0
@@ -338,6 +343,20 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public boolean handleMessage(Message msg) {
+
+        switch (msg.what)
+        {
+            case Contant.REDPACKAGE_COUNT:
+            {
+                String[] counts = (String[]) msg.obj;
+
+                useCount.setText(counts[0]);
+                nouseCount.setText(counts[1]);
+            }
+            break;
+            default:
+                break;
+        }
         return false;
     }
 

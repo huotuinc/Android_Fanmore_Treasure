@@ -152,6 +152,10 @@ public class RedEnvelopesuseFrag extends BaseFragment implements Handler.Callbac
                                       {
                                           if(null != redPacketOutput.getResultData().getList() && !redPacketOutput.getResultData().getList().isEmpty())
                                           {
+                                              String[] counts = new String[]{String.valueOf(redPacketOutput.getResultData().getUnused()), String.valueOf(redPacketOutput.getResultData().getUsedOrExpire())};
+                                              Message message = rootAty.mHandler.obtainMessage(Contant.REDPACKAGE_COUNT, counts);
+                                              rootAty.mHandler.sendMessage(message);
+
                                               if( operateType == OperateTypeEnum.REFRESH){
                                                   redPacketsModels.clear();
                                                   redPacketsModels.addAll(redPacketOutput.getResultData().getList());

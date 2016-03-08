@@ -99,6 +99,7 @@ public class Contant {
     public static final int LIST_PAY = 0x00000046;
     public static final int APPAND_LIST = 0x00000047;
 
+    public static final int REDPACKAGE_COUNT = 0x00000050;
     /**
      * 菜单标记1
      */
@@ -173,8 +174,8 @@ public class Contant {
     //loginapi
 
     //public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
-    //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
-    public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
+    public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
+    //public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
     //public static final String REQUEST_URL = "http://192.168.3.13:8080/duobao/app/";
     //获取夺宝记录
     public static final String GET_MY_RAIDER_LIST          = "getMyRaiderList";

@@ -21,6 +21,24 @@ class RedPacketOutputModel extends BaseModel {
     public class RedPacketInnerModel {
 
         private List< RedPacketsModel > list;
+        private int usedOrExpire;
+        private int unused;
+
+        public int getUsedOrExpire() {
+            return usedOrExpire;
+        }
+
+        public void setUsedOrExpire(int usedOrExpire) {
+            this.usedOrExpire = usedOrExpire;
+        }
+
+        public int getUnused() {
+            return unused;
+        }
+
+        public void setUnused(int unused) {
+            this.unused = unused;
+        }
 
         public
         List< RedPacketsModel > getList ( ) {
