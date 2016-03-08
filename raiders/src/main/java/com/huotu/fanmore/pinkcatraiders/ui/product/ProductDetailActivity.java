@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,12 +33,14 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
 import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
+import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.PartnerHistorysModel;
 import com.huotu.fanmore.pinkcatraiders.model.PartnerHistorysOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.PartnerLogModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductDetailModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductDetailsOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
@@ -51,6 +54,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.CircleImageView;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
@@ -135,6 +139,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     public long pid;
     public boolean isInflate = true;
     public ProductDetailModel productDetail;
+    public ProductModel product;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +150,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         resources = this.getResources();
         wManager = this.getWindowManager();
         bundle = this.getIntent().getExtras();
+        product = (ProductModel) bundle.getSerializable("product");
         mHandler = new Handler(this);
         initTitle();
         initBottom();
@@ -193,7 +199,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ProductDetailActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
             //商品id
-            maps.put("goodsId", bundle.getLong("goodsId"));
+            maps.put("goodsId", product.getPid());
             String suffix = params.obtainGetParam(maps);
             url = url + suffix;
             HttpUtils httpUtils = new HttpUtils();
@@ -270,10 +276,10 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             );
                                             TextView parentCount = (TextView) ProductDetailActivity
                                                     .this.findViewById(R.id.parentCount);
-                                            parentCount.setText("您参与了：1人次");
+                                            parentCount.setText("您参与了："+productDetail.getNumbers().size()+"人次");
                                             TextView raidersNo = (TextView) ProductDetailActivity
                                                     .this.findViewById(R.id.raidersNo);
-                                            raidersNo.setText("夺宝号码：1000589");
+                                            raidersNo.setText("夺宝号码：" + ((null!=productDetail.getNumbers()&&!productDetail.getNumbers().isEmpty())?productDetail.getNumbers().get(0):"暂无夺宝号码"));
                                         } else {
                                             //揭晓
                                             announcedDetail.setVisibility(View.VISIBLE);
@@ -405,7 +411,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ProductDetailActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
             //商品id
-            maps.put("issueId", bundle.getLong("issueId"));
+            maps.put("issueId", product.getIssueId());
             String suffix = params.obtainGetParam(maps);
             url = url + suffix;
             HttpUtils httpUtils = new HttpUtils();
@@ -758,6 +764,48 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         productDetailBottomOther.inflate();
         //左边
         TextView bottomOtherBtnLeft = (TextView) this.findViewById(R.id.bottomOtherBtnLeft);
+        bottomOtherBtnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //立即参与
+                progress = new ProgressPopupWindow ( ProductDetailActivity.this, ProductDetailActivity.this, wManager );
+                progress.showProgress ( "正在加入清单" );
+                progress.showAtLocation (titleLayoutL,
+                        Gravity.CENTER, 0, 0
+                );
+                String url = Contant.REQUEST_URL + Contant.JOIN_SHOPPING_CART;
+                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ProductDetailActivity.this);
+                Map<String, Object> maps = new HashMap<String, Object> ();
+                maps.put ( "issueId", String.valueOf ( product.getIssueId() ) );
+                Map<String, Object> param = params.obtainPostParam(maps);
+                BaseModel base = new BaseModel ();
+                HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
+                httpUtils.doVolleyPost (
+                        base, url, param, new Response.Listener<BaseModel>() {
+                            @Override
+                            public void onResponse(BaseModel response) {
+                                progress.dismissView();
+                                BaseModel base = response;
+                                if (1 == base.getResultCode()) {
+                                    //上传成功
+                                    ToastUtils.showLongToast(ProductDetailActivity.this, "添加清单成功");
+                                } else {
+                                    //上传失败
+                                    ToastUtils.showLongToast(ProductDetailActivity.this, "添加清单失败");
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                progress.dismissView();
+                                //系统级别错误
+                                ToastUtils.showLongToast(ProductDetailActivity.this, "添加清单失败");
+                            }
+                        }
+                );
+            }
+        });
         //中间
         TextView bottomOtherBtnCenter = (TextView) this.findViewById(R.id.bottomOtherBtnCenter);
         //购物车
@@ -787,7 +835,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     private void initSwitchImg()
     {
-        imgs = bundle.getStringArrayList("imgs");
+        imgs = product.getImgs();
         initDots();
         //通过适配器引入图片
         productDetailViewPager.setAdapter(new LoadSwitchImgAdapter(imgs, ProductDetailActivity.this));
