@@ -141,7 +141,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     public
     void onResume ( ) {
 
-        super.onResume ( );
+        super.onResume();
     }
 
     @Override
@@ -195,7 +195,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     }
                 }
                                              );
-        homePullRefresh.getRefreshableView ( ).smoothScrollTo ( 0, 0 );
+        homePullRefresh.getRefreshableView ( ).smoothScrollTo(0, 0);
     }
 
     private
@@ -227,8 +227,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     void showZqUi ( ) {
 
         Bundle bundle = new Bundle ( );
-        bundle.putLong ( "step", 10 );
-        ActivityUtils.getInstance ( ).showActivity ( getActivity ( ), AreaActivity.class, bundle );
+        bundle.putLong("step", 10);
+        ActivityUtils.getInstance().showActivity(getActivity(), AreaActivity.class, bundle);
     }
 
     @OnClick ( R.id.redPackageL )
@@ -243,7 +243,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         //ToastUtils.showLongToast(getActivity(), "弹出晒单界面");
         Bundle bundle = new Bundle (  );
         //首页晒单
-        bundle.putInt ( "type", 0 );
+        bundle.putInt("type", 0);
         ActivityUtils.getInstance().showActivity(getActivity(), ShowOrderActivity.class, bundle);
     }
 
@@ -253,7 +253,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         //显示常见问题
         Bundle bundle = new Bundle (  );
         bundle.putString ( "title", "常见问题" );
-        bundle.putString ( "link", "https://www.baidu.com/" );
+        bundle.putString("link", "https://www.baidu.com/");
         ActivityUtils.getInstance ().showActivity ( getActivity ( ), WebExhibitionActivity.class,
                                                     bundle );
     }
@@ -284,8 +284,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             {// 上拉
                 if ( rootAty.popProducts != null && rootAty.popProducts.size() > 0)
                 {
-                    ProductModel product = rootAty.popProducts.get(rootAty.popProducts.size() - 1);
-                    maps.put("lastSort", product.getPid());
+                    ProductModel product = rootAty.popProducts.get(0);
+                    maps.put("lastSort", product.getSort());
                 } else if (rootAty.popProducts != null && rootAty.popProducts.size() == 0)
                 {
                     maps.put("lastSort", 0);
@@ -306,7 +306,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
                     if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
                         if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
-
+                            rootAty.popProducts.get(0).setSort(productsOutputs.getResultData().getSort());
                             if (operateType == OperateTypeEnum.REFRESH) {
                                 rootAty.popProducts.clear();
                                 rootAty.popProducts.addAll(productsOutputs.getResultData().getList());
@@ -348,8 +348,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             {// 上拉
                 if ( rootAty.newestProducts != null && rootAty.newestProducts.size() > 0)
                 {
-                    ProductModel product = rootAty.newestProducts.get(rootAty.newestProducts.size() - 1);
-                    maps.put("lastSort", product.getPid());
+                    ProductModel product = rootAty.newestProducts.get(0);
+                    maps.put("lastSort", product.getSort());
                 } else if (rootAty.newestProducts != null && rootAty.newestProducts.size() == 0)
                 {
                     maps.put("lastSort", 0);
@@ -370,7 +370,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
                     if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
                         if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
-
+                            rootAty.newestProducts.get(0).setSort(productsOutputs.getResultData().getSort());
                             if (operateType == OperateTypeEnum.REFRESH) {
                                 rootAty.newestProducts.clear();
                                 rootAty.newestProducts.addAll(productsOutputs.getResultData().getList());
@@ -406,16 +406,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             maps.put("type", "3");
             if ( OperateTypeEnum.REFRESH == operateType )
             {// 下拉
-                maps.put("lastSort", 0);
+                maps.put("lastSort", 100);
             } else if (OperateTypeEnum.LOADMORE == operateType)
             {// 上拉
                 if ( rootAty.progressProducts != null && rootAty.progressProducts.size() > 0)
                 {
-                    ProductModel product = rootAty.progressProducts.get(rootAty.progressProducts.size() - 1);
-                    maps.put("lastSort", product.getPid());
+                    ProductModel product = rootAty.progressProducts.get(0);
+                    maps.put("lastSort", product.getSort());
                 } else if (rootAty.progressProducts != null && rootAty.progressProducts.size() == 0)
                 {
-                    maps.put("lastSort", 0);
+                    maps.put("lastSort", 100);
                 }
             }
             String suffix = params.obtainGetParam(maps);
@@ -433,7 +433,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
                     if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
                         if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
-
+                            rootAty.progressProducts.get(0).setSort(productsOutputs.getResultData().getSort());
                             if (operateType == OperateTypeEnum.REFRESH) {
                                 rootAty.progressProducts.clear();
                                 rootAty.progressProducts.addAll(productsOutputs.getResultData().getList());
@@ -474,8 +474,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             {// 上拉
                 if ( rootAty.totalProducts != null && rootAty.totalProducts.size() > 0)
                 {
-                    ProductModel product = rootAty.totalProducts.get(rootAty.totalProducts.size() - 1);
-                    maps.put("lastSort", product.getPid());
+                    ProductModel product = rootAty.totalProducts.get(0);
+                    maps.put("lastSort", product.getSort());
                 } else if (rootAty.totalProducts != null && rootAty.totalProducts.size() == 0)
                 {
                     maps.put("lastSort", 0);
@@ -496,7 +496,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
                     if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
                         if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
-
+                            rootAty.totalProducts.get(0).setSort(productsOutputs.getResultData().getSort());
                             if (operateType == OperateTypeEnum.REFRESH) {
                                 rootAty.totalProducts.clear();
                                 rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
@@ -538,8 +538,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             {// 上拉
                 if ( rootAty.totalProducts != null && rootAty.totalProducts.size() > 0)
                 {
-                    ProductModel product = rootAty.totalProducts.get(rootAty.totalProducts.size() - 1);
-                    maps.put("lastSort", product.getPid());
+                    ProductModel product = rootAty.totalProducts.get(0);
+                    maps.put("lastSort", product.getSort());
                 } else if (rootAty.totalProducts != null && rootAty.totalProducts.size() == 0)
                 {
                     maps.put("lastSort", 0);
@@ -560,7 +560,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                                           productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
                                           if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
                                               if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
-
+                                                  rootAty.totalProducts.get(0).setSort(productsOutputs.getResultData().getSort());
                                                   if (operateType == OperateTypeEnum.REFRESH) {
                                                       rootAty.totalProducts.clear();
                                                       rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
@@ -594,6 +594,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @OnClick(R.id.rqInnerL)
     void clickRql()
     {
+        //重置加载模式
+        operateType = OperateTypeEnum.REFRESH;
         currentIndex = 0;
         application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
         Drawable normal = resources.getDrawable(R.drawable.switch_normal);
@@ -606,14 +608,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(zxInnerL, normal);
         SystemTools.loadBackground(jdInnerL, normal);
         SystemTools.loadBackground(zxrsInnerL, normal);
-        if(null==rootAty.popProducts || rootAty.popProducts.isEmpty())
-        {
-            initProduct();
-        }
+        initProduct();
     }
     @OnClick(R.id.zxInnerL)
     void clickZxl()
     {
+        //重置加载模式
+        operateType = OperateTypeEnum.REFRESH;
         currentIndex = 1;
         application.proFragManager.setCurrentFrag(FragManager.FragType.NEWEST_PRODUCT);
         Drawable normal = resources.getDrawable(R.drawable.switch_normal);
@@ -626,14 +627,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(zxInnerL, press);
         SystemTools.loadBackground(jdInnerL, normal);
         SystemTools.loadBackground(zxrsInnerL, normal);
-        if(null==rootAty.newestProducts || rootAty.newestProducts.isEmpty())
-        {
-            initProduct();
-        }
+        initProduct();
     }
     @OnClick(R.id.jdInnerL)
     void clickJdl()
     {
+        //重置加载模式
+        operateType = OperateTypeEnum.REFRESH;
         currentIndex = 2;
         application.proFragManager.setCurrentFrag(FragManager.FragType.PROGRESS);
         Drawable normal = resources.getDrawable(R.drawable.switch_normal);
@@ -646,14 +646,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(zxInnerL, normal);
         SystemTools.loadBackground(jdInnerL, press);
         SystemTools.loadBackground(zxrsInnerL, normal);
-        if(null==rootAty.progressProducts || rootAty.progressProducts.isEmpty())
-        {
-            initProduct();
-        }
+        initProduct();
     }
     @OnClick(R.id.zxrsInnerL)
     void clickZxrsl()
     {
+        //重置加载模式
+        operateType = OperateTypeEnum.REFRESH;
         if(0 == zxrsInnerL.getTag ( ))
         {
             //转换成UP
@@ -690,30 +689,25 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             SystemTools.loadBackground ( jdInnerL, normal );
             SystemTools.loadBackground ( zxrsInnerL, press );
         }
-
-        if(null==rootAty.totalProducts || rootAty.totalProducts.isEmpty())
-        {
-            initProduct();
-        }
+        initProduct();
     }
 
     /**
      * 初始化加载数据
      */
     protected void firstGetData(){
-        mHandler.postDelayed (
-                new Runnable ( ) {
+        mHandler.postDelayed(
+                new Runnable() {
 
                     @Override
-                    public
-                    void run ( ) {
+                    public void run() {
 
-                        if ( getActivity ( ).isFinishing ( ) ) return;
+                        if (getActivity().isFinishing()) return;
                         operateType = OperateTypeEnum.REFRESH;
-                        homePullRefresh.setRefreshing ( true );
+                        homePullRefresh.setRefreshing(true);
                     }
                 }, 1000
-                             );
+        );
     }
 
     private void initSwitchImg()
