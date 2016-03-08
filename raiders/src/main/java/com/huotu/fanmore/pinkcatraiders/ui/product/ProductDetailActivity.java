@@ -222,6 +222,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                     productDetail = productDetailsOutput
                                             .getResultData().getData();
                                     issueId = productDetail.getIssueId();
+                                    pid=productDetail.getPid();
                                     detailUrl = productDetail.getLink();
                                     if (0 == productDetail.getStatus()) {
                                         productDetailNameLabel.setText("进行中");
@@ -431,9 +432,12 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                     )
                             )) {
                                 if (null != productDetailsOutput.getResultData().getData()) {
+
                                     productDetail = productDetailsOutput
                                             .getResultData().getData();
                                     issueId = productDetail.getIssueId();
+                                    pid=productDetail.getPid();
+
                                     detailUrl = productDetail.getLink();
                                     if (0 == productDetail.getStatus()) {
                                         productDetailNameLabel.setText("进行中");

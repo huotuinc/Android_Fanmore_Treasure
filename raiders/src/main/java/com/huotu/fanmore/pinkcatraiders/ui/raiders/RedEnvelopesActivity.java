@@ -48,6 +48,9 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+
 /**
  * 红包列表界面
  */
@@ -151,13 +154,42 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
                         //application.writeShareinfo(shareOutput.getResultData().getShare());
                         ShareModel msgModel = new ShareModel ();
                         msgModel.setImageUrl(shareOutput.getResultData().getShare().getImageUrl());
-                        msgModel.setText ( shareOutput.getResultData().getShare().getText());
-                        msgModel.setTitle ( shareOutput.getResultData().getShare().getTitle());
+                        msgModel.setText(shareOutput.getResultData().getShare().getText());
+                        msgModel.setTitle(shareOutput.getResultData().getShare().getTitle());
                         msgModel.setUrl(shareOutput.getResultData().getShare().getUrl());
                         sharePopupWindow.initShareParams(msgModel);
                         sharePopupWindow.showShareWindow();
                         sharePopupWindow.showAtLocation(titleLayoutL,
                                 Gravity.BOTTOM, 0, 0);
+                        sharePopupWindow.setPlatformActionListener (
+                                new PlatformActionListener() {
+                                    @Override
+                                    public void onComplete(
+                                            Platform platform, int i, HashMap<String, Object> hashMap
+                                    ) {
+                                        Message msg = Message.obtain();
+                                        msg.obj = platform;
+                                        mHandler.sendMessage(msg);
+                                        successshare();
+
+                                    }
+
+                                    @Override
+                                    public void onError(Platform platform, int i, Throwable throwable) {
+                                        Message msg = Message.obtain();
+                                        msg.obj = platform;
+                                        mHandler.sendMessage(msg);
+                                    }
+
+                                    @Override
+                                    public void onCancel(Platform platform, int i) {
+                                        Message msg = Message.obtain();
+                                        msg.obj = platform;
+                                        mHandler.sendMessage(msg);
+                                    }
+                                }
+                        );
+
                         sharePopupWindow.setOnDismissListener ( new PoponDismissListener( RedEnvelopesActivity.this ) );
 
 

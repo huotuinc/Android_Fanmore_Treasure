@@ -240,6 +240,8 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         sp.setTitleUrl ( shareParams.getUrl ( ) ); // 标题的超链接
         sp.setText ( shareParams.getText ( ) );
         sp.setImageUrl ( shareParams.getImageUrl ( ) );
+        sp.setSite("ht");
+        sp.setSiteUrl("http://www.baidu.com");
         Platform qzone = ShareSDK.getPlatform(context, QZone.NAME);
         qzone.setPlatformActionListener(platformActionListener); // 设置分享事件回调 //
         // 执行图文分享
