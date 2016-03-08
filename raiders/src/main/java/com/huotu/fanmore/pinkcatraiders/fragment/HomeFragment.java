@@ -234,8 +234,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @OnClick ( R.id.redPackageL )
     void showRadPackageUi ( ) {
 
-        //Bundle bundle = new Bundle ( );
-        //ActivityUtils.getInstance ( ).showActivity ( getActivity ( ), ReadPackageActivity.class, bundle );
+        Bundle bundle = new Bundle ( );
+        ActivityUtils.getInstance ( ).showActivity ( getActivity ( ), ReadPackageActivity.class, bundle );
     }
 
     @OnClick ( R.id.sdL )

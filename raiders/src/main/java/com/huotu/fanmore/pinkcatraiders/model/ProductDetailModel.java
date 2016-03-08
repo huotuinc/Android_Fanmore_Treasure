@@ -18,6 +18,105 @@ public class ProductDetailModel extends BaseModel {
     private long stepAmount;
     private String title;
     private long toAmount;
+    private String awardingDate;
+    private String awardingUserBuyCount;
+    private String awardingUserCityName;
+    private String awardingUserHead;
+    private long awardingUserId;
+    private String awardingUserIp;
+    private String awardingUserName;
+    private String firstBuyTime;
+    private long 	luckyNumber;
+    private List<Long> numbers;
+    private long 	remainSecond;
+
+    public String getAwardingDate() {
+        return awardingDate;
+    }
+
+    public void setAwardingDate(String awardingDate) {
+        this.awardingDate = awardingDate;
+    }
+
+    public String getAwardingUserBuyCount() {
+        return awardingUserBuyCount;
+    }
+
+    public void setAwardingUserBuyCount(String awardingUserBuyCount) {
+        this.awardingUserBuyCount = awardingUserBuyCount;
+    }
+
+    public String getAwardingUserCityName() {
+        return awardingUserCityName;
+    }
+
+    public void setAwardingUserCityName(String awardingUserCityName) {
+        this.awardingUserCityName = awardingUserCityName;
+    }
+
+    public String getAwardingUserHead() {
+        return awardingUserHead;
+    }
+
+    public void setAwardingUserHead(String awardingUserHead) {
+        this.awardingUserHead = awardingUserHead;
+    }
+
+    public long getAwardingUserId() {
+        return awardingUserId;
+    }
+
+    public void setAwardingUserId(long awardingUserId) {
+        this.awardingUserId = awardingUserId;
+    }
+
+    public String getAwardingUserIp() {
+        return awardingUserIp;
+    }
+
+    public void setAwardingUserIp(String awardingUserIp) {
+        this.awardingUserIp = awardingUserIp;
+    }
+
+    public String getAwardingUserName() {
+        return awardingUserName;
+    }
+
+    public void setAwardingUserName(String awardingUserName) {
+        this.awardingUserName = awardingUserName;
+    }
+
+    public String getFirstBuyTime() {
+        return firstBuyTime;
+    }
+
+    public void setFirstBuyTime(String firstBuyTime) {
+        this.firstBuyTime = firstBuyTime;
+    }
+
+    public long getLuckyNumber() {
+        return luckyNumber;
+    }
+
+    public void setLuckyNumber(long luckyNumber) {
+        this.luckyNumber = luckyNumber;
+    }
+
+    public List<Long> getNumbers() {
+        return numbers;
+    }
+
+    public void setNumbers(List<Long> numbers) {
+        this.numbers = numbers;
+    }
+
+    public long getRemainSecond() {
+        return remainSecond;
+    }
+
+    public void setRemainSecond(long remainSecond) {
+        this.remainSecond = remainSecond;
+    }
 
     public String getCharacter() {
         return character;

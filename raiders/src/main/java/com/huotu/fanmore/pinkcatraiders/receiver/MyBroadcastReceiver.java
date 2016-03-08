@@ -36,11 +36,13 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
     public static String ACTION_WX_PAY_CALLBACK="cy.com.morefan.ACTION_WX_PAY_CALLBACK";
     //清单结算模式
     public static String SHOP_CART="cy.com.morefan.SHOP_CART";
+    //其他界面跳转到购物车
+    public static String JUMP_CART="cy.com.morefan.JUMP_CART";
 
     public enum ReceiverType{
         WXNotBack,AlarmUp, RefreshTaskList,UserMainDataUpdate, Sms, Login, Logout, ShareToWeixinSuccess,
         ShareToSinaSuccess, ShareToQzoneSuccess, BackgroundBackToUpdate, FlowAdd,Register,RefreshTaskDetail,
-        WX_Pay_Callback,requestFlow,sendFlow,wxPaySuccess,shopCart
+        WX_Pay_Callback,requestFlow,sendFlow,wxPaySuccess,shopCart,jumpCart
     }
     public interface BroadcastListener{
         void onFinishReceiver(ReceiverType type, Object msg);
@@ -152,6 +154,10 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         else if(intent.getAction().equals(SHOP_CART))
         {
             listener.onFinishReceiver(ReceiverType.shopCart,intent.getExtras ( ));
+        }
+        else if(intent.getAction().equals(JUMP_CART))
+        {
+            listener.onFinishReceiver(ReceiverType.jumpCart,null);
         }
     }
 }

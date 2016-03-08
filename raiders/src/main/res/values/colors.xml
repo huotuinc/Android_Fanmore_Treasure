@@ -17,6 +17,7 @@
     <color name="deep_red">#FFFF1A17</color>
     <color name="progress_bg">#ffeaeaea</color>
     <color name="progress">#ffffb256</color>
+    <color name="redpackage_tag">#ffeeb817</color>
     <color name="color_light_gray">#FFF5F5F5</color>
     <color name="color_light_yellow">#FFFFFAEE</color>
     <color name="color_blue">#FF509BFF</color>
@@ -24,4 +25,7 @@
     <color name="transparent">#FFFFFFFF</color>
     <color name="bg_1">#FFE7E7E7</color>
     <color name="gray_backg">#e7e7e7</color>
+    <color name="redpackage">#ffff3f26</color>
+    <color name="prow_bg">#ffeee517</color>
+    <color name="redpackage_color01">#ff4e4c8d</color>
 </resources>
