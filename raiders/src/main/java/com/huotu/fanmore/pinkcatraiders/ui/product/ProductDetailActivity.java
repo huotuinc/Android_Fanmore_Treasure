@@ -768,19 +768,19 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 //立即参与
-                progress = new ProgressPopupWindow ( ProductDetailActivity.this, ProductDetailActivity.this, wManager );
-                progress.showProgress ( "正在加入清单" );
-                progress.showAtLocation (titleLayoutL,
+                progress = new ProgressPopupWindow(ProductDetailActivity.this, ProductDetailActivity.this, wManager);
+                progress.showProgress("正在加入清单");
+                progress.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0
                 );
                 String url = Contant.REQUEST_URL + Contant.JOIN_SHOPPING_CART;
                 AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ProductDetailActivity.this);
-                Map<String, Object> maps = new HashMap<String, Object> ();
-                maps.put ( "issueId", String.valueOf ( product.getIssueId() ) );
+                Map<String, Object> maps = new HashMap<String, Object>();
+                maps.put("issueId", String.valueOf(product.getIssueId()));
                 Map<String, Object> param = params.obtainPostParam(maps);
-                BaseModel base = new BaseModel ();
-                HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
-                httpUtils.doVolleyPost (
+                BaseModel base = new BaseModel();
+                HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel>();
+                httpUtils.doVolleyPost(
                         base, url, param, new Response.Listener<BaseModel>() {
                             @Override
                             public void onResponse(BaseModel response) {
@@ -808,6 +808,48 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         });
         //中间
         TextView bottomOtherBtnCenter = (TextView) this.findViewById(R.id.bottomOtherBtnCenter);
+        bottomOtherBtnCenter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //加入清单
+                progress = new ProgressPopupWindow(ProductDetailActivity.this, ProductDetailActivity.this, wManager);
+                progress.showProgress("正在加入清单");
+                progress.showAtLocation(titleLayoutL,
+                        Gravity.CENTER, 0, 0
+                );
+                String url = Contant.REQUEST_URL + Contant.JOIN_SHOPPING_CART;
+                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ProductDetailActivity.this);
+                Map<String, Object> maps = new HashMap<String, Object>();
+                maps.put("issueId", String.valueOf(product.getIssueId()));
+                Map<String, Object> param = params.obtainPostParam(maps);
+                BaseModel base = new BaseModel();
+                HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel>();
+                httpUtils.doVolleyPost(
+                        base, url, param, new Response.Listener<BaseModel>() {
+                            @Override
+                            public void onResponse(BaseModel response) {
+                                progress.dismissView();
+                                BaseModel base = response;
+                                if (1 == base.getResultCode()) {
+                                    //上传成功
+                                    ToastUtils.showLongToast(ProductDetailActivity.this, "添加清单成功");
+                                } else {
+                                    //上传失败
+                                    ToastUtils.showLongToast(ProductDetailActivity.this, "添加清单失败");
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                progress.dismissView();
+                                //系统级别错误
+                                ToastUtils.showLongToast(ProductDetailActivity.this, "添加清单失败");
+                            }
+                        }
+                );
+            }
+        });
         //购物车
         ImageView cartImg = (ImageView) this.findViewById(R.id.bottomOtherCart);
         //数量
