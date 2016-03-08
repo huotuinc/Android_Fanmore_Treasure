@@ -84,7 +84,7 @@ import butterknife.OnClick;
 /**
  * 首页
  */
-public class HomeActivity extends BaseActivity implements Handler.Callback, View.OnClickListener {
+public class HomeActivity extends BaseActivity implements Handler.Callback, View.OnClickListener, MyBroadcastReceiver.BroadcastListener {
 
     //获取资源对象
     public
@@ -216,6 +216,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     public double prices = 0;
     public int payNum = 0;
 
+    private MyBroadcastReceiver myBroadcastReceiver;
+
     @Override
     protected
     void onResume ( ) {
@@ -228,12 +230,13 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate ( savedInstanceState );
-        this.setContentView ( R.layout.ri_home );
-        ButterKnife.bind ( this );
+        this.setContentView(R.layout.ri_home);
+        ButterKnife.bind(this);
         application = ( BaseApplication ) this.getApplication ( );
         application.mFragManager = FragManager.getIns ( this, R.id.fragment_container );
-        resources = this.getResources ( );
+        resources = this.getResources();
         mHandler = new Handler ( this );
+        myBroadcastReceiver = new MyBroadcastReceiver(HomeActivity.this, this, MyBroadcastReceiver.JUMP_CART);
         //设置沉浸模式
         setImmerseLayout ( this.findViewById ( R.id.titleLayoutL ) );
         wManager = this.getWindowManager ( );
@@ -917,6 +920,45 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     @Override
     public void onClick(View v) {
+    }
+
+    @Override
+    public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
+        if(type == MyBroadcastReceiver.ReceiverType.jumpCart)
+        {
+            //显示清单列表
+            //设置选中状态
+            Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal );
+            SystemTools.loadBackground(oneBuy, oneBuyDraw);
+            obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
+            //标题栏右图标
+            //编辑模式
+            titleRightImage.setTag ( 1 );
+            Drawable rightDraw = resources.getDrawable(R.mipmap.title_edit);
+            SystemTools.loadBackground(titleRightImage, rightDraw);
+            //重置其他
+            Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
+            SystemTools.loadBackground(newest, newestDraw);
+            newestLabel.setTextColor(resources.getColor(R.color.text_black));
+            Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_press);
+            SystemTools.loadBackground(list, listDraw);
+            listLabel.setTextColor(resources.getColor(R.color.title_bg));
+            Drawable mallDraw = resources.getDrawable(R.mipmap.mall_icon_common);
+            SystemTools.loadBackground(mall, mallDraw);
+            mallLabel.setTextColor(resources.getColor(R.color.text_black));
+            Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
+            SystemTools.loadBackground(profile, profileDraw);
+            profileLabel.setTextColor(resources.getColor(R.color.text_black));
+
+            //显示清单操作弹出框
+            funcPopWin1.showLayout();
+            funcPopWin1.showAsDropDown(homeBottom, 0, -(2 * (int) resources.getDimension(R.dimen.bottom_height)));
+            //切换内容
+            String tag = Contant.TAG_3;
+            //加载具体的页面
+            Message message = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
+            mHandler.sendMessage(message);
+        }
     }
 
     public class CartBalanceModel

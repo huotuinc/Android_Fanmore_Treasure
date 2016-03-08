@@ -179,6 +179,8 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                                       listOutputs = jsonUtil.toBean(response.toString(), listOutputs);
                                       if(null != listOutputs && null != listOutputs.getResultData() && (1==listOutputs.getResultCode()))
                                       {
+                                          //广播数量
+
                                           if(null != listOutputs.getResultData().getList() && !listOutputs.getResultData().getList().isEmpty())
                                           {
                                               lists.clear();

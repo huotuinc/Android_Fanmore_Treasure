@@ -43,6 +43,7 @@ import com.huotu.fanmore.pinkcatraiders.model.ProductDetailsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.ShowOrderActivity;
@@ -789,6 +790,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                 if (1 == base.getResultCode()) {
                                     //上传成功
                                     ToastUtils.showLongToast(ProductDetailActivity.this, "添加清单成功");
+                                    //2秒后跳转到购物车
+                                    mHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            MyBroadcastReceiver.sendBroadcast(ProductDetailActivity.this, MyBroadcastReceiver.JUMP_CART);
+                                            closeSelf(ProductDetailActivity.this);
+                                        }
+                                    }, 2000);
                                 } else {
                                     //上传失败
                                     ToastUtils.showLongToast(ProductDetailActivity.this, "添加清单失败");
@@ -852,6 +861,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         });
         //购物车
         ImageView cartImg = (ImageView) this.findViewById(R.id.bottomOtherCart);
+        cartImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //跳转到购物车
+                MyBroadcastReceiver.sendBroadcast(ProductDetailActivity.this, MyBroadcastReceiver.JUMP_CART);
+                closeSelf(ProductDetailActivity.this);
+            }
+        });
         //数量
         TextView bottomOtherCartAmount = (TextView) this.findViewById(R.id.bottomOtherCartAmount);
         //设置宽度
