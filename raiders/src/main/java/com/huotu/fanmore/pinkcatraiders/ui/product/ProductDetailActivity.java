@@ -146,6 +146,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         wManager = this.getWindowManager();
         bundle = this.getIntent().getExtras();
         mHandler = new Handler(this);
+
         initTitle();
         initBottom();
         initSwitchImg();
@@ -617,6 +618,12 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         }
     }
 
+    @OnClick(R.id.calculationDetail)
+    void calculationDetail(){
+        Bundle bundle=new Bundle();
+        bundle.putLong("issueId",productDetail.getIssueId());
+        ActivityUtils.getInstance().showActivity(ProductDetailActivity.this,CountResultActivity.class,bundle);
+    }
     @OnClick(R.id.titleLeftImage)
     void doBack()
     {

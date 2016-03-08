@@ -291,7 +291,7 @@
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <!-- Required SDK 核心功能 -->
         <!-- 可配置android:process参数将PushService放在其他进程中 -->
@@ -380,7 +380,8 @@
             android:value="a36e00d3397bf5e69049ed41" />
         <!-- </>值来自开发者平台取得的AppKey -->
         <!-- 激光推送 -->
-        <activity android:name=".ui.raiders.WinLogDetailActivity"></activity>
+        <activity android:name=".ui.raiders.WinLogDetailActivity" />
+        <activity android:name=".ui.product.CountResultActivity"></activity>
     </application>
 
 </manifest>

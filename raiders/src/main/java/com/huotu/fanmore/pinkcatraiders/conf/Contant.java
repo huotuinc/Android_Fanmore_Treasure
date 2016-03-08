@@ -172,8 +172,8 @@ public class Contant {
     //接口请求地址
     //loginapi
 
-    public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
-    //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
+    //public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
+    public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
     //public static final String REQUEST_URL = "http://192.168.3.13:8080/duobao/app/";
     //获取夺宝记录
@@ -195,6 +195,8 @@ public class Contant {
     //获取参与历史
     public static final String GET_BUY_LIST                = "getBuyList";
 
+    //获取计算结果
+    public static final String GET_COUNT_RESULT_BY_ISSUEID="getCountResultByIssueId";
     //获取幻灯片轮播列表
     public static final String GET_SLIDE_LIST              = "getSlideList";
     //获取幻灯片轮播列表
