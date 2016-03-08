@@ -49,6 +49,22 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     ImageView titleLeftImage;
     public Bundle bundle;
 
+    @Bind(R.id.prowL01)
+    TextView prowL01;
+    @Bind(R.id.prowL02)
+    TextView prowL02;
+    @Bind(R.id.prowL03)
+    TextView prowL03;
+    @Bind(R.id.prowL04)
+    TextView prowL04;
+    @Bind(R.id.prowL05)
+    TextView prowL05;
+    @Bind(R.id.prowL06)
+    TextView prowL06;
+
+    @Bind(R.id.redBtn)
+    TextView redBtn;
+
     @Override
     public boolean handleMessage(Message msg) {
         return false;
@@ -73,6 +89,19 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         wManager = this.getWindowManager ( );
         bundle = this.getIntent().getExtras();
         initTitle ( );
+        initData();
+    }
+
+    private void initData()
+    {
+
+    }
+
+    @OnClick(R.id.redBtn)
+    void obtainRedpackage()
+    {
+        //设置动画
+
     }
 
     @OnClick(R.id.titleLeftImage)
