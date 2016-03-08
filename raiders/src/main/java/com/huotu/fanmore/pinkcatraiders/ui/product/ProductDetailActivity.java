@@ -34,6 +34,7 @@ import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
 import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
+import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.PartnerHistorysModel;
 import com.huotu.fanmore.pinkcatraiders.model.PartnerHistorysOutputModel;
@@ -65,6 +66,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -141,7 +143,6 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     public boolean isInflate = true;
     public ProductDetailModel productDetail;
     public ProductModel product;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -627,7 +628,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     @OnClick(R.id.titleLeftImage)
     void doBack()
     {
-        closeSelf ( ProductDetailActivity.this );
+        closeSelf(ProductDetailActivity.this);
     }
 
     @OnClick(R.id.graphicDetails)
@@ -871,6 +872,16 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         });
         //数量
         TextView bottomOtherCartAmount = (TextView) this.findViewById(R.id.bottomOtherCartAmount);
+        Iterator<CartCountModel> cartCountIt = CartCountModel.findAll(CartCountModel.class);
+        if(cartCountIt.hasNext())
+        {
+            CartCountModel cartCount = cartCountIt.next();
+            bottomOtherCartAmount.setText(String.valueOf(cartCount.getCount()));
+        }
+        else
+        {
+            bottomOtherCartAmount.setText("0");
+        }
         //设置宽度
         ViewGroup.LayoutParams pl = bottomOtherBtnLeft.getLayoutParams();
         pl.width = wManager.getDefaultDisplay().getWidth()/3;
@@ -996,4 +1007,5 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     public boolean handleMessage(Message msg) {
         return false;
     }
+
 }

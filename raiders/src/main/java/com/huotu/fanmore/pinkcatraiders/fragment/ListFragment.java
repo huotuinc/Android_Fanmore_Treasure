@@ -22,11 +22,13 @@ import com.huotu.fanmore.pinkcatraiders.adapter.RaidersAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.SearchHistoryModel;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.PayResultAtivity;
@@ -40,6 +42,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -179,17 +182,22 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                                       listOutputs = jsonUtil.toBean(response.toString(), listOutputs);
                                       if(null != listOutputs && null != listOutputs.getResultData() && (1==listOutputs.getResultCode()))
                                       {
-                                          //广播数量
-
                                           if(null != listOutputs.getResultData().getList() && !listOutputs.getResultData().getList().isEmpty())
                                           {
+                                              //记录购物车数量
+                                              CartCountModel cartCount = new CartCountModel();
+                                              Iterator<CartCountModel> cartCountIt = CartCountModel.findAll(CartCountModel.class);
+                                              if(cartCountIt.hasNext()) {
+                                                  CartCountModel.deleteAll(CartCountModel.class);
+                                              }
+                                              cartCount.setCount(listOutputs.getResultData().getList().size());
+                                              cartCount.save(cartCount);
                                               lists.clear();
                                               lists.addAll(listOutputs.getResultData().getList());
                                               adapter.notifyDataSetChanged();
                                           }
                                           else
                                           {
-                                              lists.clear();
                                               menuList.setEmptyView(emptyView);
                                           }
                                       }
