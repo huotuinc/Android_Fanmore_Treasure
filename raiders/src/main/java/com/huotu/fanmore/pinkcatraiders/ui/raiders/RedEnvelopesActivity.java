@@ -208,7 +208,7 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
                 {
                     //异常处理，自动切换成无数据
 
-                    noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, shareOutput.getResultDescription());
+                    noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, "数据请求失败");
                     noticePopWin.showNotice();
                     noticePopWin.showAtLocation(titleLayoutL,
                             Gravity.CENTER, 0, 0
@@ -223,6 +223,11 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
                 {
                     return;
                 }
+                noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, "数据请求失败");
+                noticePopWin.showNotice();
+                noticePopWin.showAtLocation(titleLayoutL,
+                        Gravity.CENTER, 0, 0
+                );
 
             }
         });
