@@ -324,7 +324,7 @@
                         android:layout_weight="1"
                         android:gravity="right"
                         android:maxLength="30"
-                        android:text="（2016-1-21 10:07:12开始）"
+                        android:text=""
                         android:textSize="@dimen/text_size_14"
                         android:textColor="@color/text_gray"/>
                 </LinearLayout>
