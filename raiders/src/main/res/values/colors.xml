@@ -28,4 +28,5 @@
     <color name="redpackage">#ffff3f26</color>
     <color name="prow_bg">#ffeee517</color>
     <color name="redpackage_color01">#ff4e4c8d</color>
+    <color name="redpackage_wait">#a2000000</color>
 </resources>

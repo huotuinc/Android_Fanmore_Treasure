@@ -1,49 +1,44 @@
 package com.huotu.fanmore.pinkcatraiders.uitls;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
+
+import java.util.HashMap;
 
 /**
  * 声音播放工具类
  */
-public class SoundUtil {
-    private MediaPlayer mMediaPlayer;
+public class SoundUtil implements SoundPool.OnLoadCompleteListener {
+    private SoundPool soundPool;
+    private int raw;
+    private Context mContext;
+    HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
 
-    private Context mContext = null;
-
-    public SoundUtil(Context context)
+    public SoundUtil(Context context, int raw)
     {
         mContext = context;
+        this.raw = raw;
+        soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 1);
+        soundPool.setOnLoadCompleteListener(this);
+        soundMap.put(1, soundPool.load(context, raw, 1));
+
     }
 
-    public void shakeSound(int sid)
+    public void shakeSound()
     {
-        if (mMediaPlayer == null)
-        {
-            mMediaPlayer = MediaPlayer.create(mContext, sid);
-        } else
-        {
-            mMediaPlayer.reset();
-            mMediaPlayer = MediaPlayer.create(mContext, sid);
-        }
-        try
-        {
-            if (mMediaPlayer != null)
-            {
-                mMediaPlayer.stop();
-            }
-            mMediaPlayer.prepare();
-        } catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        mMediaPlayer.start();
+        soundPool.play(soundMap.get(1), 30, 30, 10, 0, 1);
     }
 
-    public void Release(){
-        if( mMediaPlayer!=null){
-            mMediaPlayer.release();
+    public void release(){
+        if( soundPool!=null){
+            soundPool.release();
         }
+    }
+
+    @Override
+    public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+
     }
 }

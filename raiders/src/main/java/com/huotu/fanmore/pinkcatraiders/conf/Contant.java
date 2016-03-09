@@ -283,4 +283,8 @@ public class Contant {
     public static final String BALANCE = "balance";
     //jpush设置别名
     public static final String UPDATE_DEVICE_TOKEN = "updateDeviceToken";
+    //判断是否开始抽奖
+    public static final String WHETHER_TO_START_DRAWING = "whetherToStartDrawing";
+    //咻咻咻
+    public static final String XIU_XIU_XIU = "xiuxiuxiu";
 }

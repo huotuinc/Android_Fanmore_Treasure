@@ -3,9 +3,12 @@ package com.huotu.fanmore.pinkcatraiders.ui.redpackage;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,10 +24,17 @@ import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SoundUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
+import com.huotu.fanmore.pinkcatraiders.widget.RadpackageWaitPopWin;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,7 +44,7 @@ import butterknife.OnTouch;
 /**
  * 红包接口
  */
-public class ReadPackageActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+public class ReadPackageActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, SoundPool.OnLoadCompleteListener {
 
     public Handler mHandler;
 
@@ -76,7 +86,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     ImageView wave3;
     @Bind(R.id.redBtn)
     TextView redBtn;
-    private SoundUtil soundUtil;
+    private SoundPool soundPool;
 
     private AnimationSet mAnimationSet1;
     private AnimationSet mAnimationSet2;
@@ -87,8 +97,11 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     private static final int MSG_WAVE3_ANIMATION = 3;
     private static final int CLEAN_ANIMATION = 4;
     private static final int POWER_COUNT = 5;
+    private static final int SOUND = 6;
 
     public int powerPro = 0;
+    public HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
+    public RadpackageWaitPopWin redpackageWaitPopWin;
 
     @Override
     public boolean handleMessage(Message msg) {
@@ -104,6 +117,26 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
             case CLEAN_ANIMATION:
                 clearWaveAnimation();
                 break;
+            case SOUND:
+                int code = (int) msg.obj;
+                if(1==code)
+                {
+                    soundPool.play(soundMap.get(1), 30, 30, 1, 0, 1f);
+                }
+
+                break;
+            case 0x66667777:
+            {
+                redpackageWaitPopWin.showWin();
+                redpackageWaitPopWin.showAtLocation(titleLayoutL,
+                        Gravity.CENTER, 0, 0);
+            }
+            break;
+            case 0x66660001:
+            {
+                closeSelf(ReadPackageActivity.this);
+            }
+            break;
             case POWER_COUNT:
                 int count = (int) msg.obj;
                 if(0==count)
@@ -199,12 +232,14 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         mHandler = new Handler ( this );
         //设置沉浸模式
         setImmerseLayout(this.findViewById(R.id.titleLayoutL));
-        am = this.getAssets ( );
+        am = this.getAssets();
         resources = this.getResources();
         application = ( BaseApplication ) this.getApplication ( );
         wManager = this.getWindowManager();
-        soundUtil = new SoundUtil(ReadPackageActivity.this);
+        soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 0);
+        soundPool.setOnLoadCompleteListener(this);
         bundle = this.getIntent().getExtras();
+        redpackageWaitPopWin= new RadpackageWaitPopWin(ReadPackageActivity.this, ReadPackageActivity.this, wManager, mHandler);
         initTitle();
         mAnimationSet1 = initAnimationSet();
         mAnimationSet2 = initAnimationSet();
@@ -244,6 +279,14 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     private void initData()
     {
 
+        //判断抢红包是否开启
+        if( false == ReadPackageActivity.this.canConnect ( ) ){
+            return;
+        }
+        String url = Contant.REQUEST_URL + Contant.WHETHER_TO_START_DRAWING;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ReadPackageActivity.this);
+        Map<String, Object> maps = new HashMap<String, Object> ();
+        mHandler.sendEmptyMessage(0x66667777);
     }
 
     @OnClick(R.id.redBtn)
@@ -259,12 +302,13 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         mHandler.sendMessage(message);
         mHandler.sendEmptyMessageDelayed(CLEAN_ANIMATION, OFFSET * 3);
         //
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                soundUtil.shakeSound(R.raw.red_click);
-            }
-        }).start();
+        try {
+            int soundId = soundPool.load(ReadPackageActivity.this.getAssets().openFd("redclick.wav"), 1);
+            soundMap.put(1, soundId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @OnClick(R.id.titleLeftImage)
@@ -277,8 +321,8 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         super.onDestroy();
         VolleyUtil.cancelAllRequest();
         ButterKnife.unbind(this);
-        if( soundUtil !=null){
-            soundUtil.Release();
+        if( soundPool !=null){
+            soundPool.release();
         }
     }
 
@@ -304,5 +348,12 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
             this.closeSelf(ReadPackageActivity.this);
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+        Message msg = mHandler.obtainMessage(SOUND); ;
+        msg.obj = sampleId ;
+        mHandler.sendMessage(msg);
     }
 }
