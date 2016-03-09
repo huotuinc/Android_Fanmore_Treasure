@@ -220,7 +220,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @OnClick ( R.id.lbL )
     void showCatagoryUi ( ) {
 
-        ActivityUtils.getInstance ( ).showActivity ( getActivity ( ), CateGoryActivity.class );
+        ActivityUtils.getInstance ( ).showActivity(getActivity(), CateGoryActivity.class);
     }
 
     @OnClick ( R.id.zqL )
@@ -235,7 +235,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     void showRadPackageUi ( ) {
 
         Bundle bundle = new Bundle ( );
-        ActivityUtils.getInstance ( ).showActivity ( getActivity ( ), ReadPackageActivity.class, bundle );
+        ActivityUtils.getInstance().showActivity(getActivity(), ReadPackageActivity.class, bundle);
     }
 
     @OnClick ( R.id.sdL )
@@ -306,7 +306,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
                     if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
                         if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
-                            rootAty.popProducts.get(0).setSort(productsOutputs.getResultData().getSort());
+
                             if (operateType == OperateTypeEnum.REFRESH) {
                                 rootAty.popProducts.clear();
                                 rootAty.popProducts.addAll(productsOutputs.getResultData().getList());
@@ -314,6 +314,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                             } else if (operateType == OperateTypeEnum.LOADMORE) {
                                 rootAty.popProducts.addAll(productsOutputs.getResultData().getList());
                                 rootAty.popAdapter.notifyDataSetChanged();
+                            }
+                            if ( rootAty.popProducts != null && rootAty.popProducts.size() > 0)
+                            {
+                                rootAty.popProducts.get(0).setSort(productsOutputs.getResultData().getSort());
                             }
                         } else {
                             //空数据处理
@@ -370,7 +374,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
                     if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
                         if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
-                            rootAty.newestProducts.get(0).setSort(productsOutputs.getResultData().getSort());
                             if (operateType == OperateTypeEnum.REFRESH) {
                                 rootAty.newestProducts.clear();
                                 rootAty.newestProducts.addAll(productsOutputs.getResultData().getList());
@@ -379,6 +382,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                                 rootAty.newestProducts.addAll(productsOutputs.getResultData().getList());
                                 rootAty.newestAdapter.notifyDataSetChanged();
                             }
+                            if ( rootAty.newestProducts != null && rootAty.newestProducts.size() > 0) {
+                                rootAty.newestProducts.get(0).setSort(productsOutputs.getResultData().getSort());
+                            }
+
                         } else {
                             //空数据处理
                         }
@@ -433,7 +440,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
                     if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
                         if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
-                            rootAty.progressProducts.get(0).setSort(productsOutputs.getResultData().getSort());
+
                             if (operateType == OperateTypeEnum.REFRESH) {
                                 rootAty.progressProducts.clear();
                                 rootAty.progressProducts.addAll(productsOutputs.getResultData().getList());
@@ -441,6 +448,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                             } else if (operateType == OperateTypeEnum.LOADMORE) {
                                 rootAty.progressProducts.addAll(productsOutputs.getResultData().getList());
                                 rootAty.progressAdapter.notifyDataSetChanged();
+                            }
+                            if ( rootAty.progressProducts != null && rootAty.progressProducts.size() > 0)
+                            {
+                                rootAty.progressProducts.get(0).setSort(productsOutputs.getResultData().getSort());
                             }
                         } else {
                             //空数据处理
@@ -496,7 +507,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
                     if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
                         if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
-                            rootAty.totalProducts.get(0).setSort(productsOutputs.getResultData().getSort());
+
                             if (operateType == OperateTypeEnum.REFRESH) {
                                 rootAty.totalProducts.clear();
                                 rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
@@ -504,6 +515,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                             } else if (operateType == OperateTypeEnum.LOADMORE) {
                                 rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
                                 rootAty.totalAdapter.notifyDataSetChanged();
+                            }
+                            if ( rootAty.totalProducts != null && rootAty.totalProducts.size() > 0)
+                            {
+                                rootAty.totalProducts.get(0).setSort(productsOutputs.getResultData().getSort());
                             }
                         } else {
                             //空数据处理
@@ -560,7 +575,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                                           productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
                                           if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
                                               if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
-                                                  rootAty.totalProducts.get(0).setSort(productsOutputs.getResultData().getSort());
+
                                                   if (operateType == OperateTypeEnum.REFRESH) {
                                                       rootAty.totalProducts.clear();
                                                       rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
@@ -568,6 +583,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                                                   } else if (operateType == OperateTypeEnum.LOADMORE) {
                                                       rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
                                                       rootAty.totalAdapter.notifyDataSetChanged();
+                                                  }
+                                                  if ( rootAty.totalProducts != null && rootAty.totalProducts.size() > 0)
+                                                  {
+                                                      rootAty.totalProducts.get(0).setSort(productsOutputs.getResultData().getSort());
                                                   }
                                               } else {
                                                   //空数据处理
