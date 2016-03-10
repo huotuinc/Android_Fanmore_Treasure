@@ -186,7 +186,7 @@ public class Contant {
     //public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
     public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
-    //public static final String REQUEST_URL = "http://192.168.3.13:8080/duobao/app/";
+    //public static final String REQUEST_URL = "http://192.168.3.86:8080/duobao/app/";
     //获取夺宝记录
     public static final String GET_MY_RAIDER_LIST          = "getMyRaiderList";
 
@@ -303,4 +303,8 @@ public class Contant {
     public static final String BALANCE = "balance";
     //jpush设置别名
     public static final String UPDATE_DEVICE_TOKEN = "updateDeviceToken";
+    //判断是否开始抽奖
+    public static final String WHETHER_TO_START_DRAWING = "whetherToStartDrawing";
+    //咻咻咻
+    public static final String XIU_XIU_XIU = "xiuxiuxiu";
 }

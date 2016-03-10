@@ -3,31 +3,48 @@ package com.huotu.fanmore.pinkcatraiders.ui.redpackage;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.SoundUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
+import com.huotu.fanmore.pinkcatraiders.widget.RadpackageWaitPopWin;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 
 /**
  * 红包接口
  */
-public class ReadPackageActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+public class ReadPackageActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, SoundPool.OnLoadCompleteListener {
 
     public Handler mHandler;
 
@@ -61,12 +78,144 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     TextView prowL05;
     @Bind(R.id.prowL06)
     TextView prowL06;
-
+    @Bind(R.id.wave1)
+    ImageView wave1;
+    @Bind(R.id.wave2)
+    ImageView wave2;
+    @Bind(R.id.wave3)
+    ImageView wave3;
     @Bind(R.id.redBtn)
     TextView redBtn;
+    private SoundPool soundPool;
+
+    private AnimationSet mAnimationSet1;
+    private AnimationSet mAnimationSet2;
+    private AnimationSet mAnimationSet3;
+
+    private static final int OFFSET = 100;  //每个动画的播放时间间隔
+    private static final int MSG_WAVE2_ANIMATION = 2;
+    private static final int MSG_WAVE3_ANIMATION = 3;
+    private static final int CLEAN_ANIMATION = 4;
+    private static final int POWER_COUNT = 5;
+    private static final int SOUND = 6;
+
+    public int powerPro = 0;
+    public HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
+    public RadpackageWaitPopWin redpackageWaitPopWin;
 
     @Override
     public boolean handleMessage(Message msg) {
+
+        switch (msg.what)
+        {
+            case MSG_WAVE2_ANIMATION:
+                wave2.startAnimation(mAnimationSet2);
+                break;
+            case MSG_WAVE3_ANIMATION:
+                wave3.startAnimation(mAnimationSet3);
+                break;
+            case CLEAN_ANIMATION:
+                clearWaveAnimation();
+                break;
+            case SOUND:
+                int code = (int) msg.obj;
+                if(1==code)
+                {
+                    soundPool.play(soundMap.get(1), 30, 30, 1, 0, 1f);
+                }
+
+                break;
+            case 0x66667777:
+            {
+                redpackageWaitPopWin.showWin();
+                redpackageWaitPopWin.showAtLocation(titleLayoutL,
+                        Gravity.CENTER, 0, 0);
+            }
+            break;
+            case 0x66660001:
+            {
+                closeSelf(ReadPackageActivity.this);
+            }
+            break;
+            case POWER_COUNT:
+                int count = (int) msg.obj;
+                if(0==count)
+                {
+                    //初始化
+                    SystemTools.loadBackground(prowL01, resources.getDrawable(R.color.prow_bg));
+                    SystemTools.loadBackground(prowL02, resources.getDrawable(R.color.prow_bg));
+                    SystemTools.loadBackground(prowL03, resources.getDrawable(R.color.prow_bg));
+                    SystemTools.loadBackground(prowL04, resources.getDrawable(R.color.prow_bg));
+                    SystemTools.loadBackground(prowL05, resources.getDrawable(R.color.prow_bg));
+                    SystemTools.loadBackground(prowL06, resources.getDrawable(R.color.prow_bg));
+                }
+                else if(1==count)
+                {
+                    //初始化
+                    SystemTools.loadBackground(prowL01, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL02, resources.getDrawable(R.color.prow_bg));
+                    SystemTools.loadBackground(prowL03, resources.getDrawable(R.color.prow_bg));
+                    SystemTools.loadBackground(prowL04, resources.getDrawable(R.color.prow_bg));
+                    SystemTools.loadBackground(prowL05, resources.getDrawable(R.color.prow_bg));
+                    SystemTools.loadBackground(prowL06, resources.getDrawable(R.color.prow_bg));
+                }
+                else if(2==count)
+                {
+                    //初始化
+                    SystemTools.loadBackground(prowL01, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL02, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL03, resources.getDrawable(R.color.prow_bg));
+                    SystemTools.loadBackground(prowL04, resources.getDrawable(R.color.prow_bg));
+                    SystemTools.loadBackground(prowL05, resources.getDrawable(R.color.prow_bg));
+                    SystemTools.loadBackground(prowL06, resources.getDrawable(R.color.prow_bg));
+                }
+                else if(3==count)
+                {
+                    //初始化
+                    SystemTools.loadBackground(prowL01, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL02, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL03, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL04, resources.getDrawable(R.color.prow_bg));
+                    SystemTools.loadBackground(prowL05, resources.getDrawable(R.color.prow_bg));
+                    SystemTools.loadBackground(prowL06, resources.getDrawable(R.color.prow_bg));
+                }
+                else if(4==count)
+                {
+                    //初始化
+                    SystemTools.loadBackground(prowL01, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL02, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL03, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL04, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL05, resources.getDrawable(R.color.prow_bg));
+                    SystemTools.loadBackground(prowL06, resources.getDrawable(R.color.prow_bg));
+                }
+                else if(5==count)
+                {
+                    //初始化
+                    SystemTools.loadBackground(prowL01, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL02, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL03, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL04, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL05, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL06, resources.getDrawable(R.color.prow_bg));
+                }
+                else if(6<=count)
+                {
+                    //初始化
+                    SystemTools.loadBackground(prowL01, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL02, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL03, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL04, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL05, resources.getDrawable(R.color.redpackage));
+                    SystemTools.loadBackground(prowL06, resources.getDrawable(R.color.redpackage));
+                    //初始化
+                    powerPro = 0;
+                    //发送红包接口
+                }
+                break;
+            default:
+                break;
+        }
         return false;
     }
 
@@ -77,36 +226,93 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate ( savedInstanceState );
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.redpackage_game);
         ButterKnife.bind(this);
         mHandler = new Handler ( this );
         //设置沉浸模式
-        setImmerseLayout ( this.findViewById ( R.id.titleLayoutL ) );
-        am = this.getAssets ( );
+        setImmerseLayout(this.findViewById(R.id.titleLayoutL));
+        am = this.getAssets();
         resources = this.getResources();
         application = ( BaseApplication ) this.getApplication ( );
-        wManager = this.getWindowManager ( );
+        wManager = this.getWindowManager();
+        soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 0);
+        soundPool.setOnLoadCompleteListener(this);
         bundle = this.getIntent().getExtras();
-        initTitle ( );
+        redpackageWaitPopWin= new RadpackageWaitPopWin(ReadPackageActivity.this, ReadPackageActivity.this, wManager, mHandler);
+        initTitle();
+        mAnimationSet1 = initAnimationSet();
+        mAnimationSet2 = initAnimationSet();
+        mAnimationSet3 = initAnimationSet();
         initData();
+
+    }
+
+    private AnimationSet initAnimationSet()
+    {
+        AnimationSet as = new AnimationSet(true);
+        ScaleAnimation sa = new ScaleAnimation(1f, 2.3f, 1f, 2.3f,
+                ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
+                ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+        sa.setDuration(OFFSET * 3);
+        sa.setRepeatCount(Animation.INFINITE);// 设置循环
+        AlphaAnimation aa = new AlphaAnimation(1, 0.1f);
+        aa.setDuration(OFFSET * 3);
+        aa.setRepeatCount(Animation.INFINITE);//设置循环
+        as.addAnimation(sa);
+        as.addAnimation(aa);
+        return as;
+    }
+
+    private void showWaveAnimation() {
+        wave1.startAnimation(mAnimationSet1);
+        mHandler.sendEmptyMessageDelayed(MSG_WAVE2_ANIMATION, OFFSET);
+        mHandler.sendEmptyMessageDelayed(MSG_WAVE3_ANIMATION, OFFSET * 2);
+    }
+
+    private void clearWaveAnimation() {
+        wave1.clearAnimation();
+        wave2.clearAnimation();
+        wave3.clearAnimation();
     }
 
     private void initData()
     {
 
+        //判断抢红包是否开启
+        if( false == ReadPackageActivity.this.canConnect ( ) ){
+            return;
+        }
+        String url = Contant.REQUEST_URL + Contant.WHETHER_TO_START_DRAWING;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ReadPackageActivity.this);
+        Map<String, Object> maps = new HashMap<String, Object> ();
+        mHandler.sendEmptyMessage(0x66667777);
     }
 
     @OnClick(R.id.redBtn)
-    void obtainRedpackage()
+    void redBtn()
     {
-        //设置动画
+        powerPro++;
+        //动画
+        showWaveAnimation();
+        //改变能量槽
+        Message message = mHandler.obtainMessage();
+        message.what = POWER_COUNT;
+        message.obj = powerPro;
+        mHandler.sendMessage(message);
+        mHandler.sendEmptyMessageDelayed(CLEAN_ANIMATION, OFFSET * 3);
+        //
+        try {
+            int soundId = soundPool.load(ReadPackageActivity.this.getAssets().openFd("redclick.wav"), 1);
+            soundMap.put(1, soundId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
     @OnClick(R.id.titleLeftImage)
-    void doBack()
-    {
+    void doBack() {
         closeSelf(ReadPackageActivity.this);
     }
 
@@ -115,6 +321,9 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         super.onDestroy();
         VolleyUtil.cancelAllRequest();
         ButterKnife.unbind(this);
+        if( soundPool !=null){
+            soundPool.release();
+        }
     }
 
     private
@@ -139,5 +348,12 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
             this.closeSelf(ReadPackageActivity.this);
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+        Message msg = mHandler.obtainMessage(SOUND); ;
+        msg.obj = sampleId ;
+        mHandler.sendMessage(msg);
     }
 }
