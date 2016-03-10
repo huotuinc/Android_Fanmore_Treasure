@@ -441,16 +441,16 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
 
     private void checkUserName()
     {
-        progress.showProgress ( "正在验证用户是否存在" );
+        progress.showProgress ( "正在验证手机是否存在" );
         progress.showAtLocation ( btn_commit, Gravity.CENTER, 0, 0 );
         //登录接口
-        String url = Contant.REQUEST_URL + "checkUserName";
+        String url = Contant.REQUEST_URL + "checkPhone";
         AuthParamUtils params = new AuthParamUtils (
                 application, System.currentTimeMillis (
         ),
                 MobileRegActivity.this );
         Map< String, Object > maps = new HashMap< String, Object > ( );
-        maps.put ( "userName", edtPhone.getText ( ).toString ( ) );
+        maps.put ( "phone", edtPhone.getText ( ).toString ( ) );
         String suffix = params.obtainGetParam ( maps );
         url = url + suffix;
         HttpUtils httpUtils = new HttpUtils ( );

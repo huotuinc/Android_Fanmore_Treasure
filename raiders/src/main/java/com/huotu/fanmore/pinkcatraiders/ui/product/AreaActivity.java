@@ -248,7 +248,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
                 ProductModel product = ( ProductModel ) msg.obj;
                 progress = new ProgressPopupWindow( AreaActivity.this, AreaActivity.this, wManager );
                 progress.showProgress ( "正在添加清单" );
-                progress.showAtLocation (titleLayoutL,
+                progress.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0
                 );
                 String url = Contant.REQUEST_URL + Contant.JOIN_SHOPPING_CART;
@@ -256,6 +256,8 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
                 Map<String, Object> maps = new HashMap<String, Object> ();
                 maps.put ( "issueId", String.valueOf ( product.getIssueId () ) );
                 Map<String, Object> param = params.obtainPostParam(maps);
+                String suffix = params.obtainGetParam(maps);
+                url = url + suffix;
                 BaseModel base = new BaseModel ();
                 HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
                 httpUtils.doVolleyPost (

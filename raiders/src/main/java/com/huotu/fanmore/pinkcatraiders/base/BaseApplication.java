@@ -130,6 +130,16 @@ public class BaseApplication extends Application {
     }
     public void writeUserInfo(AppUserModel user)
     {
+        PreferenceHelper.writeInt(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_HASPADDWORD,user.getHasPassword());
+        PreferenceHelper.writeInt(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_HASSHARERED,user.getHasShareRed());
+        PreferenceHelper.writeLong(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_INREGRAL, user.getIntegral());
+        PreferenceHelper.writeInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_REDSENDRED, user.getRegSendRed());
+        PreferenceHelper.writeInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_BUYANDSHARE, user.getBuyAndShare());
+        PreferenceHelper.writeInt(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_PUTMONEY,user.getPutMoney());
+        PreferenceHelper.writeInt(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_GETFROMSHARE,user.getGetFromShare());
+        PreferenceHelper.writeInt(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_XIUXIUXIU,user.getXiuxiuxiu());
+        PreferenceHelper.writeInt(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_BANDQQ,user.getQqBanded());
+        PreferenceHelper.writeInt(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_WEXINBANDED,user.getWexinBanded());
         PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_REALNAME, user.getRealName());
         PreferenceHelper.writeInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_ENABLED, user.getEnabled());
         PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MOBILE, user.getMoblie());
@@ -141,6 +151,22 @@ public class BaseApplication extends Application {
         PreferenceHelper.writeLong(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_USERID, user.getUserId());
         PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_DEFAULT_ADDRESS, (null==user.getAppMyAddressListModel())?null:user.getAppMyAddressListModel().getDetails());
         PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_USERNAME,user.getUsername());
+    }
+
+    //获取手机是否绑定
+    public int readMobileBanded()
+    {
+        return PreferenceHelper.readInt ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_MOBILEBANDED );
+    }
+    //获取微信是否绑定
+    public int readWxBanded()
+    {
+        return PreferenceHelper.readInt ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_WEXINBANDED );
+    }
+    //获取qq是否绑定
+    public int readQqBanded()
+    {
+        return PreferenceHelper.readInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_BANDQQ);
     }
     //获取头像
     public String readUerHead()

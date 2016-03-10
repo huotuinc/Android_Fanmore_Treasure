@@ -143,70 +143,138 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
        }
         else
        {
-           //弹出执行进度条
-           progress.showProgress ( "正在修改用户"+bundle.get("profile"));
-           progress.showAtLocation(titleLayoutL,
-                   Gravity.CENTER, 0, 0
-           );
-           String url = Contant.REQUEST_URL + Contant.UPDATE_PROFILE;
-           AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ModifyInfoActivity.this);
-           Map<String, Object> maps = new HashMap<String, Object> ();
-           if (bundle.get("profile")=="昵称") {
-               maps.put("profileType", "1");
-           }else if (bundle.get("profile")=="手机"){
-           maps.put("profileType", "2");
-       }
-           maps.put ( "profileData",  modityTextInput.getText ().toString ( ));
-           Map<String, Object> param = params.obtainPostParam(maps);
-           UpdateProfileModel updateProfile = new UpdateProfileModel ();
-           HttpUtils<UpdateProfileModel> httpUtils = new HttpUtils<UpdateProfileModel> ();
-           httpUtils.doVolleyPost (
-                   updateProfile, url, param, new Response.Listener< UpdateProfileModel > ( ) {
-                       @Override
-                       public
-                       void onResponse ( UpdateProfileModel response ) {
-                           progress.dismissView ();
-                           UpdateProfileModel updateProfile = response;
-                           if(1==updateProfile.getResultCode ())
-                           {
-                               //上传成功
-                               noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户"+bundle.get("profile")+"修改成功");
-                               noticePop.showNotice ( );
-                               noticePop.showAtLocation (
-                                       findViewById ( R.id.titleLayout ),
-                                       Gravity.CENTER, 0, 0
-                                                        );
-                               //更新本地用户信息
-                               application
-                                       .writeUserInfo ( updateProfile.getResultData ().getUser () );
+           if (bundle.get("moblieband")==1){
+               //弹出执行进度条
+               progress.showProgress ( "正在修改用户"+bundle.get("profile"));
+               progress.showAtLocation(titleLayoutL,
+                       Gravity.CENTER, 0, 0
+               );
+               String url = Contant.REQUEST_URL + Contant.UPDATE_PROFILE;
+               AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ModifyInfoActivity.this);
+               Map<String, Object> maps = new HashMap<String, Object> ();
+               if (bundle.get("profile")=="昵称") {
+                   maps.put("profileType", "1");
+               }else if (bundle.get("profile")=="手机"){
+                   maps.put("profileType", "2");
+               }
+               maps.put ( "profileData",  modityTextInput.getText ().toString ( ));
+               Map<String, Object> param = params.obtainPostParam(maps);
+               UpdateProfileModel updateProfile = new UpdateProfileModel ();
+               HttpUtils<UpdateProfileModel> httpUtils = new HttpUtils<UpdateProfileModel> ();
+               httpUtils.doVolleyPost (
+                       updateProfile, url, param, new Response.Listener< UpdateProfileModel > ( ) {
+                           @Override
+                           public
+                           void onResponse ( UpdateProfileModel response ) {
+                               progress.dismissView ();
+                               UpdateProfileModel updateProfile = response;
+                               if(1==updateProfile.getResultCode ())
+                               {
+                                   //上传成功
+                                   noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户"+bundle.get("profile")+"修改成功");
+                                   noticePop.showNotice ( );
+                                   noticePop.showAtLocation (
+                                           findViewById ( R.id.titleLayout ),
+                                           Gravity.CENTER, 0, 0
+                                   );
+                                   //更新本地用户信息
+                                   application
+                                           .writeUserInfo ( updateProfile.getResultData ().getUser () );
+                               }
+                               else
+                               {
+                                   //上传失败
+                                   noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户"+bundle.get("profile")+"修改失败");
+                                   noticePop.showNotice ( );
+                                   noticePop.showAtLocation (
+                                           findViewById ( R.id.titleLayout ),
+                                           Gravity.CENTER, 0, 0
+                                   );
+                               }
                            }
-                           else
-                           {
-                               //上传失败
-                               noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户"+bundle.get("profile")+"修改失败");
-                               noticePop.showNotice ( );
-                               noticePop.showAtLocation (
-                                       findViewById ( R.id.titleLayout ),
-                                       Gravity.CENTER, 0, 0
-                                                        );
-                           }
-                       }
-                   }, new Response.ErrorListener ( ) {
+                       }, new Response.ErrorListener ( ) {
 
-                       @Override
-                       public
-                       void onErrorResponse ( VolleyError error ) {
-                           progress.dismissView ();
-                           //系统级别错误
-                           noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "服务器拒绝本次修改");
-                           noticePop.showNotice ( );
-                           noticePop.showAtLocation (
-                                   findViewById ( R.id.titleLayout ),
-                                   Gravity.CENTER, 0, 0
-                                                    );
+                           @Override
+                           public
+                           void onErrorResponse ( VolleyError error ) {
+                               progress.dismissView ();
+                               //系统级别错误
+                               noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "服务器拒绝本次修改");
+                               noticePop.showNotice ( );
+                               noticePop.showAtLocation (
+                                       findViewById ( R.id.titleLayout ),
+                                       Gravity.CENTER, 0, 0
+                               );
+                           }
                        }
-                   }
-                                  );
+               );
+           }else {
+               progress.showProgress ( "正在修改用户"+bundle.get("profile"));
+               progress.showAtLocation(titleLayoutL,
+                       Gravity.CENTER, 0, 0
+               );
+               String url = Contant.REQUEST_URL + Contant.UPDATE_PROFILE;
+               AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ModifyInfoActivity.this);
+               Map<String, Object> maps = new HashMap<String, Object> ();
+               if (bundle.get("profile")=="昵称") {
+                   maps.put("profileType", "1");
+               }else if (bundle.get("profile")=="手机"){
+                   maps.put("profileType", "2");
+               }
+               maps.put ( "profileData",  modityTextInput.getText ().toString ( ));
+               Map<String, Object> param = params.obtainPostParam(maps);
+               UpdateProfileModel updateProfile = new UpdateProfileModel ();
+               HttpUtils<UpdateProfileModel> httpUtils = new HttpUtils<UpdateProfileModel> ();
+               httpUtils.doVolleyPost (
+                       updateProfile, url, param, new Response.Listener< UpdateProfileModel > ( ) {
+                           @Override
+                           public
+                           void onResponse ( UpdateProfileModel response ) {
+                               progress.dismissView ();
+                               UpdateProfileModel updateProfile = response;
+                               if(1==updateProfile.getResultCode ())
+                               {
+                                   //上传成功
+                                   noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户"+bundle.get("profile")+"修改成功");
+                                   noticePop.showNotice ( );
+                                   noticePop.showAtLocation (
+                                           findViewById ( R.id.titleLayout ),
+                                           Gravity.CENTER, 0, 0
+                                   );
+                                   //更新本地用户信息
+                                   application
+                                           .writeUserInfo ( updateProfile.getResultData ().getUser () );
+                               }
+                               else
+                               {
+                                   //上传失败
+                                   noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户"+bundle.get("profile")+"修改失败");
+                                   noticePop.showNotice ( );
+                                   noticePop.showAtLocation (
+                                           findViewById ( R.id.titleLayout ),
+                                           Gravity.CENTER, 0, 0
+                                   );
+                               }
+                           }
+                       }, new Response.ErrorListener ( ) {
+
+                           @Override
+                           public
+                           void onErrorResponse ( VolleyError error ) {
+                               progress.dismissView ();
+                               //系统级别错误
+                               noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "服务器拒绝本次修改");
+                               noticePop.showNotice ( );
+                               noticePop.showAtLocation (
+                                       findViewById ( R.id.titleLayout ),
+                                       Gravity.CENTER, 0, 0
+                               );
+                           }
+                       }
+               );
+
+           }
+
        }
     }
 

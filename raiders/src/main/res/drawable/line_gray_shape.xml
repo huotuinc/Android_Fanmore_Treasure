@@ -3,6 +3,6 @@
     android:shape="rectangle" >
 
     <!-- 填充 -->
-    <solid android:color="@color/list_separationline_layout" /> <!-- 填充的颜色 -->
+    <solid android:color="#CBCBCB" /> <!-- 填充的颜色 -->
 
 </shape>
