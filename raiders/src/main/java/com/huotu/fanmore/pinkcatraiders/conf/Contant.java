@@ -147,6 +147,16 @@ public class Contant {
     public final static String SHARE_INFO_TEXT="text";
     public final static String SHARE_INFO_TITLE="title";
     public final static String SHARE_INFO_URL="url";
+    public final static String LOGIN_AUTH_HASPADDWORD="hasPaddword";
+    public final static String LOGIN_AUTH_HASSHARERED="hasShareRed";
+    public final static String LOGIN_AUTH_INREGRAL="integral";
+    public final static String LOGIN_AUTH_REDSENDRED="regSendRed";
+    public final static String LOGIN_AUTH_BUYANDSHARE="buyAndShare";
+    public final static String LOGIN_AUTH_PUTMONEY="putMoney";
+    public final static String LOGIN_AUTH_GETFROMSHARE="getFromShare";
+    public final static String LOGIN_AUTH_XIUXIUXIU="xiuxiuxiu";
+    public final static String LOGIN_AUTH_BANDQQ       = "qqBanded";
+    public final static String LOGIN_AUTH_WEXINBANDED  = "wexinBanded";
     public final static String LOGIN_AUTH_REALNAME     = "realName";
 
     public final static String LOGIN_AUTH_ENABLED      = "enabled";
@@ -210,10 +220,20 @@ public class Contant {
     public static final String LOGIN                       = "login";
     //qq 微信授权登录
     public static final String AUTHLOGIN= "authLogin";
+    //绑定微信
+    public static final String BINGWEIXIN= "bingWeixin";
+    //绑定qq
+    public static final String BINDQQ= "bindQq";
+    //绑定手机
+    public static final String BINDMOBLIE="bindMobile";
+    //解绑
+    public static final String UNWRAP="unwrap";
 
     public static final String REG                         = "reg";
     //修改用户信息资料
     public static final String UPDATE_PROFILE = "updateProfile";
+    //设置密码
+    public static final String SETPASSWORD="setPassword";
     //获取地址列表
     public static final String GET_MY_ADDRESS_LIST = "getMyAddressList";
     //添加地址
