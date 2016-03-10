@@ -81,4 +81,6 @@
     <dimen name="winner_confirm_height">50dp</dimen>
     <dimen name="package_top">240dp</dimen>
     <dimen name="package_bottom">60dp</dimen>
+    <dimen name="radpackage_msg_bg_size">300dp</dimen>
+    <dimen name="redpackage_position">50dp</dimen>
 </resources>
