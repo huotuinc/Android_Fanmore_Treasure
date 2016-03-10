@@ -30,6 +30,7 @@ import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AppRedPactketsDistributeSourceModel;
 import com.huotu.fanmore.pinkcatraiders.model.CheckRedpackageOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.LoginOutputsModel;
+import com.huotu.fanmore.pinkcatraiders.model.RedpackageXiuXiuOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -39,6 +40,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SoundUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
@@ -81,8 +83,6 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     ImageView titleLeftImage;
     public Bundle bundle;
 
-    @Bind(R.id.layout01)
-    RelativeLayout layout01;
     @Bind(R.id.layout02)
     RelativeLayout layout02;
     @Bind(R.id.doneTag)
@@ -99,18 +99,6 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     TextView surplus05;
     @Bind(R.id.surplus06)
     TextView surplus06;
-    @Bind(R.id.prowL01)
-    TextView prowL01;
-    @Bind(R.id.prowL02)
-    TextView prowL02;
-    @Bind(R.id.prowL03)
-    TextView prowL03;
-    @Bind(R.id.prowL04)
-    TextView prowL04;
-    @Bind(R.id.prowL05)
-    TextView prowL05;
-    @Bind(R.id.prowL06)
-    TextView prowL06;
     @Bind(R.id.wave1)
     ImageView wave1;
     @Bind(R.id.wave2)
@@ -125,23 +113,24 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     private AnimationSet mAnimationSet2;
     private AnimationSet mAnimationSet3;
 
-    private static final int OFFSET = 100;  //每个动画的播放时间间隔
+    private static final int OFFSET = 50;  //每个动画的播放时间间隔
     private static final int MSG_WAVE2_ANIMATION = 0x66660001;
     private static final int MSG_WAVE3_ANIMATION = 0x66660002;
     private static final int CLEAN_ANIMATION = 0x66660003;
     private static final int POWER_COUNT = 0x66660004;
     private static final int REDPACKAGE_WAIT = 0x66660005;
     public static final int REDPACKAGE_CLOSED = 0x66660006;
-    public static final int REDPACKAGE_FAILED = 0x66660007;
+    public static final int REDPACKAGE_RESULT = 0x66660007;
     public static final int REDPACKAGE_BEGIN = 0x66660008;
 
-    public int powerPro = 0;
     public HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
     public RadpackageWaitPopWin redpackageWaitPopWin;
     public RedpackageFailedPopWin redpackageFailedPopWin;
 
     public
     ProgressPopupWindow progress;
+
+    public int powerCount=0;
 
     @Override
     public boolean handleMessage(Message msg) {
@@ -184,11 +173,29 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
                 }
             }
             break;
-            case REDPACKAGE_FAILED:
+            case REDPACKAGE_RESULT:
             {
-                redpackageFailedPopWin.showWin();
-                redpackageFailedPopWin.showAtLocation(titleLayoutL,
-                        Gravity.CENTER, 0, 0);
+                redBtn.setEnabled(true);
+                int tag = msg.arg1;
+                if(1==tag)
+                {
+                    redpackageFailedPopWin.showWin();
+                    redpackageFailedPopWin.showAtLocation(titleLayoutL,
+                            Gravity.CENTER, 0, 0);
+                }
+                else if(0==tag)
+                {
+                    //ToastUtils.showShortToast(ReadPackageActivity.this, "你有机会获得红包");
+                }
+                else if(2==tag)
+                {
+                    //ToastUtils.showShortToast(ReadPackageActivity.this, "通道还没开启");
+                }
+                else if(3==tag)
+                {
+                    //ToastUtils.showShortToast(ReadPackageActivity.this, "获取红包错误");
+                }
+
             }
             break;
             case REDPACKAGE_CLOSED:
@@ -200,8 +207,6 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
             {
                 redpackageFailedPopWin.dismissView();
                 redpackageWaitPopWin.dismissView();
-                layout01.setVisibility(View.GONE);
-                layout02.setVisibility(View.VISIBLE);
                 AppRedPactketsDistributeSourceModel redPactketsDistributeSource = (AppRedPactketsDistributeSourceModel) msg.obj;
                 doneTag.setText(DateUtils.getMin(redPactketsDistributeSource.getEndTime()));
                 //设置红包数量
@@ -209,80 +214,69 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
             }
             break;
             case POWER_COUNT:
-                int count = (int) msg.obj;
-                if(0==count)
-                {
-                    //初始化
-                    SystemTools.loadBackground(prowL01, resources.getDrawable(R.color.prow_bg));
-                    SystemTools.loadBackground(prowL02, resources.getDrawable(R.color.prow_bg));
-                    SystemTools.loadBackground(prowL03, resources.getDrawable(R.color.prow_bg));
-                    SystemTools.loadBackground(prowL04, resources.getDrawable(R.color.prow_bg));
-                    SystemTools.loadBackground(prowL05, resources.getDrawable(R.color.prow_bg));
-                    SystemTools.loadBackground(prowL06, resources.getDrawable(R.color.prow_bg));
-                }
-                else if(1==count)
-                {
-                    //初始化
-                    SystemTools.loadBackground(prowL01, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL02, resources.getDrawable(R.color.prow_bg));
-                    SystemTools.loadBackground(prowL03, resources.getDrawable(R.color.prow_bg));
-                    SystemTools.loadBackground(prowL04, resources.getDrawable(R.color.prow_bg));
-                    SystemTools.loadBackground(prowL05, resources.getDrawable(R.color.prow_bg));
-                    SystemTools.loadBackground(prowL06, resources.getDrawable(R.color.prow_bg));
-                }
-                else if(2==count)
-                {
-                    //初始化
-                    SystemTools.loadBackground(prowL01, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL02, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL03, resources.getDrawable(R.color.prow_bg));
-                    SystemTools.loadBackground(prowL04, resources.getDrawable(R.color.prow_bg));
-                    SystemTools.loadBackground(prowL05, resources.getDrawable(R.color.prow_bg));
-                    SystemTools.loadBackground(prowL06, resources.getDrawable(R.color.prow_bg));
-                }
-                else if(3==count)
-                {
-                    //初始化
-                    SystemTools.loadBackground(prowL01, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL02, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL03, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL04, resources.getDrawable(R.color.prow_bg));
-                    SystemTools.loadBackground(prowL05, resources.getDrawable(R.color.prow_bg));
-                    SystemTools.loadBackground(prowL06, resources.getDrawable(R.color.prow_bg));
-                }
-                else if(4==count)
-                {
-                    //初始化
-                    SystemTools.loadBackground(prowL01, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL02, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL03, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL04, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL05, resources.getDrawable(R.color.prow_bg));
-                    SystemTools.loadBackground(prowL06, resources.getDrawable(R.color.prow_bg));
-                }
-                else if(5==count)
-                {
-                    //初始化
-                    SystemTools.loadBackground(prowL01, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL02, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL03, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL04, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL05, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL06, resources.getDrawable(R.color.prow_bg));
-                }
-                else if(6<=count)
-                {
-                    //初始化
-                    SystemTools.loadBackground(prowL01, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL02, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL03, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL04, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL05, resources.getDrawable(R.color.redpackage));
-                    SystemTools.loadBackground(prowL06, resources.getDrawable(R.color.redpackage));
-                    //初始化
-                    powerPro = 0;
-                    //发送红包接口
-                }
+            {
+                powerCount = 0;
+                //发送红包接口
+                String url = Contant.REQUEST_URL + Contant.XIU_XIU_XIU;
+                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ReadPackageActivity.this);
+                Map<String, Object> maps = new HashMap<String, Object> ();
+                String suffix = params.obtainGetParam(maps);
+                url = url + suffix;
+                HttpUtils httpUtils = new HttpUtils();
+                httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (ReadPackageActivity.this.isFinishing()) {
+                            return;
+                        }
+                        JSONUtil<RedpackageXiuXiuOutputModel> jsonUtil = new JSONUtil<RedpackageXiuXiuOutputModel>();
+                        RedpackageXiuXiuOutputModel redpackageXiuXiu = new RedpackageXiuXiuOutputModel();
+                        redpackageXiuXiu = jsonUtil.toBean(response.toString(), redpackageXiuXiu);
+                        if (null != redpackageXiuXiu && null != redpackageXiuXiu.getResultData() && (1 == redpackageXiuXiu.getResultCode())) {
+
+                            if (0 == redpackageXiuXiu.getResultData().getFlag()) {
+                                //有机会获得红包
+                                Message message = mHandler.obtainMessage();
+                                message.what = REDPACKAGE_RESULT;
+                                message.arg1 = 0;
+                                mHandler.sendMessageDelayed(message, 1000);
+
+                            } else if (1 == redpackageXiuXiu.getResultData().getFlag()) {
+                                //失败
+                                Message message = mHandler.obtainMessage();
+                                message.what = REDPACKAGE_RESULT;
+                                message.arg1 = 1;
+                                mHandler.sendMessageDelayed(message, 1000);
+
+                            } else if (2 == redpackageXiuXiu.getResultData().getFlag()) {
+                                //通道还没开启
+                                Message message = mHandler.obtainMessage();
+                                message.what = REDPACKAGE_RESULT;
+                                message.arg1 = 2;
+                                mHandler.sendMessageDelayed(message, 1000);
+                            }
+                        } else {
+                            //异常处理，自动切换成无数据
+                            //活动获取失败
+                            Message message = mHandler.obtainMessage();
+                            message.what = REDPACKAGE_RESULT;
+                            message.arg1 = 3;
+                            mHandler.sendMessageDelayed(message, 1000);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progress.dismissView();
+                        //异常处理，自动切换成无数据
+                        //活动获取失败
+                        Message message = mHandler.obtainMessage();
+                        message.what = REDPACKAGE_RESULT;
+                        message.arg1 = 3;
+                        mHandler.sendMessageDelayed(message, 1000);
+                    }
+                });
+            }
                 break;
             default:
                 break;
@@ -322,7 +316,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     private AnimationSet initAnimationSet()
     {
         AnimationSet as = new AnimationSet(true);
-        ScaleAnimation sa = new ScaleAnimation(1f, 2.3f, 1f, 2.3f,
+        ScaleAnimation sa = new ScaleAnimation(1f, 5f, 1f, 5f,
                 ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
                 ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
         sa.setDuration(OFFSET * 3);
@@ -418,7 +412,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     @OnClick(R.id.redBtn)
     void redBtn()
     {
-        powerPro++;
+        powerCount++;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -427,12 +421,15 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         }).start();
         //动画
         showWaveAnimation();
-        //改变能量槽
-        Message message = mHandler.obtainMessage();
-        message.what = POWER_COUNT;
-        message.obj = powerPro;
-        mHandler.sendMessage(message);
         mHandler.sendEmptyMessageDelayed(CLEAN_ANIMATION, OFFSET * 3);
+        //改变能量槽
+        if(20 == powerCount)
+        {
+            Message message = mHandler.obtainMessage();
+            message.what = POWER_COUNT;
+            mHandler.sendMessage(message);
+        }
+
     }
 
     @OnClick(R.id.titleLeftImage)
