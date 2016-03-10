@@ -40,6 +40,8 @@ import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.SlideListModel;
+import com.huotu.fanmore.pinkcatraiders.model.SlideListOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.ShowOrderActivity;
@@ -90,7 +92,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Bind ( R.id.dot )
     LinearLayout dot;
 
-    List< CarouselModel > adDataList = null;
+    List< SlideListModel > adDataList = null;
 
     @Bind ( R.id.homeHornText )
     ViewFlipper             homeHornText;
@@ -168,8 +170,79 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         zxrsInnerL.setTag ( 0 );
         SystemTools.loadBackground ( zxrsLogo, resources.getDrawable ( R.mipmap.sort_down ) );
         initView ( );
+        initBanner();
         iniScroll ( );
         return rootView;
+    }
+
+    private void initBanner()
+    {
+        //记载首页轮播图片数据
+        String url = Contant.REQUEST_URL + Contant.GET_SLIDE_LIST;
+        AuthParamUtils params = new AuthParamUtils ( application,
+                System.currentTimeMillis ( ), getActivity() );
+        Map< String, Object > maps = new HashMap< String, Object
+                > ( );
+        String suffix = params.obtainGetParam ( maps );
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils ( );
+
+        httpUtils.doVolleyGet (
+                url, new Response.Listener< JSONObject > ( ) {
+                    @Override
+                    public
+                    void onResponse ( JSONObject response ) {
+
+                        //转换轮播数据
+                        if ( getActivity().isFinishing() ) {
+                            return;
+                        }
+                        JSONUtil<SlideListOutputModel> jsonUtil    = new JSONUtil<
+                                SlideListOutputModel > ( );
+                        SlideListOutputModel             slideListOutput = new
+                                SlideListOutputModel ( );
+                        slideListOutput = jsonUtil.toBean ( response.toString ( ),
+                                slideListOutput );
+                        if ( null != slideListOutput && null != slideListOutput.getResultData
+                                ( ) && ( 1 == slideListOutput.getResultCode ( ) ) ) {
+
+                            //轮播数据写入数据库
+                            List<SlideListModel> slides = slideListOutput.getResultData ().getList ();
+                            if(null!=slides && !slides.isEmpty ())
+                            {
+                                adDataList = new ArrayList<SlideListModel> (  );
+                                //读取轮播图片实体
+                                adDataList = slides;
+                                initDots();
+                                //通过适配器引入图片
+                                homeViewPager.setAdapter(new HomeViewPagerAdapter(adDataList, getActivity(), rootAty.mHandler));
+                                int centerValue=Integer.MAX_VALUE/2;
+                                int value=centerValue%adDataList.size();
+                                homeViewPager.setCurrentItem(centerValue - value);
+                                initListener();
+                                //更新文本内容
+                                updateTextAndDot();
+                                mHandler.sendEmptyMessageDelayed(0, 3000);
+                            }
+                            else
+                            {
+                                ToastUtils.showShortToast(getActivity(), "Banner图片加载失败");
+                            }
+                        }
+                        else
+                        {
+                            ToastUtils.showShortToast(getActivity(), "Banner图片加载失败");
+                        }
+                    }
+                }, new Response.ErrorListener ( ) {
+
+                    @Override
+                    public
+                    void onErrorResponse ( VolleyError error ) {
+                        ToastUtils.showShortToast(getActivity(), "Banner图片加载失败");
+                    }
+                }
+        );
     }
 
     private
@@ -793,23 +866,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     }
                 }
                               );
-        adDataList = new ArrayList<CarouselModel> (  );
-        //读取轮播图片实体
-        Iterator<CarouselModel> iterator = CarouselModel.findAll ( CarouselModel.class );
-        while ( iterator.hasNext () )
-        {
-            adDataList.add ( iterator.next () );
-        }
-        initDots();
-        //通过适配器引入图片
-        homeViewPager.setAdapter(new HomeViewPagerAdapter(adDataList, getActivity(), rootAty.mHandler));
-        int centerValue=Integer.MAX_VALUE/2;
-        int value=centerValue%adDataList.size();
-        homeViewPager.setCurrentItem(centerValue - value);
-        initListener();
-        //更新文本内容
-        updateTextAndDot();
-        mHandler.sendEmptyMessageDelayed(0, 3000);
     }
 
     /**

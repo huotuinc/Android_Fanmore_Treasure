@@ -13,6 +13,7 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
 import com.huotu.fanmore.pinkcatraiders.model.CarouselModel;
+import com.huotu.fanmore.pinkcatraiders.model.SlideListModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 public class HomeViewPagerAdapter extends PagerAdapter {
 
-    private List< CarouselModel > datas;
+    private List< SlideListModel > datas;
 
     private
     Handler mHandler;
@@ -29,7 +30,7 @@ public class HomeViewPagerAdapter extends PagerAdapter {
     private Context mContext;
 
     public
-    HomeViewPagerAdapter ( List< CarouselModel > datas, Context mContext, Handler mHandler ) {
+    HomeViewPagerAdapter ( List<SlideListModel> datas, Context mContext, Handler mHandler ) {
 
         this.datas = datas;
         this.mContext = mContext;
