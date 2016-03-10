@@ -23,6 +23,7 @@
             android:layout_height="@dimen/package_top"
             android:background="@mipmap/redpackage_top">
             <RelativeLayout
+                android:id="@+id/layout02"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -30,8 +31,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="正在疯抢中"
-                    android:id="@+id/redpackageTag"
+                    android:text=""
+                    android:id="@+id/doneTag"
                     android:layout_centerHorizontal="true"
                     android:textSize="@dimen/text_size_16"
                     android:textColor="@color/redpackage_tag"/>
@@ -39,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:layout_below="@+id/redpackageTag"
+                    android:layout_below="@+id/doneTag"
                     android:layout_centerHorizontal="true"
                     android:orientation="horizontal">
                     <TextView
@@ -48,46 +49,64 @@
                         android:textColor="@color/redpackage_tag"
                         android:textSize="@dimen/text_size_16"
                         android:layout_gravity="center"
-                        android:text="蓄力槽"/>
+                        android:text="还剩"/>
                     <TextView
-                        android:layout_width="@dimen/icon_size_2"
-                        android:layout_height="@dimen/icon_size_2"
-                        android:id="@+id/prowL01"
+                        android:layout_width="@dimen/icon_size_22"
+                        android:layout_height="@dimen/icon_size_22"
+                        android:gravity="center"
+                        android:id="@+id/surplus01"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/deep_red"
                         android:layout_marginLeft="3dp"
                         android:layout_gravity="center"
                         android:background="@color/prow_bg"/>
                     <TextView
-                    android:layout_width="@dimen/icon_size_2"
-                    android:layout_height="@dimen/icon_size_2"
-                    android:id="@+id/prowL02"
-                        android:layout_gravity="center"
-                    android:layout_marginLeft="3dp"
-                    android:background="@color/prow_bg"/>
-                    <TextView
-                        android:layout_width="@dimen/icon_size_2"
-                        android:layout_height="@dimen/icon_size_2"
-                        android:id="@+id/prowL03"
+                        android:layout_width="@dimen/icon_size_22"
+                        android:layout_height="@dimen/icon_size_22"
+                        android:gravity="center"
+                        android:id="@+id/surplus02"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/deep_red"
                         android:layout_gravity="center"
                         android:layout_marginLeft="3dp"
                         android:background="@color/prow_bg"/>
                     <TextView
-                        android:layout_width="@dimen/icon_size_2"
-                        android:layout_height="@dimen/icon_size_2"
-                        android:id="@+id/prowL04"
+                        android:layout_width="@dimen/icon_size_22"
+                        android:layout_height="@dimen/icon_size_22"
+                        android:gravity="center"
+                        android:id="@+id/surplus03"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/deep_red"
                         android:layout_gravity="center"
                         android:layout_marginLeft="3dp"
                         android:background="@color/prow_bg"/>
                     <TextView
-                        android:layout_width="@dimen/icon_size_2"
-                        android:layout_height="@dimen/icon_size_2"
-                        android:id="@+id/prowL05"
+                        android:layout_width="@dimen/icon_size_22"
+                        android:layout_height="@dimen/icon_size_22"
+                        android:gravity="center"
+                        android:id="@+id/surplus04"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/deep_red"
                         android:layout_gravity="center"
                         android:layout_marginLeft="3dp"
                         android:background="@color/prow_bg"/>
                     <TextView
-                        android:layout_width="@dimen/icon_size_2"
-                        android:layout_height="@dimen/icon_size_2"
-                        android:id="@+id/prowL06"
+                        android:layout_width="@dimen/icon_size_22"
+                        android:layout_height="@dimen/icon_size_22"
+                        android:gravity="center"
+                        android:id="@+id/surplus05"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/deep_red"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="3dp"
+                        android:background="@color/prow_bg"/>
+                    <TextView
+                        android:layout_width="@dimen/icon_size_22"
+                        android:layout_height="@dimen/icon_size_22"
+                        android:gravity="center"
+                        android:id="@+id/surplus06"
+                        android:textSize="@dimen/text_size_12"
+                        android:textColor="@color/deep_red"
                         android:layout_gravity="center"
                         android:layout_marginLeft="3dp"
                         android:background="@color/prow_bg"/>
@@ -98,7 +117,7 @@
                         android:layout_gravity="center"
                         android:textColor="@color/redpackage_tag"
                         android:textSize="@dimen/text_size_16"
-                        android:text="点满开奖"/>
+                        android:text="个红包"/>
                 </LinearLayout>
             </RelativeLayout>
         </RelativeLayout>

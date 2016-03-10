@@ -90,6 +90,7 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
 
     @Override
     public void onResume() {
+        firstGetData();
         super.onResume();
     }
 
