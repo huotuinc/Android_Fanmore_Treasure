@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
+import com.huotu.fanmore.pinkcatraiders.ui.redpackage.ReadPackageActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.WindowUtils;
 
@@ -53,7 +54,7 @@ public class RadpackageWaitPopWin extends PopupWindow {
             public
             void onClick ( View v ) {
                 dismissView ();
-                mHandler.sendEmptyMessage(0x66660001);
+                mHandler.sendEmptyMessage(ReadPackageActivity.REDPACKAGE_CLOSED);
             }
         } );
         hour = (TextView) view.findViewById ( R.id.hour );

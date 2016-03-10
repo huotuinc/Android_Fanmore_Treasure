@@ -31,6 +31,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.SoundUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.RadpackageWaitPopWin;
+import com.huotu.fanmore.pinkcatraiders.widget.RedpackageFailedPopWin;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -93,14 +94,18 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     private AnimationSet mAnimationSet3;
 
     private static final int OFFSET = 100;  //每个动画的播放时间间隔
-    private static final int MSG_WAVE2_ANIMATION = 2;
-    private static final int MSG_WAVE3_ANIMATION = 3;
-    private static final int CLEAN_ANIMATION = 4;
-    private static final int POWER_COUNT = 5;
+    private static final int MSG_WAVE2_ANIMATION = 0x66660001;
+    private static final int MSG_WAVE3_ANIMATION = 0x66660002;
+    private static final int CLEAN_ANIMATION = 0x66660003;
+    private static final int POWER_COUNT = 0x66660004;
+    private static final int REDPACKAGE_WAIT = 0x66660005;
+    public static final int REDPACKAGE_CLOSED = 0x66660006;
+    public static final int REDPACKAGE_FAILED = 0x66660007;
 
     public int powerPro = 0;
     public HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
     public RadpackageWaitPopWin redpackageWaitPopWin;
+    public RedpackageFailedPopWin redpackageFailedPopWin;
 
     @Override
     public boolean handleMessage(Message msg) {
@@ -116,14 +121,21 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
             case CLEAN_ANIMATION:
                 clearWaveAnimation();
                 break;
-            case 0x66667777:
+            case REDPACKAGE_WAIT:
             {
                 redpackageWaitPopWin.showWin();
                 redpackageWaitPopWin.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0);
             }
             break;
-            case 0x66660001:
+            case REDPACKAGE_FAILED:
+            {
+                redpackageFailedPopWin.showWin();
+                redpackageFailedPopWin.showAtLocation(titleLayoutL,
+                        Gravity.CENTER, 0, 0);
+            }
+            break;
+            case REDPACKAGE_CLOSED:
             {
                 closeSelf(ReadPackageActivity.this);
             }
@@ -230,6 +242,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         bundle = this.getIntent().getExtras();
         soundPool = new SoundUtil(ReadPackageActivity.this, R.raw.redclick);
         redpackageWaitPopWin= new RadpackageWaitPopWin(ReadPackageActivity.this, ReadPackageActivity.this, wManager, mHandler);
+        redpackageFailedPopWin = new RedpackageFailedPopWin(ReadPackageActivity.this, ReadPackageActivity.this, wManager, mHandler);
         initTitle();
         mAnimationSet1 = initAnimationSet();
         mAnimationSet2 = initAnimationSet();
@@ -276,7 +289,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         String url = Contant.REQUEST_URL + Contant.WHETHER_TO_START_DRAWING;
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ReadPackageActivity.this);
         Map<String, Object> maps = new HashMap<String, Object> ();
-        mHandler.sendEmptyMessage(0x66667777);
+        mHandler.sendEmptyMessage(REDPACKAGE_FAILED);
     }
 
     @OnClick(R.id.redBtn)
