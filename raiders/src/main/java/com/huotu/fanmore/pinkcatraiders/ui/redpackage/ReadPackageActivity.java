@@ -22,16 +22,30 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.AppRedPactketsDistributeSourceModel;
+import com.huotu.fanmore.pinkcatraiders.model.CheckRedpackageOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.LoginOutputsModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SoundUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
+import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
+import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.RadpackageWaitPopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.RedpackageFailedPopWin;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -67,6 +81,24 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     ImageView titleLeftImage;
     public Bundle bundle;
 
+    @Bind(R.id.layout01)
+    RelativeLayout layout01;
+    @Bind(R.id.layout02)
+    RelativeLayout layout02;
+    @Bind(R.id.doneTag)
+    TextView doneTag;
+    @Bind(R.id.surplus01)
+    TextView surplus01;
+    @Bind(R.id.surplus02)
+    TextView surplus02;
+    @Bind(R.id.surplus03)
+    TextView surplus03;
+    @Bind(R.id.surplus04)
+    TextView surplus04;
+    @Bind(R.id.surplus05)
+    TextView surplus05;
+    @Bind(R.id.surplus06)
+    TextView surplus06;
     @Bind(R.id.prowL01)
     TextView prowL01;
     @Bind(R.id.prowL02)
@@ -101,11 +133,15 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     private static final int REDPACKAGE_WAIT = 0x66660005;
     public static final int REDPACKAGE_CLOSED = 0x66660006;
     public static final int REDPACKAGE_FAILED = 0x66660007;
+    public static final int REDPACKAGE_BEGIN = 0x66660008;
 
     public int powerPro = 0;
     public HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
     public RadpackageWaitPopWin redpackageWaitPopWin;
     public RedpackageFailedPopWin redpackageFailedPopWin;
+
+    public
+    ProgressPopupWindow progress;
 
     @Override
     public boolean handleMessage(Message msg) {
@@ -123,9 +159,29 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
                 break;
             case REDPACKAGE_WAIT:
             {
-                redpackageWaitPopWin.showWin();
-                redpackageWaitPopWin.showAtLocation(titleLayoutL,
-                        Gravity.CENTER, 0, 0);
+                int tag = msg.arg1;
+                if(0==tag)
+                {
+                    //活动开始
+                    AppRedPactketsDistributeSourceModel redPactketsDistributeSource = (AppRedPactketsDistributeSourceModel) msg.obj;
+                    redpackageWaitPopWin.showWin(0, redPactketsDistributeSource.getStartTime());
+                    redpackageWaitPopWin.showAtLocation(titleLayoutL,
+                            Gravity.CENTER, 0, 0);
+                }
+                else if(1==tag)
+                {
+                    //没有活动
+                    redpackageWaitPopWin.showWin(1, null);
+                    redpackageWaitPopWin.showAtLocation(titleLayoutL,
+                            Gravity.CENTER, 0, 0);
+                }
+                else if(2==tag)
+                {
+                    //活动获取错误
+                    redpackageWaitPopWin.showWin(2, null);
+                    redpackageWaitPopWin.showAtLocation(titleLayoutL,
+                            Gravity.CENTER, 0, 0);
+                }
             }
             break;
             case REDPACKAGE_FAILED:
@@ -138,6 +194,18 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
             case REDPACKAGE_CLOSED:
             {
                 closeSelf(ReadPackageActivity.this);
+            }
+            break;
+            case REDPACKAGE_BEGIN:
+            {
+                redpackageFailedPopWin.dismissView();
+                redpackageWaitPopWin.dismissView();
+                layout01.setVisibility(View.GONE);
+                layout02.setVisibility(View.VISIBLE);
+                AppRedPactketsDistributeSourceModel redPactketsDistributeSource = (AppRedPactketsDistributeSourceModel) msg.obj;
+                doneTag.setText(DateUtils.getMin(redPactketsDistributeSource.getEndTime()));
+                //设置红包数量
+                DateUtils.setRedpackageCount(surplus01, surplus02, surplus03, surplus04, surplus05, surplus06, redPactketsDistributeSource.getAmount());
             }
             break;
             case POWER_COUNT:
@@ -243,12 +311,12 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         soundPool = new SoundUtil(ReadPackageActivity.this, R.raw.redclick);
         redpackageWaitPopWin= new RadpackageWaitPopWin(ReadPackageActivity.this, ReadPackageActivity.this, wManager, mHandler);
         redpackageFailedPopWin = new RedpackageFailedPopWin(ReadPackageActivity.this, ReadPackageActivity.this, wManager, mHandler);
+        progress = new ProgressPopupWindow ( ReadPackageActivity.this, ReadPackageActivity.this, wManager );
         initTitle();
         mAnimationSet1 = initAnimationSet();
         mAnimationSet2 = initAnimationSet();
         mAnimationSet3 = initAnimationSet();
         initData();
-
     }
 
     private AnimationSet initAnimationSet()
@@ -281,7 +349,6 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
 
     private void initData()
     {
-
         //判断抢红包是否开启
         if( false == ReadPackageActivity.this.canConnect ( ) ){
             return;
@@ -289,7 +356,63 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         String url = Contant.REQUEST_URL + Contant.WHETHER_TO_START_DRAWING;
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ReadPackageActivity.this);
         Map<String, Object> maps = new HashMap<String, Object> ();
-        mHandler.sendEmptyMessage(REDPACKAGE_FAILED);
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                progress.dismissView();
+                if (ReadPackageActivity.this.isFinishing()) {
+                    return;
+                }
+                JSONUtil<CheckRedpackageOutputModel> jsonUtil = new JSONUtil<CheckRedpackageOutputModel>();
+                CheckRedpackageOutputModel checkRedpackage = new CheckRedpackageOutputModel();
+                checkRedpackage = jsonUtil.toBean(response.toString(), checkRedpackage);
+                if (null != checkRedpackage && null != checkRedpackage.getResultData() && (1 == checkRedpackage.getResultCode())) {
+
+                    if (0 == checkRedpackage.getResultData().getFlag()) {
+                        //活动已经开始
+                        Message message = mHandler.obtainMessage();
+                        message.what = REDPACKAGE_BEGIN;
+                        message.obj = checkRedpackage.getResultData().getData();
+                        mHandler.sendMessage(message);
+                    } else if (1 == checkRedpackage.getResultData().getFlag()) {
+                        //活动为开始
+                        Message message = mHandler.obtainMessage();
+                        message.what = REDPACKAGE_WAIT;
+                        message.obj = checkRedpackage.getResultData().getData();
+                        message.arg1 = 0;
+                        mHandler.sendMessage(message);
+
+                    } else if (2 == checkRedpackage.getResultData().getFlag()) {
+                        //没有活动
+                        Message message = mHandler.obtainMessage();
+                        message.what = REDPACKAGE_WAIT;
+                        message.arg1 = 1;
+                        mHandler.sendMessage(message);
+                    }
+                } else {
+                    //异常处理，自动切换成无数据
+                    //活动获取失败
+                    Message message = mHandler.obtainMessage();
+                    message.what = REDPACKAGE_WAIT;
+                    message.arg1 = 2;
+                    mHandler.sendMessage(message);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progress.dismissView();
+                //异常处理，自动切换成无数据
+                //活动获取失败
+                Message message = mHandler.obtainMessage();
+                message.what = REDPACKAGE_WAIT;
+                message.arg1 = 2;
+                mHandler.sendMessage(message);
+            }
+        });
     }
 
     @OnClick(R.id.redBtn)

@@ -25,8 +25,9 @@
             android:textColor="@color/color_white"
             android:textSize="@dimen/text_size_16"
             android:layout_centerHorizontal="true"
-            android:text="距离下次活动开始还有"/>
+            android:text=""/>
         <LinearLayout
+            android:id="@+id/waitTimeL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

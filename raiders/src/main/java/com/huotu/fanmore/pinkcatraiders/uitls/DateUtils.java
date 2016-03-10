@@ -1,10 +1,14 @@
 package com.huotu.fanmore.pinkcatraiders.uitls;
 
+import android.support.v4.app.NotificationCompatSideChannelService;
+import android.widget.TextView;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 时间处理工具类
@@ -221,6 +225,133 @@ public class DateUtils {
         {
             //发现异常时，返回当前时间
             return format.format(new Date());
+        }
+    }
+
+    public static String getMin(long sec)
+    {
+        if(sec<=0)
+        {
+            return "距离结束还有 00:00 分钟";
+        }
+        else
+        {
+            int min = (int) (sec/(int)60);
+            if(min<60)
+            {
+                if(min<10)
+                {
+                    return "距离结束还有 00:0"+min+" 分钟";
+                }
+                else
+                {
+                    return "距离结束还有 00:"+min+" 分钟";
+                }
+            }
+            else
+            {
+                return "距离结束还有很多时间";
+            }
+        }
+    }
+
+    public static void setRedpackageCount(TextView v1, TextView v2, TextView v3, TextView v4, TextView v5, TextView v6, long count)
+    {
+        String str = String.valueOf(count);
+        char[] chars = str.toCharArray();
+        switch (chars.length)
+        {
+            case 0:
+            {
+                v1.setText("0");
+                v2.setText("0");
+                v3.setText("0");
+                v4.setText("0");
+                v5.setText("0");
+                v6.setText("0");
+            }
+            break;
+            case 1:
+            {
+                v1.setText("0");
+                v2.setText("0");
+                v3.setText("0");
+                v4.setText("0");
+                v5.setText("0");
+                v6.setText(String.valueOf(chars[0]));
+            }
+            break;
+            case 2:
+            {
+                v1.setText("0");
+                v2.setText("0");
+                v3.setText("0");
+                v4.setText("0");
+                v5.setText(String.valueOf(chars[0]));
+                v6.setText(String.valueOf(chars[1]));
+            }
+            break;
+            case 3:
+            {
+                v1.setText("0");
+                v2.setText("0");
+                v3.setText("0");
+                v4.setText(String.valueOf(chars[0]));
+                v5.setText(String.valueOf(chars[1]));
+                v6.setText(String.valueOf(chars[2]));
+            }
+            break;
+            case 4:
+            {
+                v1.setText("0");
+                v2.setText("0");
+                v3.setText(String.valueOf(chars[0]));
+                v4.setText(String.valueOf(chars[1]));
+                v5.setText(String.valueOf(chars[2]));
+                v6.setText(String.valueOf(chars[3]));
+            }
+            break;
+            case 5:
+            {
+                v1.setText("0");
+                v2.setText(String.valueOf(chars[0]));
+                v3.setText(String.valueOf(chars[1]));
+                v4.setText(String.valueOf(chars[2]));
+                v5.setText(String.valueOf(chars[3]));
+                v6.setText(String.valueOf(chars[4]));
+            }
+            break;
+            case 6:
+            {
+                v1.setText(String.valueOf(chars[0]));
+                v2.setText(String.valueOf(chars[1]));
+                v3.setText(String.valueOf(chars[2]));
+                v4.setText(String.valueOf(chars[3]));
+                v5.setText(String.valueOf(chars[4]));
+                v6.setText(String.valueOf(chars[5]));
+            }
+            break;
+            default:
+                break;
+        }
+    }
+
+    public static void getTime(TextView v1, TextView v2, Object o)
+    {
+        long time = Long.valueOf(0);
+        if(time<=0)
+        {
+            v1.setText("00");
+            v2.setText("00");
+        }
+        else
+        {
+            int hour = (int) (time/(60*60));
+            long sec = time%(60*60);
+            int min = (int) (sec/60);
+
+            v1.setText(String.valueOf(hour));
+            v2.setText(String.valueOf(min));
         }
     }
 }

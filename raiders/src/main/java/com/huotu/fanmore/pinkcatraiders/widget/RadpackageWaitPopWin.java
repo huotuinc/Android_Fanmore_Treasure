@@ -8,14 +8,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
 import com.huotu.fanmore.pinkcatraiders.ui.redpackage.ReadPackageActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.WindowUtils;
+
+import java.util.Objects;
 
 /**
  * 红包倒计时界面
@@ -38,13 +42,31 @@ public class RadpackageWaitPopWin extends PopupWindow {
         this.mHandler = mHandler;
     }
 
-    public void showWin()
+    public void showWin(int tag, Object o)
     {
         Resources resources = context.getResources();
-        View view = LayoutInflater.from(context).inflate (
+        View view = LayoutInflater.from(context).inflate(
                 R.layout.redpackage_wait,
                 null
         );
+        TextView waitTag = (TextView) view.findViewById(R.id.waitTag);
+        LinearLayout waitTimeL = (LinearLayout) view.findViewById(R.id.waitTimeL);
+        TextView hour = (TextView) view.findViewById(R.id.hour);
+        TextView min = (TextView) view.findViewById(R.id.min);
+
+        if(0==tag)
+        {
+            //活动等待
+            waitTimeL.setVisibility(View.VISIBLE);
+            waitTag.setText("距离下次活动开始还有");
+            DateUtils.getTime(hour, min, o);
+        }
+        if(1==tag || 2==tag)
+        {
+            //无活动
+            waitTimeL.setVisibility(View.GONE);
+            waitTag.setText("敬请等待下一期活动");
+        }
         closeImg = (TextView) view.findViewById ( R.id.closeImg );
         int statusBarHeight = getStatusBarHeight(context);
         view.setPadding(10, statusBarHeight+10, 10, 0);
