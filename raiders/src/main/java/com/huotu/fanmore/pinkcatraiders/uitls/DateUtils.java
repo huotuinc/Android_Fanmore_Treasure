@@ -339,7 +339,7 @@ public class DateUtils {
     public static void getTime(TextView v1, TextView v2, Object o)
     {
         long time = Long.valueOf(0);
-        if(time<=0)
+        if(time<=60)
         {
             v1.setText("00");
             v2.setText("00");
