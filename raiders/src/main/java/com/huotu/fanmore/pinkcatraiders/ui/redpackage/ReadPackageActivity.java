@@ -44,7 +44,7 @@ import butterknife.OnTouch;
 /**
  * 红包接口
  */
-public class ReadPackageActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, SoundPool.OnLoadCompleteListener {
+public class ReadPackageActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
 
     public Handler mHandler;
 
@@ -86,7 +86,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     ImageView wave3;
     @Bind(R.id.redBtn)
     TextView redBtn;
-    private SoundPool soundPool;
+    private SoundUtil soundPool;
 
     private AnimationSet mAnimationSet1;
     private AnimationSet mAnimationSet2;
@@ -97,7 +97,6 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     private static final int MSG_WAVE3_ANIMATION = 3;
     private static final int CLEAN_ANIMATION = 4;
     private static final int POWER_COUNT = 5;
-    private static final int SOUND = 6;
 
     public int powerPro = 0;
     public HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
@@ -116,14 +115,6 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
                 break;
             case CLEAN_ANIMATION:
                 clearWaveAnimation();
-                break;
-            case SOUND:
-                int code = (int) msg.obj;
-                if(1==code)
-                {
-                    soundPool.play(soundMap.get(1), 30, 30, 1, 0, 1f);
-                }
-
                 break;
             case 0x66667777:
             {
@@ -236,9 +227,8 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         resources = this.getResources();
         application = ( BaseApplication ) this.getApplication ( );
         wManager = this.getWindowManager();
-        soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 0);
-        soundPool.setOnLoadCompleteListener(this);
         bundle = this.getIntent().getExtras();
+        soundPool = new SoundUtil(ReadPackageActivity.this, R.raw.redclick);
         redpackageWaitPopWin= new RadpackageWaitPopWin(ReadPackageActivity.this, ReadPackageActivity.this, wManager, mHandler);
         initTitle();
         mAnimationSet1 = initAnimationSet();
@@ -293,6 +283,12 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     void redBtn()
     {
         powerPro++;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                soundPool.shakeSound();
+            }
+        }).start();
         //动画
         showWaveAnimation();
         //改变能量槽
@@ -301,14 +297,6 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         message.obj = powerPro;
         mHandler.sendMessage(message);
         mHandler.sendEmptyMessageDelayed(CLEAN_ANIMATION, OFFSET * 3);
-        //
-        try {
-            int soundId = soundPool.load(ReadPackageActivity.this.getAssets().openFd("redclick.wav"), 1);
-            soundMap.put(1, soundId);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     @OnClick(R.id.titleLeftImage)
@@ -350,10 +338,4 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-        Message msg = mHandler.obtainMessage(SOUND); ;
-        msg.obj = sampleId ;
-        mHandler.sendMessage(msg);
-    }
 }
