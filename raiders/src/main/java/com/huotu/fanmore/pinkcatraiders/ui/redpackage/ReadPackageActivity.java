@@ -122,6 +122,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     public static final int REDPACKAGE_CLOSED = 0x66660006;
     public static final int REDPACKAGE_RESULT = 0x66660007;
     public static final int REDPACKAGE_BEGIN = 0x66660008;
+    public static final int REDPACKAGE_FLUSH = 0x66660009;
 
     public HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
     public RadpackageWaitPopWin redpackageWaitPopWin;
@@ -146,6 +147,12 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
             case CLEAN_ANIMATION:
                 clearWaveAnimation();
                 break;
+            case REDPACKAGE_FLUSH:
+            {
+                initData();
+                mHandler.sendEmptyMessageDelayed(REDPACKAGE_FLUSH, 20000);
+            }
+            break;
             case REDPACKAGE_WAIT:
             {
                 int tag = msg.arg1;
@@ -311,6 +318,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         mAnimationSet2 = initAnimationSet();
         mAnimationSet3 = initAnimationSet();
         initData();
+        mHandler.sendEmptyMessageDelayed(REDPACKAGE_FLUSH, 20000);
     }
 
     private AnimationSet initAnimationSet()
