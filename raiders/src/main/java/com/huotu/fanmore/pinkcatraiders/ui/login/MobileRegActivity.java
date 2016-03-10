@@ -137,11 +137,11 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
         SystemTools.loadBackground ( titleLeftImage, leftDraw );
         stubTitleText.inflate ( );
         TextView titleText = ( TextView ) this.findViewById ( R.id.titleText );
-        if(0==bundle.getInt("type"))
+        if(1==bundle.getInt("type"))
         {
             titleText.setText ( "手机注册" );
         }
-        else if(1==bundle.getInt("type"))
+        else if(2==bundle.getInt("type"))
         {
             titleText.setText ( "忘记密码" );
         }
@@ -208,11 +208,11 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
             Map< String, Object > maps = new HashMap< String, Object > ( );
             maps.put ( "phone", edtPhone.getText ( ).toString ( ) );
             maps.put ( "authcode", edtCode.getText ( ).toString ( ) );
-            if(0==bundle.getInt("type"))
+            if(1==bundle.getInt("type"))
             {
                 maps.put("type", "1");
             }
-            else if(1==bundle.getInt("type"))
+            else if(2==bundle.getInt("type"))
             {
                 maps.put("type","2");
             }else {
@@ -241,12 +241,12 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
 
                         Bundle bundle1 = new Bundle();
                         bundle1.putString("phone", edtPhone.getText().toString());
-                        if(0==bundle.getInt("type"))
+                        if(1==bundle.getInt("type"))
                         {
                             bundle1.putInt("type", 0);
                             ActivityUtils.getInstance().skipActivity(MobileRegActivity.this, SetPasswordActivity.class, bundle1);
                         }
-                        else if(1==bundle.getInt("type"))
+                        else if(2==bundle.getInt("type"))
                         {
                             bundle1.putInt("type", 1);
                             ActivityUtils.getInstance().skipActivity(MobileRegActivity.this, SetPasswordActivity.class, bundle1);
@@ -385,11 +385,11 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), MobileRegActivity.this);
         Map<String, Object> maps = new HashMap<String, Object>();
         maps.put("phone", edtPhone.getText().toString());
-        if (0 == bundle.getInt("type"))
+        if (1 == bundle.getInt("type"))
         {
             maps.put("type", "1");
         }
-        else if(1==bundle.getInt("type"))
+        else if(2==bundle.getInt("type"))
         {
             maps.put("type","2");
             maps.put("userName", edtPhone.getText().toString());
@@ -556,8 +556,14 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
         Map< String, Object > maps = new HashMap< String, Object > ( );
         maps.put ( "phone", edtPhone.getText ( ).toString ( ) );
         if(1==bundle.getInt("type")){
+            maps.put("type",1);
+        }
+        else if(2==bundle.getInt("type"))
+        {
             maps.put("type",2);
-        }else {
+        }
+        else if(3==bundle.getInt("type"))
+        {
             maps.put("type",3);
         }
         String suffix = params.obtainGetParam ( maps );

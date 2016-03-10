@@ -472,7 +472,7 @@ public class LoginActivity extends BaseActivity
     {
         //注册
         Bundle bundle = new Bundle();
-        bundle.putInt("type", 0);
+        bundle.putInt("type", 1);
         ActivityUtils.getInstance().showActivity(LoginActivity.this, MobileRegActivity.class, bundle);
     }
 
