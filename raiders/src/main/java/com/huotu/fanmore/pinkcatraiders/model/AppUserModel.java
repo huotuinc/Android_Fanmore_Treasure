@@ -8,7 +8,16 @@ import java.math.BigDecimal;
 public class AppUserModel extends BaseModel  {
     int enabled;
     Long userId;
-    String moblie;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    String mobile;
 
     public int getQqBanded() {
         return qqBanded;
@@ -40,13 +49,7 @@ public class AppUserModel extends BaseModel  {
         this.userId = userId;
     }
 
-    public String getMoblie() {
-        return moblie;
-    }
 
-    public void setMoblie(String moblie) {
-        this.moblie = moblie;
-    }
 
     public int getEnabled() {
         return enabled;

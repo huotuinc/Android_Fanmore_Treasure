@@ -385,7 +385,8 @@
         <!-- </>值来自开发者平台取得的AppKey -->
         <!-- 激光推送 -->
         <activity android:name=".ui.raiders.WinLogDetailActivity" />
-        <activity android:name=".ui.product.CountResultActivity"></activity>
+        <activity android:name=".ui.product.CountResultActivity" />
+        <activity android:name=".ui.login.ChangePasswordActivity"></activity>
     </application>
 
 </manifest>

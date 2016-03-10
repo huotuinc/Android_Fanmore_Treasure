@@ -1,6 +1,9 @@
 package com.huotu.fanmore.pinkcatraiders.ui.login;
 
+import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
+import com.huotu.fanmore.pinkcatraiders.model.BindOutputModel;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.widget.CountDownTimerButton;
 
 
@@ -129,7 +132,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
     void initTitle ( ) {
         //背景色
         Drawable bgDraw = res.getDrawable ( R.drawable.account_bg_bottom );
-        SystemTools.loadBackground ( titleLayoutL, bgDraw );
+        SystemTools.loadBackground(titleLayoutL, bgDraw);
         Drawable leftDraw = res.getDrawable ( R.mipmap.back_gray );
         SystemTools.loadBackground ( titleLeftImage, leftDraw );
         stubTitleText.inflate ( );
@@ -141,6 +144,13 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
         else if(1==bundle.getInt("type"))
         {
             titleText.setText ( "忘记密码" );
+        }
+        else if (3==bundle.getInt("type"))
+        {
+            titleText.setText("修改手机");
+        }
+        else if (4==bundle.getInt("type")){
+            titleText.setText("设置手机");
         }
     }
 
@@ -170,7 +180,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
         if ( keyCode == KeyEvent.KEYCODE_BACK
              && event.getAction ( ) == KeyEvent.ACTION_DOWN ) {
             //关闭
-            this.closeSelf ( MobileRegActivity.this );
+            this.closeSelf(MobileRegActivity.this);
         }
         return super.onKeyDown ( keyCode, event );
     }
@@ -205,6 +215,8 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
             else if(1==bundle.getInt("type"))
             {
                 maps.put("type","2");
+            }else {
+                maps.put("type","3");
             }
             String suffix = params.obtainGetParam ( maps );
             url = url + suffix;
@@ -239,6 +251,10 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                             bundle1.putInt("type", 1);
                             ActivityUtils.getInstance().skipActivity(MobileRegActivity.this, SetPasswordActivity.class, bundle1);
                         }
+                        else {
+                            bindMobile();
+
+                        }
 
                     }
                     else
@@ -268,6 +284,91 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
     }}
     /**
      *
+     * @方法描述：绑定手机
+     * @方法名：bindMobile
+     * @参数：
+     * @返回：void
+     * @exception
+     * @since
+     */
+    private void bindMobile() {
+        if (bundle.get("type")==3){
+            progress.showProgress ( "正在修改手机" );
+        }else if (bundle.get("type")==4){
+            progress.showProgress ( "正在绑定手机" );
+        }
+        progress.showAtLocation ( btn_commit, Gravity.CENTER, 0, 0 );
+
+        String url = Contant.REQUEST_URL + Contant.BINDMOBLIE;
+        AuthParamUtils params = new AuthParamUtils (
+                application, System.currentTimeMillis (
+        ),
+                MobileRegActivity.this );
+        Map< String, Object > maps = new HashMap< String, Object > ( );
+        maps.put ( "phone", edtPhone.getText ( ).toString ( ) );
+        String suffix = params.obtainGetParam ( maps );
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils ( );
+        httpUtils.doVolleyGet (
+                url, new Response.Listener< JSONObject > ( ) {
+
+                    @Override
+                    public
+                    void onResponse ( JSONObject response ) {
+
+                        progress.dismissView ( );
+                        if(MobileRegActivity.this.isFinishing())
+                        {
+                            return;
+                        }
+                        JSONUtil<BindOutputModel> jsonUtil = new JSONUtil<BindOutputModel>();
+                        BindOutputModel bindmoblie = new BindOutputModel();
+                        bindmoblie = jsonUtil.toBean(response.toString(), bindmoblie);
+                        if(null != bindmoblie && null != bindmoblie.getResultData() && (1 == bindmoblie.getResultCode()))
+                        {
+
+                            AppUserModel user = bindmoblie.getResultData().getData();
+                            if(null != user) {
+                                application.writeUserInfo(user);
+                                ActivityUtils.getInstance().showActivity(MobileRegActivity.this, UserSettingActivity.class);
+
+                            } else
+                            {
+                                ToastUtils.showShortToast(MobileRegActivity.this, "未请求到数据");
+                            }
+
+
+                        }
+                        else
+                        {
+                            //异常处理，自动切换成无数据
+                            noticePop = new NoticePopWindow ( MobileRegActivity.this, MobileRegActivity.this, wManager, "绑定失败");
+                            noticePop.showNotice ( );
+                            noticePop.showAtLocation(btn_commit,
+                                    Gravity.CENTER, 0, 0
+                            );
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progress.dismissView();
+                        //初始化失败
+                        //异常处理，自动切换成无数据
+                        noticePop = new NoticePopWindow ( MobileRegActivity.this, MobileRegActivity.this, wManager, "绑定失败");
+                        noticePop.showNotice ( );
+                        noticePop.showAtLocation(btn_commit,
+                                Gravity.CENTER, 0, 0
+                        );
+                    }
+                });
+
+    }
+
+
+
+    /**
+     *
      * @方法描述：获取验证码
      * @方法名：getCode
      * @参数：
@@ -292,6 +393,9 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
         {
             maps.put("type","2");
             maps.put("userName", edtPhone.getText().toString());
+        }
+        else {
+            maps.put("type","3");
         }
         maps.put("codeType","0");
         String suffix = params.obtainGetParam(maps);
@@ -375,18 +479,18 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
         switch (v.getId()){
                 case R.id.btn_code: {
                     if (isWritePhone() == true) {
-                        if(0==bundle.getInt("type"))
-                        {
-                            getCode();
-                            countDownBtn = new CountDownTimerButton(btn_code, "%d秒重发",
-                                    "获取验证码", 60000, new CountDownFinish());
-                            countDownBtn.start();
-                        }
-                        else if(1==bundle.getInt("type"))
-                        {
+//                        if(0==bundle.getInt("type"))
+//                        {
+//                            getCode();
+//                            countDownBtn = new CountDownTimerButton(btn_code, "%d秒重发",
+//                                    "获取验证码", 60000, new CountDownFinish());
+//                            countDownBtn.start();
+//                        }
+//                        else
+//                        {
                             //验证用户名是否存在
                             checkUserName();
-                        }
+//                        }
                     } else {
                         ToastUtils.showShortToast(MobileRegActivity.this, "手机号不能为空");
                     }
@@ -451,36 +555,36 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                 MobileRegActivity.this );
         Map< String, Object > maps = new HashMap< String, Object > ( );
         maps.put ( "phone", edtPhone.getText ( ).toString ( ) );
+        if(1==bundle.getInt("type")){
+            maps.put("type",2);
+        }else {
+            maps.put("type",3);
+        }
         String suffix = params.obtainGetParam ( maps );
         url = url + suffix;
         HttpUtils httpUtils = new HttpUtils ( );
-        httpUtils.doVolleyGet (
-                url, new Response.Listener< JSONObject > ( ) {
+        httpUtils.doVolleyGet(
+                url, new Response.Listener<JSONObject>() {
 
                     @Override
-                    public
-                    void onResponse ( JSONObject response ) {
-                        progress.dismissView ( );
-                        if(MobileRegActivity.this.isFinishing())
-                        {
+                    public void onResponse(JSONObject response) {
+                        progress.dismissView();
+                        if (MobileRegActivity.this.isFinishing()) {
                             return;
                         }
                         JSONUtil<BaseModel> jsonUtil = new JSONUtil<BaseModel>();
                         BaseModel base = new BaseModel();
                         base = jsonUtil.toBean(response.toString(), base);
-                        if(1==base.getResultCode())
-                        {
+                        if (1 == base.getResultCode()) {
                             //获取验证码
                             getCode();
                             countDownBtn = new CountDownTimerButton(btn_code, "%d秒重发",
                                     "获取验证码", 60000, new CountDownFinish());
                             countDownBtn.start();
-                        }
-                        else
-                        {
+                        } else {
                             //异常处理，自动切换成无数据
-                            noticePop = new NoticePopWindow ( MobileRegActivity.this, MobileRegActivity.this, wManager, "该用户不存在");
-                            noticePop.showNotice ( );
+                            noticePop = new NoticePopWindow(MobileRegActivity.this, MobileRegActivity.this, wManager, "验证错误");
+                            noticePop.showNotice();
                             noticePop.showAtLocation(btn_commit,
                                     Gravity.CENTER, 0, 0
                             );
@@ -492,8 +596,8 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                         progress.dismissView();
                         //初始化失败
                         //异常处理，自动切换成无数据
-                        noticePop = new NoticePopWindow ( MobileRegActivity.this, MobileRegActivity.this, wManager, "该用户不存在");
-                        noticePop.showNotice ( );
+                        noticePop = new NoticePopWindow(MobileRegActivity.this, MobileRegActivity.this, wManager, "验证错误");
+                        noticePop.showNotice();
                         noticePop.showAtLocation(btn_commit,
                                 Gravity.CENTER, 0, 0
                         );

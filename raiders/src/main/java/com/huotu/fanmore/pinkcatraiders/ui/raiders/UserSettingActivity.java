@@ -49,6 +49,7 @@ import com.huotu.fanmore.pinkcatraiders.model.UserUnwrapOutput;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.ModifyInfoActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.login.AutnLogin;
+import com.huotu.fanmore.pinkcatraiders.ui.login.ChangePasswordActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.login.MobileRegActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
@@ -121,6 +122,9 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
     @Bind ( R.id.userPhone )
     TextView userPhone;
 
+    @Bind(R.id.password)
+    TextView password;
+
     @Bind ( R.id.userNickName )
     TextView userNickName;
 
@@ -180,7 +184,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
         );
     }
 
-    private
+    public
     void initData ( ) {
 
         userSettingPullRefresh.onRefreshComplete ( );
@@ -211,6 +215,9 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                         application.readMobile())
                 ) ? application.readMobile() : "未设置手机号码"
         );
+        password.setText(
+                (1==application.readHaspassword()? "修改密码":"设置密码")
+        );
     }
 
     private
@@ -232,7 +239,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
         final AlertDialog alertdialog = dialog.create();
         LayoutInflater inflater = LayoutInflater.from(UserSettingActivity.this);
         View view = inflater.inflate(R.layout.activity_dialog, null);
-        alertdialog.setView(view,0,0,0,0);
+        alertdialog.setView(view, 0, 0, 0, 0);
         TextView titletext = (TextView) view.findViewById(R.id.titletext);
         TextView messagetext = (TextView) view.findViewById(R.id.messagetext);
         Button btn_lift = (Button) view.findViewById(R.id.btn_lift);
@@ -398,7 +405,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
         commonPopWin.showAtLocation(titleLeftImage, Gravity.BOTTOM, 0, 0);
         commonPopWin.setOnDismissListener(new PoponDismissListener(UserSettingActivity.this));
     }
-    @OnClick(R.id.userPhone)
+    @OnClick(R.id.userPhoneL)
     void modifyuserPhone()
     {
         //设置或者修改手机号码
@@ -425,6 +432,16 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
         bundle.putString("content", userNickName.getText().toString());
         ActivityUtils
                 .getInstance().showActivity(UserSettingActivity.this, ModifyInfoActivity.class, bundle);
+    }
+    @OnClick(R.id.passwordL)
+    void password(){
+        if (0==application.readHaspassword()){
+            Bundle bundle=new Bundle();
+            bundle.putString("profile","密码");
+            ActivityUtils.getInstance().showActivity(UserSettingActivity.this, ModifyInfoActivity.class, bundle);
+        }else {
+            ActivityUtils.getInstance().showActivity(UserSettingActivity.this, ChangePasswordActivity.class);
+        }
     }
     @Override
     public boolean handleMessage(Message msg) {

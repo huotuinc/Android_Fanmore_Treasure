@@ -224,12 +224,16 @@ public class Contant {
     public static final String BINGWEIXIN= "bingWeixin";
     //绑定qq
     public static final String BINDQQ= "bindQq";
+    //绑定手机
+    public static final String BINDMOBLIE="bindMobile";
     //解绑
     public static final String UNWRAP="unwrap";
 
     public static final String REG                         = "reg";
     //修改用户信息资料
     public static final String UPDATE_PROFILE = "updateProfile";
+    //设置密码
+    public static final String SETPASSWORD="setPassword";
     //获取地址列表
     public static final String GET_MY_ADDRESS_LIST = "getMyAddressList";
     //添加地址

@@ -142,7 +142,7 @@ public class BaseApplication extends Application {
         PreferenceHelper.writeInt(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_WEXINBANDED,user.getWexinBanded());
         PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_REALNAME, user.getRealName());
         PreferenceHelper.writeInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_ENABLED, user.getEnabled());
-        PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MOBILE, user.getMoblie());
+        PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MOBILE, user.getMobile());
         PreferenceHelper.writeInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MOBILEBANDED, user.getMobileBanded());
         PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MONEY, String.valueOf(user.getMoney()));
         PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_TOKEN, user.getToken());
@@ -151,6 +151,11 @@ public class BaseApplication extends Application {
         PreferenceHelper.writeLong(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_USERID, user.getUserId());
         PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_DEFAULT_ADDRESS, (null==user.getAppMyAddressListModel())?null:user.getAppMyAddressListModel().getDetails());
         PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_USERNAME,user.getUsername());
+    }
+    //获取是否有密码
+    public int readHaspassword()
+    {
+        return PreferenceHelper.readInt ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_HASPADDWORD );
     }
 
     //获取手机是否绑定
