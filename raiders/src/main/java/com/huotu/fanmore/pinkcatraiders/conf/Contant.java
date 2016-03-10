@@ -99,6 +99,7 @@ public class Contant {
     public static final int LIST_PAY = 0x00000046;
     public static final int APPAND_LIST = 0x00000047;
 
+    public static final int REDPACKAGE_COUNT = 0x00000050;
     /**
      * 菜单标记1
      */

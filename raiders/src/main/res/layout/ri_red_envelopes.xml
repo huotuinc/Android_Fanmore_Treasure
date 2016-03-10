@@ -11,19 +11,6 @@
         android:orientation="horizontal">
         <include
             layout="@layout/layout_title"/>
-
-        <TextView
-            android:id="@+id/share_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="分享红包"
-            android:textSize="16sp"
-            android:textColor="@color/color_blue"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-             />
-
     </RelativeLayout>
 
 
@@ -70,7 +57,7 @@
                         android:textColor="@color/text_black"
                         android:textSize="@dimen/text_size_14"
                         android:layout_alignBaseline="@+id/useLabel"
-                        android:text="1"
+                        android:text="0"
                         android:layout_toRightOf="@+id/useLabel"
                         android:layout_marginLeft="5dp"/>
                 </RelativeLayout>
@@ -104,7 +91,7 @@
                         android:textColor="@color/text_black"
                         android:textSize="@dimen/text_size_14"
                         android:layout_alignBaseline="@+id/nouseLabel"
-                        android:text="2"
+                        android:text="0"
                         android:layout_toRightOf="@+id/nouseLabel"
                         android:layout_marginLeft="5dp"/>
                 </RelativeLayout>

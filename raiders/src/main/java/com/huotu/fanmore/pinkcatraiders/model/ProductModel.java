@@ -16,6 +16,15 @@ public class ProductModel extends BaseModel {
     private long remainAmount;
     private long stepAmount;
     private List<String> imgs;
+    private long sort;
+
+    public long getSort() {
+        return sort;
+    }
+
+    public void setSort(long sort) {
+        this.sort = sort;
+    }
 
     public
     long getIssueId ( ) {
