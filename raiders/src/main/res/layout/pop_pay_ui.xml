@@ -12,7 +12,7 @@
                 android:layout_marginTop="@dimen/weixin_pay_margin"
                 android:layout_marginLeft="@dimen/weixin_pay_margin"
                 android:layout_marginRight="@dimen/weixin_pay_margin"
-                android:text="微信支付"
+                android:text="通过旧密码方式"
                 android:textColor="#ffffffff"
                 android:background="@drawable/wx_pay"/>
             <Button
@@ -23,7 +23,7 @@
                 android:layout_marginTop="@dimen/weixin_pay_margin"
                 android:layout_marginLeft="@dimen/weixin_pay_margin"
                 android:layout_marginRight="@dimen/weixin_pay_margin"
-                android:text="支付宝支付"
+                android:text="通过手机验证码"
                 android:textColor="#ffffffff"
                 android:background="@drawable/ali_pay"/>
             <Button
@@ -34,7 +34,7 @@
                 android:layout_marginTop="@dimen/weixin_pay_margin"
                 android:layout_marginLeft="@dimen/weixin_pay_margin"
                 android:layout_marginRight="@dimen/weixin_pay_margin"
-                android:text="取消支付"
+                android:text="取消"
                 android:textColor="#696969"
                 android:background="@drawable/btn_common"/>
     <Button

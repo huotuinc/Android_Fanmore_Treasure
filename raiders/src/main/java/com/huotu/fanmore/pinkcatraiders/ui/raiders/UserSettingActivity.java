@@ -64,6 +64,7 @@ import com.huotu.fanmore.pinkcatraiders.widget.CommonPopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.CropperView;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
+import com.huotu.fanmore.pinkcatraiders.widget.SetPasswordPopWindow;
 
 import org.json.JSONObject;
 
@@ -146,13 +147,14 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
     public
     NoticePopWindow noticePop;
     public Bundle bundle;
+    public SetPasswordPopWindow setPasswordPop;
 
 
     @Override
     protected
     void onCreate ( Bundle savedInstanceState ) {
 
-        super.onCreate ( savedInstanceState );
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_setting);
         ButterKnife.bind(this);
         application = ( BaseApplication ) this.getApplication ( );
@@ -162,7 +164,8 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
         bundle=new Bundle();
         progress = new ProgressPopupWindow ( UserSettingActivity.this, UserSettingActivity.this, wManager );
         successProgress = new ProgressPopupWindow ( UserSettingActivity.this, UserSettingActivity.this, wManager );
-        successProgress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
+        successProgress.showAtLocation(titleLayoutL,Gravity.CENTER,0,0);
+        setPasswordPop=new SetPasswordPopWindow(UserSettingActivity.this,UserSettingActivity.this,mHandler,application,null,wManager);
         initTitle();
         initSroll();
     }
@@ -216,7 +219,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                 ) ? application.readMobile() : "未设置手机号码"
         );
         password.setText(
-                (1==application.readHaspassword()? "修改密码":"设置密码")
+                (1 == application.readHaspassword() ? "修改密码" : "设置密码")
         );
     }
 
@@ -436,11 +439,20 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
     @OnClick(R.id.passwordL)
     void password(){
         if (0==application.readHaspassword()){
-            Bundle bundle=new Bundle();
-            bundle.putString("profile","密码");
-            ActivityUtils.getInstance().showActivity(UserSettingActivity.this, ModifyInfoActivity.class, bundle);
+            if (1==application.readMobileBanded()) {
+                Bundle bundle = new Bundle();
+                bundle.putString("profile", "密码");
+                ActivityUtils.getInstance().showActivity(UserSettingActivity.this, ModifyInfoActivity.class, bundle);
+            }else {
+                noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "请先绑定手机，才能设置密码。");
+                noticePop.showNotice();
+                noticePop.showAtLocation(titleLayoutL,
+                        Gravity.CENTER, 0, 0
+                );
+            }
         }else {
-            ActivityUtils.getInstance().showActivity(UserSettingActivity.this, ChangePasswordActivity.class);
+            setPasswordPop.showProgress();
+            setPasswordPop.showAtLocation(titleLayoutL, Gravity.BOTTOM, 0, 0);
         }
     }
     @Override

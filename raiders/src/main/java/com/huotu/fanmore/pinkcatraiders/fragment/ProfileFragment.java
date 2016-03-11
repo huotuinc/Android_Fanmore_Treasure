@@ -23,6 +23,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.orders.ShowOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.BuyLogActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RedEnvelopesActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.SettingActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.ShareOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.WinLogActivity;
@@ -105,7 +106,7 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
     void toseting()
     {
       //跳转到个人设置
-        ActivityUtils.getInstance().showActivity(getActivity(), UserSettingActivity.class);
+        ActivityUtils.getInstance().showActivity(getActivity(), SettingActivity.class);
     }
     @OnClick(R.id.ll1)
     void toll1()
