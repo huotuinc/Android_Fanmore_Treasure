@@ -20,14 +20,23 @@ public class NewOpenOutputModel  extends BaseModel {
     public class ProductsInnerModel
     {
         private List<NewOpenListModel> list;
-        private long lastId;
+        private long type;
+        private long sort;
 
-        public long getLastId() {
-            return lastId;
+        public long getType() {
+            return type;
         }
 
-        public void setLastId(long lastId) {
-            this.lastId = lastId;
+        public void setType(long type) {
+            this.type = type;
+        }
+
+        public long getSort() {
+            return sort;
+        }
+
+        public void setSort(long sort) {
+            this.sort = sort;
         }
 
         public List<NewOpenListModel> getList() {

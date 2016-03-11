@@ -150,15 +150,25 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
             if ( OperateTypeEnum.REFRESH == operateType )
             {// 下拉
                 maps.put("lastId", 0);
+                if ( newestProducts != null &&newestProducts.size() > 0)
+                {
+                    NewOpenListModel product = newestProducts.get(0);
+                    maps.put("curType", product.getType());
+                } else
+                {
+                    maps.put("curType", 0);
+                }
             } else if (OperateTypeEnum.LOADMORE == operateType)
             {// 上拉
                 if ( newestProducts != null &&newestProducts.size() > 0)
                 {
-                    NewOpenListModel product = newestProducts.get(newestProducts.size() - 1);
-                    maps.put("lastId",product.getPid());
+                    NewOpenListModel product = newestProducts.get(0);
+                    maps.put("lastId",product.getSort());
+                    maps.put("curType", product.getType());
                 } else
                 {
                     maps.put("lastId",0);
+                    maps.put("curType", 0);
                 }
             }
             String suffix = params.obtainGetParam(maps);
@@ -184,6 +194,11 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
                             } else if (operateType == OperateTypeEnum.LOADMORE) {
                                 newestProducts.addAll(productsOutputs.getResultData().getList());
                                 adapter.notifyDataSetChanged();
+                            }
+                            if ( newestProducts != null &&newestProducts.size() > 0)
+                            {
+                                newestProducts.get(0).setSort(productsOutputs.getResultData().getSort());
+                                newestProducts.get(0).setType(productsOutputs.getResultData().getType());
                             }
                         } else {
                             //空数据处理

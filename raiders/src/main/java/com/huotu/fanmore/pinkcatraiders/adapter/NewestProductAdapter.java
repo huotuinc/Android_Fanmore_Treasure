@@ -81,15 +81,10 @@ public class NewestProductAdapter extends BaseAdapter {
             final NewOpenListModel product = newestProducts.get(position);
             BitmapLoader.create().displayUrl(context, holder.newestProductIcon, product.getPictureUrl(), R.mipmap.error);
 
-            if(0==product.getAreaAmount().intValue())
+            if(0!=product.getAreaAmount().intValue())
             {
-                holder.newestProductTag.setText("十元\n专区");
+                holder.newestProductTag.setText("专区\n商品");
                 SystemTools.loadBackground(holder.newestProductTag, resources.getDrawable(R.mipmap.area_1));
-            }
-            else if(1==product.getAreaAmount().intValue())
-            {
-                holder.newestProductTag.setText("五元\n专区");
-                SystemTools.loadBackground(holder.newestProductTag, resources.getDrawable(R.mipmap.area_2));
             }
             else {
 

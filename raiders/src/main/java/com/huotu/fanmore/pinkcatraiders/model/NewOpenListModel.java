@@ -23,6 +23,24 @@ public class NewOpenListModel extends BaseModel {
     long time;
     String title;
     long toAwardingTime;
+    private long type;
+    private long sort;
+
+    public long getType() {
+        return type;
+    }
+
+    public void setType(long type) {
+        this.type = type;
+    }
+
+    public long getSort() {
+        return sort;
+    }
+
+    public void setSort(long sort) {
+        this.sort = sort;
+    }
 
     public List<String> getImgs() {
         return imgs;
