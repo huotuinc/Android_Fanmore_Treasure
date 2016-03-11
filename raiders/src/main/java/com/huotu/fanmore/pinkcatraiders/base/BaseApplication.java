@@ -132,7 +132,7 @@ public class BaseApplication extends Application {
     {
         PreferenceHelper.writeInt(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_HASPADDWORD,user.getHasPassword());
         PreferenceHelper.writeInt(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_HASSHARERED,user.getHasShareRed());
-        PreferenceHelper.writeLong(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_INREGRAL, (null==user.getIntegral()?0:user.getIntegral()));
+        PreferenceHelper.writeLong(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_INREGRAL, (null == user.getIntegral() ? 0 : user.getIntegral()));
         PreferenceHelper.writeInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_REDSENDRED, user.getRegSendRed());
         PreferenceHelper.writeInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_BUYANDSHARE, user.getBuyAndShare());
         PreferenceHelper.writeInt(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_PUTMONEY,user.getPutMoney());
@@ -149,9 +149,10 @@ public class BaseApplication extends Application {
         PreferenceHelper.writeInt(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_USERFORMTYPE, user.getUserFormType());
         PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_UDERHEAD, user.getUserHead());
         PreferenceHelper.writeLong(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_USERID, user.getUserId());
-        PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_DEFAULT_ADDRESS, (null==user.getAppMyAddressListModel())?null:user.getAppMyAddressListModel().getDetails());
+        PreferenceHelper.writeString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_DEFAULT_ADDRESS, (null == user.getAppMyAddressListModel()) ? null : user.getAppMyAddressListModel().getDetails());
         PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_USERNAME,user.getUsername());
     }
+
     //获取是否有密码
     public int readHaspassword()
     {

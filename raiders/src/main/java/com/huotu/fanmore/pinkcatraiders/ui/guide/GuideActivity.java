@@ -75,7 +75,7 @@ class GuideActivity extends BaseActivity implements View.OnClickListener, ViewPa
         resources = this.getResources ();
         mHandler = new Handler ( this );
         //设置沉浸模式
-        setImmerseLayout(guideL);
+        //setImmerseLayout(guideL);
         views = new ArrayList< View > ( );
         initImage ( );
 

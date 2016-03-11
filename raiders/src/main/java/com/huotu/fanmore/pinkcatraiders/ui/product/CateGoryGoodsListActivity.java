@@ -27,6 +27,7 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AreaProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
+import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.GoodsListByOtherOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
@@ -455,6 +456,19 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                                 BaseModel base = response;
                                 if(1==base.getResultCode ())
                                 {
+                                    CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                                    if(null==cartCountIt)
+                                    {
+                                        CartCountModel cartCount = new CartCountModel();
+                                        cartCount.setId(0l);
+                                        cartCount.setCount(1);
+                                        CartCountModel.save(cartCount);
+                                    }
+                                    else
+                                    {
+                                        cartCountIt.setCount(cartCountIt.getCount()+1);
+                                        CartCountModel.save(cartCountIt);
+                                    }
                                     //上传成功
                                     ToastUtils.showLongToast(CateGoryGoodsListActivity.this, "添加清单成功");
                                 }

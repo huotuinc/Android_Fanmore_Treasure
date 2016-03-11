@@ -38,6 +38,7 @@ import com.huotu.fanmore.pinkcatraiders.model.AppBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BalanceOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
+import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
@@ -480,6 +481,10 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 //加载具体的页面
                 Message msg = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
                 mHandler.sendMessage(msg);
+                //广播确认每次都是结算界面，并且下拉刷新
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", 0);
+                MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
             }
             break;
             case R.id.mallL:
@@ -736,6 +741,19 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                 BaseModel base = response;
                                 if(1==base.getResultCode ())
                                 {
+                                    CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                                    if(null==cartCountIt)
+                                    {
+                                        CartCountModel cartCount = new CartCountModel();
+                                        cartCount.setId(0l);
+                                        cartCount.setCount(1);
+                                        CartCountModel.save(cartCount);
+                                    }
+                                    else
+                                    {
+                                        cartCountIt.setCount(cartCountIt.getCount()+1);
+                                        CartCountModel.save(cartCountIt);
+                                    }
                                     //上传成功
                                     ToastUtils.showLongToast ( HomeActivity.this, "添加清单成功");
                                 }
@@ -875,7 +893,19 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                     public void onResponse(BaseModel response) {
                                         BaseModel base = response;
                                         if (1 == base.getResultCode()) {
-
+                                            CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 1l);
+                                            if(null==cartCountIt)
+                                            {
+                                                CartCountModel cartCount = new CartCountModel();
+                                                cartCount.setId(1l);
+                                                cartCount.setCount(0);
+                                                CartCountModel.save(cartCount);
+                                            }
+                                            else
+                                            {
+                                                cartCountIt.setCount(cartCountIt.getCount()-1);
+                                                CartCountModel.save(cartCountIt);
+                                            }
                                         } else {
                                             progress.dismissView();
                                             VolleyUtil.cancelAllRequest();

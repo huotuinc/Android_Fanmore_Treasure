@@ -65,6 +65,7 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
     View emptyView = null;
     public List<ListModel> lists;
     public ListAdapter adapter;
+    public int cartAmount=0;
 
     private MyBroadcastReceiver myBroadcastReceiver;
 
@@ -90,7 +91,6 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
 
     @Override
     public void onResume() {
-        firstGetData();
         super.onResume();
     }
 
@@ -173,6 +173,7 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                                       rootAty.payAllNum = 0;
                                       rootAty.prices = 0;
                                       rootAty.payNum=0;
+                                      cartAmount=0;
                                       menuList.onRefreshComplete();
                                       if(rootAty.isFinishing())
                                       {
@@ -185,25 +186,34 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                                       {
                                           if(null != listOutputs.getResultData().getList() && !listOutputs.getResultData().getList().isEmpty())
                                           {
+                                              cartAmount = listOutputs.getResultData().getList().size();
                                               //记录购物车数量
-                                              CartCountModel cartCount = new CartCountModel();
-                                              Iterator<CartCountModel> cartCountIt = CartCountModel.findAll(CartCountModel.class);
-                                              if(cartCountIt.hasNext()) {
-                                                  CartCountModel.deleteAll(CartCountModel.class);
+                                              CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 1l);
+                                              if(null==cartCountIt)
+                                              {
+                                                  CartCountModel cartCount = new CartCountModel();
+                                                  cartCount.setId(1l);
+                                                  cartCount.setCount(cartAmount);
+                                                  CartCountModel.save(cartCount);
                                               }
-                                              cartCount.setCount(listOutputs.getResultData().getList().size());
-                                              cartCount.save(cartCount);
+                                              else
+                                              {
+                                                  cartCountIt.setCount(cartAmount);
+                                                  CartCountModel.save(cartCountIt);
+                                              }
                                               lists.clear();
                                               lists.addAll(listOutputs.getResultData().getList());
                                               adapter.notifyDataSetChanged();
                                           }
                                           else
                                           {
+                                              lists.clear();
                                               menuList.setEmptyView(emptyView);
                                           }
                                       }
                                       else
                                       {
+                                          lists.clear();
                                           //异常处理，自动切换成无数据
                                           menuList.setEmptyView(emptyView);
                                       }
@@ -216,6 +226,7 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                                       {
                                           return;
                                       }
+                                      lists.clear();
                                       menuList.setEmptyView(emptyView);
                                   }
                               });
