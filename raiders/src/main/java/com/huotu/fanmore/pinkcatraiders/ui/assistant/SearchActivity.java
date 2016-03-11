@@ -25,7 +25,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.MyAddressAdapter;
-import com.huotu.fanmore.pinkcatraiders.adapter.MyGridAdapter;
+import com.huotu.fanmore.pinkcatraiders.adapter.SearchGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
@@ -114,7 +114,7 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
 
     public List< ProductModel > searchProducts;
 
-    public MyGridAdapter adapter;
+    public SearchGridAdapter adapter;
 
     @Override
     public
@@ -296,7 +296,7 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
 
         searchProducts = new ArrayList<ProductModel> ();
         initProducts();
-        adapter = new MyGridAdapter(searchProducts, SearchActivity.this, SearchActivity.this, mHandler);
+        adapter = new SearchGridAdapter(searchProducts, SearchActivity.this, SearchActivity.this, mHandler);
         searchGrid.setAdapter ( adapter );
     }
 

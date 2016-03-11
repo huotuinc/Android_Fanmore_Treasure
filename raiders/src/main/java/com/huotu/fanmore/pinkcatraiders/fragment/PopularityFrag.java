@@ -15,7 +15,7 @@ import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.huotu.fanmore.pinkcatraiders.R;
-import com.huotu.fanmore.pinkcatraiders.adapter.MyGridAdapter;
+import com.huotu.fanmore.pinkcatraiders.adapter.PopGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
@@ -74,7 +74,7 @@ public class PopularityFrag extends BaseFragment {
     {
         //初始化数据
         rootAty.popProducts = new ArrayList<ProductModel>();
-        rootAty.popAdapter = new MyGridAdapter(rootAty.popProducts, getActivity(), getActivity(), rootAty.mHandler);
+        rootAty.popAdapter = new PopGridAdapter(rootAty.popProducts, getActivity(), getActivity(), rootAty.mHandler);
         popularGrid.setAdapter(rootAty.popAdapter);
     }
 

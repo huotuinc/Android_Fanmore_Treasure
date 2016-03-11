@@ -25,7 +25,10 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.ListAdapter;
-import com.huotu.fanmore.pinkcatraiders.adapter.MyGridAdapter;
+import com.huotu.fanmore.pinkcatraiders.adapter.NewestGridAdapter;
+import com.huotu.fanmore.pinkcatraiders.adapter.PopGridAdapter;
+import com.huotu.fanmore.pinkcatraiders.adapter.ProgressGridAdapter;
+import com.huotu.fanmore.pinkcatraiders.adapter.TotalGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
@@ -186,22 +189,22 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     //加载首页产品列表适配器
     //人气
-    public MyGridAdapter        popAdapter;
+    public PopGridAdapter popAdapter;
 
     public List< ProductModel > popProducts;
 
     //最新
-    public MyGridAdapter        newestAdapter;
+    public NewestGridAdapter newestAdapter;
 
     public List< ProductModel > newestProducts;
 
     //进度
-    public MyGridAdapter        progressAdapter;
+    public ProgressGridAdapter progressAdapter;
 
     public List< ProductModel > progressProducts;
 
     //总需
-    public MyGridAdapter        totalAdapter;
+    public TotalGridAdapter totalAdapter;
 
     public List< ProductModel > totalProducts;
 

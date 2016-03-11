@@ -12,7 +12,7 @@ import android.widget.GridView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.huotu.fanmore.pinkcatraiders.R;
-import com.huotu.fanmore.pinkcatraiders.adapter.MyGridAdapter;
+import com.huotu.fanmore.pinkcatraiders.adapter.NewestGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
@@ -73,7 +73,7 @@ public class NewestProductFrag extends BaseFragment {
     {
         //初始化数据
         rootAty.newestProducts = new ArrayList<ProductModel>();
-        rootAty.newestAdapter = new MyGridAdapter(rootAty.newestProducts, getActivity(), getActivity(), rootAty.mHandler);
+        rootAty.newestAdapter = new NewestGridAdapter(rootAty.newestProducts, getActivity(), getActivity(), rootAty.mHandler);
         newestProGrid.setAdapter(rootAty.newestAdapter);
     }
 

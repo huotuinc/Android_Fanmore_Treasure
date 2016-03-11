@@ -24,17 +24,15 @@ import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * 自定义grid数据适配器
+ * 产品总需加载适配器
  */
-public class MyGridAdapter extends BaseAdapter {
+public class TotalGridAdapter  extends BaseAdapter {
 
     private List<ProductModel> productModels;
     private Context mContext;
@@ -42,7 +40,7 @@ public class MyGridAdapter extends BaseAdapter {
     private
     Handler mHandler;
 
-    public MyGridAdapter(List<ProductModel> productModels, Context mContext, Activity aty, Handler mHandler)
+    public TotalGridAdapter(List<ProductModel> productModels, Context mContext, Activity aty, Handler mHandler)
     {
         this.productModels = productModels;
         this.mContext = mContext;
@@ -95,7 +93,7 @@ public class MyGridAdapter extends BaseAdapter {
             holder.lotterySchedule.setText("开奖进度" + (value > 1 ? 100 : (int)(100 * value)) + "%");
             holder.lotteryScheduleProgress.setMax ( ( int ) product.getToAmount ( ) );
             holder.lotteryScheduleProgress.setProgress ( ( int ) ( product.getToAmount ( ) -
-                                                                   product.getRemainAmount ( ) ) );
+                    product.getRemainAmount ( ) ) );
 
             holder.iconL.setOnClickListener (
                     new View.OnClickListener ( ) {
@@ -108,22 +106,22 @@ public class MyGridAdapter extends BaseAdapter {
                             bundle.putInt("tip",1);
                             bundle.putSerializable("product", product);
                             //跳转到商品详情界面
-                            ActivityUtils.getInstance ( ).showActivity ( aty, ProductDetailActivity.class, bundle );
+                            ActivityUtils.getInstance().showActivity ( aty, ProductDetailActivity.class, bundle );
                         }
                     }
-                                            );
+            );
             holder.addBtn.setOnClickListener ( new View.OnClickListener ( ) {
 
-                                                   @Override
-                                                   public
-                                                   void onClick ( View v ) {
+                @Override
+                public
+                void onClick ( View v ) {
 
-                                                       Message message = mHandler.obtainMessage ();
-                                                       message.what = Contant.ADD_LIST;
-                                                       message.obj = product;
-                                                       mHandler.sendMessage ( message );
-                                                   }
-                                               } );
+                    Message message = mHandler.obtainMessage ();
+                    message.what = Contant.ADD_LIST;
+                    message.obj = product;
+                    mHandler.sendMessage ( message );
+                }
+            } );
         }
         else
         {

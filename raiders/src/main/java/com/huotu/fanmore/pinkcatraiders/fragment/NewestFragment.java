@@ -18,7 +18,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.AreaProductAdapter;
-import com.huotu.fanmore.pinkcatraiders.adapter.MyGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.NewestProductAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;

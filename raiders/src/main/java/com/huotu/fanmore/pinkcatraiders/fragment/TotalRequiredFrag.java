@@ -12,7 +12,7 @@ import android.widget.GridView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.huotu.fanmore.pinkcatraiders.R;
-import com.huotu.fanmore.pinkcatraiders.adapter.MyGridAdapter;
+import com.huotu.fanmore.pinkcatraiders.adapter.TotalGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
@@ -72,7 +72,7 @@ public class TotalRequiredFrag extends BaseFragment {
     private void initGrid()
     {
         rootAty.totalProducts = new ArrayList<ProductModel>();
-        rootAty.totalAdapter = new MyGridAdapter(rootAty.totalProducts, getActivity(), getActivity(), rootAty.mHandler);
+        rootAty.totalAdapter = new TotalGridAdapter(rootAty.totalProducts, getActivity(), getActivity(), rootAty.mHandler);
         totalGrid.setAdapter(rootAty.totalAdapter);
     }
 

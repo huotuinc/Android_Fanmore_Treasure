@@ -12,7 +12,7 @@ import android.widget.GridView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.huotu.fanmore.pinkcatraiders.R;
-import com.huotu.fanmore.pinkcatraiders.adapter.MyGridAdapter;
+import com.huotu.fanmore.pinkcatraiders.adapter.ProgressGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
@@ -74,7 +74,7 @@ public class ProgressFrag extends BaseFragment {
 
         //初始化数据
         rootAty.progressProducts = new ArrayList<ProductModel>();
-        rootAty.progressAdapter = new MyGridAdapter(rootAty.progressProducts, getActivity(), getActivity(), rootAty.mHandler);
+        rootAty.progressAdapter = new ProgressGridAdapter(rootAty.progressProducts, getActivity(), getActivity(), rootAty.mHandler);
         progressGrid.setAdapter(rootAty.progressAdapter);
     }
 
