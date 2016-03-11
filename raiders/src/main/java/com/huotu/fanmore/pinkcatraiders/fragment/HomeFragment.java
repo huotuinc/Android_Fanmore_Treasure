@@ -40,8 +40,6 @@ import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
-import com.huotu.fanmore.pinkcatraiders.model.SlideListModel;
-import com.huotu.fanmore.pinkcatraiders.model.SlideListOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.ShowOrderActivity;
@@ -92,7 +90,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Bind ( R.id.dot )
     LinearLayout dot;
 
-    List< SlideListModel > adDataList = null;
+    List< CarouselModel > adDataList = null;
 
     @Bind ( R.id.homeHornText )
     ViewFlipper             homeHornText;
@@ -170,79 +168,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         zxrsInnerL.setTag ( 0 );
         SystemTools.loadBackground ( zxrsLogo, resources.getDrawable ( R.mipmap.sort_down ) );
         initView ( );
-        initBanner();
         iniScroll ( );
         return rootView;
-    }
-
-    private void initBanner()
-    {
-        //记载首页轮播图片数据
-        String url = Contant.REQUEST_URL + Contant.GET_SLIDE_LIST;
-        AuthParamUtils params = new AuthParamUtils ( application,
-                System.currentTimeMillis ( ), getActivity() );
-        Map< String, Object > maps = new HashMap< String, Object
-                > ( );
-        String suffix = params.obtainGetParam ( maps );
-        url = url + suffix;
-        HttpUtils httpUtils = new HttpUtils ( );
-
-        httpUtils.doVolleyGet (
-                url, new Response.Listener< JSONObject > ( ) {
-                    @Override
-                    public
-                    void onResponse ( JSONObject response ) {
-
-                        //转换轮播数据
-                        if ( getActivity().isFinishing() ) {
-                            return;
-                        }
-                        JSONUtil<SlideListOutputModel> jsonUtil    = new JSONUtil<
-                                SlideListOutputModel > ( );
-                        SlideListOutputModel             slideListOutput = new
-                                SlideListOutputModel ( );
-                        slideListOutput = jsonUtil.toBean ( response.toString ( ),
-                                slideListOutput );
-                        if ( null != slideListOutput && null != slideListOutput.getResultData
-                                ( ) && ( 1 == slideListOutput.getResultCode ( ) ) ) {
-
-                            //轮播数据写入数据库
-                            List<SlideListModel> slides = slideListOutput.getResultData ().getList ();
-                            if(null!=slides && !slides.isEmpty ())
-                            {
-                                adDataList = new ArrayList<SlideListModel> (  );
-                                //读取轮播图片实体
-                                adDataList = slides;
-                                initDots();
-                                //通过适配器引入图片
-                                homeViewPager.setAdapter(new HomeViewPagerAdapter(adDataList, getActivity(), rootAty.mHandler));
-                                int centerValue=Integer.MAX_VALUE/2;
-                                int value=centerValue%adDataList.size();
-                                homeViewPager.setCurrentItem(centerValue - value);
-                                initListener();
-                                //更新文本内容
-                                updateTextAndDot();
-                                mHandler.sendEmptyMessageDelayed(0, 3000);
-                            }
-                            else
-                            {
-                                ToastUtils.showShortToast(getActivity(), "Banner图片加载失败");
-                            }
-                        }
-                        else
-                        {
-                            ToastUtils.showShortToast(getActivity(), "Banner图片加载失败");
-                        }
-                    }
-                }, new Response.ErrorListener ( ) {
-
-                    @Override
-                    public
-                    void onErrorResponse ( VolleyError error ) {
-                        ToastUtils.showShortToast(getActivity(), "Banner图片加载失败");
-                    }
-                }
-        );
     }
 
     private
@@ -264,77 +191,74 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     void onPullUpToRefresh ( PullToRefreshBase< ScrollView > pullToRefreshBase ) {
 
                         operateType = OperateTypeEnum.LOADMORE;
-                        initProduct ( );
+                        initProduct();
                     }
                 }
-                                             );
-        homePullRefresh.getRefreshableView ( ).smoothScrollTo(0, 0);
+        );
+        homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
     }
 
-    private
-    void initView ( ) {
+    private void initView() {
 
         currentIndex = 0;
-        application.proFragManager.setCurrentFrag ( FragManager.FragType.POPULAR );
-        Drawable normal = resources.getDrawable ( R.drawable.switch_normal );
-        Drawable press  = resources.getDrawable ( R.drawable.switch_press );
-        rqLabel.setTextColor ( resources.getColor ( R.color.deep_red ) );
-        zxLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
-        jdLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
-        zxrsLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
-        SystemTools.loadBackground ( rqInnerL, press );
-        SystemTools.loadBackground ( zxInnerL, normal );
-        SystemTools.loadBackground ( jdInnerL, normal );
-        SystemTools.loadBackground ( zxrsInnerL, normal );
-        initSwitchImg ( );
-        firstGetData ( );
+        application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
+        Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+        Drawable press = resources.getDrawable(R.drawable.switch_press);
+        rqLabel.setTextColor(resources.getColor(R.color.deep_red));
+        zxLabel.setTextColor(resources.getColor(R.color.text_black));
+        jdLabel.setTextColor(resources.getColor(R.color.text_black));
+        zxrsLabel.setTextColor(resources.getColor(R.color.text_black));
+        SystemTools.loadBackground(rqInnerL, press);
+        SystemTools.loadBackground(zxInnerL, normal);
+        SystemTools.loadBackground(jdInnerL, normal);
+        SystemTools.loadBackground(zxrsInnerL, normal);
+        initSwitchImg();
+        firstGetData();
     }
 
-    @OnClick ( R.id.lbL )
-    void showCatagoryUi ( ) {
+    @OnClick(R.id.lbL)
+    void showCatagoryUi() {
 
-        ActivityUtils.getInstance ( ).showActivity(getActivity(), CateGoryActivity.class);
+        ActivityUtils.getInstance().showActivity(getActivity(), CateGoryActivity.class);
     }
 
-    @OnClick ( R.id.zqL )
-    void showZqUi ( ) {
+    @OnClick(R.id.zqL)
+    void showZqUi() {
 
-        Bundle bundle = new Bundle ( );
+        Bundle bundle = new Bundle();
         bundle.putLong("step", 10);
         ActivityUtils.getInstance().showActivity(getActivity(), AreaActivity.class, bundle);
     }
 
-    @OnClick ( R.id.redPackageL )
-    void showRadPackageUi ( ) {
+    @OnClick(R.id.redPackageL)
+    void showRadPackageUi() {
 
-        Bundle bundle = new Bundle ( );
+        Bundle bundle = new Bundle();
         ActivityUtils.getInstance().showActivity(getActivity(), ReadPackageActivity.class, bundle);
     }
 
-    @OnClick ( R.id.sdL )
-    void showSdUi ( ) {
+    @OnClick(R.id.sdL)
+    void showSdUi() {
         //ToastUtils.showLongToast(getActivity(), "弹出晒单界面");
-        Bundle bundle = new Bundle (  );
+        Bundle bundle = new Bundle();
         //首页晒单
         bundle.putInt("type", 0);
         ActivityUtils.getInstance().showActivity(getActivity(), ShowOrderActivity.class, bundle);
     }
 
     @OnClick(R.id.wtL)
-    void showWtUi()
-    {
+    void showWtUi() {
         //显示常见问题
-        Bundle bundle = new Bundle (  );
-        bundle.putString ( "title", "常见问题" );
+        Bundle bundle = new Bundle();
+        bundle.putString("title", "常见问题");
         bundle.putString("link", "https://www.baidu.com/");
-        ActivityUtils.getInstance ().showActivity ( getActivity ( ), WebExhibitionActivity.class,
-                                                    bundle );
+        ActivityUtils.getInstance().showActivity(getActivity(), WebExhibitionActivity.class,
+                bundle);
     }
 
-    private void initProduct()
-    {
+    private void initProduct() {
 
-        if( false == rootAty.canConnect() ){
+        if (false == rootAty.canConnect()) {
             rootAty.mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -343,8 +267,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             });
             return;
         }
-        if(0==currentIndex)
-        {
+        if (0 == currentIndex) {
             //人气
             String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_INDEX;
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
@@ -637,48 +560,48 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             url = url + suffix;
             HttpUtils httpUtils = new HttpUtils();
             httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
-                                      @Override
-                                      public void onResponse(JSONObject response) {
-                                          homePullRefresh.onRefreshComplete();
-                                          if (rootAty.isFinishing()) {
-                                              return;
-                                          }
-                                          JSONUtil<ProductsOutputModel> jsonUtil = new JSONUtil<ProductsOutputModel>();
-                                          ProductsOutputModel productsOutputs = new ProductsOutputModel();
-                                          productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
-                                          if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
-                                              if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
+                @Override
+                public void onResponse(JSONObject response) {
+                    homePullRefresh.onRefreshComplete();
+                    if (rootAty.isFinishing()) {
+                        return;
+                    }
+                    JSONUtil<ProductsOutputModel> jsonUtil = new JSONUtil<ProductsOutputModel>();
+                    ProductsOutputModel productsOutputs = new ProductsOutputModel();
+                    productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
+                    if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
+                        if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
 
-                                                  if (operateType == OperateTypeEnum.REFRESH) {
-                                                      rootAty.totalProducts.clear();
-                                                      rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
-                                                      rootAty.totalAdapter.notifyDataSetChanged();
-                                                  } else if (operateType == OperateTypeEnum.LOADMORE) {
-                                                      rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
-                                                      rootAty.totalAdapter.notifyDataSetChanged();
-                                                  }
-                                                  if ( rootAty.totalProducts != null && rootAty.totalProducts.size() > 0)
-                                                  {
-                                                      rootAty.totalProducts.get(0).setSort(productsOutputs.getResultData().getSort());
-                                                  }
-                                              } else {
-                                                  //空数据处理
-                                              }
-                                          } else {
-                                              //异常处理，自动切换成无数据
-                                              //空数据处理
-                                          }
-                                      }
-                                  }, new Response.ErrorListener() {
-                                      @Override
-                                      public void onErrorResponse(VolleyError error) {
-                                          homePullRefresh.onRefreshComplete();
-                                          if (rootAty.isFinishing()) {
-                                              return;
-                                          }
-                                          //空数据处理
-                                      }
-                                  });
+                            if (operateType == OperateTypeEnum.REFRESH) {
+                                rootAty.totalProducts.clear();
+                                rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
+                                rootAty.totalAdapter.notifyDataSetChanged();
+                            } else if (operateType == OperateTypeEnum.LOADMORE) {
+                                rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
+                                rootAty.totalAdapter.notifyDataSetChanged();
+                            }
+                            if ( rootAty.totalProducts != null && rootAty.totalProducts.size() > 0)
+                            {
+                                rootAty.totalProducts.get(0).setSort(productsOutputs.getResultData().getSort());
+                            }
+                        } else {
+                            //空数据处理
+                        }
+                    } else {
+                        //异常处理，自动切换成无数据
+                        //空数据处理
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    homePullRefresh.onRefreshComplete();
+                    if (rootAty.isFinishing()) {
+                        return;
+                    }
+                    //空数据处理
+                }
+            });
         }
 
     }
@@ -818,7 +741,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public
                     void onResponse ( JSONObject response ) {
-                            JSONUtil<NoticeOutputModel > jsonUtil = new JSONUtil<NoticeOutputModel>();
+                        JSONUtil<NoticeOutputModel > jsonUtil = new JSONUtil<NoticeOutputModel>();
                         NoticeOutputModel noticeOutput = new NoticeOutputModel();
                         noticeOutput = jsonUtil.toBean(response.toString(), noticeOutput);
                         if(null != noticeOutput && null != noticeOutput.getResultData() && (1==noticeOutput.getResultCode()))
@@ -865,7 +788,24 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
                     }
                 }
-                              );
+        );
+        adDataList = new ArrayList<CarouselModel> (  );
+        //读取轮播图片实体
+        Iterator<CarouselModel> iterator = CarouselModel.findAll ( CarouselModel.class );
+        while ( iterator.hasNext () )
+        {
+            adDataList.add ( iterator.next () );
+        }
+        initDots();
+        //通过适配器引入图片
+        homeViewPager.setAdapter(new HomeViewPagerAdapter(adDataList, getActivity(), rootAty.mHandler));
+        int centerValue=Integer.MAX_VALUE/2;
+        int value=centerValue%adDataList.size();
+        homeViewPager.setCurrentItem(centerValue - value);
+        initListener();
+        //更新文本内容
+        updateTextAndDot();
+        mHandler.sendEmptyMessageDelayed(0, 3000);
     }
 
     /**

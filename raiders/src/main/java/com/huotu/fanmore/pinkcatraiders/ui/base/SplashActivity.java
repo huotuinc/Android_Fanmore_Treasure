@@ -141,48 +141,214 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                     InitOutputsModel             initOutputs = new
                                             InitOutputsModel ( );
                                     initOutputs = jsonUtil.toBean ( response.toString ( ),
-                                                                    initOutputs );
+                                            initOutputs );
                                     if ( null != initOutputs && null != initOutputs.getResultData
                                             ( ) && ( 1 == initOutputs.getResultCode ( ) ) ) {
                                         //加载全局变量数据
                                         if ( null != initOutputs.getResultData ( ).getGlobal ( ) ) {
                                             application.loadGlobalData ( initOutputs
-                                                                                 .getResultData (
-                                                                                                )
-                                                                                 .getGlobal ( ) );
+                                                    .getResultData (
+                                                    )
+                                                    .getGlobal ( ) );
                                         }
-                                        if ( null != initOutputs.getResultData ( ).getUpdate() ) {
+                                        if ( null != initOutputs.getResultData ( ).getUpdate ( ) ) {
                                             //加载更新信息
-                                            application.loadUpdate(initOutputs.getResultData(
+                                            application.loadUpdate ( initOutputs.getResultData (
                                             )
-                                                    .getUpdate());
+                                                    .getUpdate ( ) );
                                         }
-                                        if ( null != initOutputs.getResultData ( ).getUser() ) {
+                                        if ( null != initOutputs.getResultData ( ).getUser ( ) ) {
                                             //加载用户信息
-                                            application.writeUserInfo(initOutputs.getResultData
-                                                    ().getUser());
+                                            application.writeUserInfo ( initOutputs.getResultData
+                                                    ( ).getUser ( ) );
                                         }
+                                        //记载首页轮播图片数据
+                                        String url = Contant.REQUEST_URL + Contant.GET_SLIDE_LIST;
+                                        AuthParamUtils params = new AuthParamUtils ( application,
+                                                System.currentTimeMillis ( ), SplashActivity.this );
+                                        Map< String, Object > maps = new HashMap< String, Object
+                                                > ( );
+                                        String suffix = params.obtainGetParam ( maps );
+                                        url = url + suffix;
+                                        HttpUtils httpUtils = new HttpUtils ( );
+                                        httpUtils.doVolleyGet (
+                                                url, new Response.Listener< JSONObject > ( ) {
 
-                                        if ( application.isFirst ( ) ) {
-                                            ActivityUtils.getInstance ( ).skipActivity (
-                                                    SplashActivity.this, GuideActivity.class );
-                                            //写入初始化数据
-                                            application.writeInitInfo("inited");
-                                        } else {
-                                            //判断是否登录
-                                            if ( application.isLogin ( ) ) {
-                                                ActivityUtils.getInstance ( ).skipActivity (
-                                                        SplashActivity.this, HomeActivity.class );
-                                            }
-                                            else {
-                                                ActivityUtils.getInstance ( )
-                                                        .skipActivity (
-                                                                SplashActivity
-                                                                        .this,
-                                                                LoginActivity.class
-                                                        );
-                                            }
-                                        }
+                                                    @Override
+                                                    public
+                                                    void onResponse ( JSONObject response ) {
+
+                                                        //转换轮播数据
+                                                        if ( SplashActivity.this.isFinishing ( ) ) {
+                                                            return;
+                                                        }
+                                                        JSONUtil< SlideListOutputModel > jsonUtil    = new JSONUtil<
+                                                                SlideListOutputModel > ( );
+                                                        SlideListOutputModel             slideListOutput = new
+                                                                SlideListOutputModel ( );
+                                                        slideListOutput = jsonUtil.toBean ( response.toString ( ),
+                                                                slideListOutput );
+                                                        if ( null != slideListOutput && null != slideListOutput.getResultData
+                                                                ( ) && ( 1 == slideListOutput.getResultCode ( ) ) ) {
+
+                                                            //轮播数据写入数据库
+                                                            List<SlideListModel > slides = slideListOutput.getResultData ().getList ();
+                                                            if(null!=slides && !slides.isEmpty ())
+                                                            {
+                                                                //删除全部
+                                                                CarouselModel.deleteAll (
+                                                                        CarouselModel.class );
+                                                                Iterator<SlideListModel> iterator = slides.iterator ();
+                                                                while ( iterator.hasNext () )
+                                                                {
+                                                                    SlideListModel slide = iterator.next ();
+                                                                    CarouselModel carousel = new CarouselModel (  );
+                                                                    carousel.setPid ( slide.getPid () );
+                                                                    carousel.setGoodsId ( slide.getGoodsId ( ) );
+                                                                    carousel.setLink ( slide.getLink ( ) );
+                                                                    carousel.setPictureUrl (
+                                                                            slide.getPictureUrl ( ) );
+                                                                    CarouselModel.save ( carousel );
+                                                                }
+
+                                                                if ( application.isFirst ( ) ) {
+                                                                    ActivityUtils.getInstance ( ).skipActivity (
+                                                                            SplashActivity.this, GuideActivity.class );
+                                                                    //写入初始化数据
+                                                                    application.writeInitInfo ( "inited" );
+                                                                }
+                                                                else {
+                                                                    //判断是否登录
+                                                                    if ( application.isLogin ( ) ) {
+                                                                        ActivityUtils.getInstance ( ).skipActivity (
+                                                                                SplashActivity.this, HomeActivity.class );
+                                                                    }
+                                                                    else {
+                                                                        ActivityUtils.getInstance ( )
+                                                                                .skipActivity (
+                                                                                        SplashActivity
+                                                                                                .this,
+                                                                                        LoginActivity.class
+                                                                                );
+                                                                    }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                //判断数据库中是否有旧数据
+                                                                Iterator<CarouselModel> iterator = CarouselModel.findAll (
+                                                                        CarouselModel.class );
+                                                                if(iterator.hasNext ( ))
+                                                                {
+                                                                    if ( application.isFirst ( ) ) {
+                                                                        ActivityUtils.getInstance ( ).skipActivity (
+                                                                                SplashActivity.this, GuideActivity.class );
+                                                                        //写入初始化数据
+                                                                        application.writeInitInfo ( "inited" );
+                                                                    }
+                                                                    else {
+                                                                        //判断是否登录
+                                                                        if ( application.isLogin ( ) ) {
+                                                                            ActivityUtils.getInstance ( ).skipActivity (
+                                                                                    SplashActivity.this, HomeActivity.class );
+                                                                        }
+                                                                        else {
+                                                                            ActivityUtils.getInstance ( )
+                                                                                    .skipActivity (
+                                                                                            SplashActivity
+                                                                                                    .this,
+                                                                                            LoginActivity.class
+                                                                                    );
+                                                                        }
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    //使用默认图片
+                                                                    CarouselModel carousel1 = new CarouselModel (  );
+                                                                    carousel1.setGoodsId ( 0 );
+                                                                    carousel1.setPictureUrl (""
+
+                                                                    );
+                                                                    carousel1.setPid ( 0 );
+                                                                    CarouselModel.save ( carousel1 );
+                                                                    CarouselModel carousel2 = new CarouselModel (  );
+                                                                    carousel2.setGoodsId ( 1 );
+                                                                    carousel2.setPictureUrl (
+                                                                            ""
+                                                                    );
+                                                                    carousel2.setPid ( 1 );
+                                                                    CarouselModel.save ( carousel2 );
+
+                                                                    if ( application.isFirst ( ) ) {
+                                                                        ActivityUtils.getInstance ( ).skipActivity (
+                                                                                SplashActivity.this, GuideActivity.class );
+                                                                        //写入初始化数据
+                                                                        application.writeInitInfo ( "inited" );
+                                                                    }
+                                                                    else {
+                                                                        //判断是否登录
+                                                                        if ( application.isLogin ( ) ) {
+                                                                            ActivityUtils.getInstance ( ).skipActivity (
+                                                                                    SplashActivity.this, HomeActivity.class );
+                                                                        }
+                                                                        else {
+                                                                            ActivityUtils.getInstance ( )
+                                                                                    .skipActivity (
+                                                                                            SplashActivity
+                                                                                                    .this,
+                                                                                            LoginActivity.class
+                                                                                    );
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            //判断数据库中是否有旧数据
+                                                            Iterator<CarouselModel> iterator = CarouselModel.findAll (
+                                                                    CarouselModel.class );
+                                                            if(iterator.hasNext ( ))
+                                                            {
+                                                                if ( application.isFirst ( ) ) {
+                                                                    ActivityUtils.getInstance ( ).skipActivity (
+                                                                            SplashActivity.this, GuideActivity.class );
+                                                                    //写入初始化数据
+                                                                    application.writeInitInfo ( "inited" );
+                                                                }
+                                                                else {
+                                                                    //判断是否登录
+                                                                    if ( application.isLogin ( ) ) {
+                                                                        ActivityUtils.getInstance ( ).skipActivity (
+                                                                                SplashActivity.this, HomeActivity.class );
+                                                                    }
+                                                                    else {
+                                                                        ActivityUtils.getInstance ( )
+                                                                                .skipActivity (
+                                                                                        SplashActivity
+                                                                                                .this,
+                                                                                        LoginActivity.class
+                                                                                );
+                                                                    }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                ToastUtils.showLongToast ( SplashActivity.this, "初始化数据失败" );
+                                                            }
+                                                        }
+                                                    }
+                                                }, new Response.ErrorListener ( ) {
+
+                                                    @Override
+                                                    public
+                                                    void onErrorResponse ( VolleyError error ) {
+                                                        ToastUtils.showLongToast ( SplashActivity.this, "初始化数据失败" );
+                                                    }
+                                                }
+                                        );
                                     }
                                     else {
                                         //异常处理，自动切换成无数据
@@ -199,7 +365,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                     ToastUtils.showLongToast ( SplashActivity.this, "初始化数据失败" );
                                 }
                             }
-                                          );
+                    );
 
                 }
             }

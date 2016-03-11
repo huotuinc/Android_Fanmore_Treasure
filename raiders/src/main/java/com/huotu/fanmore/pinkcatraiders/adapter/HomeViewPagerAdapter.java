@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class HomeViewPagerAdapter extends PagerAdapter {
 
-    private List< SlideListModel > datas;
+    private List< CarouselModel > datas;
 
     private
     Handler mHandler;
@@ -30,7 +30,7 @@ public class HomeViewPagerAdapter extends PagerAdapter {
     private Context mContext;
 
     public
-    HomeViewPagerAdapter ( List<SlideListModel> datas, Context mContext, Handler mHandler ) {
+    HomeViewPagerAdapter ( List<CarouselModel> datas, Context mContext, Handler mHandler ) {
 
         this.datas = datas;
         this.mContext = mContext;
@@ -64,7 +64,7 @@ public class HomeViewPagerAdapter extends PagerAdapter {
         String String = datas.get(position%datas.size()).getPictureUrl ();
         View view=View.inflate(mContext, R.layout.fillview,null);
         ImageView image=(ImageView) view.findViewById(R.id.image);
-        BitmapLoader.create ( ).displayUrl ( mContext, image, String, R.mipmap.error );
+        BitmapLoader.create ( ).displayUrl ( mContext, image, String, R.mipmap.banner );
         container.addView ( view );
         image.setOnClickListener ( new View.OnClickListener ( ) {
 
