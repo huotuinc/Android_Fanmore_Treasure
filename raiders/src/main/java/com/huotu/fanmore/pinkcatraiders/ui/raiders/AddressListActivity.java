@@ -288,7 +288,7 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     void addAddress()
     {
 
-        ActivityUtils.getInstance ().showActivity ( AddressListActivity.this, AddAddressActivity.class );
+        ActivityUtils.getInstance ().skipActivity ( AddressListActivity.this, AddAddressActivity.class );
     }
 
     private void loadData()

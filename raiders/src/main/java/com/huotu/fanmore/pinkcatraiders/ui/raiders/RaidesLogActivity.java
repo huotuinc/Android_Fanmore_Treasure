@@ -269,7 +269,7 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
             case Contant.RAIDERS_NOW:
             {
 
-                                ActivityUtils.getInstance().showActivity(RaidesLogActivity.this, HomeActivity.class);
+                                ActivityUtils.getInstance().skipActivity(RaidesLogActivity.this, HomeActivity.class);
                                 closeSelf(RaidesLogActivity.this);
 
 
