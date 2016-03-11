@@ -239,7 +239,7 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
                                 if(1==setpassword.getResultCode())
                                 {
                                     updateUserInformation();
-                                    ActivityUtils.getInstance().showActivity(ModifyInfoActivity.this, UserSettingActivity.class);
+                                    ActivityUtils.getInstance().skipActivity(ModifyInfoActivity.this, UserSettingActivity.class);
                                 }
                                 else
                                 {

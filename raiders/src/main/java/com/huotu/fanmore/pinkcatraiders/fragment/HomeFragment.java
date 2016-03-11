@@ -170,7 +170,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         zxrsInnerL.setTag ( 0 );
         SystemTools.loadBackground ( zxrsLogo, resources.getDrawable ( R.mipmap.sort_down ) );
         initView ( );
-        initBanner();
+        //initBanner();
         iniScroll ( );
         return rootView;
     }

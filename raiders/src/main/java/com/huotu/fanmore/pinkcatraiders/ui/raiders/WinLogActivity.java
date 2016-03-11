@@ -110,7 +110,7 @@ public class WinLogActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public
                     void onClick ( View v ) {
-                        ActivityUtils.getInstance().showActivity(WinLogActivity.this,HomeActivity.class);
+                        ActivityUtils.getInstance().skipActivity(WinLogActivity.this,HomeActivity.class);
                         closeSelf(WinLogActivity.this);
                     }
                 }

@@ -330,7 +330,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                             AppUserModel user = bindmoblie.getResultData().getData();
                             if(null != user) {
                                 application.writeUserInfo(user);
-                                ActivityUtils.getInstance().showActivity(MobileRegActivity.this, UserSettingActivity.class);
+                                ActivityUtils.getInstance().skipActivity(MobileRegActivity.this, UserSettingActivity.class);
 
                             } else
                             {
@@ -563,6 +563,10 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
             maps.put("type",2);
         }
         else if(3==bundle.getInt("type"))
+        {
+            maps.put("type",3);
+        }
+        else if(4==bundle.getInt("type"))
         {
             maps.put("type",3);
         }
