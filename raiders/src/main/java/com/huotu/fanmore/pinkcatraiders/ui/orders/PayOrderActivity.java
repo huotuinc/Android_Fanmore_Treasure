@@ -22,8 +22,10 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.BaseBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
+import com.huotu.fanmore.pinkcatraiders.model.OrderDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.UserOutputModel;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -211,11 +213,97 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
             ToastUtils.showShortToast ( PayOrderActivity.this, "请选择支付方式" );
             return;
         }
-        else
+        else if(2==payType)
         {
+            //余额支付
             progress = new ProgressPopupWindow ( PayOrderActivity.this, PayOrderActivity.this, wManager );
             progress.showProgress ( "正在提交支付信息" );
             progress.showAtLocation ( rechargeBtn, Gravity.CENTER, 0, 0 );
+            String                url    = Contant.REQUEST_URL + Contant.PAY;
+            AuthParamUtils params = new AuthParamUtils ( application, System.currentTimeMillis
+                    ( ), PayOrderActivity.this );
+            Map< String, Object > maps   = new HashMap< String, Object >( );
+            maps.put ( "money", String.valueOf ( moneyTag ) );
+            maps.put ( "payType", String.valueOf ( payType ) );
+            maps.put ( "redPacketsId", String.valueOf ( balance1.getRedPacketsId() ) );
+            Map<String, Object> param = params.obtainPostParam(maps);
+            PayOutputModel payOutput = new PayOutputModel();
+            HttpUtils<PayOutputModel> httpUtils = new HttpUtils<PayOutputModel> ();
+            httpUtils.doVolleyPost(payOutput, url, param, new Response.Listener<PayOutputModel> ( ) {
+
+                @Override
+                public void onResponse(PayOutputModel response) {
+                    progress.dismissView ();
+                    if ( PayOrderActivity.this.isFinishing ( ) ) {
+                        return;
+                    }
+                    PayOutputModel payOutput = response;
+                    if(1==payOutput.getResultCode())
+                    {
+                        ToastUtils.showShortToast(PayOrderActivity.this, "余额支付成功, 2秒后关闭订单");
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                //刷新用户信息
+                                String url = Contant.REQUEST_URL + Contant.UPDATE_USER_INFORMATION;
+                                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), PayOrderActivity.this);
+                                Map<String, Object> maps = new HashMap<String, Object>();
+                                String suffix = params.obtainGetParam(maps);
+                                url = url + suffix;
+                                HttpUtils httpUtils = new HttpUtils();
+                                httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        JSONUtil<UserOutputModel> jsonUtil = new JSONUtil<UserOutputModel>();
+                                        UserOutputModel userOutput = new UserOutputModel();
+                                        userOutput = jsonUtil.toBean(response.toString(), userOutput);
+
+                                        if (null != userOutput && null != userOutput.getResultData() && null != userOutput.getResultData().getUser() && 1 == userOutput.getResultCode()) {
+                                            application.writeUserInfo(userOutput.getResultData().getUser());
+                                            //关闭支付订单界面
+                                            Bundle bundle = new Bundle();
+                                            bundle.putInt("type", 0);
+                                            MyBroadcastReceiver.sendBroadcast(PayOrderActivity.this, MyBroadcastReceiver.SHOP_CART, bundle);
+                                            closeSelf(PayOrderActivity.this);
+                                        } else {
+                                            ToastUtils.showShortToast(PayOrderActivity.this, "刷新余额出现问题");
+                                        }
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        ToastUtils.showShortToast(PayOrderActivity.this, "刷新余额出现问题");
+                                    }
+                                });
+                            }
+                        }, 2000);
+                    }
+                    else
+                    {
+                        ToastUtils.showShortToast(PayOrderActivity.this, "余额支付失败");
+                    }
+
+                }
+            }, new Response.ErrorListener ( ) {
+
+                @Override
+                public
+                void onErrorResponse ( VolleyError error ) {
+                    progress.dismissView ();
+
+                    if ( PayOrderActivity.this.isFinishing ( ) ) {
+                        return;
+                    }
+                    ToastUtils.showShortToast ( PayOrderActivity.this, "余额支付失败" );
+                }
+            });
+        }
+        else
+        {
+            progress = new ProgressPopupWindow ( PayOrderActivity.this, PayOrderActivity.this, wManager );
+            progress.showProgress("正在提交支付信息");
+            progress.showAtLocation(rechargeBtn, Gravity.CENTER, 0, 0);
             String                url    = Contant.REQUEST_URL + Contant.PAY;
             AuthParamUtils params = new AuthParamUtils ( application, System.currentTimeMillis
                     ( ), PayOrderActivity.this );
@@ -265,53 +353,6 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                                     );
                                     PayFunc payFunc = new PayFunc ( PayOrderActivity.this, payModel, application, mHandler, PayOrderActivity.this, progress );
                                     payFunc.aliPay();
-                                }
-                                else if(2==payType)
-                                {
-                                    //余额支付
-                                    String balanceStr = PreferenceHelper.readString(PayOrderActivity.this, Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MONEY);
-                                    if(null != balanceStr && !balanceStr.isEmpty() && !"null".equals(balanceStr) && !"0".equals(balanceStr))
-                                    {
-                                        progress.showProgress("等待余额支付跳转");
-
-                                        String                url    = Contant.REQUEST_URL + Contant.REMAINPAY;
-                                        AuthParamUtils params = new AuthParamUtils ( application, System.currentTimeMillis
-                                                ( ), PayOrderActivity.this );
-                                        Map< String, Object > maps   = new HashMap< String, Object >( );
-                                        maps.put ( "orderNo", payModel.getOrderNo() );
-                                        maps.put ( "money", payModel.getAlipayFee() );
-                                        Map<String, Object> param = params.obtainPostParam(maps);
-                                        BaseModel base = new BaseModel();
-                                        HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
-                                        httpUtils.doVolleyPost(base, url, param, new Response.Listener<BaseModel>() {
-                                            @Override
-                                            public void onResponse(BaseModel response) {
-                                                if(1==response.getResultCode())
-                                                {
-                                                    //支付成功
-                                                    ActivityUtils.getInstance().skipActivity(PayOrderActivity.this, PayResultAtivity.class);
-                                                }
-                                                else
-                                                {
-                                                    //余额支付失败
-                                                    ToastUtils.showShortToast(PayOrderActivity.this, "余额支付失败");
-
-                                                }
-                                            }
-                                        }, new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
-
-                                            }
-                                        });
-
-                                    }
-                                    else
-                                    {
-                                        ToastUtils.showShortToast(PayOrderActivity.this, "您账户的余额不足");
-                                    }
-
-
                                 }
                                 else
                                 {

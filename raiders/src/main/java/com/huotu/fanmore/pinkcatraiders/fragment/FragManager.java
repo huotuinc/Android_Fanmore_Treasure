@@ -90,7 +90,6 @@ public class FragManager {
             ft.hide(preFrag);
         }
 
-
         ft.commitAllowingStateLoss();
         preFragType = type;
 

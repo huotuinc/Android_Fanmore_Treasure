@@ -9,8 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
@@ -52,6 +55,9 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
     @Bind(R.id.money)
     TextView money;
 
+    @Bind(R.id.profilePullRefresh)
+    PullToRefreshScrollView profilePullRefresh;
+
     @Override
     public void onReshow() {
 
@@ -79,7 +85,7 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate ( savedInstanceState );
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -89,18 +95,36 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
         rootView = inflater.inflate(R.layout.profile_frag, container, false);
         application = (BaseApplication) getActivity().getApplication ( );
         rootAty = (HomeActivity) getActivity();
-        ButterKnife.bind ( this, rootView );
-        userimg.setBorderColor ( resources.getColor ( R.color.color_white ) );
-        userimg.setBorderWidth ( ( int ) resources.getDimension ( R.dimen.head_width ) );
-        String imgurl= PreferenceHelper.readString (getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_UDERHEAD);
-        BitmapLoader.create().loadRoundImage ( getActivity ( ), userimg, imgurl, R.mipmap.error );
-        TVUserName.setText ( PreferenceHelper.readString ( getActivity ( ), Contant
-                                                                   .LOGIN_USER_INFO, Contant.LOGIN_AUTH_REALNAME ) );
-        String balance = PreferenceHelper.readString(getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MONEY);
-        money.setText((null!=balance&&!balance.isEmpty ()&&!"null".equals ( balance ))?balance+"元":0+"元");
+        ButterKnife.bind(this, rootView);
+        userimg.setBorderColor(resources.getColor(R.color.color_white));
+        userimg.setBorderWidth((int) resources.getDimension(R.dimen.head_width));
+        initScroll();
         wManager = getActivity().getWindowManager();
         return rootView;
     }
+
+    private void initScroll()
+    {
+        loadData();
+        profilePullRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
+                loadData();
+            }
+        });
+    }
+
+    private void loadData()
+    {
+        profilePullRefresh.onRefreshComplete();
+        String imgurl= PreferenceHelper.readString (getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_UDERHEAD);
+        BitmapLoader.create().loadRoundImage ( getActivity ( ), userimg, imgurl, R.mipmap.error );
+        TVUserName.setText ( PreferenceHelper.readString ( getActivity ( ), Contant
+                .LOGIN_USER_INFO, Contant.LOGIN_AUTH_REALNAME ) );
+        String balance = PreferenceHelper.readString(getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MONEY);
+        money.setText((null!=balance&&!balance.isEmpty ()&&!"null".equals ( balance ))?balance+"元":0+"元");
+    }
+
     @OnClick(R.id.settingL)
     void toseting()
     {

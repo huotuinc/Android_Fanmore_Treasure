@@ -39,10 +39,13 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
     //其他界面跳转到购物车
     public static String JUMP_CART="cy.com.morefan.JUMP_CART";
 
+    //控制title上的消息tag显隐
+    public static String TITLE_MSG_TAG ="cy.com.morefan.TITLE_MSG_TAG";
+
     public enum ReceiverType{
         WXNotBack,AlarmUp, RefreshTaskList,UserMainDataUpdate, Sms, Login, Logout, ShareToWeixinSuccess,
         ShareToSinaSuccess, ShareToQzoneSuccess, BackgroundBackToUpdate, FlowAdd,Register,RefreshTaskDetail,
-        WX_Pay_Callback,requestFlow,sendFlow,wxPaySuccess,shopCart,jumpCart
+        WX_Pay_Callback,requestFlow,sendFlow,wxPaySuccess,shopCart,jumpCart,titleMsgTag
     }
     public interface BroadcastListener{
         void onFinishReceiver(ReceiverType type, Object msg);
@@ -158,6 +161,10 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         else if(intent.getAction().equals(JUMP_CART))
         {
             listener.onFinishReceiver(ReceiverType.jumpCart,null);
+        }
+        else if(intent.getAction().equals(TITLE_MSG_TAG))
+        {
+            listener.onFinishReceiver(ReceiverType.titleMsgTag,null);
         }
     }
 }

@@ -234,11 +234,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     protected
     void onCreate ( Bundle savedInstanceState ) {
 
-        super.onCreate ( savedInstanceState );
+        super.onCreate(savedInstanceState);
         this.setContentView(R.layout.ri_home);
         ButterKnife.bind(this);
         application = ( BaseApplication ) this.getApplication ( );
-        application.mFragManager = FragManager.getIns ( this, R.id.fragment_container );
+        application.mFragManager = FragManager.getIns(this, R.id.fragment_container);
         resources = this.getResources();
         mHandler = new Handler ( this );
         myBroadcastReceiver = new MyBroadcastReceiver(HomeActivity.this, this, MyBroadcastReceiver.JUMP_CART);
@@ -958,6 +958,10 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
         if(type == MyBroadcastReceiver.ReceiverType.jumpCart)
         {
+            titleMsgAmount.setVisibility(View.GONE);
+            Bundle bundle = new Bundle();
+            bundle.putInt("type", 0);
+            MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
             //显示清单列表
             //设置选中状态
             Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal );
