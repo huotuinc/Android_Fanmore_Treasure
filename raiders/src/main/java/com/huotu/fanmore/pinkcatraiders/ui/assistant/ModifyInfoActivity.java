@@ -239,7 +239,7 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
                                 if(1==setpassword.getResultCode())
                                 {
                                     updateUserInformation();
-                                    ActivityUtils.getInstance().skipActivity(ModifyInfoActivity.this, UserSettingActivity.class);
+
                                 }
                                 else
                                 {
@@ -302,6 +302,7 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
                             {
                                 AppUserModel user=useroutput.getResultData().getUser();
                                 application.writeUserInfo(user);
+                                ActivityUtils.getInstance().skipActivity(ModifyInfoActivity.this, UserSettingActivity.class);
                             }
                             else
                             {
