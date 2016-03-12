@@ -84,15 +84,14 @@ public class ListAdapter extends BaseAdapter {
         {
             final ListModel list = lists.get(position);
             BitmapLoader.create().displayUrl(context, holder.listProductIcon, list.getPictureUrl(), R.mipmap.error);
-            if(10==list.getAreaAmount())
+            if(0!=list.getAreaAmount())
             {
-                holder.productTag.setText("十元\n专区");
+                holder.productTag.setText("专区\n商品");
                 SystemTools.loadBackground(holder.productTag, resources.getDrawable(R.mipmap.area_1));
             }
-            else if(5==list.getAreaAmount())
+            else
             {
-                holder.productTag.setText("五元\n专区");
-                SystemTools.loadBackground(holder.productTag, resources.getDrawable(R.mipmap.area_2));
+                holder.productTag.setVisibility(View.GONE);
             }
 
             holder.listProductName.setText(list.getTitle());

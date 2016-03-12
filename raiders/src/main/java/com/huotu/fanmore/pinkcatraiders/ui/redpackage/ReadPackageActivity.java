@@ -448,11 +448,14 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        redpackageWaitPopWin.dismissView();
+        redpackageFailedPopWin.dismissView();
         VolleyUtil.cancelAllRequest();
         ButterKnife.unbind(this);
         if( soundPool !=null){
             soundPool.release();
         }
+
     }
 
     private
