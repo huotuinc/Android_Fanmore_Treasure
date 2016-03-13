@@ -40,7 +40,6 @@ public class ListAdapter extends BaseAdapter {
     private
     Handler mHandler;
     private int type;
-    private EditText numView;
     private long buyNum = 0;
 
     public ListAdapter(List<ListModel> lists, Context context, Handler mHandler, int type)
@@ -152,7 +151,7 @@ public class ListAdapter extends BaseAdapter {
             holder.totalRequired.setText("总需" + list.getToAmount() + "人次");
             holder.surplusRequired.setText("剩余" + list.getRemainAmount() + "人次");
             //加减控件
-            numView = holder.num;
+            final EditText numView = holder.num;
             //数量
 
             buyNum = list.getUserBuyAmount();
@@ -187,7 +186,7 @@ public class ListAdapter extends BaseAdapter {
                             list.setUserBuyAmount(buyNum);
                             Message message = mHandler.obtainMessage ( );
                             message.what = Contant.CART_SELECT;
-                            message.arg1 = 0;
+                            message.arg1 = 2;
                             message.obj = lists;
                             mHandler.sendMessage(message);
                         }
@@ -226,7 +225,7 @@ public class ListAdapter extends BaseAdapter {
                             list.setUserBuyAmount(buyNum);
                             Message message = mHandler.obtainMessage ( );
                             message.what = Contant.CART_SELECT;
-                            message.arg1 = 0;
+                            message.arg1 = 3;
                             message.obj = lists;
                             mHandler.sendMessage(message);
                         }
