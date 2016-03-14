@@ -111,16 +111,16 @@ class GuideActivity extends BaseActivity implements View.OnClickListener, ViewPa
                             public void run() {
 
                                 //判断是否登录
-                                if (application.isLogin()) {
+//                                if (application.isLogin()) {
                                     ActivityUtils.getInstance().skipActivity(GuideActivity.this, HomeActivity.class);
 
-                                } else {
-                                    ActivityUtils.getInstance()
-                                            .skipActivity(
-                                                    GuideActivity
-                                                            .this,
-                                                    LoginActivity.class);
-                                }
+//                                } else {
+//                                    ActivityUtils.getInstance()
+//                                            .skipActivity(
+//                                                    GuideActivity
+//                                                            .this,
+//                                                    LoginActivity.class);
+//                                }
                             }
                         }, 1000);
                     }

@@ -67,6 +67,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.FunPopWin1;
 import com.huotu.fanmore.pinkcatraiders.widget.FuncPopWin;
+import com.huotu.fanmore.pinkcatraiders.widget.GuideLoginPopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.MorePopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
@@ -222,6 +223,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     public int payNum = 0;
 
     private MyBroadcastReceiver myBroadcastReceiver;
+
+    public GuideLoginPopWin guideLoginPopWin;
 
     @Override
     protected
@@ -489,7 +492,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case R.id.mallL:
             {
-                titleMsgAmount.setVisibility(View.GONE);
+                titleMsgAmount.setVisibility(View.VISIBLE);
                 //设置选中状态
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal );
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
@@ -497,7 +500,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 //标题栏右图标
                 //编辑模式
                 titleRightImage.setTag ( 0 );
-                Drawable rightDraw = resources.getDrawable(R.mipmap.title_edit);
+                Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
                 SystemTools.loadBackground(titleRightImage, rightDraw);
                 //重置其他
                 Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
@@ -617,11 +620,24 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     application.mFragManager.setCurrentFrag ( FragManager.FragType.PROFILE );
                 }
                 else if ( tag.equals ( Contant.TAG_5 ) ) {
-                    /*AuthParamUtils paramUtils = new AuthParamUtils ( application, System.currentTimeMillis(),HomeActivity.this );
+                    //判断是否登陆
+                    if(!application.isLogin())
+                    {
+                        guideLoginPopWin = new GuideLoginPopWin(HomeActivity.this, mHandler, HomeActivity.this, wManager);
+                        guideLoginPopWin.showWin();
+                        guideLoginPopWin.showAtLocation(
+                                findViewById(R.id.titleLayout),
+                                Gravity.CENTER, 0, 0
+                        );
+                    }
+                    else
+                    {
+                        /*AuthParamUtils paramUtils = new AuthParamUtils ( application, System.currentTimeMillis(),HomeActivity.this );
                     //String url = paramUtils.obtainUrl();
                     Bundle bundle = new Bundle();
                     bundle.putString("url","http://cosytest.51flashmall.com/");
                     ActivityUtils.getInstance().showActivity(HomeActivity.this, MallHomeActivity.class, bundle);*/
+                    }
                 }
             }
             break;
@@ -979,6 +995,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     bundle.putInt("type", 1);
                     MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
                 }
+            }
+            break;
+            case Contant.GO_LOGIN:
+            {
+                ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class);
             }
             break;
             default:

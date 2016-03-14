@@ -177,7 +177,7 @@ public class BaseApplication extends Application {
     //获取头像
     public String readUerHead()
     {
-        return PreferenceHelper.readString ( getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_UDERHEAD );
+        return PreferenceHelper.readString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_UDERHEAD);
     }
 
     //获取userId
@@ -242,7 +242,7 @@ public class BaseApplication extends Application {
         PreferenceHelper.writeString(getApplicationContext(),"update_info","updateMD5",update.getUpdateMD5());
         PreferenceHelper.writeString(getApplicationContext(),"update_info","updateTips",update.getUpdateTips());
         PreferenceHelper.writeString(getApplicationContext(),"update_info","updateUrl",update.getUpdateUrl());
-        PreferenceHelper.writeString(getApplicationContext(),"update_info","updateType",update.getUpdateType().getName());
+        PreferenceHelper.writeString(getApplicationContext(), "update_info", "updateType", update.getUpdateType().getName());
     }
     //判断是否登录
     public boolean isLogin()
@@ -265,4 +265,8 @@ public class BaseApplication extends Application {
 
     }
 
+    public void ClearUser() {
+
+        PreferenceHelper.clean(getApplicationContext(),Contant.LOGIN_USER_INFO);
+    }
 }

@@ -219,18 +219,18 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                                                 }
                                                                 else {
                                                                     //判断是否登录
-                                                                    if ( application.isLogin ( ) ) {
+//                                                                    if ( application.isLogin ( ) ) {
                                                                         ActivityUtils.getInstance ( ).skipActivity (
                                                                                 SplashActivity.this, HomeActivity.class );
-                                                                    }
-                                                                    else {
-                                                                        ActivityUtils.getInstance ( )
-                                                                                .skipActivity (
-                                                                                        SplashActivity
-                                                                                                .this,
-                                                                                        LoginActivity.class
-                                                                                );
-                                                                    }
+//                                                                    }
+//                                                                    else {
+//                                                                        ActivityUtils.getInstance ( )
+//                                                                                .skipActivity (
+//                                                                                        SplashActivity
+//                                                                                                .this,
+//                                                                                        LoginActivity.class
+//                                                                                );
+//                                                                    }
                                                                 }
                                                             }
                                                             else
@@ -248,18 +248,18 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                                                     }
                                                                     else {
                                                                         //判断是否登录
-                                                                        if ( application.isLogin ( ) ) {
+//                                                                        if ( application.isLogin ( ) ) {
                                                                             ActivityUtils.getInstance ( ).skipActivity (
                                                                                     SplashActivity.this, HomeActivity.class );
-                                                                        }
-                                                                        else {
-                                                                            ActivityUtils.getInstance ( )
-                                                                                    .skipActivity (
-                                                                                            SplashActivity
-                                                                                                    .this,
-                                                                                            LoginActivity.class
-                                                                                    );
-                                                                        }
+//                                                                        }
+//                                                                        else {
+//                                                                            ActivityUtils.getInstance ( )
+//                                                                                    .skipActivity (
+//                                                                                            SplashActivity
+//                                                                                                    .this,
+//                                                                                            LoginActivity.class
+//                                                                                    );
+//                                                                        }
                                                                     }
                                                                 }
                                                                 else
@@ -288,18 +288,18 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                                                     }
                                                                     else {
                                                                         //判断是否登录
-                                                                        if ( application.isLogin ( ) ) {
+//                                                                        if ( application.isLogin ( ) ) {
                                                                             ActivityUtils.getInstance ( ).skipActivity (
                                                                                     SplashActivity.this, HomeActivity.class );
-                                                                        }
-                                                                        else {
-                                                                            ActivityUtils.getInstance ( )
-                                                                                    .skipActivity (
-                                                                                            SplashActivity
-                                                                                                    .this,
-                                                                                            LoginActivity.class
-                                                                                    );
-                                                                        }
+//                                                                        }
+//                                                                        else {
+//                                                                            ActivityUtils.getInstance ( )
+//                                                                                    .skipActivity (
+//                                                                                            SplashActivity
+//                                                                                                    .this,
+//                                                                                            LoginActivity.class
+//                                                                                    );
+//                                                                        }
                                                                     }
                                                                 }
 
@@ -320,18 +320,18 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                                                 }
                                                                 else {
                                                                     //判断是否登录
-                                                                    if ( application.isLogin ( ) ) {
+//                                                                    if ( application.isLogin ( ) ) {
                                                                         ActivityUtils.getInstance ( ).skipActivity (
                                                                                 SplashActivity.this, HomeActivity.class );
-                                                                    }
-                                                                    else {
-                                                                        ActivityUtils.getInstance ( )
-                                                                                .skipActivity (
-                                                                                        SplashActivity
-                                                                                                .this,
-                                                                                        LoginActivity.class
-                                                                                );
-                                                                    }
+//                                                                    }
+//                                                                    else {
+//                                                                        ActivityUtils.getInstance ( )
+//                                                                                .skipActivity (
+//                                                                                        SplashActivity
+//                                                                                                .this,
+//                                                                                        LoginActivity.class
+//                                                                                );
+//                                                                    }
                                                                 }
                                                             }
                                                             else

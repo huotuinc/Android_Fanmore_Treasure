@@ -100,6 +100,8 @@ public class Contant {
     public static final int APPAND_LIST = 0x00000047;
 
     public static final int REDPACKAGE_COUNT = 0x00000050;
+
+    public static final int GO_LOGIN = 0x00000051;
     /**
      * 菜单标记1
      */
