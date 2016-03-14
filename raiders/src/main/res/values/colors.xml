@@ -30,4 +30,5 @@
     <color name="redpackage_color01">#ff4e4c8d</color>
     <color name="redpackage_wait">#a2000000</color>
     <color name="redpackage_warn">#ff3f8a3d</color>
+    <color name="space_color">#ffe2e5e9</color>
 </resources>

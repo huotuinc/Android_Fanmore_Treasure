@@ -391,12 +391,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
 
                                     //加载参与历史
-                                    //getCommentLog();
+                                    getCommentLog();
                                 } else {
                                     //暂无数据提示
+
                                 }
                             } else {
                                 //异常处理，自动切换成无数据
+
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -409,6 +411,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                 return;
                             }
                             //暂无数据提示
+
                         }
                     }
             );
@@ -688,10 +691,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             {
                 PartnerHistorysModel partnerHistory = partnerHistorys.get(partnerHistorys.size() - 1);
                 maps.put("lastId", partnerHistory.getPid());
-            } else if (partnerHistorys != null && partnerHistorys.size() == 0)
-            {
-                maps.put("lastId", 0);
-            }else if (partnerHistorys==null){
+            } else{
                 maps.put("lastId", 0);
             }
         }
@@ -725,7 +725,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                             TextView bgLine = (TextView) parntersLayout.findViewById(R.id.bgLine);
                             bgLine.setMinimumHeight(200);
                             CircleImageView partnerLogo = (CircleImageView) parntersLayout.findViewById(R.id.partnerLogo);
-                            BitmapLoader.create().loadRoundImage(ProductDetailActivity.this, partnerLogo, partnerLog.getUserHeadUrl(), R.mipmap.error);
+                            BitmapLoader.create().loadRoundImage(ProductDetailActivity.this, partnerLogo, partnerLog.getUserHeadUrl(), R.mipmap.ic_launcher);
                             TextView partnerName = (TextView) parntersLayout.findViewById(R.id.partnerName);
                             partnerName.setText(partnerLog.getNickName());
                             TextView partnerIp = (TextView) parntersLayout.findViewById(R.id.partnerIp);
