@@ -92,6 +92,7 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         resources = getActivity().getResources ( );
         rootView = inflater.inflate(R.layout.profile_frag, container, false);
         application = (BaseApplication) getActivity().getApplication ( );
