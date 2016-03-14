@@ -52,6 +52,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.raiders.ShareOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
+import com.huotu.fanmore.pinkcatraiders.uitls.CartUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
@@ -788,58 +789,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 progress.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0
                 );
-                String url = Contant.REQUEST_URL + Contant.JOIN_SHOPPING_CART;
-                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ProductDetailActivity.this);
-                Map<String, Object> maps = new HashMap<String, Object>();
-                maps.put("issueId", String.valueOf(product.getIssueId()));
-                Map<String, Object> param = params.obtainPostParam(maps);
-                BaseModel base = new BaseModel();
-                HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel>();
-                httpUtils.doVolleyPost(
-                        base, url, param, new Response.Listener<BaseModel>() {
-                            @Override
-                            public void onResponse(BaseModel response) {
-                                progress.dismissView();
-                                BaseModel base = response;
-                                if (1 == base.getResultCode()) {
-                                    //上传成功
-                                    CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
-                                    if(null==cartCountIt)
-                                    {
-                                        CartCountModel cartCount = new CartCountModel();
-                                        cartCount.setId(0l);
-                                        cartCount.setCount(1);
-                                        CartCountModel.save(cartCount);
-                                    }
-                                    else
-                                    {
-                                        cartCountIt.setCount(cartCountIt.getCount()+1);
-                                        CartCountModel.save(cartCountIt);
-                                    }
-                                    ToastUtils.showLongToast(ProductDetailActivity.this, "添加清单成功");
-                                    //2秒后跳转到购物车
-                                    mHandler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            MyBroadcastReceiver.sendBroadcast(ProductDetailActivity.this, MyBroadcastReceiver.JUMP_CART);
-                                            closeSelf(ProductDetailActivity.this);
-                                        }
-                                    }, 2000);
-                                } else {
-                                    //上传失败
-                                    ToastUtils.showLongToast(ProductDetailActivity.this, "添加清单失败");
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                progress.dismissView();
-                                //系统级别错误
-                                ToastUtils.showLongToast(ProductDetailActivity.this, "添加清单失败");
-                            }
-                        }
-                );
+                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler);
             }
         });
         //中间
@@ -853,50 +803,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 progress.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0
                 );
-                String url = Contant.REQUEST_URL + Contant.JOIN_SHOPPING_CART;
-                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ProductDetailActivity.this);
-                Map<String, Object> maps = new HashMap<String, Object>();
-                maps.put("issueId", String.valueOf(product.getIssueId()));
-                Map<String, Object> param = params.obtainPostParam(maps);
-                BaseModel base = new BaseModel();
-                HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel>();
-                httpUtils.doVolleyPost(
-                        base, url, param, new Response.Listener<BaseModel>() {
-                            @Override
-                            public void onResponse(BaseModel response) {
-                                progress.dismissView();
-                                BaseModel base = response;
-                                if (1 == base.getResultCode()) {
-                                    //上传成功
-                                    CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
-                                    if(null==cartCountIt)
-                                    {
-                                        CartCountModel cartCount = new CartCountModel();
-                                        cartCount.setId(0l);
-                                        cartCount.setCount(1);
-                                        CartCountModel.save(cartCount);
-                                    }
-                                    else
-                                    {
-                                        cartCountIt.setCount(cartCountIt.getCount()+1);
-                                        CartCountModel.save(cartCountIt);
-                                    }
-                                    ToastUtils.showLongToast(ProductDetailActivity.this, "添加清单成功");
-                                } else {
-                                    //上传失败
-                                    ToastUtils.showLongToast(ProductDetailActivity.this, "添加清单失败");
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                progress.dismissView();
-                                //系统级别错误
-                                ToastUtils.showLongToast(ProductDetailActivity.this, "添加清单失败");
-                            }
-                        }
-                );
+                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler);
             }
         });
         //购物车
