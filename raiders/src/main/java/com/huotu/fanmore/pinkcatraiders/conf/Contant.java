@@ -311,4 +311,6 @@ public class Contant {
     public static final String XIU_XIU_XIU = "xiuxiuxiu";
     //更新用户资料信息
     public static final String UPDATE_USER_INFORMATION = "updateUserInformation";
+    //获取消息列表
+    public static final String MESSAGE = "messages";
 }
