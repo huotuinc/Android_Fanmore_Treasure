@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -82,6 +83,8 @@ public class ListAdapter extends BaseAdapter {
         if(null!=lists&&!lists.isEmpty()&&null!=lists.get(position))
         {
             final ListModel list = lists.get(position);
+            //禁止手动输入
+            holder.num.setInputType(InputType.TYPE_NULL);
             BitmapLoader.create().displayUrl(context, holder.listProductIcon, list.getPictureUrl(), R.mipmap.error);
             if(0!=list.getAreaAmount())
             {
