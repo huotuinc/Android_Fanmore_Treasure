@@ -672,6 +672,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             {
                 if(0==msg.arg1)
                 {
+                    prices = 0;
                     //结算模式
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
@@ -681,7 +682,43 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         ListModel list = it.next();
                         double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                         double total = price*list.getUserBuyAmount();
-                        prices=+total;
+                        prices+=total;
+                    }
+
+                    funcPopWin1.setMsg(String.valueOf(payNum), String.valueOf(prices));
+                    funcPopWin1.setData(lists);
+                }
+                else if(2==msg.arg1)
+                {
+                    prices=0;
+                    //结算模式 加
+                    List<ListModel> lists = (List<ListModel>) msg.obj;
+                    Iterator<ListModel> it = lists.iterator();
+                    payNum = lists.size();
+                    while (it.hasNext())
+                    {
+                        ListModel list = it.next();
+                        double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double total = price*list.getUserBuyAmount();
+                        prices+=total;
+                    }
+
+                    funcPopWin1.setMsg(String.valueOf(payNum), String.valueOf(prices));
+                    funcPopWin1.setData(lists);
+                }
+                else if(3==msg.arg1)
+                {
+                    prices=0;
+                    //结算模式 减
+                    List<ListModel> lists = (List<ListModel>) msg.obj;
+                    Iterator<ListModel> it = lists.iterator();
+                    payNum = lists.size();
+                    while (it.hasNext())
+                    {
+                        ListModel list = it.next();
+                        double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double total = price*list.getUserBuyAmount();
+                        prices+=total;
                     }
 
                     funcPopWin1.setMsg(String.valueOf(payNum), String.valueOf(prices));
