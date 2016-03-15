@@ -932,16 +932,14 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                                 cartCountIt.setCount(cartCountIt.getCount()-1);
                                                 CartCountModel.save(cartCountIt);
                                             }
+
+                                            ToastUtils.showShortToast(HomeActivity.this, "删除成功");
+
                                         } else {
                                             progress.dismissView();
                                             VolleyUtil.cancelAllRequest();
                                             //上传失败
-                                            noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "删除购物车失败");
-                                            noticePop.showNotice();
-                                            noticePop.showAtLocation(
-                                                    findViewById(R.id.titleLayout),
-                                                    Gravity.CENTER, 0, 0
-                                            );
+                                            ToastUtils.showShortToast(HomeActivity.this, "删除失败");
                                         }
                                     }
                                 }, new Response.ErrorListener() {
@@ -951,16 +949,12 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                         progress.dismissView();
                                         VolleyUtil.cancelAllRequest();
                                         //系统级别错误
-                                        noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "删除购物车失败");
-                                        noticePop.showNotice();
-                                        noticePop.showAtLocation(
-                                                findViewById(R.id.titleLayout),
-                                                Gravity.CENTER, 0, 0
-                                        );
+                                        ToastUtils.showShortToast(HomeActivity.this, "删除失败");
                                     }
                                 }
                         );
                 }
+
                     progress.dismissView();
                     Bundle bundle = new Bundle();
                     bundle.putInt("type", 1);

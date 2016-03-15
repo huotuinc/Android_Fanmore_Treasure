@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.SearchHistoryModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.CartUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
@@ -44,8 +46,10 @@ import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.MyGridView;
+import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -107,6 +111,8 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
 
     @Bind ( R.id.commentDetailL )
     LinearLayout commentDetailL;
+    @Bind(R.id.cleanAllBtn)
+    TextView cleanAllBtn;
 
     public LayoutInflater inflate;
 
@@ -115,11 +121,28 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
     public List< ProductModel > searchProducts;
 
     public SearchGridAdapter adapter;
+    public ProgressPopupWindow progress;
 
     @Override
     public
     boolean handleMessage ( Message msg ) {
 
+        switch (msg.what)
+        {
+            case Contant.ADD_LIST:
+            {
+                ProductModel product = ( ProductModel ) msg.obj;
+                progress = new ProgressPopupWindow( SearchActivity.this, SearchActivity.this, wManager );
+                progress.showProgress ( "正在添加清单" );
+                progress.showAtLocation(titleLayoutL,
+                        Gravity.CENTER, 0, 0
+                );
+                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, SearchActivity.this, mHandler);
+            }
+            break;
+            default:
+                break;
+        }
         return false;
     }
 
@@ -157,19 +180,19 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
         Drawable bgDraw = resources.getDrawable ( R.drawable.account_bg_bottom );
         SystemTools.loadBackground ( titleLayoutL, bgDraw );
         Drawable leftDraw = resources.getDrawable ( R.mipmap.back_gray );
-        SystemTools.loadBackground ( titleLeftImage, leftDraw );
+        SystemTools.loadBackground(titleLeftImage, leftDraw);
         Drawable rightDraw = resources.getDrawable ( R.mipmap.search_btn );
-        SystemTools.loadBackground ( titleRightImage, rightDraw );
-        stubSearchBar.inflate ( );
+        SystemTools.loadBackground(titleRightImage, rightDraw);
+        stubSearchBar.inflate();
         searchL = ( EditText ) this.findViewById ( R.id.titleSearchBar );
     }
 
     private
     void initView ( ) {
         //查询搜索历史
-        Iterator< SearchHistoryModel > searchHistorys = SearchHistoryModel.findAll (
+        Iterator< SearchHistoryModel > searchHistorys = SearchHistoryModel.findAll(
                 SearchHistoryModel.class
-                                                                                   );
+        );
         if ( ! searchHistorys.hasNext ( ) ) {
             searchGrid.setVisibility ( View.GONE );
             commentDetailLL.setVisibility ( View.GONE );
@@ -202,6 +225,14 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
                 commentDetailL.addView(searchLayout);
             }
         }
+    }
+
+    @OnClick(R.id.cleanAllBtn)
+    void cleanAll()
+    {
+        SearchHistoryModel.deleteAll(SearchHistoryModel.class);
+        commentDetailL.removeAllViews();
+        commentDetailLL.setVisibility(View.GONE);
     }
 
     @Override
