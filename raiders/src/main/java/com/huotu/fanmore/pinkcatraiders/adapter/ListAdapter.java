@@ -15,11 +15,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
+import com.huotu.fanmore.pinkcatraiders.model.LocalCartOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.widget.AddAndSubView;
@@ -42,13 +46,15 @@ public class ListAdapter extends BaseAdapter {
     Handler mHandler;
     private int type;
     private long buyNum = 0;
+    private BaseApplication application;
 
-    public ListAdapter(List<ListModel> lists, Context context, Handler mHandler, int type)
+    public ListAdapter(List<ListModel> lists, Context context, Handler mHandler, int type, BaseApplication application)
     {
         this.lists = lists;
         this.context = context;
         this.mHandler = mHandler;
         this.type = type;
+        this.application = application;
     }
 
     @Override
@@ -166,8 +172,8 @@ public class ListAdapter extends BaseAdapter {
                     //获取数据源
                     String numString = numView.getText().toString();
                     if (numString == null || numString.equals("")) {
-                        buyNum = 1;
-                        numView.setText("1");
+                        buyNum = list.getStepAmount();
+                        numView.setText(String.valueOf(list.getStepAmount()));
                     } else
                     {
                         if ((buyNum+list.getStepAmount()) < 1) // 先加，再判断
@@ -187,6 +193,32 @@ public class ListAdapter extends BaseAdapter {
                             buyNum=buyNum+list.getStepAmount();
                             numView.setText(String.valueOf(buyNum));
                             list.setUserBuyAmount(buyNum);
+                            //非登陆状态下加
+                            if(!application.isLogin())
+                            {
+                                //修改本地购物车数据
+                                CartDataModel cartData = CartDataModel.findById(CartDataModel.class, 1000l);
+                                if(null!=cartData)
+                                {
+                                    String dataStr = cartData.getCartData();
+                                    LocalCartOutputModel localCartOutput = new LocalCartOutputModel();
+                                    JSONUtil<LocalCartOutputModel> jsonUtil = new JSONUtil<LocalCartOutputModel>();
+                                    localCartOutput = new LocalCartOutputModel();
+                                    localCartOutput = jsonUtil.toBean(dataStr, localCartOutput);
+                                    List<ListModel> lists = localCartOutput.getResultData().getLists();
+
+                                    for(int i=0; i<lists.size(); i++)
+                                    {
+                                        if(list.getIssueId()==lists.get(i).getIssueId())
+                                        {
+                                            lists.get(i).setUserBuyAmount(list.getUserBuyAmount());
+                                        }
+                                    }
+
+                                    CartDataModel.save(cartData);
+                                }
+
+                            }
                             Message message = mHandler.obtainMessage ( );
                             message.what = Contant.CART_SELECT;
                             message.arg1 = 2;
@@ -204,8 +236,8 @@ public class ListAdapter extends BaseAdapter {
                     //获取数据源
                     String numString = numView.getText().toString();
                     if (numString == null || numString.equals("")) {
-                        buyNum = 1;
-                        numView.setText("1");
+                        buyNum = list.getStepAmount();
+                        numView.setText(String.valueOf(list.getStepAmount()));
                     }
                     else if((buyNum-list.getStepAmount()) > list.getToAmount())
                     {
@@ -226,6 +258,32 @@ public class ListAdapter extends BaseAdapter {
                             buyNum = buyNum-list.getStepAmount();
                             numView.setText(String.valueOf(buyNum));
                             list.setUserBuyAmount(buyNum);
+                            //非登陆状态下加
+                            if(!application.isLogin())
+                            {
+                                //修改本地购物车数据
+                                CartDataModel cartData = CartDataModel.findById(CartDataModel.class, 1000l);
+                                if(null!=cartData)
+                                {
+                                    String dataStr = cartData.getCartData();
+                                    LocalCartOutputModel localCartOutput = new LocalCartOutputModel();
+                                    JSONUtil<LocalCartOutputModel> jsonUtil = new JSONUtil<LocalCartOutputModel>();
+                                    localCartOutput = new LocalCartOutputModel();
+                                    localCartOutput = jsonUtil.toBean(dataStr, localCartOutput);
+                                    List<ListModel> lists = localCartOutput.getResultData().getLists();
+
+                                    for(int i=0; i<lists.size(); i++)
+                                    {
+                                        if(list.getIssueId()==lists.get(i).getIssueId())
+                                        {
+                                            lists.get(i).setUserBuyAmount(list.getUserBuyAmount());
+                                        }
+                                    }
+
+                                    CartDataModel.save(cartData);
+                                }
+
+                            }
                             Message message = mHandler.obtainMessage ( );
                             message.what = Contant.CART_SELECT;
                             message.arg1 = 3;

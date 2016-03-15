@@ -45,6 +45,7 @@ public class CartUtils {
 
                 //product 转 listModel
                 listModel.setUserBuyAmount(p.getStepAmount());
+                listModel.setStepAmount(p.getStepAmount());
                 listModel.setPictureUrl(p.getPictureUrl());
                 listModel.setTitle(p.getTitle());
                 listModel.setToAmount(p.getToAmount());

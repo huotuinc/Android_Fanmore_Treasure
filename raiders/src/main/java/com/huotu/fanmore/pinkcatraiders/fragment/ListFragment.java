@@ -132,7 +132,7 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                                             }
                                         } );
         lists = new ArrayList<ListModel>();
-        adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 0);
+        adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 0, application);
         menuList.setAdapter(adapter);
         firstGetData();
     }
@@ -293,14 +293,14 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
             if(1==types)
             {
                 //编辑模式
-                adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 1);
+                adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 1, application);
                 menuList.setAdapter(adapter);
                 firstGetData();
             }
             else if(0==types)
             {
                 //结算模式
-                adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 0);
+                adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 0, application);
                 menuList.setAdapter(adapter);
                 firstGetData();
             }
