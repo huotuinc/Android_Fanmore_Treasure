@@ -790,6 +790,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                         Gravity.CENTER, 0, 0
                 );
                 CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler);
+                MyBroadcastReceiver.sendBroadcast(ProductDetailActivity.this, MyBroadcastReceiver.JUMP_CART);
+                closeSelf(ProductDetailActivity.this);
             }
         });
         //中间

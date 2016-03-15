@@ -45,7 +45,6 @@ public class ListAdapter extends BaseAdapter {
     private
     Handler mHandler;
     private int type;
-    private long buyNum = 0;
     private BaseApplication application;
     private int deleteType;
 
@@ -191,9 +190,8 @@ public class ListAdapter extends BaseAdapter {
             //加减控件
             final EditText numView = holder.num;
             //数量
-
-            buyNum = list.getUserBuyAmount();
-            numView.setText(String.valueOf(buyNum));
+            numView.setTag(list.getUserBuyAmount());
+            numView.setText(String.valueOf(numView.getTag()));
             //加
             holder.addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -201,27 +199,27 @@ public class ListAdapter extends BaseAdapter {
                     //获取数据源
                     String numString = numView.getText().toString();
                     if (numString == null || numString.equals("")) {
-                        buyNum = list.getStepAmount();
+                        numView.setTag(list.getStepAmount());
                         numView.setText(String.valueOf(list.getStepAmount()));
                     } else
                     {
-                        if ((buyNum+list.getStepAmount()) < 1) // 先加，再判断
+                        if (((long)numView.getTag()+list.getStepAmount()) < 1) // 先加，再判断
                         {
-                            buyNum  = buyNum-list.getStepAmount();
+                            //buyNum  = buyNum-list.getStepAmount();
                             ToastUtils.showShortToast(context, "亲，数量至少为" + list.getStepAmount() + "哦~");
                             numView.setText(String.valueOf ( list.getStepAmount()));
                         }
-                        else if((buyNum+list.getStepAmount()) > list.getToAmount())
+                        else if(((long)numView.getTag()+list.getStepAmount()) > list.getToAmount())
                         {
-                            buyNum  = buyNum-list.getStepAmount();
+                            //buyNum  = buyNum-list.getStepAmount();
                             ToastUtils.showShortToast(context, "亲，数量不能超过" + list.getToAmount() + "哦~");
-                            numView.setText(String.valueOf(buyNum));
+                            numView.setText(String.valueOf(numView.getTag()));
                         }
                         else
                         {
-                            buyNum=buyNum+list.getStepAmount();
-                            numView.setText(String.valueOf(buyNum));
-                            list.setUserBuyAmount(buyNum);
+                            numView.setTag((long)numView.getTag()+list.getStepAmount());
+                            numView.setText(String.valueOf((long)numView.getTag()));
+                            list.setUserBuyAmount((long)numView.getTag());
                             //非登陆状态下加
                             if(!application.isLogin())
                             {
@@ -265,28 +263,28 @@ public class ListAdapter extends BaseAdapter {
                     //获取数据源
                     String numString = numView.getText().toString();
                     if (numString == null || numString.equals("")) {
-                        buyNum = list.getStepAmount();
+                        numView.setTag(list.getStepAmount());
                         numView.setText(String.valueOf(list.getStepAmount()));
                     }
-                    else if((buyNum-list.getStepAmount()) > list.getToAmount())
+                    else if(((long)numView.getTag()-list.getStepAmount()) > list.getToAmount())
                     {
-                        buyNum  = buyNum+list.getStepAmount();
+                        numView.setTag((long)numView.getTag()+list.getStepAmount());
                         ToastUtils.showShortToast(context, "亲，数量不能超过" + list.getToAmount() + "哦~");
-                        numView.setText(String.valueOf(buyNum));
+                        numView.setText(String.valueOf((long)numView.getTag()));
                     }
                     else
                     {
 
-                        if ((buyNum-list.getStepAmount()) < 1) // 先减，再判断
+                        if (((long)numView.getTag()-list.getStepAmount()) < 1) // 先减，再判断
                         {
-                            buyNum=buyNum+list.getStepAmount();
+                            //numView.setTag((long)numView.getTag()+list.getStepAmount());
                             ToastUtils.showShortToast(context, "亲，数量至少为"+list.getStepAmount()+"哦~");
                             numView.setText(String.valueOf ( list.getStepAmount()));
                         } else
                         {
-                            buyNum = buyNum-list.getStepAmount();
-                            numView.setText(String.valueOf(buyNum));
-                            list.setUserBuyAmount(buyNum);
+                            numView.setTag((long)numView.getTag()-list.getStepAmount());
+                            numView.setText(String.valueOf((long)numView.getTag()));
+                            list.setUserBuyAmount((long)numView.getTag());
                             //非登陆状态下加
                             if(!application.isLogin())
                             {
