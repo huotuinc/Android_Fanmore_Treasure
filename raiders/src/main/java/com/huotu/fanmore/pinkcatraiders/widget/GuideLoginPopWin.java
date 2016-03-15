@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -28,6 +29,7 @@ public class GuideLoginPopWin extends PopupWindow {
     private Handler mHandler;
     private Activity aty;
     private WindowManager wManager;
+    private String loginData = null;
 
     public GuideLoginPopWin(Context context, Handler mHandler, Activity aty, WindowManager wManager)
     {
@@ -58,7 +60,10 @@ public class GuideLoginPopWin extends PopupWindow {
             @Override
             public void onClick(View v) {
 
-                mHandler.sendEmptyMessage(Contant.GO_LOGIN);
+                Message message = mHandler.obtainMessage();
+                message.what = Contant.GO_LOGIN;
+                message.obj = loginData;
+                mHandler.sendMessage(message);
                 dismissView();
             }
         });
@@ -73,6 +78,11 @@ public class GuideLoginPopWin extends PopupWindow {
         // 设置SelectPicPopupWindow弹出窗体可点击
         this.setFocusable(false);
         WindowUtils.backgroundAlpha(aty, 0.4f);
+    }
+
+    public void setLoginData(String data)
+    {
+        loginData=data;
     }
 
     public void dismissView()

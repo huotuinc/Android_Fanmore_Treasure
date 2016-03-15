@@ -18,7 +18,7 @@ public class Contant {
     /**
      * operation
      */
-    public static final String OPERATION        = "fenmore2016";
+    public static final String OPERATION        = "duobao2016AD";
 
     public static final String SYS_INFO         = "sysInfo";
 

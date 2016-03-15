@@ -42,6 +42,7 @@ import com.huotu.fanmore.pinkcatraiders.model.BalanceOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
+import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
@@ -798,51 +799,82 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
                 else
                 {
-                    Iterator<ListModel> it = datas.iterator();
-                    while (it.hasNext())
+                    if(!application.isLogin())
                     {
-                        ListModel listModel = it.next();
-                        CartBalanceModel cartBalanceModel = new CartBalanceModel();
-                        cartBalanceModel.setPid(listModel.getSid());
-                        cartBalanceModel.setBuyAmount(listModel.getUserBuyAmount());
-                        list.add(cartBalanceModel);
+                        //未登录状态
+                        //跳转到登陆
+                        CartDataModel cartData = CartDataModel.findById(CartDataModel.class, 1000l);
+                        String cartStr = cartData.getCartData();
+                        guideLoginPopWin = new GuideLoginPopWin(HomeActivity.this, mHandler, HomeActivity.this, wManager);
+                        guideLoginPopWin.setLoginData(cartStr);
+                        guideLoginPopWin.showWin();
+                        guideLoginPopWin.showAtLocation(
+                                findViewById(R.id.titleLayout),
+                                Gravity.CENTER, 0, 0
+                        );
                     }
-                    //转成json格式参数
-                    Gson gson = new Gson();
-                    String carts = gson.toJson(list);
-                    String url = Contant.REQUEST_URL + Contant.BALANCE;
-                    AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
-                    Map<String, Object> maps = new HashMap<String, Object> ();
-                    maps.put ( "carts",  carts);
-                    Map<String, Object> param = params.obtainPostParam(maps);
-                    BalanceOutputModel base = new BalanceOutputModel ();
-                    HttpUtils<BalanceOutputModel> httpUtils = new HttpUtils<BalanceOutputModel> ();
-                    httpUtils.doVolleyPost(
-                            base, url, param, new Response.Listener<BalanceOutputModel>() {
-                                @Override
-                                public void onResponse(BalanceOutputModel response) {
-                                    BalanceOutputModel base = response;
-                                    if (1 == base.getResultCode() && null != base.getResultData() && null != base.getResultData().getData()) {
-                                        AppBalanceModel balance = base.getResultData().getData();
-                                        BaseBalanceModel baseBalance = new BaseBalanceModel();
-                                        baseBalance.setMoney(balance.getMoney());
-                                        baseBalance.setRedPacketsEndTime(balance.getRedPacketsEndTime());
-                                        baseBalance.setRedPacketsFullMoney(balance.getRedPacketsFullMoney());
-                                        baseBalance.setRedPacketsId(balance.getRedPacketsId());
-                                        baseBalance.setRedPacketsMinusMoney(balance.getRedPacketsMinusMoney());
-                                        baseBalance.setRedPacketsNumber(balance.getRedPacketsNumber());
-                                        baseBalance.setRedPacketsRemark(balance.getRedPacketsRemark());
-                                        baseBalance.setRedPacketsStartTime(balance.getRedPacketsStartTime());
-                                        baseBalance.setRedPacketsStatus(null==balance.getRedPacketsStatus()?null:balance.getRedPacketsStatus().getName());
-                                        baseBalance.setTotalMoney(balance.getTotalMoney());
-                                        baseBalance.setRedPacketsTitle(balance.getRedPacketsTitle());
-                                        Bundle bundle = new Bundle();
-                                        bundle.putSerializable("baseBalance", baseBalance);
-                                        ActivityUtils.getInstance ().showActivity(HomeActivity.this, PayOrderActivity.class, bundle );
-                                    } else {
+                    else
+                    {
+                        Iterator<ListModel> it = datas.iterator();
+                        while (it.hasNext())
+                        {
+                            ListModel listModel = it.next();
+                            CartBalanceModel cartBalanceModel = new CartBalanceModel();
+                            cartBalanceModel.setPid(listModel.getSid());
+                            cartBalanceModel.setBuyAmount(listModel.getUserBuyAmount());
+                            list.add(cartBalanceModel);
+                        }
+                        //转成json格式参数
+                        Gson gson = new Gson();
+                        String carts = gson.toJson(list);
+                        String url = Contant.REQUEST_URL + Contant.BALANCE;
+                        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                        Map<String, Object> maps = new HashMap<String, Object> ();
+                        maps.put ( "carts",  carts);
+                        Map<String, Object> param = params.obtainPostParam(maps);
+                        BalanceOutputModel base = new BalanceOutputModel ();
+                        HttpUtils<BalanceOutputModel> httpUtils = new HttpUtils<BalanceOutputModel> ();
+                        httpUtils.doVolleyPost(
+                                base, url, param, new Response.Listener<BalanceOutputModel>() {
+                                    @Override
+                                    public void onResponse(BalanceOutputModel response) {
+                                        BalanceOutputModel base = response;
+                                        if (1 == base.getResultCode() && null != base.getResultData() && null != base.getResultData().getData()) {
+                                            AppBalanceModel balance = base.getResultData().getData();
+                                            BaseBalanceModel baseBalance = new BaseBalanceModel();
+                                            baseBalance.setMoney(balance.getMoney());
+                                            baseBalance.setRedPacketsEndTime(balance.getRedPacketsEndTime());
+                                            baseBalance.setRedPacketsFullMoney(balance.getRedPacketsFullMoney());
+                                            baseBalance.setRedPacketsId(balance.getRedPacketsId());
+                                            baseBalance.setRedPacketsMinusMoney(balance.getRedPacketsMinusMoney());
+                                            baseBalance.setRedPacketsNumber(balance.getRedPacketsNumber());
+                                            baseBalance.setRedPacketsRemark(balance.getRedPacketsRemark());
+                                            baseBalance.setRedPacketsStartTime(balance.getRedPacketsStartTime());
+                                            baseBalance.setRedPacketsStatus(null==balance.getRedPacketsStatus()?null:balance.getRedPacketsStatus().getName());
+                                            baseBalance.setTotalMoney(balance.getTotalMoney());
+                                            baseBalance.setRedPacketsTitle(balance.getRedPacketsTitle());
+                                            Bundle bundle = new Bundle();
+                                            bundle.putSerializable("baseBalance", baseBalance);
+                                            ActivityUtils.getInstance ().showActivity(HomeActivity.this, PayOrderActivity.class, bundle );
+                                        } else {
+                                            progress.dismissView();
+                                            VolleyUtil.cancelAllRequest();
+                                            //上传失败
+                                            noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "结算失败");
+                                            noticePop.showNotice();
+                                            noticePop.showAtLocation(
+                                                    findViewById(R.id.titleLayout),
+                                                    Gravity.CENTER, 0, 0
+                                            );
+                                        }
+                                    }
+                                }, new Response.ErrorListener() {
+
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
                                         progress.dismissView();
                                         VolleyUtil.cancelAllRequest();
-                                        //上传失败
+                                        //系统级别错误
                                         noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "结算失败");
                                         noticePop.showNotice();
                                         noticePop.showAtLocation(
@@ -851,22 +883,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                         );
                                     }
                                 }
-                            }, new Response.ErrorListener() {
-
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    progress.dismissView();
-                                    VolleyUtil.cancelAllRequest();
-                                    //系统级别错误
-                                    noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "结算失败");
-                                    noticePop.showNotice();
-                                    noticePop.showAtLocation(
-                                            findViewById(R.id.titleLayout),
-                                            Gravity.CENTER, 0, 0
-                                    );
-                                }
-                            }
-                    );
+                        );
+                    }
                 }
             }
             break;
@@ -952,7 +970,17 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case Contant.GO_LOGIN:
             {
-                ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class);
+                String loginData = (String) msg.obj;
+                if(null==loginData || "".equals(loginData))
+                {
+                    ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class);
+                }
+                else
+                {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("loginData", loginData);
+                    ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class, bundle);
+                }
             }
             break;
             default:

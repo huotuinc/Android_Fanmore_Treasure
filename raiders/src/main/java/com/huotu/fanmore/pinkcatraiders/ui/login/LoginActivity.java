@@ -29,20 +29,32 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.google.common.eventbus.EventBus;
+import com.google.gson.Gson;
 import com.huotu.android.library.libedittext.EditText;
 import com.huotu.android.library.libedittext.MainActivity;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.AppBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
 import com.huotu.fanmore.pinkcatraiders.model.AppWXLoginModel;
+import com.huotu.fanmore.pinkcatraiders.model.BalanceOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.BaseBalanceModel;
+import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
+import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
+import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
 import com.huotu.fanmore.pinkcatraiders.model.InitOutputsModel;
+import com.huotu.fanmore.pinkcatraiders.model.ListModel;
+import com.huotu.fanmore.pinkcatraiders.model.ListOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.LocalCartOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.LoginOutputsModel;
 import com.huotu.fanmore.pinkcatraiders.model.LoginQQModel;
 import com.huotu.fanmore.pinkcatraiders.model.LoginWXModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.guide.GuideActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.orders.PayOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.EncryptUtil;
@@ -59,7 +71,9 @@ import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -92,6 +106,7 @@ public class LoginActivity extends BaseActivity
     public
     AssetManager am;
 
+    public Bundle bundle;
 
     public Resources res;
 
@@ -227,8 +242,16 @@ public class LoginActivity extends BaseActivity
                                     try {
                                         //加载用户信息
                                         application.writeUserInfo(appWXLoginModel.getResultData().getUser());
-                                        //跳转到首页
-                                        ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                                        if(null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
+                                        {
+                                            uploadCartData();
+                                        }
+                                        else
+                                        {
+                                            //跳转到首页
+                                            ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                                        }
+
                                     } catch (Exception e)
                                     {
                                         //未获取该用户信息
@@ -335,6 +358,137 @@ public class LoginActivity extends BaseActivity
         return false;
     }
 
+    private void uploadCartData()
+    {
+            //提交本地购物数据
+            String data = bundle.getString("loginData");
+            JSONUtil<LocalCartOutputModel> jsonUtil = new JSONUtil<LocalCartOutputModel>();
+            LocalCartOutputModel localCartOutput = new LocalCartOutputModel();
+            localCartOutput = jsonUtil.toBean(data, localCartOutput);
+            List<ListModel> lists = localCartOutput.getResultData().getLists();
+            List<UploadLocalCartDataModel> uploadLocalCarts = new ArrayList<UploadLocalCartDataModel>();
+            for(int i=0; i<lists.size(); i++)
+            {
+                UploadLocalCartDataModel uploadLocalCartData = new UploadLocalCartDataModel();
+                uploadLocalCartData.setIssueId(lists.get(i).getIssueId());
+                uploadLocalCartData.setAmount(lists.get(i).getUserBuyAmount());
+                uploadLocalCarts.add(uploadLocalCartData);
+            }
+
+            Gson gson = new Gson();
+            String carts = gson.toJson(uploadLocalCarts);
+
+            String url = Contant.REQUEST_URL + Contant.JOIN_ALL_CART_TO_SERVER;
+            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), LoginActivity.this);
+            Map<String, Object> maps = new HashMap<String, Object>();
+            maps.put ( "cartsJson", carts );
+            Map<String, Object> param = params.obtainPostParam(maps);
+            ListOutputModel base = new ListOutputModel ();
+            HttpUtils<ListOutputModel> httpUtils = new HttpUtils<ListOutputModel> ();
+
+            httpUtils.doVolleyPost (
+                    base, url, param, new Response.Listener< ListOutputModel > ( ) {
+                        @Override
+                        public
+                        void onResponse ( ListOutputModel response ) {
+                            //清空本地数据
+                            CartDataModel.deleteAll(CartDataModel.class);
+                            ListOutputModel base = response;
+                            if(null!=base&&null!=base.getResultData()&&null!=base.getResultData().getList()&&1==base.getResultCode())
+                            {
+                                //跳转到结算界面
+                                List<ListModel> ls = base.getResultData().getList();
+                                List<CartBalanceModel> paramsList = new ArrayList<CartBalanceModel>();
+                                for(int i=0; i<ls.size(); i++)
+                                {
+                                    CartBalanceModel cartBalanceModel = new CartBalanceModel();
+                                    cartBalanceModel.setPid(ls.get(i).getSid());
+                                    cartBalanceModel.setBuyAmount(ls.get(i).getUserBuyAmount());
+                                    paramsList.add(cartBalanceModel);
+                                }
+
+                                //转成json格式参数
+                                Gson gson = new Gson();
+                                String carts = gson.toJson(paramsList);
+                                String url = Contant.REQUEST_URL + Contant.BALANCE;
+                                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), LoginActivity.this);
+                                Map<String, Object> maps = new HashMap<String, Object> ();
+                                maps.put ( "carts",  carts);
+                                Map<String, Object> param = params.obtainPostParam(maps);
+                                BalanceOutputModel base1 = new BalanceOutputModel ();
+                                HttpUtils<BalanceOutputModel> httpUtils = new HttpUtils<BalanceOutputModel> ();
+                                httpUtils.doVolleyPost(
+                                        base1, url, param, new Response.Listener<BalanceOutputModel>() {
+                                            @Override
+                                            public void onResponse(BalanceOutputModel response) {
+                                                BalanceOutputModel base1 = response;
+                                                if (1 == base1.getResultCode() && null != base1.getResultData() && null != base1.getResultData().getData()) {
+                                                    AppBalanceModel balance = base1.getResultData().getData();
+                                                    BaseBalanceModel baseBalance = new BaseBalanceModel();
+                                                    baseBalance.setMoney(balance.getMoney());
+                                                    baseBalance.setRedPacketsEndTime(balance.getRedPacketsEndTime());
+                                                    baseBalance.setRedPacketsFullMoney(balance.getRedPacketsFullMoney());
+                                                    baseBalance.setRedPacketsId(balance.getRedPacketsId());
+                                                    baseBalance.setRedPacketsMinusMoney(balance.getRedPacketsMinusMoney());
+                                                    baseBalance.setRedPacketsNumber(balance.getRedPacketsNumber());
+                                                    baseBalance.setRedPacketsRemark(balance.getRedPacketsRemark());
+                                                    baseBalance.setRedPacketsStartTime(balance.getRedPacketsStartTime());
+                                                    baseBalance.setRedPacketsStatus(null==balance.getRedPacketsStatus()?null:balance.getRedPacketsStatus().getName());
+                                                    baseBalance.setTotalMoney(balance.getTotalMoney());
+                                                    baseBalance.setRedPacketsTitle(balance.getRedPacketsTitle());
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putSerializable("baseBalance", baseBalance);
+                                                    ActivityUtils.getInstance ().skipActivity(LoginActivity.this, PayOrderActivity.class, bundle );
+                                                } else {
+                                                    progress.dismissView();
+                                                    VolleyUtil.cancelAllRequest();
+                                                    //上传失败
+                                                    noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "结算失败");
+                                                    noticePop.showNotice();
+                                                    noticePop.showAtLocation(
+                                                            findViewById(R.id.titleLayout),
+                                                            Gravity.CENTER, 0, 0
+                                                    );
+                                                }
+                                            }
+                                        }, new Response.ErrorListener() {
+
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                progress.dismissView();
+                                                VolleyUtil.cancelAllRequest();
+                                                //系统级别错误
+                                                noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "结算失败");
+                                                noticePop.showNotice();
+                                                noticePop.showAtLocation(
+                                                        findViewById(R.id.titleLayout),
+                                                        Gravity.CENTER, 0, 0
+                                                );
+                                            }
+                                        }
+                                );
+                            }
+                            else
+                            {
+                                //跳转到购物车
+                                MyBroadcastReceiver.sendBroadcast(LoginActivity.this, MyBroadcastReceiver.JUMP_CART);
+                                ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                            }
+                        }
+                    }, new Response.ErrorListener ( ) {
+
+                        @Override
+                        public
+                        void onErrorResponse ( VolleyError error ) {
+                            CartDataModel.deleteAll(CartDataModel.class);
+                            //跳转到购物车
+                            MyBroadcastReceiver.sendBroadcast(LoginActivity.this, MyBroadcastReceiver.JUMP_CART);
+                            ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                        }
+                    }
+            );
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
@@ -362,6 +516,7 @@ public class LoginActivity extends BaseActivity
         successProgress = new ProgressPopupWindow ( LoginActivity.this, LoginActivity.this, wManager );
         successProgress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
         Drawable bgDraw = res.getDrawable(R.color.title_bg);
+        bundle = this.getIntent().getExtras();
         stubTitleText.inflate();
         TextView titleText= (TextView) findViewById(R.id.titleText);
         titleText.setText("用户登录");
@@ -419,8 +574,15 @@ public class LoginActivity extends BaseActivity
                             try {
                                 //加载用户信息
                                 application.writeUserInfo(loginOutputs.getResultData().getUser());
-                                //跳转到首页
-                                ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                                if(null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
+                                {
+                                    uploadCartData();
+                                }
+                                else
+                                {
+                                    //跳转到首页
+                                    ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                                }
                             } catch (Exception e)
                             {
                                 //未获取该用户信息
@@ -554,14 +716,65 @@ public class LoginActivity extends BaseActivity
             {
                 //记录token
                 BaseApplication.getInstance().writeUserInfo(user);
-
-                ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class );
-                finish();
+                if(null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
+                {
+                    uploadCartData();
+                }
+                else
+                {
+                    //跳转到首页
+                    ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                }
             }
             else
             {
                 ToastUtils.showShortToast(LoginActivity.this, "未请求到数据");
             }
         }};
+
+
+    public class UploadLocalCartDataModel
+    {
+        private long issueId;
+        private long amount;
+
+        public long getIssueId() {
+            return issueId;
+        }
+
+        public void setIssueId(long issueId) {
+            this.issueId = issueId;
+        }
+
+        public long getAmount() {
+            return amount;
+        }
+
+        public void setAmount(long amount) {
+            this.amount = amount;
+        }
+    }
+
+    public class CartBalanceModel
+    {
+        private long pid;
+        private long buyAmount;
+
+        public long getPid() {
+            return pid;
+        }
+
+        public void setPid(long pid) {
+            this.pid = pid;
+        }
+
+        public long getBuyAmount() {
+            return buyAmount;
+        }
+
+        public void setBuyAmount(long buyAmount) {
+            this.buyAmount = buyAmount;
+        }
+    }
 
 }
