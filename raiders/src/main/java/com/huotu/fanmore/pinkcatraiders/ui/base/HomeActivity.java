@@ -45,6 +45,7 @@ import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
+import com.huotu.fanmore.pinkcatraiders.model.LocalCartOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
@@ -913,69 +914,110 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
                 else if(0==msg.arg1)
                 {
-                    //删除清单数据
-                    progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
-                    progress.showProgress ( "正在删除选中的商品" );
-                    progress.showAtLocation (titleLayoutL,
-                            Gravity.CENTER, 0, 0
-                    );
-                    final List<Long> deletes = (List<Long>) msg.obj;
-                    for(int i=0; i<deletes.size(); i++)
+                    if(!application.isLogin())
                     {
-                        Long chartId = deletes.get(i);
-                        String url = Contant.REQUEST_URL + Contant.DELETE_CART;
-                        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
-                        Map<String, Object> maps = new HashMap<String, Object> ();
-                        maps.put ( "shoppingCartId",  String.valueOf(chartId));
-                        Map<String, Object> param = params.obtainPostParam(maps);
-                        BaseModel base = new BaseModel ();
-                        HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
-                        httpUtils.doVolleyPost(
-                                base, url, param, new Response.Listener<BaseModel>() {
-                                    @Override
-                                    public void onResponse(BaseModel response) {
-                                        BaseModel base = response;
-                                        if (1 == base.getResultCode()) {
-                                            CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 1l);
-                                            if(null==cartCountIt)
-                                            {
-                                                CartCountModel cartCount = new CartCountModel();
-                                                cartCount.setId(1l);
-                                                cartCount.setCount(0);
-                                                CartCountModel.save(cartCount);
-                                            }
-                                            else
-                                            {
-                                                cartCountIt.setCount(cartCountIt.getCount()-1);
-                                                CartCountModel.save(cartCountIt);
-                                            }
+                        progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
+                        progress.showProgress ( "正在删除选中的商品" );
+                        progress.showAtLocation (titleLayoutL,
+                                Gravity.CENTER, 0, 0
+                        );
+                        final List<Long> deletes = (List<Long>) msg.obj;
+                        //未登录状态
+                        CartDataModel cartData = CartDataModel.findById(CartDataModel.class, 1000l);
+                        //转换成JSON
+                        String data = cartData.getCartData();
+                        JSONUtil<LocalCartOutputModel> jsonUtil = new JSONUtil<LocalCartOutputModel>();
+                        LocalCartOutputModel localCartOutput = new LocalCartOutputModel();
+                        localCartOutput = jsonUtil.toBean(data, localCartOutput);
+                        List<ListModel> lists = localCartOutput.getResultData().getLists();
+                        List<ListModel> removes = new ArrayList<ListModel>();
+                        for(int j=0; j<deletes.size(); j++)
+                        {
+                            for(int i=0; i<lists.size(); i++)
+                            {
+                                if(deletes.get(j) == lists.get(i).getSid())
+                                {
+                                    removes.add(lists.get(i));
+                                }
+                            }
+                        }
+                        lists.removeAll(removes);
+                        progress.dismissView();
+                        localCartOutput.getResultData().setLists(lists);
+                        String str = jsonUtil.toJson(localCartOutput);
+                        cartData.setCartData(str);
+                        CartDataModel.save(cartData);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("type", 1);
+                        MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
+                    }
+                    else
+                    {
+                        //删除清单数据
+                        progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
+                        progress.showProgress ( "正在删除选中的商品" );
+                        progress.showAtLocation (titleLayoutL,
+                                Gravity.CENTER, 0, 0
+                        );
+                        final List<Long> deletes = (List<Long>) msg.obj;
+                        for(int i=0; i<deletes.size(); i++)
+                        {
+                            Long chartId = deletes.get(i);
+                            String url = Contant.REQUEST_URL + Contant.DELETE_CART;
+                            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                            Map<String, Object> maps = new HashMap<String, Object> ();
+                            maps.put ( "shoppingCartId",  String.valueOf(chartId));
+                            Map<String, Object> param = params.obtainPostParam(maps);
+                            BaseModel base = new BaseModel ();
+                            HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
+                            httpUtils.doVolleyPost(
+                                    base, url, param, new Response.Listener<BaseModel>() {
+                                        @Override
+                                        public void onResponse(BaseModel response) {
+                                            BaseModel base = response;
+                                            if (1 == base.getResultCode()) {
+                                                CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 1l);
+                                                if(null==cartCountIt)
+                                                {
+                                                    CartCountModel cartCount = new CartCountModel();
+                                                    cartCount.setId(1l);
+                                                    cartCount.setCount(0);
+                                                    CartCountModel.save(cartCount);
+                                                }
+                                                else
+                                                {
+                                                    cartCountIt.setCount(cartCountIt.getCount()-1);
+                                                    CartCountModel.save(cartCountIt);
+                                                }
 
-                                            ToastUtils.showShortToast(HomeActivity.this, "删除成功");
+                                                ToastUtils.showShortToast(HomeActivity.this, "删除成功");
 
-                                        } else {
+                                            } else {
+                                                progress.dismissView();
+                                                VolleyUtil.cancelAllRequest();
+                                                //上传失败
+                                                ToastUtils.showShortToast(HomeActivity.this, "删除失败");
+                                            }
+                                        }
+                                    }, new Response.ErrorListener() {
+
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
                                             progress.dismissView();
                                             VolleyUtil.cancelAllRequest();
-                                            //上传失败
+                                            //系统级别错误
                                             ToastUtils.showShortToast(HomeActivity.this, "删除失败");
                                         }
                                     }
-                                }, new Response.ErrorListener() {
+                            );
+                        }
 
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        progress.dismissView();
-                                        VolleyUtil.cancelAllRequest();
-                                        //系统级别错误
-                                        ToastUtils.showShortToast(HomeActivity.this, "删除失败");
-                                    }
-                                }
-                        );
-                }
+                        progress.dismissView();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("type", 1);
+                        MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
+                    }
 
-                    progress.dismissView();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("type", 1);
-                    MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
                 }
             }
             break;

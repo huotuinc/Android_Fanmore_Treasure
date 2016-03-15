@@ -1,6 +1,7 @@
 package com.huotu.fanmore.pinkcatraiders.fragment;
 
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -165,33 +166,47 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
         if(!application.isLogin())
         {
             //未登录情况下加载本地清单数据
-            try {
-                Thread.sleep(1000);
-                menuList.onRefreshComplete();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            //禁用加减符号
-            CartDataModel cartData = CartDataModel.findById(CartDataModel.class, 1000l);
-            if(null!=cartData && null!=cartData.getCartData())
+            new AsyncTask<Void, Void, List<ListModel>>()
             {
-                //加载数据
-                String cartJson = cartData.getCartData();
-                JSONUtil<LocalCartOutputModel> jsonUtil = new JSONUtil<LocalCartOutputModel>();
-                LocalCartOutputModel localCartOutput = new LocalCartOutputModel();
-                localCartOutput = new LocalCartOutputModel();
-                localCartOutput = jsonUtil.toBean(cartJson, localCartOutput);
-                List<ListModel> l = localCartOutput.getResultData().getLists();
-                lists.clear();
-                lists.addAll(l);
-                adapter.notifyDataSetChanged();
-            }
-            else
-            {
-                //空列表
-                lists.clear();
-                menuList.setEmptyView(emptyView);
-            }
+
+                @Override
+                protected List<ListModel> doInBackground(Void... params) {
+                    CartDataModel cartData = CartDataModel.findById(CartDataModel.class, 1000l);
+                    if(null!=cartData && null!=cartData.getCartData())
+                    {
+                        //加载数据
+                        String cartJson = cartData.getCartData();
+                        JSONUtil<LocalCartOutputModel> jsonUtil = new JSONUtil<LocalCartOutputModel>();
+                        LocalCartOutputModel localCartOutput = new LocalCartOutputModel();
+                        localCartOutput = new LocalCartOutputModel();
+                        localCartOutput = jsonUtil.toBean(cartJson, localCartOutput);
+                        List<ListModel> l = localCartOutput.getResultData().getLists();
+                        return l;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+
+                @Override
+                protected void onPostExecute(List<ListModel> listModels) {
+                    super.onPostExecute(listModels);
+                    menuList.onRefreshComplete();
+                    if (null==listModels || listModels.isEmpty())
+                    {
+                        //空列表
+                        lists.clear();
+                        menuList.setEmptyView(emptyView);
+                    }
+                    else
+                    {
+                        lists.clear();
+                        lists.addAll(listModels);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            }.execute();
         }
         else
         {
