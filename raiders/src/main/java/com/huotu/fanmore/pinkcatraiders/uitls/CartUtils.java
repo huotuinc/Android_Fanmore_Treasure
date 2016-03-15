@@ -51,6 +51,7 @@ public class CartUtils {
                 listModel.setRemainAmount(p.getRemainAmount());
                 listModel.setAreaAmount(p.getAreaAmount());
                 listModel.setIssueId(p.getIssueId());
+                listModel.setPricePercentAmount(p.getPricePercentAmount());
 
                 //产品加入购物车
                 if(null==cartData)

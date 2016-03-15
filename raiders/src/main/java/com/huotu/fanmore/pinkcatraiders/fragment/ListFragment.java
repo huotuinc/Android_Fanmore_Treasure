@@ -23,8 +23,10 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
+import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.LocalCartOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
@@ -159,78 +161,113 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                                   });
             return;
         }
-        String url = Contant.REQUEST_URL + Contant.GET_SHOPPING_LIST;
-        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
-        Map<String, Object> maps = new HashMap<String, Object> ();
-        String suffix = params.obtainGetParam(maps);
-        url = url + suffix;
-        HttpUtils httpUtils = new HttpUtils();
-        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject >() {
-                                  @Override
-                                  public void onResponse(JSONObject response) {
-                                      //刷新列表重置业务数据
-                                      rootAty.deleteAllNum = 0;
-                                      rootAty.deleteIds.clear();
-                                      rootAty.payAllNum = 0;
-                                      rootAty.prices = 0;
-                                      rootAty.payNum=0;
-                                      cartAmount=0;
-                                      menuList.onRefreshComplete();
-                                      if(rootAty.isFinishing())
-                                      {
-                                          return;
-                                      }
-                                      JSONUtil<ListOutputModel > jsonUtil = new JSONUtil<ListOutputModel>();
-                                      ListOutputModel listOutputs = new ListOutputModel();
-                                      listOutputs = jsonUtil.toBean(response.toString(), listOutputs);
-                                      if(null != listOutputs && null != listOutputs.getResultData() && (1==listOutputs.getResultCode()))
-                                      {
-                                          if(null != listOutputs.getResultData().getList() && !listOutputs.getResultData().getList().isEmpty())
-                                          {
-                                              cartAmount = listOutputs.getResultData().getList().size();
-                                              //记录购物车数量
-                                              CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 1l);
-                                              if(null==cartCountIt)
-                                              {
-                                                  CartCountModel cartCount = new CartCountModel();
-                                                  cartCount.setId(1l);
-                                                  cartCount.setCount(cartAmount);
-                                                  CartCountModel.save(cartCount);
-                                              }
-                                              else
-                                              {
-                                                  cartCountIt.setCount(cartAmount);
-                                                  CartCountModel.save(cartCountIt);
-                                              }
-                                              lists.clear();
-                                              lists.addAll(listOutputs.getResultData().getList());
-                                              adapter.notifyDataSetChanged();
-                                          }
-                                          else
-                                          {
-                                              lists.clear();
-                                              menuList.setEmptyView(emptyView);
-                                          }
-                                      }
-                                      else
-                                      {
-                                          lists.clear();
-                                          //异常处理，自动切换成无数据
-                                          menuList.setEmptyView(emptyView);
-                                      }
-                                  }
-                              }, new Response.ErrorListener() {
-                                  @Override
-                                  public void onErrorResponse(VolleyError error) {
-                                      menuList.onRefreshComplete();
-                                      if(rootAty.isFinishing())
-                                      {
-                                          return;
-                                      }
-                                      lists.clear();
-                                      menuList.setEmptyView(emptyView);
-                                  }
-                              });
+
+        if(!application.isLogin())
+        {
+            //未登录情况下加载本地清单数据
+            try {
+                Thread.sleep(1000);
+                menuList.onRefreshComplete();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //禁用加减符号
+            CartDataModel cartData = CartDataModel.findById(CartDataModel.class, 1000l);
+            if(null!=cartData && null!=cartData.getCartData())
+            {
+                //加载数据
+                String cartJson = cartData.getCartData();
+                JSONUtil<LocalCartOutputModel> jsonUtil = new JSONUtil<LocalCartOutputModel>();
+                LocalCartOutputModel localCartOutput = new LocalCartOutputModel();
+                localCartOutput = new LocalCartOutputModel();
+                localCartOutput = jsonUtil.toBean(cartJson, localCartOutput);
+                List<ListModel> l = localCartOutput.getResultData().getLists();
+                lists.clear();
+                lists.addAll(l);
+                adapter.notifyDataSetChanged();
+            }
+            else
+            {
+                //空列表
+                lists.clear();
+                menuList.setEmptyView(emptyView);
+            }
+        }
+        else
+        {
+            String url = Contant.REQUEST_URL + Contant.GET_SHOPPING_LIST;
+            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
+            Map<String, Object> maps = new HashMap<String, Object> ();
+            String suffix = params.obtainGetParam(maps);
+            url = url + suffix;
+            HttpUtils httpUtils = new HttpUtils();
+            httpUtils.doVolleyGet(url, new Response.Listener<JSONObject >() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    //刷新列表重置业务数据
+                    rootAty.deleteAllNum = 0;
+                    rootAty.deleteIds.clear();
+                    rootAty.payAllNum = 0;
+                    rootAty.prices = 0;
+                    rootAty.payNum=0;
+                    cartAmount=0;
+                    menuList.onRefreshComplete();
+                    if(rootAty.isFinishing())
+                    {
+                        return;
+                    }
+                    JSONUtil<ListOutputModel > jsonUtil = new JSONUtil<ListOutputModel>();
+                    ListOutputModel listOutputs = new ListOutputModel();
+                    listOutputs = jsonUtil.toBean(response.toString(), listOutputs);
+                    if(null != listOutputs && null != listOutputs.getResultData() && (1==listOutputs.getResultCode()))
+                    {
+                        if(null != listOutputs.getResultData().getList() && !listOutputs.getResultData().getList().isEmpty())
+                        {
+                            cartAmount = listOutputs.getResultData().getList().size();
+                            //记录购物车数量
+                            CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 1l);
+                            if(null==cartCountIt)
+                            {
+                                CartCountModel cartCount = new CartCountModel();
+                                cartCount.setId(1l);
+                                cartCount.setCount(cartAmount);
+                                CartCountModel.save(cartCount);
+                            }
+                            else
+                            {
+                                cartCountIt.setCount(cartAmount);
+                                CartCountModel.save(cartCountIt);
+                            }
+                            lists.clear();
+                            lists.addAll(listOutputs.getResultData().getList());
+                            adapter.notifyDataSetChanged();
+                        }
+                        else
+                        {
+                            lists.clear();
+                            menuList.setEmptyView(emptyView);
+                        }
+                    }
+                    else
+                    {
+                        lists.clear();
+                        //异常处理，自动切换成无数据
+                        menuList.setEmptyView(emptyView);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    menuList.onRefreshComplete();
+                    if(rootAty.isFinishing())
+                    {
+                        return;
+                    }
+                    lists.clear();
+                    menuList.setEmptyView(emptyView);
+                }
+            });
+        }
     }
 
 
