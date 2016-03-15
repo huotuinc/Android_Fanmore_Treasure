@@ -42,6 +42,7 @@ import com.huotu.fanmore.pinkcatraiders.model.BalanceOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
+import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
@@ -60,6 +61,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.orders.PayOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.CartUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
@@ -67,6 +69,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.FunPopWin1;
 import com.huotu.fanmore.pinkcatraiders.widget.FuncPopWin;
+import com.huotu.fanmore.pinkcatraiders.widget.GuideLoginPopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.MorePopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
@@ -222,6 +225,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     public int payNum = 0;
 
     private MyBroadcastReceiver myBroadcastReceiver;
+
+    public GuideLoginPopWin guideLoginPopWin;
 
     @Override
     protected
@@ -489,7 +494,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case R.id.mallL:
             {
-                titleMsgAmount.setVisibility(View.GONE);
+                titleMsgAmount.setVisibility(View.VISIBLE);
                 //设置选中状态
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal );
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
@@ -497,7 +502,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 //标题栏右图标
                 //编辑模式
                 titleRightImage.setTag ( 0 );
-                Drawable rightDraw = resources.getDrawable(R.mipmap.title_edit);
+                Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
                 SystemTools.loadBackground(titleRightImage, rightDraw);
                 //重置其他
                 Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
@@ -617,6 +622,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     application.mFragManager.setCurrentFrag ( FragManager.FragType.PROFILE );
                 }
                 else if ( tag.equals ( Contant.TAG_5 ) ) {
+
 //                    String url = Contant.REQUEST_URL + Contant.GETMALLURL;
 //                    AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
 //                    //中文字符特殊处理
@@ -638,9 +644,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 //
 //                                try {
 //                                    String url= getmallurl.getResultDescription();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("url", "http://cosytest.51flashmall.com/");
-                                    ActivityUtils.getInstance().showActivity(HomeActivity.this, MallHomeActivity.class, bundle);
+//                                    Bundle bundle = new Bundle();
+//                                    bundle.putString("url", "http://cosytest.51flashmall.com/");
+//                                    ActivityUtils.getInstance().showActivity(HomeActivity.this, MallHomeActivity.class, bundle);
 //                                } catch (Exception e) {
 //                                    //未获取该用户信息
 //                                    noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "用户数据存在非法字符");
@@ -680,6 +686,27 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 //
 //
               }
+
+                    //判断是否登陆
+                    if(!application.isLogin())
+                    {
+                        guideLoginPopWin = new GuideLoginPopWin(HomeActivity.this, mHandler, HomeActivity.this, wManager);
+                        guideLoginPopWin.showWin();
+                        guideLoginPopWin.showAtLocation(
+                                findViewById(R.id.titleLayout),
+                                Gravity.CENTER, 0, 0
+                        );
+                    }
+                    else
+                    {
+                        /*AuthParamUtils paramUtils = new AuthParamUtils ( application, System.currentTimeMillis(),HomeActivity.this );
+                    //String url = paramUtils.obtainUrl();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("url","http://cosytest.51flashmall.com/");
+                    ActivityUtils.getInstance().showActivity(HomeActivity.this, MallHomeActivity.class, bundle);*/
+                    }
+
+
             }
             break;
             case Contant.CAROUSE_URL:
@@ -818,58 +845,10 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 ProductModel product = ( ProductModel ) msg.obj;
                 progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
                 progress.showProgress ( "正在添加清单" );
-                progress.showAtLocation (titleLayoutL,
-                                         Gravity.CENTER, 0, 0
-                                        );
-                String url = Contant.REQUEST_URL + Contant.JOIN_SHOPPING_CART;
-                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
-                Map<String, Object> maps = new HashMap<String, Object> ();
-                maps.put ( "issueId", String.valueOf ( product.getIssueId () ) );
-                Map<String, Object> param = params.obtainPostParam(maps);
-                BaseModel base = new BaseModel ();
-                HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
-                httpUtils.doVolleyPost (
-                        base, url, param, new Response.Listener< BaseModel > ( ) {
-                            @Override
-                            public
-                            void onResponse ( BaseModel response ) {
-                                progress.dismissView ();
-                                BaseModel base = response;
-                                if(1==base.getResultCode ())
-                                {
-                                    CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
-                                    if(null==cartCountIt)
-                                    {
-                                        CartCountModel cartCount = new CartCountModel();
-                                        cartCount.setId(0l);
-                                        cartCount.setCount(1);
-                                        CartCountModel.save(cartCount);
-                                    }
-                                    else
-                                    {
-                                        cartCountIt.setCount(cartCountIt.getCount()+1);
-                                        CartCountModel.save(cartCountIt);
-                                    }
-                                    //上传成功
-                                    ToastUtils.showLongToast ( HomeActivity.this, "添加清单成功");
-                                }
-                                else
-                                {
-                                    //上传失败
-                                    ToastUtils.showLongToast ( HomeActivity.this, "添加清单失败" );
-                                }
-                            }
-                        }, new Response.ErrorListener ( ) {
-
-                            @Override
-                            public
-                            void onErrorResponse ( VolleyError error ) {
-                                progress.dismissView ( );
-                                //系统级别错误
-                                ToastUtils.showLongToast ( HomeActivity.this, "添加清单失败" );
-                            }
-                        }
-                                       );
+                progress.showAtLocation(titleLayoutL,
+                        Gravity.CENTER, 0, 0
+                );
+                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, HomeActivity.this, mHandler);
             }
             break;
             case Contant.BILLING:
@@ -886,51 +865,82 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
                 else
                 {
-                    Iterator<ListModel> it = datas.iterator();
-                    while (it.hasNext())
+                    if(!application.isLogin())
                     {
-                        ListModel listModel = it.next();
-                        CartBalanceModel cartBalanceModel = new CartBalanceModel();
-                        cartBalanceModel.setPid(listModel.getSid());
-                        cartBalanceModel.setBuyAmount(listModel.getUserBuyAmount());
-                        list.add(cartBalanceModel);
+                        //未登录状态
+                        //跳转到登陆
+                        CartDataModel cartData = CartDataModel.findById(CartDataModel.class, 1000l);
+                        String cartStr = cartData.getCartData();
+                        guideLoginPopWin = new GuideLoginPopWin(HomeActivity.this, mHandler, HomeActivity.this, wManager);
+                        guideLoginPopWin.setLoginData(cartStr);
+                        guideLoginPopWin.showWin();
+                        guideLoginPopWin.showAtLocation(
+                                findViewById(R.id.titleLayout),
+                                Gravity.CENTER, 0, 0
+                        );
                     }
-                    //转成json格式参数
-                    Gson gson = new Gson();
-                    String carts = gson.toJson(list);
-                    String url = Contant.REQUEST_URL + Contant.BALANCE;
-                    AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
-                    Map<String, Object> maps = new HashMap<String, Object> ();
-                    maps.put ( "carts",  carts);
-                    Map<String, Object> param = params.obtainPostParam(maps);
-                    BalanceOutputModel base = new BalanceOutputModel ();
-                    HttpUtils<BalanceOutputModel> httpUtils = new HttpUtils<BalanceOutputModel> ();
-                    httpUtils.doVolleyPost(
-                            base, url, param, new Response.Listener<BalanceOutputModel>() {
-                                @Override
-                                public void onResponse(BalanceOutputModel response) {
-                                    BalanceOutputModel base = response;
-                                    if (1 == base.getResultCode() && null != base.getResultData() && null != base.getResultData().getData()) {
-                                        AppBalanceModel balance = base.getResultData().getData();
-                                        BaseBalanceModel baseBalance = new BaseBalanceModel();
-                                        baseBalance.setMoney(balance.getMoney());
-                                        baseBalance.setRedPacketsEndTime(balance.getRedPacketsEndTime());
-                                        baseBalance.setRedPacketsFullMoney(balance.getRedPacketsFullMoney());
-                                        baseBalance.setRedPacketsId(balance.getRedPacketsId());
-                                        baseBalance.setRedPacketsMinusMoney(balance.getRedPacketsMinusMoney());
-                                        baseBalance.setRedPacketsNumber(balance.getRedPacketsNumber());
-                                        baseBalance.setRedPacketsRemark(balance.getRedPacketsRemark());
-                                        baseBalance.setRedPacketsStartTime(balance.getRedPacketsStartTime());
-                                        baseBalance.setRedPacketsStatus(null==balance.getRedPacketsStatus()?null:balance.getRedPacketsStatus().getName());
-                                        baseBalance.setTotalMoney(balance.getTotalMoney());
-                                        baseBalance.setRedPacketsTitle(balance.getRedPacketsTitle());
-                                        Bundle bundle = new Bundle();
-                                        bundle.putSerializable("baseBalance", baseBalance);
-                                        ActivityUtils.getInstance ().showActivity(HomeActivity.this, PayOrderActivity.class, bundle );
-                                    } else {
+                    else
+                    {
+                        Iterator<ListModel> it = datas.iterator();
+                        while (it.hasNext())
+                        {
+                            ListModel listModel = it.next();
+                            CartBalanceModel cartBalanceModel = new CartBalanceModel();
+                            cartBalanceModel.setPid(listModel.getSid());
+                            cartBalanceModel.setBuyAmount(listModel.getUserBuyAmount());
+                            list.add(cartBalanceModel);
+                        }
+                        //转成json格式参数
+                        Gson gson = new Gson();
+                        String carts = gson.toJson(list);
+                        String url = Contant.REQUEST_URL + Contant.BALANCE;
+                        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                        Map<String, Object> maps = new HashMap<String, Object> ();
+                        maps.put ( "carts",  carts);
+                        Map<String, Object> param = params.obtainPostParam(maps);
+                        BalanceOutputModel base = new BalanceOutputModel ();
+                        HttpUtils<BalanceOutputModel> httpUtils = new HttpUtils<BalanceOutputModel> ();
+                        httpUtils.doVolleyPost(
+                                base, url, param, new Response.Listener<BalanceOutputModel>() {
+                                    @Override
+                                    public void onResponse(BalanceOutputModel response) {
+                                        BalanceOutputModel base = response;
+                                        if (1 == base.getResultCode() && null != base.getResultData() && null != base.getResultData().getData()) {
+                                            AppBalanceModel balance = base.getResultData().getData();
+                                            BaseBalanceModel baseBalance = new BaseBalanceModel();
+                                            baseBalance.setMoney(balance.getMoney());
+                                            baseBalance.setRedPacketsEndTime(balance.getRedPacketsEndTime());
+                                            baseBalance.setRedPacketsFullMoney(balance.getRedPacketsFullMoney());
+                                            baseBalance.setRedPacketsId(balance.getRedPacketsId());
+                                            baseBalance.setRedPacketsMinusMoney(balance.getRedPacketsMinusMoney());
+                                            baseBalance.setRedPacketsNumber(balance.getRedPacketsNumber());
+                                            baseBalance.setRedPacketsRemark(balance.getRedPacketsRemark());
+                                            baseBalance.setRedPacketsStartTime(balance.getRedPacketsStartTime());
+                                            baseBalance.setRedPacketsStatus(null==balance.getRedPacketsStatus()?null:balance.getRedPacketsStatus().getName());
+                                            baseBalance.setTotalMoney(balance.getTotalMoney());
+                                            baseBalance.setRedPacketsTitle(balance.getRedPacketsTitle());
+                                            Bundle bundle = new Bundle();
+                                            bundle.putSerializable("baseBalance", baseBalance);
+                                            ActivityUtils.getInstance ().showActivity(HomeActivity.this, PayOrderActivity.class, bundle );
+                                        } else {
+                                            progress.dismissView();
+                                            VolleyUtil.cancelAllRequest();
+                                            //上传失败
+                                            noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "结算失败");
+                                            noticePop.showNotice();
+                                            noticePop.showAtLocation(
+                                                    findViewById(R.id.titleLayout),
+                                                    Gravity.CENTER, 0, 0
+                                            );
+                                        }
+                                    }
+                                }, new Response.ErrorListener() {
+
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
                                         progress.dismissView();
                                         VolleyUtil.cancelAllRequest();
-                                        //上传失败
+                                        //系统级别错误
                                         noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "结算失败");
                                         noticePop.showNotice();
                                         noticePop.showAtLocation(
@@ -939,22 +949,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                         );
                                     }
                                 }
-                            }, new Response.ErrorListener() {
-
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    progress.dismissView();
-                                    VolleyUtil.cancelAllRequest();
-                                    //系统级别错误
-                                    noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "结算失败");
-                                    noticePop.showNotice();
-                                    noticePop.showAtLocation(
-                                            findViewById(R.id.titleLayout),
-                                            Gravity.CENTER, 0, 0
-                                    );
-                                }
-                            }
-                    );
+                        );
+                    }
                 }
             }
             break;
@@ -1035,6 +1031,21 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     Bundle bundle = new Bundle();
                     bundle.putInt("type", 1);
                     MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
+                }
+            }
+            break;
+            case Contant.GO_LOGIN:
+            {
+                String loginData = (String) msg.obj;
+                if(null==loginData || "".equals(loginData))
+                {
+                    ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class);
+                }
+                else
+                {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("loginData", loginData);
+                    ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class, bundle);
                 }
             }
             break;

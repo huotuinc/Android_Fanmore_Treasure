@@ -45,6 +45,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.RadpackageWaitPopWin;
+import com.huotu.fanmore.pinkcatraiders.widget.RedWarningPopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.RedpackageFailedPopWin;
 
 import org.json.JSONObject;
@@ -127,6 +128,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     public HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
     public RadpackageWaitPopWin redpackageWaitPopWin;
     public RedpackageFailedPopWin redpackageFailedPopWin;
+    public RedWarningPopWin redWarningPopWin;
 
     public
     ProgressPopupWindow progress;
@@ -174,8 +176,8 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
                 else if(2==tag)
                 {
                     //活动获取错误
-                    redpackageWaitPopWin.showWin(2, null);
-                    redpackageWaitPopWin.showAtLocation(titleLayoutL,
+                    redWarningPopWin.showWin();
+                    redWarningPopWin.showAtLocation(titleLayoutL,
                             Gravity.CENTER, 0, 0);
                 }
             }
@@ -312,6 +314,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         soundPool = new SoundUtil(ReadPackageActivity.this, R.raw.redclick);
         redpackageWaitPopWin= new RadpackageWaitPopWin(ReadPackageActivity.this, ReadPackageActivity.this, wManager, mHandler);
         redpackageFailedPopWin = new RedpackageFailedPopWin(ReadPackageActivity.this, ReadPackageActivity.this, wManager, mHandler);
+        redWarningPopWin = new RedWarningPopWin(ReadPackageActivity.this, mHandler, ReadPackageActivity.this, wManager);
         progress = new ProgressPopupWindow ( ReadPackageActivity.this, ReadPackageActivity.this, wManager );
         initTitle();
         mAnimationSet1 = initAnimationSet();

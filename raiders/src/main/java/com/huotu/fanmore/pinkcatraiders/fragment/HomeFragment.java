@@ -155,7 +155,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public
     View onCreateView ( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-
+        super.onCreate(savedInstanceState);
         resources = getActivity ( ).getResources ( );
         rootView = inflater.inflate ( R.layout.home_frag, container, false );
         application = ( BaseApplication ) getActivity ( ).getApplication ( );
@@ -282,7 +282,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 {
                     ProductModel product = rootAty.popProducts.get(0);
                     maps.put("lastSort", product.getSort());
-                } else if (rootAty.popProducts != null && rootAty.popProducts.size() == 0)
+                } else
                 {
                     maps.put("lastSort", 0);
                 }
@@ -350,7 +350,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 {
                     ProductModel product = rootAty.newestProducts.get(0);
                     maps.put("lastSort", product.getSort());
-                } else if (rootAty.newestProducts != null && rootAty.newestProducts.size() == 0)
+                } else
                 {
                     maps.put("lastSort", 0);
                 }
@@ -416,7 +416,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 {
                     ProductModel product = rootAty.progressProducts.get(0);
                     maps.put("lastSort", product.getSort());
-                } else if (rootAty.progressProducts != null && rootAty.progressProducts.size() == 0)
+                } else
                 {
                     maps.put("lastSort", 100);
                 }
@@ -483,7 +483,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 {
                     ProductModel product = rootAty.totalProducts.get(0);
                     maps.put("lastSort", product.getSort());
-                } else if (rootAty.totalProducts != null && rootAty.totalProducts.size() == 0)
+                } else
                 {
                     maps.put("lastSort", 0);
                 }
@@ -551,7 +551,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 {
                     ProductModel product = rootAty.totalProducts.get(0);
                     maps.put("lastSort", product.getSort());
-                } else if (rootAty.totalProducts != null && rootAty.totalProducts.size() == 0)
+                } else
                 {
                     maps.put("lastSort", 0);
                 }

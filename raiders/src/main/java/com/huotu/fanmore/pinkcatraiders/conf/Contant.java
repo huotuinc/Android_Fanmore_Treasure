@@ -18,7 +18,9 @@ public class Contant {
     /**
      * operation
      */
-    public static final String OPERATION        = "2016AD";
+
+    public static final String OPERATION        = "duobao2016AD";
+
 
     public static final String SYS_INFO         = "sysInfo";
 
@@ -100,6 +102,8 @@ public class Contant {
     public static final int APPAND_LIST = 0x00000047;
 
     public static final int REDPACKAGE_COUNT = 0x00000050;
+
+    public static final int GO_LOGIN = 0x00000051;
     /**
      * 菜单标记1
      */
@@ -315,4 +319,8 @@ public class Contant {
     public static final String XIU_XIU_XIU = "xiuxiuxiu";
     //更新用户资料信息
     public static final String UPDATE_USER_INFORMATION = "updateUserInformation";
+    //获取消息列表
+    public static final String MESSAGE = "messages";
+    //未登录情况下加入购物车
+    public static final String JOIN_ALL_CART_TO_SERVER = "joinAllCartToServer";
 }
