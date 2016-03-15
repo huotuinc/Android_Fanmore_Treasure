@@ -122,8 +122,10 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 else {
+
                     if(0==bundle.getInt("type"))
                     {
+                        progress.showProgress("注册中......");
                         String url = Contant.REQUEST_URL + Contant.REG;
                         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), SetPasswordActivity.this);
                         Map<String, Object> maps = new HashMap<String, Object>();
@@ -181,7 +183,7 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
                                 progress.dismissView();
                                 //初始化失败
                                 //异常处理，自动切换成无数据
-                                noticePop = new NoticePopWindow(SetPasswordActivity.this, SetPasswordActivity.this, wManager, "登录失败");
+                                noticePop = new NoticePopWindow(SetPasswordActivity.this, SetPasswordActivity.this, wManager, "注册失败");
                                 noticePop.showNotice();
                                 noticePop.showAtLocation(edtpsd,
                                         Gravity.CENTER, 0, 0
@@ -191,6 +193,7 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
                     }
                     else if(1==bundle.getInt("type"))
                     {
+                        progress.showProgress("提交中......");
                         String url = Contant.REQUEST_URL + "forgetPassword";
                         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), SetPasswordActivity.this);
                         Map<String, Object> maps = new HashMap<String, Object>();
@@ -228,7 +231,7 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
                                 progress.dismissView();
                                 //初始化失败
                                 //异常处理，自动切换成无数据
-                                noticePop = new NoticePopWindow(SetPasswordActivity.this, SetPasswordActivity.this, wManager, "登录失败");
+                                noticePop = new NoticePopWindow(SetPasswordActivity.this, SetPasswordActivity.this, wManager, "提交失败");
                                 noticePop.showNotice();
                                 noticePop.showAtLocation(edtpsd,
                                         Gravity.CENTER, 0, 0
