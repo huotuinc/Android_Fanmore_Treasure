@@ -3,6 +3,7 @@ package com.huotu.fanmore.pinkcatraiders.widget;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 
 import java.util.ArrayList;
@@ -51,14 +53,16 @@ public class FuncPopWin extends PopupWindow {
     public
     void showLayout ( ) {
 
-        Resources resources = context.getResources ( );
-        View view = LayoutInflater.from ( context ).inflate (
+        final Resources resources = context.getResources ( );
+        View view = LayoutInflater.from ( context ).inflate(
                 R.layout.func_pop_ui,
                 null
-                                                            );
-        TextView funBtn = ( TextView ) view.findViewById ( R.id.funBtn );
+        );
+        final TextView funBtn = ( TextView ) view.findViewById ( R.id.funBtn );
+        //未选
+        funBtn.setTag(0);
         msg = ( TextView ) view.findViewById ( R.id.totalSelect );
-        SystemTools.loadBackground ( funBtn, resources.getDrawable(R.mipmap.unselect));
+        SystemTools.loadBackground(funBtn, resources.getDrawable(R.mipmap.unselect));
         TextView funOpBtn = (TextView) view.findViewById(R.id.funOpBtn);
         funOpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +84,30 @@ public class FuncPopWin extends PopupWindow {
                     mHandler.sendMessage(message);
                 }
 
+            }
+        });
+        funBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int tag = (int) funBtn.getTag();
+                if(0==tag)
+                {
+                    funBtn.setTag(1);
+                    SystemTools.loadBackground(funBtn, resources.getDrawable(R.mipmap.unselected));
+                    //发送全选的广播
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("type", 11);
+                    MyBroadcastReceiver.sendBroadcast(context, MyBroadcastReceiver.SHOP_CART, bundle);
+                }
+                else if(1==tag)
+                {
+                    funBtn.setTag(0);
+                    SystemTools.loadBackground(funBtn, resources.getDrawable(R.mipmap.unselect));
+                    //发送全不选的广播
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("type", 12);
+                    MyBroadcastReceiver.sendBroadcast(context, MyBroadcastReceiver.SHOP_CART, bundle);
+                }
             }
         });
         // 设置SelectPicPopupWindow的View

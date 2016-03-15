@@ -47,14 +47,16 @@ public class ListAdapter extends BaseAdapter {
     private int type;
     private long buyNum = 0;
     private BaseApplication application;
+    private int deleteType;
 
-    public ListAdapter(List<ListModel> lists, Context context, Handler mHandler, int type, BaseApplication application)
+    public ListAdapter(List<ListModel> lists, Context context, Handler mHandler, int type, BaseApplication application, int deleteType)
     {
         this.lists = lists;
         this.context = context;
         this.mHandler = mHandler;
         this.type = type;
         this.application = application;
+        this.deleteType = deleteType;
     }
 
     @Override
@@ -85,6 +87,22 @@ public class ListAdapter extends BaseAdapter {
         else
         {
             holder = (ViewHolder) convertView.getTag();
+        }
+
+        if(1==type&&12==deleteType)
+        {
+            Message message = mHandler.obtainMessage ( );
+            message.what = Contant.CART_SELECT;
+            message.arg1 = 4;
+            mHandler.sendMessage(message);
+        }
+        else if(1==type&&11==deleteType)
+        {
+            Message message = mHandler.obtainMessage ( );
+            message.what = Contant.CART_SELECT;
+            message.arg1 = 5;
+            message.obj = lists;
+            mHandler.sendMessage(message);
         }
         if(null!=lists&&!lists.isEmpty()&&null!=lists.get(position))
         {
@@ -120,8 +138,19 @@ public class ListAdapter extends BaseAdapter {
                 final TextView editBtn = holder.editBtn;
                 final Drawable draw1 = resources.getDrawable ( R.mipmap.unselect );
                 final Drawable draw2 = resources.getDrawable ( R.mipmap.unselected );
-                editBtn.setTag ( 0 );
-                SystemTools.loadBackground ( holder.editBtn, draw1 );
+                if(12==deleteType)
+                {
+                    //全不选
+                    editBtn.setTag ( 0 );
+                    SystemTools.loadBackground(holder.editBtn, draw1);
+                }
+                else if(11==deleteType)
+                {
+                    //全选
+                    editBtn.setTag ( 1 );
+                    SystemTools.loadBackground(holder.editBtn, draw2);
+                }
+
                 editBtn.setOnClickListener (
                         new View.OnClickListener ( ) {
 
