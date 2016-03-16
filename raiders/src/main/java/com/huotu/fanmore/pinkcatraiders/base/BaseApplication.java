@@ -228,6 +228,10 @@ public class BaseApplication extends Application {
         PreferenceHelper.writeString ( getApplicationContext (), Contant.SYS_INFO, Contant.FIRST_OPEN, initStr );
     }
 
+    public String readHelpURL()
+    {
+        return PreferenceHelper.readString(getApplicationContext(),"global_info","helpURL");
+    }
     public void loadGlobalData(InitOutputsModel.InitInnerModel.GlobalModel globalModel)
     {
         PreferenceHelper.writeString(getApplicationContext(),"global_info","redRules",globalModel.getRedRules());

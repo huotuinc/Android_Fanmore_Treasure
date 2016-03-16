@@ -153,14 +153,14 @@ public class LoginActivity extends BaseActivity
             case Contant.LOGIN_AUTH_ERROR:
             {
                 btn_wx.setClickable(true);
-                successProgress.dismissView();
+                progress.dismissView();
                 ToastUtils.showShortToast(this, "登录失败");
             }
             break;
             case Contant.MSG_AUTH_ERROR:
             {
                 loginL.setClickable ( true );
-                successProgress.dismissView();
+                progress.dismissView();
 
                 Throwable throwable = ( Throwable ) msg.obj;
                 if("cn.sharesdk.wechat.utils.WechatClientNotExistException".equals ( throwable.toString () ))
@@ -172,7 +172,7 @@ public class LoginActivity extends BaseActivity
                 else
                 {
                     loginL.setClickable ( true );
-                      successProgress.dismissView();
+                    progress.dismissView();
 //                    //提示授权失败
                     ToastUtils.showShortToast(this, "授权操作遇到错误");
 
@@ -184,7 +184,7 @@ public class LoginActivity extends BaseActivity
             {
                 loginL.setClickable ( true );
                 //提示取消授权
-                  successProgress.dismissView();
+                progress.dismissView();
                 ToastUtils.showShortToast(this, "授权操作已取消");
 
 
@@ -192,7 +192,7 @@ public class LoginActivity extends BaseActivity
             break;
             case Contant.MSG_USERID_FOUND:
             {
-                successProgress.dismissView();
+
                 ToastUtils.showShortToast(this, "已经获取用户信息");
 
 
@@ -200,11 +200,11 @@ public class LoginActivity extends BaseActivity
             break;
             case Contant.MSG_LOGIN:
             {
-                successProgress.dismissView();
 
                // ToastUtils.showShortToast(this,"登陆成功");
 
                 if( msg.arg1 == 1 ) {
+                    progress.showProgress("正在登录");
                     LoginQQModel qqModel = (LoginQQModel) msg.obj;
                     String url = Contant.REQUEST_URL + Contant.AUTHLOGIN;
                     AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), LoginActivity.this);
@@ -298,6 +298,7 @@ public class LoginActivity extends BaseActivity
 
                 }
                 else if( msg.arg1 == 2 ) {
+                    progress.showProgress("正在登录");
                     LoginWXModel loginWXModel = (LoginWXModel) msg.obj;
                     AuthParamUtils paramUtils = new AuthParamUtils( application, System.currentTimeMillis (),  LoginActivity.this );
                     //中文字符特殊处理
@@ -341,7 +342,7 @@ public class LoginActivity extends BaseActivity
 
             case Contant.MSG_USERID_NO_FOUND:
             {
-                  successProgress.dismissView();
+                progress.dismissView();
                 //提示授权成功
                 ToastUtils.showShortToast(this, "获取用户信息失败");
 
@@ -349,7 +350,7 @@ public class LoginActivity extends BaseActivity
             break;
             case Contant.INIT_MENU_ERROR:
             {
-                  successProgress.dismissView();
+                progress.dismissView();
                 ToastUtils.showShortToast(this, "获取用户信息失败");
 
             }
@@ -650,8 +651,7 @@ public class LoginActivity extends BaseActivity
         switch (v.getId()){
             case R.id.tv_wx:
             case R.id.btn_wx:{
-               successProgress.showProgress("正在登录");
-               ShareSDK.getPlatform(LoginActivity.this, Wechat.NAME);
+//               ShareSDK.getPlatform(LoginActivity.this, Wechat.NAME);
                login = new AutnLogin(LoginActivity.this, mHandler, loginL, application);
                login.authorize(new Wechat(LoginActivity.this));
                loginL.setClickable(false);
@@ -660,8 +660,7 @@ public class LoginActivity extends BaseActivity
            break;
             case R.id.tv_qq:
             case R.id.btn_qq:{
-                successProgress.showProgress("正在登录");
-                ShareSDK.getPlatform(LoginActivity.this, QQ.NAME);
+//                Platform platform=ShareSDK.getPlatform(LoginActivity.this, QQ.NAME);
                 login = new AutnLogin(LoginActivity.this, mHandler, loginL, application);
                 login.authorize(new QQ(LoginActivity.this));
                 loginL.setClickable(false);

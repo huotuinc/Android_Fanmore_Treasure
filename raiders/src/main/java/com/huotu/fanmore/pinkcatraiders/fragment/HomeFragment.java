@@ -251,7 +251,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         //显示常见问题
         Bundle bundle = new Bundle();
         bundle.putString("title", "常见问题");
-        bundle.putString("link", "https://www.baidu.com/");
+        bundle.putString("link", application.readHelpURL());
         ActivityUtils.getInstance().showActivity(getActivity(), WebExhibitionActivity.class,
                 bundle);
     }

@@ -36,6 +36,7 @@ import java.io.File;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
@@ -173,7 +174,11 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
        application.ClearUser();
         //清除微信授权信息
         ShareSDK.getPlatform(Wechat.NAME).removeAccount();
-        ShareSDK.getPlatform(QQ.NAME).removeAccount();
+
+        Platform platform = new QQ(SettingActivity.this);
+        if(platform!=null) {
+            platform.removeAccount();
+        }
 
 
 
@@ -184,7 +189,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     {
         Bundle bundle = new Bundle();
         bundle.putString("title", "常见问题");
-        bundle.putString("link", "https://www.baidu.com/");
+        bundle.putString("link",  application.readHelpURL());
         ActivityUtils.getInstance().showActivity(SettingActivity.this, WebExhibitionActivity.class,
                 bundle);
     }

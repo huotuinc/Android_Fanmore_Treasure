@@ -18,7 +18,9 @@ public class Contant {
     /**
      * operation
      */
+
     public static final String OPERATION        = "duobao2016AD";
+
 
     public static final String SYS_INFO         = "sysInfo";
 
@@ -187,10 +189,12 @@ public class Contant {
 
     //public static final String REQUEST_URL = "http://192.168.3.22:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
-    public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
-   //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
-    //public static final String REQUEST_URL = "http://192.168.1.254:10001/duobao/app/";
+      public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
+   // public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
+    //public static final String REQUEST_URL = "http://192.168.1.254:10001/app/";
     //public static final String REQUEST_URL = "http://192.168.3.86:8080/duobao/app/";
+    //test url
+    //public static final String REQUEST_URL="http://192.168.1.254:10001/app/";
     //获取夺宝记录
     public static final String GET_MY_RAIDER_LIST          = "getMyRaiderList";
 
@@ -222,6 +226,8 @@ public class Contant {
 
     //登录
     public static final String LOGIN                       = "login";
+    //获取商城地址
+    public static final String GETMALLURL="getMallUrl";
     //qq 微信授权登录
     public static final String AUTHLOGIN= "authLogin";
     //绑定微信
