@@ -73,6 +73,19 @@ public class CartUtils {
                     cartDataModel.setId(1000l);
                     CartDataModel.save(cartDataModel);
                     progress.dismissView();
+                    CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                    if(null==cartCountIt)
+                    {
+                        CartCountModel cartCount = new CartCountModel();
+                        cartCount.setId(0l);
+                        cartCount.setCount(1);
+                        CartCountModel.save(cartCount);
+                    }
+                    else
+                    {
+                        cartCountIt.setCount(cartCountIt.getCount()+1);
+                        CartCountModel.save(cartCountIt);
+                    }
                     ToastUtils.showLongToast(context, "添加清单成功");
                 }
                 else
@@ -109,6 +122,19 @@ public class CartUtils {
                     cartData.setCartData(str);
                     CartDataModel.save(cartData);
                     progress.dismissView();
+                    CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                    if(null==cartCountIt)
+                    {
+                        CartCountModel cartCount = new CartCountModel();
+                        cartCount.setId(0l);
+                        cartCount.setCount(1);
+                        CartCountModel.save(cartCount);
+                    }
+                    else
+                    {
+                        cartCountIt.setCount(cartCountIt.getCount()+1);
+                        CartCountModel.save(cartCountIt);
+                    }
                     ToastUtils.showLongToast ( context, "添加清单成功");
                 }
 
