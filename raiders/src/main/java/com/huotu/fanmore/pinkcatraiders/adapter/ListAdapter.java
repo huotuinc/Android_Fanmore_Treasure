@@ -171,7 +171,7 @@ public class ListAdapter extends BaseAdapter {
                                 }
                                 else if ( 1 == editBtn.getTag ( ) ) {
                                     //删除
-                                    editBtn.setTag ( 0 );
+                                    editBtn.setTag(0);
                                     list.setIsSelect(false);
                                     SystemTools.loadBackground (
                                             editBtn, draw1
@@ -211,10 +211,10 @@ public class ListAdapter extends BaseAdapter {
                             ToastUtils.showShortToast(context, "亲，数量至少为" + list.getStepAmount() + "哦~");
                             numView.setText(String.valueOf ( list.getStepAmount()));
                         }
-                        else if(((long)numView.getTag()+list.getStepAmount()) > list.getToAmount())
+                        else if(((long)numView.getTag()+list.getStepAmount()) > list.getRemainAmount())
                         {
                             //buyNum  = buyNum-list.getStepAmount();
-                            ToastUtils.showShortToast(context, "亲，数量不能超过" + list.getToAmount() + "哦~");
+                            ToastUtils.showShortToast(context, "亲，数量不能超过" + list.getRemainAmount() + "哦~");
                             numView.setText(String.valueOf(numView.getTag()));
                         }
                         else
@@ -268,10 +268,10 @@ public class ListAdapter extends BaseAdapter {
                         numView.setTag(list.getStepAmount());
                         numView.setText(String.valueOf(list.getStepAmount()));
                     }
-                    else if(((long)numView.getTag()-list.getStepAmount()) > list.getToAmount())
+                    else if(((long)numView.getTag()-list.getStepAmount()) > list.getRemainAmount())
                     {
                         numView.setTag((long)numView.getTag()+list.getStepAmount());
-                        ToastUtils.showShortToast(context, "亲，数量不能超过" + list.getToAmount() + "哦~");
+                        ToastUtils.showShortToast(context, "亲，数量不能超过" + list.getRemainAmount() + "哦~");
                         numView.setText(String.valueOf((long)numView.getTag()));
                     }
                     else
@@ -280,8 +280,8 @@ public class ListAdapter extends BaseAdapter {
                         if (((long)numView.getTag()-list.getStepAmount()) < 1) // 先减，再判断
                         {
                             //numView.setTag((long)numView.getTag()+list.getStepAmount());
-                            ToastUtils.showShortToast(context, "亲，数量至少为"+(list.getToAmount()>list.getStepAmount()?list.getStepAmount():list.getToAmount())+"哦~");
-                            numView.setText(String.valueOf ( (list.getToAmount()>list.getStepAmount()?list.getStepAmount():list.getToAmount())));
+                            ToastUtils.showShortToast(context, "亲，数量至少为"+(list.getRemainAmount()>list.getStepAmount()?list.getStepAmount():list.getRemainAmount())+"哦~");
+                            numView.setText(String.valueOf ( (list.getRemainAmount()>list.getStepAmount()?list.getStepAmount():list.getRemainAmount())));
                         } else
                         {
                             numView.setTag((long)numView.getTag()-list.getStepAmount());
