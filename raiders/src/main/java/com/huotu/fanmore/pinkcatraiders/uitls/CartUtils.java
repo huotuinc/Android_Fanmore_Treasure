@@ -1,5 +1,6 @@
 package com.huotu.fanmore.pinkcatraiders.uitls;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 
@@ -86,7 +87,7 @@ public class CartUtils {
                         cartCountIt.setCount(cartCountIt.getCount()+1);
                         CartCountModel.save(cartCountIt);
                     }
-                    ToastUtils.showLongToast(context, "添加清单成功");
+                    ToastUtils.showMomentToast((Activity) context, context, "添加清单成功", 500);
                 }
                 else
                 {
@@ -135,7 +136,7 @@ public class CartUtils {
                         cartCountIt.setCount(cartCountIt.getCount()+1);
                         CartCountModel.save(cartCountIt);
                     }
-                    ToastUtils.showLongToast ( context, "添加清单成功");
+                    ToastUtils.showMomentToast((Activity) context, context, "添加清单成功", 500);
                 }
 
             }
@@ -172,12 +173,12 @@ public class CartUtils {
                                     CartCountModel.save(cartCountIt);
                                 }
                                 //上传成功
-                                ToastUtils.showLongToast ( context, "添加清单成功");
+                                ToastUtils.showMomentToast((Activity) context, context, "添加清单成功", 500);
                             }
                             else
                             {
                                 //上传失败
-                                ToastUtils.showLongToast ( context, "添加清单失败" );
+                                ToastUtils.showMomentToast((Activity) context, context, "添加清单失败", 500);
                             }
                         }
                     }, new Response.ErrorListener ( ) {
@@ -187,7 +188,7 @@ public class CartUtils {
                         void onErrorResponse ( VolleyError error ) {
                             progress.dismissView ( );
                             //系统级别错误
-                            ToastUtils.showLongToast ( context, "添加清单失败" );
+                            ToastUtils.showMomentToast((Activity) context, context, "添加清单失败", 500);
                         }
                     }
             );
