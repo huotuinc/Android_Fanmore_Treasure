@@ -45,16 +45,17 @@ public class ListAdapter extends BaseAdapter {
     private
     Handler mHandler;
     private int type;
-    private long buyNum = 0;
     private BaseApplication application;
+    private int deleteType;
 
-    public ListAdapter(List<ListModel> lists, Context context, Handler mHandler, int type, BaseApplication application)
+    public ListAdapter(List<ListModel> lists, Context context, Handler mHandler, int type, BaseApplication application, int deleteType)
     {
         this.lists = lists;
         this.context = context;
         this.mHandler = mHandler;
         this.type = type;
         this.application = application;
+        this.deleteType = deleteType;
     }
 
     @Override
@@ -85,6 +86,22 @@ public class ListAdapter extends BaseAdapter {
         else
         {
             holder = (ViewHolder) convertView.getTag();
+        }
+
+        if(1==type&&12==deleteType)
+        {
+            Message message = mHandler.obtainMessage ( );
+            message.what = Contant.CART_SELECT;
+            message.arg1 = 4;
+            mHandler.sendMessage(message);
+        }
+        else if(1==type&&11==deleteType)
+        {
+            Message message = mHandler.obtainMessage ( );
+            message.what = Contant.CART_SELECT;
+            message.arg1 = 5;
+            message.obj = lists;
+            mHandler.sendMessage(message);
         }
         if(null!=lists&&!lists.isEmpty()&&null!=lists.get(position))
         {
@@ -120,8 +137,21 @@ public class ListAdapter extends BaseAdapter {
                 final TextView editBtn = holder.editBtn;
                 final Drawable draw1 = resources.getDrawable ( R.mipmap.unselect );
                 final Drawable draw2 = resources.getDrawable ( R.mipmap.unselected );
-                editBtn.setTag ( 0 );
-                SystemTools.loadBackground ( holder.editBtn, draw1 );
+                if(12==deleteType)
+                {
+                    //全不选
+                    editBtn.setTag ( 0 );
+                    list.setIsSelect(false);
+                    SystemTools.loadBackground(holder.editBtn, draw1);
+                }
+                else if(11==deleteType)
+                {
+                    //全选
+                    editBtn.setTag ( 1 );
+                    list.setIsSelect(true);
+                    SystemTools.loadBackground(holder.editBtn, draw2);
+                }
+
                 editBtn.setOnClickListener (
                         new View.OnClickListener ( ) {
 
@@ -132,8 +162,8 @@ public class ListAdapter extends BaseAdapter {
                                 Message message = mHandler.obtainMessage ( );
                                 if ( 0 == editBtn.getTag ( ) ) {
                                     //添加
-                                    message.arg2 = 0;
                                     editBtn.setTag ( 1 );
+                                    list.setIsSelect(true);
                                     SystemTools.loadBackground (
                                             editBtn, draw2
                                     );
@@ -141,8 +171,8 @@ public class ListAdapter extends BaseAdapter {
                                 }
                                 else if ( 1 == editBtn.getTag ( ) ) {
                                     //删除
-                                    message.arg2 = 1;
                                     editBtn.setTag ( 0 );
+                                    list.setIsSelect(false);
                                     SystemTools.loadBackground (
                                             editBtn, draw1
                                     );
@@ -151,7 +181,7 @@ public class ListAdapter extends BaseAdapter {
                                 //选择项目
                                 message.what = Contant.CART_SELECT;
                                 message.arg1 = 1;
-                                message.obj = list;
+                                message.obj = lists;
                                 mHandler.sendMessage ( message );
                             }
                         }
@@ -162,9 +192,8 @@ public class ListAdapter extends BaseAdapter {
             //加减控件
             final EditText numView = holder.num;
             //数量
-
-            buyNum = list.getUserBuyAmount();
-            numView.setText(String.valueOf(buyNum));
+            numView.setTag(list.getUserBuyAmount());
+            numView.setText(String.valueOf(numView.getTag()));
             //加
             holder.addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -172,27 +201,27 @@ public class ListAdapter extends BaseAdapter {
                     //获取数据源
                     String numString = numView.getText().toString();
                     if (numString == null || numString.equals("")) {
-                        buyNum = list.getStepAmount();
+                        numView.setTag(list.getStepAmount());
                         numView.setText(String.valueOf(list.getStepAmount()));
                     } else
                     {
-                        if ((buyNum+list.getStepAmount()) < 1) // 先加，再判断
+                        if (((long)numView.getTag()+list.getStepAmount()) < 1) // 先加，再判断
                         {
-                            buyNum  = buyNum-list.getStepAmount();
+                            //buyNum  = buyNum-list.getStepAmount();
                             ToastUtils.showShortToast(context, "亲，数量至少为" + list.getStepAmount() + "哦~");
                             numView.setText(String.valueOf ( list.getStepAmount()));
                         }
-                        else if((buyNum+list.getStepAmount()) > list.getToAmount())
+                        else if(((long)numView.getTag()+list.getStepAmount()) > list.getToAmount())
                         {
-                            buyNum  = buyNum-list.getStepAmount();
+                            //buyNum  = buyNum-list.getStepAmount();
                             ToastUtils.showShortToast(context, "亲，数量不能超过" + list.getToAmount() + "哦~");
-                            numView.setText(String.valueOf(buyNum));
+                            numView.setText(String.valueOf(numView.getTag()));
                         }
                         else
                         {
-                            buyNum=buyNum+list.getStepAmount();
-                            numView.setText(String.valueOf(buyNum));
-                            list.setUserBuyAmount(buyNum);
+                            numView.setTag((long)numView.getTag()+list.getStepAmount());
+                            numView.setText(String.valueOf((long)numView.getTag()));
+                            list.setUserBuyAmount((long)numView.getTag());
                             //非登陆状态下加
                             if(!application.isLogin())
                             {
@@ -236,28 +265,28 @@ public class ListAdapter extends BaseAdapter {
                     //获取数据源
                     String numString = numView.getText().toString();
                     if (numString == null || numString.equals("")) {
-                        buyNum = list.getStepAmount();
+                        numView.setTag(list.getStepAmount());
                         numView.setText(String.valueOf(list.getStepAmount()));
                     }
-                    else if((buyNum-list.getStepAmount()) > list.getToAmount())
+                    else if(((long)numView.getTag()-list.getStepAmount()) > list.getToAmount())
                     {
-                        buyNum  = buyNum+list.getStepAmount();
+                        numView.setTag((long)numView.getTag()+list.getStepAmount());
                         ToastUtils.showShortToast(context, "亲，数量不能超过" + list.getToAmount() + "哦~");
-                        numView.setText(String.valueOf(buyNum));
+                        numView.setText(String.valueOf((long)numView.getTag()));
                     }
                     else
                     {
 
-                        if ((buyNum-list.getStepAmount()) < 1) // 先减，再判断
+                        if (((long)numView.getTag()-list.getStepAmount()) < 1) // 先减，再判断
                         {
-                            buyNum=buyNum+list.getStepAmount();
-                            ToastUtils.showShortToast(context, "亲，数量至少为"+list.getStepAmount()+"哦~");
-                            numView.setText(String.valueOf ( list.getStepAmount()));
+                            //numView.setTag((long)numView.getTag()+list.getStepAmount());
+                            ToastUtils.showShortToast(context, "亲，数量至少为"+(list.getToAmount()>list.getStepAmount()?list.getStepAmount():list.getToAmount())+"哦~");
+                            numView.setText(String.valueOf ( (list.getToAmount()>list.getStepAmount()?list.getStepAmount():list.getToAmount())));
                         } else
                         {
-                            buyNum = buyNum-list.getStepAmount();
-                            numView.setText(String.valueOf(buyNum));
-                            list.setUserBuyAmount(buyNum);
+                            numView.setTag((long)numView.getTag()-list.getStepAmount());
+                            numView.setText(String.valueOf((long)numView.getTag()));
+                            list.setUserBuyAmount((long)numView.getTag());
                             //非登陆状态下加
                             if(!application.isLogin())
                             {

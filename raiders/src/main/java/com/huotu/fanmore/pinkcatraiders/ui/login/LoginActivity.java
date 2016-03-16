@@ -244,7 +244,11 @@ public class LoginActivity extends BaseActivity
                                     try {
                                         //加载用户信息
                                         application.writeUserInfo(appWXLoginModel.getResultData().getUser());
+
                                         if(bundle!=null&&null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
+
+
+
                                         {
                                             uploadCartData();
                                         }
@@ -577,7 +581,9 @@ public class LoginActivity extends BaseActivity
                             try {
                                 //加载用户信息
                                 application.writeUserInfo(loginOutputs.getResultData().getUser());
+
                                 if(bundle!=null&&null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
+
                                 {
                                     uploadCartData();
                                 }
@@ -717,7 +723,9 @@ public class LoginActivity extends BaseActivity
             {
                 //记录token
                 BaseApplication.getInstance().writeUserInfo(user);
-                if(bundle!=null&&null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
+
+                if(null!=bundle&&null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
+
                 {
                     uploadCartData();
                 }

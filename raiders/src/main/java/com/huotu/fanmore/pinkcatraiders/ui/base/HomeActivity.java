@@ -45,7 +45,11 @@ import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
+
 import com.huotu.fanmore.pinkcatraiders.model.OutputUrlModel;
+
+import com.huotu.fanmore.pinkcatraiders.model.LocalCartOutputModel;
+
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
@@ -215,13 +219,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     public int label = 0;
     //清单选中删除的数量
-    public long deleteAllNum = 0;
     //清单结算数量
     public long payAllNum = 0;
     //清单结算总金额
     public long payAllAmount = 0;
     //购物车删除ID列表
-    public List<Long> deleteIds = new ArrayList<Long>();
     public double prices = 0;
     public int payNum = 0;
 
@@ -609,6 +611,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     public boolean handleMessage(Message msg) {
         switch (msg.what) {
             case Contant.SWITCH_UI: {
+
                 String tag = msg.obj.toString();
                 if (tag.equals(Contant.TAG_1)) {
                     application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
@@ -619,14 +622,19 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 } else if (tag.equals(Contant.TAG_4)) {
                     application.mFragManager.setCurrentFrag(FragManager.FragType.PROFILE);
                 } else if (tag.equals(Contant.TAG_5)) {
+
+
                     //判断是否登陆
-                    if (!application.isLogin()) {
+                    if(!application.isLogin())
+                    {
+
                         guideLoginPopWin = new GuideLoginPopWin(HomeActivity.this, mHandler, HomeActivity.this, wManager);
                         guideLoginPopWin.showWin();
                         guideLoginPopWin.showAtLocation(
                                 findViewById(R.id.titleLayout),
                                 Gravity.CENTER, 0, 0
                         );
+
                     } else {
 
                         String url = Contant.REQUEST_URL + Contant.GETMALLURL;
@@ -696,16 +704,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
                     }
 
+                    }
 
-//                        /*AuthParamUtils paramUtils = new AuthParamUtils ( application, System.currentTimeMillis(),HomeActivity.this );
-//                    //String url = paramUtils.obtainUrl();
-//                    Bundle bundle = new Bundle();
-//                    bundle.putString("url","http://cosytest.51flashmall.com/");
-//                    ActivityUtils.getInstance().showActivity(HomeActivity.this, MallHomeActivity.class, bundle);*/
-//                    }
-
-
-                }
             }
             break;
             case Contant.CAROUSE_URL:
@@ -755,8 +755,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             {
                 if(0==msg.arg1)
                 {
-                    prices = 0;
                     //结算模式
+                    prices = 0;
+
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
                     payNum = lists.size();
@@ -773,8 +774,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
                 else if(2==msg.arg1)
                 {
-                    prices=0;
                     //结算模式 加
+                    prices=0;
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
                     payNum = lists.size();
@@ -791,8 +792,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
                 else if(3==msg.arg1)
                 {
-                    prices=0;
                     //结算模式 减
+                    prices=0;
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
                     payNum = lists.size();
@@ -809,32 +810,51 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
                 else if(1==msg.arg1)
                 {
-                    ListModel list = (ListModel) msg.obj;
+                    //购物车删除ID列表
+                    List<Long> deleteIds = new ArrayList<Long>();
+                    int deleteAllNum =0;
                     //编辑模式
-                    if(0==msg.arg2)
+                    List<ListModel> lists = (List<ListModel>) msg.obj;
+                    for(int i=0; i<lists.size(); i++)
                     {
-                        //结算模式添加
-                        deleteAllNum++;
-                        deleteIds.add(list.getSid());
+                        if(lists.get(i).isSelect())
+                        {
+                            deleteAllNum++;
+                            deleteIds.add(lists.get(i).getSid());
+                        }
                     }
-                    else if(1==msg.arg2)
+                    if(deleteIds.size()==lists.size())
                     {
-                        //结算模式删除
-                        //编辑模式删除
-                        if(0>=deleteAllNum)
-                        {
-                            deleteAllNum=0;
-                            deleteIds.clear();
-                        }
-                        else
-                        {
-                            deleteAllNum--;
-                            deleteIds.remove(list.getSid());
-                        }
+                        //设置全选
+                        funcPopWin.setSelectAll();
+                    }
+                    else
+
+                    {
+                        //取消全选
+                        funcPopWin.setUNSelectAll();
                     }
                     funcPopWin.setMsg ( String.valueOf ( deleteAllNum ) );
                     funcPopWin.setDeletes(deleteIds);
 
+                }
+                else if(4==msg.arg1)
+                {
+                    //全部选
+                    funcPopWin.setMsg(String.valueOf(0));
+                    funcPopWin.setDeletes(null);
+                }
+                else if(5==msg.arg1)
+                {
+                    List<Long> deleteIds = new ArrayList<Long>();
+                    //全部选
+                    List<ListModel> ls = (List<ListModel>) msg.obj;
+                    funcPopWin.setMsg(String.valueOf(ls.size()));
+                    for(int i=0; i<ls.size(); i++)
+                    {
+                        deleteIds.add(ls.get(i).getSid());
+                    }
+                    funcPopWin.setDeletes(deleteIds);
                 }
 
             }
@@ -961,75 +981,118 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
                 else if(0==msg.arg1)
                 {
-                    //删除清单数据
-                    progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
-                    progress.showProgress ( "正在删除选中的商品" );
-                    progress.showAtLocation (titleLayoutL,
-                            Gravity.CENTER, 0, 0
-                    );
-                    final List<Long> deletes = (List<Long>) msg.obj;
-                    for(int i=0; i<deletes.size(); i++)
+                    if(!application.isLogin())
                     {
-                        Long chartId = deletes.get(i);
-                        String url = Contant.REQUEST_URL + Contant.DELETE_CART;
-                        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
-                        Map<String, Object> maps = new HashMap<String, Object> ();
-                        maps.put ( "shoppingCartId",  String.valueOf(chartId));
-                        Map<String, Object> param = params.obtainPostParam(maps);
-                        BaseModel base = new BaseModel ();
-                        HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
-                        httpUtils.doVolleyPost(
-                                base, url, param, new Response.Listener<BaseModel>() {
-                                    @Override
-                                    public void onResponse(BaseModel response) {
-                                        BaseModel base = response;
-                                        if (1 == base.getResultCode()) {
-                                            CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 1l);
-                                            if(null==cartCountIt)
-                                            {
-                                                CartCountModel cartCount = new CartCountModel();
-                                                cartCount.setId(1l);
-                                                cartCount.setCount(0);
-                                                CartCountModel.save(cartCount);
+                        progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
+                        progress.showProgress ( "正在删除选中的商品" );
+                        progress.showAtLocation (titleLayoutL,
+                                Gravity.CENTER, 0, 0
+                        );
+                        final List<Long> deletes = (List<Long>) msg.obj;
+                        //未登录状态
+                        CartDataModel cartData = CartDataModel.findById(CartDataModel.class, 1000l);
+                        //转换成JSON
+                        String data = cartData.getCartData();
+                        JSONUtil<LocalCartOutputModel> jsonUtil = new JSONUtil<LocalCartOutputModel>();
+                        LocalCartOutputModel localCartOutput = new LocalCartOutputModel();
+                        localCartOutput = jsonUtil.toBean(data, localCartOutput);
+                        List<ListModel> lists = localCartOutput.getResultData().getLists();
+                        List<ListModel> removes = new ArrayList<ListModel>();
+                        for(int j=0; j<deletes.size(); j++)
+                        {
+                            for(int i=0; i<lists.size(); i++)
+                            {
+                                if(deletes.get(j) == lists.get(i).getSid())
+                                {
+                                    removes.add(lists.get(i));
+                                }
+                            }
+                        }
+                        lists.removeAll(removes);
+                        progress.dismissView();
+                        ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除成功", 500);
+                        //全选按钮置空
+                        funcPopWin.setUNSelectAll();
+                        localCartOutput.getResultData().setLists(lists);
+                        String str = jsonUtil.toJson(localCartOutput);
+                        cartData.setCartData(str);
+                        CartDataModel.save(cartData);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("type", 1);
+                        MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
+                    }
+                    else
+                    {
+                        //删除清单数据
+                        progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
+                        progress.showProgress ( "正在删除选中的商品" );
+                        progress.showAtLocation (titleLayoutL,
+                                Gravity.CENTER, 0, 0
+                        );
+                        final List<Long> deletes = (List<Long>) msg.obj;
+                        for(int i=0; i<deletes.size(); i++)
+                        {
+                            Long chartId = deletes.get(i);
+                            String url = Contant.REQUEST_URL + Contant.DELETE_CART;
+                            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                            Map<String, Object> maps = new HashMap<String, Object> ();
+                            maps.put ( "shoppingCartId",  String.valueOf(chartId));
+                            Map<String, Object> param = params.obtainPostParam(maps);
+                            BaseModel base = new BaseModel ();
+                            HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
+                            httpUtils.doVolleyPost(
+                                    base, url, param, new Response.Listener<BaseModel>() {
+                                        @Override
+                                        public void onResponse(BaseModel response) {
+                                            BaseModel base = response;
+                                            if (1 == base.getResultCode()) {
+                                                CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 1l);
+                                                if(null==cartCountIt)
+                                                {
+                                                    CartCountModel cartCount = new CartCountModel();
+                                                    cartCount.setId(1l);
+                                                    cartCount.setCount(0);
+                                                    CartCountModel.save(cartCount);
+                                                }
+                                                else
+                                                {
+                                                    cartCountIt.setCount(cartCountIt.getCount()-1);
+                                                    CartCountModel.save(cartCountIt);
+                                                }
+                                                //全选按钮置空
+                                                funcPopWin.setUNSelectAll();
+                                                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除成功", 500);
+
+                                            } else {
+                                                progress.dismissView();
+                                                //全选按钮置空
+                                                funcPopWin.setUNSelectAll();
+                                                VolleyUtil.cancelAllRequest();
+                                                //上传失败
+                                                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除失败", 500);
                                             }
-                                            else
-                                            {
-                                                cartCountIt.setCount(cartCountIt.getCount()-1);
-                                                CartCountModel.save(cartCountIt);
-                                            }
-                                        } else {
+                                        }
+                                    }, new Response.ErrorListener() {
+
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
                                             progress.dismissView();
+                                            //全选按钮置空
+                                            funcPopWin.setUNSelectAll();
                                             VolleyUtil.cancelAllRequest();
-                                            //上传失败
-                                            noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "删除购物车失败");
-                                            noticePop.showNotice();
-                                            noticePop.showAtLocation(
-                                                    findViewById(R.id.titleLayout),
-                                                    Gravity.CENTER, 0, 0
-                                            );
+                                            //系统级别错误
+                                            ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除失败", 500);
                                         }
                                     }
-                                }, new Response.ErrorListener() {
+                            );
+                        }
 
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        progress.dismissView();
-                                        VolleyUtil.cancelAllRequest();
-                                        //系统级别错误
-                                        noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "删除购物车失败");
-                                        noticePop.showNotice();
-                                        noticePop.showAtLocation(
-                                                findViewById(R.id.titleLayout),
-                                                Gravity.CENTER, 0, 0
-                                        );
-                                    }
-                                }
-                        );
-                }
-                    progress.dismissView();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("type", 1);
-                    MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
+                        progress.dismissView();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("type", 1);
+                        MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
+                    }
+
                 }
             }
             break;
