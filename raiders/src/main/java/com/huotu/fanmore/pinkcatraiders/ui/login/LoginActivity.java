@@ -134,6 +134,8 @@ public class LoginActivity extends BaseActivity
     RelativeLayout  loginL;
     @Bind(R.id.tv_forgetpsd)
     TextView tv_forgetpsd;
+    @Bind(R.id.titleLeftImage)
+    ImageView titleLeftImage;
 
 
     @Override
@@ -521,6 +523,7 @@ public class LoginActivity extends BaseActivity
         stubTitleText.inflate();
         TextView titleText= (TextView) findViewById(R.id.titleText);
         titleText.setText("用户登录");
+
         titleText.setTextColor(getResources().getColor(R.color.color_white));
         btn_wx.setOnClickListener(this);
         tv_qq.setOnClickListener(this);
@@ -528,6 +531,8 @@ public class LoginActivity extends BaseActivity
         tv_wx.setOnClickListener(this);
         tv_forgetpsd.setOnClickListener(this);
         SystemTools.loadBackground(titleLayoutL, bgDraw);
+        SystemTools.loadBackground(titleLeftImage, res.getDrawable(R.mipmap.title_back_white));
+
     }
 
     @OnClick(R.id.btn_login)
@@ -628,6 +633,12 @@ public class LoginActivity extends BaseActivity
                 }
             });
         }
+    }
+
+    @OnClick(R.id.titleLeftImage)
+    void doBack()
+    {
+        closeSelf(LoginActivity.this);
     }
 
     @OnClick(R.id.btn_phonereg)

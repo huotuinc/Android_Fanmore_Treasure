@@ -144,6 +144,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     public boolean isInflate = true;
     public ProductDetailModel productDetail;
     public ProductModel product;
+    public ImageView cartImg;
+    public TextView bottomOtherCartAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,11 +252,10 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             //未揭晓
                                             loginedDetail.setVisibility(View.VISIBLE);
 
-                                            TextView noLabel = (TextView) ProductDetailActivity
-                                                    .this.findViewById(R.id.noLabel);
+                                            TextView noLabel = (TextView) loginedDetail.findViewById(R.id.noLabel);
                                             noLabel.setText("期号：" + productDetail.getIssueId());
                                             ProgressBar progressBar = (ProgressBar)
-                                                    ProductDetailActivity.this.findViewById(R.id.partnerProgress);
+                                                    loginedDetail.findViewById(R.id.partnerProgress);
                                             progressBar.setProgress(
                                                     (int) (
                                                             productDetail
@@ -269,14 +270,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     )
                                             );
                                             TextView totalRequiredLabel = (TextView)
-                                                    ProductDetailActivity.this.findViewById(R.id.totalRequiredLabel);
+                                                    loginedDetail.findViewById(R.id.totalRequiredLabel);
                                             totalRequiredLabel.setText(
                                                     "总需人数：" + productDetail
                                                             .getToAmount() +
                                                             "次"
                                             );
                                             TextView surplusLabel = (TextView)
-                                                    ProductDetailActivity.this.findViewById(R.id.surplusLabel);
+                                                    loginedDetail.findViewById(R.id.surplusLabel);
                                             surplusLabel.setText(
                                                     "剩余：" + productDetail
                                                             .getRemainAmount()
@@ -291,7 +292,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             //揭晓
                                             announcedDetail.setVisibility(View.VISIBLE);
                                             CircleImageView accountLogo = (CircleImageView)
-                                                    ProductDetailActivity.this.findViewById(R.id.accountLogo);
+                                                    loginedDetail.findViewById(R.id.accountLogo);
                                             BitmapLoader.create().loadRoundImage(
                                                     ProductDetailActivity.this, accountLogo,
                                                     "http://v1.qzone"
@@ -317,7 +318,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     .this.findViewById(R.id.luckyNo);
                                             luckyNo.setText("幸运号：32890");
                                             TextView calculationDetail = (TextView)
-                                                    ProductDetailActivity.this.findViewById(R.id.calculationDetail);
+                                                    loginedDetail.findViewById(R.id.calculationDetail);
                                             calculationDetail.setText("幸运号：32890");
                                         }
                                     } else {
@@ -325,11 +326,10 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                         if (3 != productDetail.getStatus()) {
                                             //未揭晓
                                                 unlogin.setVisibility(View.VISIBLE);
-                                            TextView noLabel = (TextView) ProductDetailActivity
-                                                    .this.findViewById(R.id.noLabel);
+                                            TextView noLabel = (TextView) unlogin.findViewById(R.id.noLabel);
                                             noLabel.setText("期号：" + productDetail.getIssueId());
                                             ProgressBar progressBar = (ProgressBar)
-                                                    ProductDetailActivity.this.findViewById(R.id.partnerProgress);
+                                                    unlogin.findViewById(R.id.partnerProgress);
                                             progressBar.setProgress(
                                                     (int) (
                                                             productDetail
@@ -344,14 +344,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     )
                                             );
                                             TextView totalRequiredLabel = (TextView)
-                                                    ProductDetailActivity.this.findViewById(R.id.totalRequiredLabel);
+                                                    unlogin.findViewById(R.id.totalRequiredLabel);
                                             totalRequiredLabel.setText(
                                                     "总需人数：" + productDetail
                                                             .getToAmount() +
                                                             "次"
                                             );
                                             TextView surplusLabel = (TextView)
-                                                    ProductDetailActivity.this.findViewById(R.id.surplusLabel);
+                                                    unlogin.findViewById(R.id.surplusLabel);
                                             surplusLabel.setText(
                                                     "剩余：" + productDetail
                                                             .getRemainAmount()
@@ -361,31 +361,25 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
                                             announcedDetail.setVisibility(View.VISIBLE);
                                             CircleImageView accountLogo = (CircleImageView)
-                                                    ProductDetailActivity.this.findViewById(R.id.accountLogo);
+                                                    announcedDetail.findViewById(R.id.accountLogo);
                                             BitmapLoader.create().loadRoundImage(
                                                     ProductDetailActivity.this, accountLogo,
                                                     "http://v1.qzone"
                                                             + ".cc/avatar/201404/10/00/12/534571832f9ea304"
                                                             + ".jpg!200x200.jpg", R.mipmap.error);
-                                            TextView winnerName = (TextView) ProductDetailActivity
-                                                    .this.findViewById(R.id.winnerName);
+                                            TextView winnerName = (TextView) announcedDetail.findViewById(R.id.winnerName);
                                             winnerName.setText("中奖者：百晓生");
-                                            TextView winnerIp = (TextView) ProductDetailActivity
-                                                    .this.findViewById(R.id.winnerIp);
+                                            TextView winnerIp = (TextView) announcedDetail.findViewById(R.id.winnerIp);
                                             winnerIp.setText("铁岭：10.10.123.45");
-                                            TextView winnerId = (TextView) ProductDetailActivity
-                                                    .this.findViewById(R.id.winnerId);
+                                            TextView winnerId = (TextView) announcedDetail.findViewById(R.id.winnerId);
                                             winnerId.setText("用户ID：23000909");
-                                            TextView partnerUser = (TextView) ProductDetailActivity
-                                                    .this.findViewById(R.id.partnerUser);
+                                            TextView partnerUser = (TextView) announcedDetail.findViewById(R.id.partnerUser);
                                             partnerUser.setText("本期参与：3000次");
-                                            TextView partnerTime = (TextView) ProductDetailActivity
-                                                    .this.findViewById(R.id.partnerTime);
+                                            TextView partnerTime = (TextView) announcedDetail.findViewById(R.id.partnerTime);
                                             partnerTime.setText("揭晓时间：2015-12-11 14:20:11");
-                                            TextView luckyNo = (TextView) ProductDetailActivity
-                                                    .this.findViewById(R.id.luckyNo);
+                                            TextView luckyNo = (TextView) announcedDetail.findViewById(R.id.luckyNo);
                                             luckyNo.setText("幸运号：32890");
-                                            TextView calculationDetail = (TextView) ProductDetailActivity.this.findViewById(R.id.calculationDetail);
+                                            TextView calculationDetail = (TextView) announcedDetail.findViewById(R.id.calculationDetail);
                                             calculationDetail.setText("幸运号：32890");
                                         }
                                     }
@@ -509,7 +503,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
                                             announcedDetail.setVisibility(View.VISIBLE);
                                             CircleImageView accountLogo = (CircleImageView)
-                                                    ProductDetailActivity.this.findViewById(R.id.accountLogo);
+                                                    announcedDetail.findViewById(R.id.accountLogo);
                                             BitmapLoader.create().loadRoundImage(
                                                     ProductDetailActivity.this, accountLogo,
                                                     "http://v1.qzone"
@@ -535,7 +529,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     .this.findViewById(R.id.luckyNo);
                                             luckyNo.setText("幸运号：32890");
                                             TextView calculationDetail = (TextView)
-                                                    ProductDetailActivity.this.findViewById(R.id.calculationDetail);
+                                                    announcedDetail.findViewById(R.id.calculationDetail);
                                             calculationDetail.setText("幸运号：32890");
                                         }
                                     } else {
@@ -548,7 +542,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     .this.findViewById(R.id.noLabel);
                                             noLabel.setText("期号：" + productDetail.getIssueId());
                                             ProgressBar progressBar = (ProgressBar)
-                                                    ProductDetailActivity.this.findViewById(R.id.partnerProgress);
+                                                    announcedDetail.findViewById(R.id.partnerProgress);
                                             progressBar.setProgress(
                                                     (int) (
                                                             productDetail
@@ -563,14 +557,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     )
                                             );
                                             TextView totalRequiredLabel = (TextView)
-                                                    ProductDetailActivity.this.findViewById(R.id.totalRequiredLabel);
+                                                    announcedDetail.findViewById(R.id.totalRequiredLabel);
                                             totalRequiredLabel.setText(
                                                     "总需人数：" + productDetail
                                                             .getToAmount() +
                                                             "次"
                                             );
                                             TextView surplusLabel = (TextView)
-                                                    ProductDetailActivity.this.findViewById(R.id.surplusLabel);
+                                                    announcedDetail.findViewById(R.id.surplusLabel);
                                             surplusLabel.setText(
                                                     "剩余：" + productDetail
                                                             .getRemainAmount()
@@ -580,7 +574,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
                                             announcedDetail.setVisibility(View.VISIBLE);
                                             CircleImageView accountLogo = (CircleImageView)
-                                                    ProductDetailActivity.this.findViewById(R.id.accountLogo);
+                                                    announcedDetail.findViewById(R.id.accountLogo);
                                             BitmapLoader.create().loadRoundImage(
                                                     ProductDetailActivity.this, accountLogo,
                                                     "http://v1.qzone"
@@ -604,7 +598,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             TextView luckyNo = (TextView) ProductDetailActivity
                                                     .this.findViewById(R.id.luckyNo);
                                             luckyNo.setText("幸运号：32890");
-                                            TextView calculationDetail = (TextView) ProductDetailActivity.this.findViewById(R.id.calculationDetail);
+                                            TextView calculationDetail = (TextView) announcedDetail.findViewById(R.id.calculationDetail);
                                             calculationDetail.setText("幸运号：32890");
                                         }
                                     }
@@ -806,10 +800,27 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                         Gravity.CENTER, 0, 0
                 );
                 CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler);
+                //设置数量
+                CartCountModel cartCountIt0 = CartCountModel.findById(CartCountModel.class, 0l);
+                CartCountModel cartCountIt1 = CartCountModel.findById(CartCountModel.class, 1l);
+                if(null!=cartCountIt1)
+                {
+                    bottomOtherCartAmount.setText(String.valueOf(cartCountIt1.getCount()));
+                } else
+                {
+                    if(null!=cartCountIt0)
+                    {
+                        bottomOtherCartAmount.setText(String.valueOf(cartCountIt0.getCount()));
+                    }
+                    else
+                    {
+                        bottomOtherCartAmount.setText("0");
+                    }
+                }
             }
         });
         //购物车
-        ImageView cartImg = (ImageView) this.findViewById(R.id.bottomOtherCart);
+        cartImg = (ImageView) this.findViewById(R.id.bottomOtherCart);
         cartImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -819,7 +830,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             }
         });
         //数量
-        TextView bottomOtherCartAmount = (TextView) this.findViewById(R.id.bottomOtherCartAmount);
+        bottomOtherCartAmount = (TextView) this.findViewById(R.id.bottomOtherCartAmount);
         CartCountModel cartCountIt0 = CartCountModel.findById(CartCountModel.class, 0l);
         CartCountModel cartCountIt1 = CartCountModel.findById(CartCountModel.class, 1l);
         if(null!=cartCountIt1)

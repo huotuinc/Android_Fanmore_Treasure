@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
@@ -69,6 +70,7 @@ public class HistorysActivity extends BaseActivity implements View.OnClickListen
     public
     ProgressPopupWindow progress;
     public PastListAdapter adapter;
+    public LayoutInflater inflate;
     View emptyView = null;
 
     @Override
@@ -79,7 +81,13 @@ public class HistorysActivity extends BaseActivity implements View.OnClickListen
         application = ( BaseApplication ) this.getApplication ( );
         resources = this.getResources ( );
         mHandler = new Handler ( this );
+        inflate = LayoutInflater.from ( HistorysActivity.this );
         wManager = this.getWindowManager ( );
+        emptyView = inflate.inflate(R.layout.empty, null);
+        TextView emptyTag = (TextView) emptyView.findViewById(R.id.emptyTag);
+        emptyTag.setText("暂无往期揭晓数据");
+        TextView emptyBtn = (TextView) emptyView.findViewById(R.id.emptyBtn);
+        emptyBtn.setVisibility(View.GONE);
         progress = new ProgressPopupWindow( HistorysActivity.this, HistorysActivity.this, wManager );
         bundle = this.getIntent().getExtras();
         initTitle();
@@ -160,12 +168,17 @@ public class HistorysActivity extends BaseActivity implements View.OnClickListen
                     JSONUtil<PastListOutputModel> jsonUtil = new JSONUtil<PastListOutputModel>();
                     PastListOutputModel pastListOutputModel = new PastListOutputModel();
                     pastListOutputModel = jsonUtil.toBean(response.toString(), pastListOutputModel);
-                    if (null != pastListOutputModel && null != pastListOutputModel.getResultData() && null != pastListOutputModel.getResultData().getList()) {
+                    if (null != pastListOutputModel && null != pastListOutputModel.getResultData() && null != pastListOutputModel.getResultData().getList()&&!pastListOutputModel.getResultData().getList().isEmpty()) {
 
-                        //修改记录总数
-                        pastList.clear();
-                        pastList.addAll(pastListOutputModel.getResultData().getList());
-                        adapter.notifyDataSetChanged();
+                        if (operateType == OperateTypeEnum.REFRESH) {
+                            pastList.clear();
+                            pastList.addAll(pastListOutputModel.getResultData().getList());
+                            adapter.notifyDataSetChanged();
+                        } else if (operateType == OperateTypeEnum.LOADMORE) {
+                            pastList.addAll(pastListOutputModel.getResultData().getList());
+                            adapter.notifyDataSetChanged();
+                        }
+
                     } else {
                         //提示获取数据失败
                         historysPullRefresh.setEmptyView(emptyView);

@@ -981,6 +981,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
                 else if(0==msg.arg1)
                 {
+                    //弹出确认框
                     if(!application.isLogin())
                     {
                         progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
