@@ -141,12 +141,14 @@ public class ListAdapter extends BaseAdapter {
                 {
                     //全不选
                     editBtn.setTag ( 0 );
+                    list.setIsSelect(false);
                     SystemTools.loadBackground(holder.editBtn, draw1);
                 }
                 else if(11==deleteType)
                 {
                     //全选
                     editBtn.setTag ( 1 );
+                    list.setIsSelect(true);
                     SystemTools.loadBackground(holder.editBtn, draw2);
                 }
 
@@ -160,8 +162,8 @@ public class ListAdapter extends BaseAdapter {
                                 Message message = mHandler.obtainMessage ( );
                                 if ( 0 == editBtn.getTag ( ) ) {
                                     //添加
-                                    message.arg2 = 0;
                                     editBtn.setTag ( 1 );
+                                    list.setIsSelect(true);
                                     SystemTools.loadBackground (
                                             editBtn, draw2
                                     );
@@ -169,8 +171,8 @@ public class ListAdapter extends BaseAdapter {
                                 }
                                 else if ( 1 == editBtn.getTag ( ) ) {
                                     //删除
-                                    message.arg2 = 1;
                                     editBtn.setTag ( 0 );
+                                    list.setIsSelect(false);
                                     SystemTools.loadBackground (
                                             editBtn, draw1
                                     );
@@ -179,7 +181,7 @@ public class ListAdapter extends BaseAdapter {
                                 //选择项目
                                 message.what = Contant.CART_SELECT;
                                 message.arg1 = 1;
-                                message.obj = list;
+                                message.obj = lists;
                                 mHandler.sendMessage ( message );
                             }
                         }

@@ -41,6 +41,9 @@ public class FuncPopWin extends PopupWindow {
     Handler mHandler;
     public List<Long> deletesAll = new ArrayList<Long>();
 
+    public TextView funBtn;
+    public Resources resources;
+
     public
     FuncPopWin ( Context context, Activity aty, WindowManager wManager, Handler mHandler ) {
 
@@ -53,12 +56,12 @@ public class FuncPopWin extends PopupWindow {
     public
     void showLayout ( ) {
 
-        final Resources resources = context.getResources ( );
+        resources = context.getResources();
         View view = LayoutInflater.from ( context ).inflate(
                 R.layout.func_pop_ui,
                 null
         );
-        final TextView funBtn = ( TextView ) view.findViewById ( R.id.funBtn );
+        funBtn = ( TextView ) view.findViewById ( R.id.funBtn );
         //未选
         funBtn.setTag(0);
         msg = ( TextView ) view.findViewById ( R.id.totalSelect );
@@ -120,6 +123,17 @@ public class FuncPopWin extends PopupWindow {
         this.setFocusable(false);
     }
 
+    public void setSelectAll()
+    {
+        funBtn.setTag(1);
+        SystemTools.loadBackground(funBtn, resources.getDrawable(R.mipmap.unselected));
+    }
+
+    public void setUNSelectAll()
+    {
+        funBtn.setTag(0);
+        SystemTools.loadBackground(funBtn, resources.getDrawable(R.mipmap.unselect));
+    }
     public void setMsg(String num)
     {
         msg.setText ( "共选择"+num+"件商品" );

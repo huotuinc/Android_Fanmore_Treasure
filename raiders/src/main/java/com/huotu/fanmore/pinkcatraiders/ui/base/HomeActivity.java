@@ -215,13 +215,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     public int label = 0;
     //清单选中删除的数量
-    public long deleteAllNum = 0;
     //清单结算数量
     public long payAllNum = 0;
     //清单结算总金额
     public long payAllAmount = 0;
     //购物车删除ID列表
-    public List<Long> deleteIds = new ArrayList<Long>();
     public double prices = 0;
     public int payNum = 0;
 
@@ -757,8 +755,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             {
                 if(0==msg.arg1)
                 {
-                    prices = 0;
                     //结算模式
+                    prices = 0;
+
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
                     payNum = lists.size();
@@ -775,8 +774,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
                 else if(2==msg.arg1)
                 {
-                    prices=0;
                     //结算模式 加
+                    prices=0;
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
                     payNum = lists.size();
@@ -793,8 +792,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
                 else if(3==msg.arg1)
                 {
-                    prices=0;
                     //结算模式 减
+                    prices=0;
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
                     payNum = lists.size();
@@ -811,28 +810,29 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
                 else if(1==msg.arg1)
                 {
-                    ListModel list = (ListModel) msg.obj;
+                    //购物车删除ID列表
+                    List<Long> deleteIds = new ArrayList<Long>();
+                    int deleteAllNum =0;
                     //编辑模式
-                    if(0==msg.arg2)
+                    List<ListModel> lists = (List<ListModel>) msg.obj;
+                    for(int i=0; i<lists.size(); i++)
                     {
-                        //结算模式添加
-                        deleteAllNum++;
-                        deleteIds.add(list.getSid());
+                        if(lists.get(i).isSelect())
+                        {
+                            deleteAllNum++;
+                            deleteIds.add(lists.get(i).getSid());
+                        }
                     }
-                    else if(1==msg.arg2)
+                    if(deleteIds.size()==lists.size())
                     {
-                        //结算模式删除
-                        //编辑模式删除
-                        if(0>=deleteAllNum)
-                        {
-                            deleteAllNum=0;
-                            deleteIds.clear();
-                        }
-                        else
-                        {
-                            deleteAllNum--;
-                            deleteIds.remove(list.getSid());
-                        }
+                        //设置全选
+                        funcPopWin.setSelectAll();
+                    }
+                    else
+
+                    {
+                        //取消全选
+                        funcPopWin.setUNSelectAll();
                     }
                     funcPopWin.setMsg ( String.valueOf ( deleteAllNum ) );
                     funcPopWin.setDeletes(deleteIds);
@@ -842,10 +842,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 {
                     //全部选
                     funcPopWin.setMsg(String.valueOf(0));
-                    funcPopWin.setDeletes(deleteIds);
+                    funcPopWin.setDeletes(null);
                 }
                 else if(5==msg.arg1)
                 {
+                    List<Long> deleteIds = new ArrayList<Long>();
                     //全部选
                     List<ListModel> ls = (List<ListModel>) msg.obj;
                     funcPopWin.setMsg(String.valueOf(ls.size()));
@@ -1009,6 +1010,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         }
                         lists.removeAll(removes);
                         progress.dismissView();
+                        ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除成功", 500);
+                        //全选按钮置空
+                        funcPopWin.setUNSelectAll();
                         localCartOutput.getResultData().setLists(lists);
                         String str = jsonUtil.toJson(localCartOutput);
                         cartData.setCartData(str);
@@ -1055,14 +1059,17 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                                     cartCountIt.setCount(cartCountIt.getCount()-1);
                                                     CartCountModel.save(cartCountIt);
                                                 }
-
-                                                ToastUtils.showShortToast(HomeActivity.this, "删除成功");
+                                                //全选按钮置空
+                                                funcPopWin.setUNSelectAll();
+                                                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除成功", 500);
 
                                             } else {
                                                 progress.dismissView();
+                                                //全选按钮置空
+                                                funcPopWin.setUNSelectAll();
                                                 VolleyUtil.cancelAllRequest();
                                                 //上传失败
-                                                ToastUtils.showShortToast(HomeActivity.this, "删除失败");
+                                                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除失败", 500);
                                             }
                                         }
                                     }, new Response.ErrorListener() {
@@ -1070,9 +1077,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
                                             progress.dismissView();
+                                            //全选按钮置空
+                                            funcPopWin.setUNSelectAll();
                                             VolleyUtil.cancelAllRequest();
                                             //系统级别错误
-                                            ToastUtils.showShortToast(HomeActivity.this, "删除失败");
+                                            ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除失败", 500);
                                         }
                                     }
                             );
