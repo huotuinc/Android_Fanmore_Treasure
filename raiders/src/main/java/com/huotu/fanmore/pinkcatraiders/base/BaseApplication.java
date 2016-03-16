@@ -180,12 +180,22 @@ public class BaseApplication extends Application {
         return PreferenceHelper.readString(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_UDERHEAD);
     }
 
+    public void writeunionid(String initStr)
+    {
+        PreferenceHelper.writeString(getApplicationContext(),Contant.MALL_INFO,Contant.MALL_UNIONID,initStr);
+    }
+    public String readUnionid()
+    {
+        return PreferenceHelper.readString(getApplicationContext(), Contant.MALL_INFO,
+                Contant.MALL_UNIONID);
+    }
     //获取userId
     public Long readUerId()
     {
         return PreferenceHelper.readLong(getApplicationContext(), Contant.LOGIN_USER_INFO,
                 Contant.LOGIN_AUTH_USERID);
     }
+
 
     //获取user账号
     public String readAccount()

@@ -184,6 +184,7 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
         viewPage.getSettings().setSavePassword(true);
         viewPage.getSettings().setLoadsImagesAutomatically(true);
         viewPage.loadUrl(bundle.getString("url"));
+        underwebView.loadUrl(bundle.getString("bottomurl"));
 
         viewPage.setWebViewClient(
                 new WebViewClient() {

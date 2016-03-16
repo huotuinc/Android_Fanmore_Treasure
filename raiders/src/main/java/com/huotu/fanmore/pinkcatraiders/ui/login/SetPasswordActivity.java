@@ -194,6 +194,7 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
                     else if(1==bundle.getInt("type"))
                     {
                         progress.showProgress("提交中......");
+                        progress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
                         String url = Contant.REQUEST_URL + "forgetPassword";
                         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), SetPasswordActivity.this);
                         Map<String, Object> maps = new HashMap<String, Object>();

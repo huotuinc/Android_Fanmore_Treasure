@@ -45,7 +45,11 @@ import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
+
+import com.huotu.fanmore.pinkcatraiders.model.OutputUrlModel;
+
 import com.huotu.fanmore.pinkcatraiders.model.LocalCartOutputModel;
+
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
@@ -607,104 +611,100 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     public boolean handleMessage(Message msg) {
         switch (msg.what) {
             case Contant.SWITCH_UI: {
-                String tag = msg.obj.toString ( );
-                if ( tag.equals ( Contant.TAG_1 ) ) {
+
+                String tag = msg.obj.toString();
+                if (tag.equals(Contant.TAG_1)) {
                     application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
-                }
-                else if ( tag.equals ( Contant.TAG_2 ) ) {
-                    application.mFragManager.setCurrentFrag ( FragManager.FragType.NEWEST );
-                }
-                else if ( tag.equals ( Contant.TAG_3 ) ) {
-                    application.mFragManager.setCurrentFrag ( FragManager.FragType.LIST );
-                }
-                else if ( tag.equals ( Contant.TAG_4 ) ) {
-                    application.mFragManager.setCurrentFrag ( FragManager.FragType.PROFILE );
-                }
-                else if ( tag.equals ( Contant.TAG_5 ) ) {
+                } else if (tag.equals(Contant.TAG_2)) {
+                    application.mFragManager.setCurrentFrag(FragManager.FragType.NEWEST);
+                } else if (tag.equals(Contant.TAG_3)) {
+                    application.mFragManager.setCurrentFrag(FragManager.FragType.LIST);
+                } else if (tag.equals(Contant.TAG_4)) {
+                    application.mFragManager.setCurrentFrag(FragManager.FragType.PROFILE);
+                } else if (tag.equals(Contant.TAG_5)) {
+
 
                     //判断是否登陆
                     if(!application.isLogin())
                     {
+
                         guideLoginPopWin = new GuideLoginPopWin(HomeActivity.this, mHandler, HomeActivity.this, wManager);
                         guideLoginPopWin.showWin();
                         guideLoginPopWin.showAtLocation(
                                 findViewById(R.id.titleLayout),
                                 Gravity.CENTER, 0, 0
                         );
-                    }
-                    else
-                    {
-                        /*AuthParamUtils paramUtils = new AuthParamUtils ( application, System.currentTimeMillis(),HomeActivity.this );
-                    //String url = paramUtils.obtainUrl();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("url","http://cosytest.51flashmall.com/");
-                    ActivityUtils.getInstance().showActivity(HomeActivity.this, MallHomeActivity.class, bundle);*/
+
+                    } else {
+
+                        String url = Contant.REQUEST_URL + Contant.GETMALLURL;
+                        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                        //中文字符特殊处理
+                        //1 拼装参数
+                        Map<String, Object> maps = new HashMap<String, Object>();
+                        String suffix = params.obtainGetParam(maps);
+                        url = url + suffix;
+                        HttpUtils httpUtils = new HttpUtils();
+                        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                if (HomeActivity.this.isFinishing()) {
+                                    return;
+                                }
+                                JSONUtil<OutputUrlModel> jsonUtil = new JSONUtil<OutputUrlModel>();
+                                OutputUrlModel getmallurl = new OutputUrlModel();
+                                getmallurl = jsonUtil.toBean(response.toString(), getmallurl);
+                                if (1 == getmallurl.getResultCode() && getmallurl.getResultData() != null) {
+
+                                    try {
+                                        String loginUrl = getmallurl.getResultData().getLoginUrl();
+                                        String bottomUrl = getmallurl.getResultData().getBottomNavUrl();
+                                        String orderUrl = getmallurl.getResultData().getOrderRequestUrl();
+
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("url", loginUrl);
+                                        bundle.putString("bottomurl", bottomUrl);
+                                        bundle.putString("orderurl", orderUrl);
+                                        ActivityUtils.getInstance().showActivity(HomeActivity.this, MallHomeActivity.class, bundle);
+                                    } catch (Exception e) {
+                                        //未获取该用户信息
+                                        noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "用户数据存在非法字符");
+                                        noticePop.showNotice();
+                                        noticePop.showAtLocation(titleLayoutL,
+                                                Gravity.CENTER, 0, 0
+                                        );
+
+                                    }
+                                } else {
+                                    //未获取该用户信息
+                                    noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "未获取该用户信息");
+                                    noticePop.showNotice();
+                                    noticePop.showAtLocation(titleLayoutL,
+                                            Gravity.CENTER, 0, 0
+                                    );
+                                }
+
+                            }
+
+
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                progress.dismissView();
+                                //初始化失败
+                                //异常处理，自动切换成无数据
+                                noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "登录失败");
+                                noticePop.showNotice();
+                                noticePop.showAtLocation(titleLayoutL,
+                                        Gravity.CENTER, 0, 0
+                                );
+                            }
+                        });
+
+
                     }
 
-//                    String url = Contant.REQUEST_URL + Contant.GETMALLURL;
-//                    AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
-//                    //中文字符特殊处理
-//                    //1 拼装参数
-//                    Map<String, Object> maps = new HashMap<String, Object> ();
-//                    String suffix = params.obtainGetParam(maps);
-//                    url = url + suffix;
-//                    HttpUtils httpUtils = new HttpUtils();
-//                    httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
-//                        @Override
-//                        public void onResponse(JSONObject response) {
-//                            if (HomeActivity.this.isFinishing()) {
-//                                return;
-//                            }
-//                            JSONUtil<BaseModel> jsonUtil = new JSONUtil<BaseModel>();
-//                            BaseModel getmallurl = new BaseModel();
-//                            getmallurl = jsonUtil.toBean(response.toString(), getmallurl);
-//                            if (1 == getmallurl.getResultCode()) {
-//
-//                                try {
-//                                    String url= getmallurl.getResultDescription();
-//                                    Bundle bundle = new Bundle();
-//                                    bundle.putString("url", "http://cosytest.51flashmall.com/");
-//                                    ActivityUtils.getInstance().showActivity(HomeActivity.this, MallHomeActivity.class, bundle);
-//                                } catch (Exception e) {
-//                                    //未获取该用户信息
-//                                    noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "用户数据存在非法字符");
-//                                    noticePop.showNotice();
-//                                    noticePop.showAtLocation(titleLayoutL,
-//                                            Gravity.CENTER, 0, 0
-//                                    );
-//
-//                                }
-//                            } else {
-//                                //未获取该用户信息
-//                                noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "未获取该用户信息");
-//                                noticePop.showNotice();
-//                                noticePop.showAtLocation(titleLayoutL,
-//                                        Gravity.CENTER, 0, 0
-//                                );
-//                            }
-//
-//                        }
-//
-//
-//
-//                    }, new Response.ErrorListener() {
-//                        @Override
-//                        public void onErrorResponse(VolleyError error) {
-//                            progress.dismissView();
-//                            //初始化失败
-//                            //异常处理，自动切换成无数据
-//                            noticePop = new NoticePopWindow ( HomeActivity.this, HomeActivity.this, wManager, "登录失败");
-//                            noticePop.showNotice ( );
-//                            noticePop.showAtLocation(titleLayoutL,
-//                                    Gravity.CENTER, 0, 0
-//                            );
-//                        }
-//                    });
-//
-//
-//
-              }
-
+                    }
 
             }
             break;
