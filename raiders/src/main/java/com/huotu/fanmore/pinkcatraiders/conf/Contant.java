@@ -21,7 +21,6 @@ public class Contant {
 
     public static final String OPERATION        = "duobao2016AD";
 
-
     public static final String SYS_INFO         = "sysInfo";
 
     public static final String SYS_PACKAGE      = "cy.com.morefan";
@@ -33,6 +32,9 @@ public class Contant {
     public static final String MEMBER_TOKEN     = "member_token";
 
     public static final String APPKEY           = "123456";
+    //商城信息------------------------------------------
+    public static final String MALL_INFO   ="mall_info";
+    public static final String MALL_UNIONID  ="mall_unionid";
 
     //支付环节------------------------------------------
     //微信支付ID
@@ -195,6 +197,8 @@ public class Contant {
     //public static final String REQUEST_URL = "http://192.168.3.86:8080/duobao/app/";
     //test url
     //public static final String REQUEST_URL="http://192.168.1.254:10001/app/";
+   //获取商城地址
+   public static final String GETMALLURL="getMallLoginUrl";
     //获取夺宝记录
     public static final String GET_MY_RAIDER_LIST          = "getMyRaiderList";
 
@@ -226,8 +230,7 @@ public class Contant {
 
     //登录
     public static final String LOGIN                       = "login";
-    //获取商城地址
-    public static final String GETMALLURL="getMallUrl";
+
     //qq 微信授权登录
     public static final String AUTHLOGIN= "authLogin";
     //绑定微信

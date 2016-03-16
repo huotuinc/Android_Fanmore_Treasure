@@ -119,7 +119,7 @@ public class NewestProductAdapter extends BaseAdapter {
                     Bundle bundle = new Bundle ( );
                     bundle.putInt("tip",2);
                     bundle.putLong("issueId", product.getIssueId());
-                    bundle.putStringArrayList("imgs", (ArrayList<String>) product.getImgs());
+                    bundle.putSerializable("newopenlist", product);
                     ActivityUtils.getInstance().showActivity ( aty, ProductDetailActivity.class, bundle );
                 }
             });

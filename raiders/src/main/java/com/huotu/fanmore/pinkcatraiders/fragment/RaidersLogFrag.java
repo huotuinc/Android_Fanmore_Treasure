@@ -125,7 +125,7 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
         String url = Contant.REQUEST_URL + Contant.GET_MY_RAIDER_LIST;
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
         Map<String, Object> maps = new HashMap<String, Object>();
-        //全部
+        //进行中
         maps.put("type", "1");
         if ( OperateTypeEnum.REFRESH == operateType )
         {// 下拉

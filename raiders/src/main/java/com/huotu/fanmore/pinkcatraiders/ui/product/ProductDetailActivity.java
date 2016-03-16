@@ -35,6 +35,7 @@ import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
 import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
+import com.huotu.fanmore.pinkcatraiders.model.NewOpenListModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.PartnerHistorysModel;
 import com.huotu.fanmore.pinkcatraiders.model.PartnerHistorysOutputModel;
@@ -66,6 +67,7 @@ import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -134,6 +136,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     TextView allLogText;
     @Bind(R.id.partnerLogL)
     LinearLayout partnerLogL;
+    @Bind(R.id.bottomL)
+    RelativeLayout bottomL;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public Handler mHandler;
     public Bundle bundle;
@@ -144,6 +148,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     public boolean isInflate = true;
     public ProductDetailModel productDetail;
     public ProductModel product;
+    public NewOpenListModel newopenlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,10 +160,17 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         wManager = this.getWindowManager();
         bundle = this.getIntent().getExtras();
         product = (ProductModel) bundle.getSerializable("product");
+        newopenlist=(NewOpenListModel)bundle.getSerializable("newopenlist");
         mHandler = new Handler(this);
 
         initTitle();
-        initBottom();
+        if (bundle.getInt("tip")==1) {
+
+
+            initBottom();
+        }else {
+            bottomL.setVisibility(View.GONE);
+        }
         initSwitchImg();
         initView();
     }
@@ -421,7 +433,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ProductDetailActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
             //商品id
-            maps.put("issueId", product.getIssueId());
+            maps.put("issueId", bundle.getLong("issueId"));
             String suffix = params.obtainGetParam(maps);
             url = url + suffix;
             HttpUtils httpUtils = new HttpUtils();
@@ -857,7 +869,11 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     private void initSwitchImg()
     {
+    if (bundle.getInt("tip")==1) {
         imgs = product.getImgs();
+    }else {
+        imgs=newopenlist.getImgs();
+    }
         initDots();
         //通过适配器引入图片
         productDetailViewPager.setAdapter(new LoadSwitchImgAdapter(imgs, ProductDetailActivity.this));

@@ -61,6 +61,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.EncryptUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.GsonRequest;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 
@@ -213,6 +214,7 @@ public class LoginActivity extends BaseActivity
                     Map<String, Object> maps = new HashMap<String, Object> ();
                     maps.put("username",qqModel.getNickname());
                     maps.put("unionId",qqModel.getOpenid());
+                    application.writeunionid(qqModel.getOpenid());
                     maps.put("head",qqModel.getIcon());
                     maps.put("type", 2);
                     maps = params.obtainAllParamUTF8 ( maps );
@@ -242,7 +244,7 @@ public class LoginActivity extends BaseActivity
                                     try {
                                         //加载用户信息
                                         application.writeUserInfo(appWXLoginModel.getResultData().getUser());
-                                        if(null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
+                                        if(bundle!=null&&null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
                                         {
                                             uploadCartData();
                                         }
@@ -575,7 +577,7 @@ public class LoginActivity extends BaseActivity
                             try {
                                 //加载用户信息
                                 application.writeUserInfo(loginOutputs.getResultData().getUser());
-                                if(null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
+                                if(bundle!=null&&null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
                                 {
                                     uploadCartData();
                                 }
@@ -715,7 +717,7 @@ public class LoginActivity extends BaseActivity
             {
                 //记录token
                 BaseApplication.getInstance().writeUserInfo(user);
-                if(null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
+                if(bundle!=null&&null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
                 {
                     uploadCartData();
                 }
