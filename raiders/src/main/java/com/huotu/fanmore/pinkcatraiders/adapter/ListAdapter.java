@@ -278,8 +278,8 @@ public class ListAdapter extends BaseAdapter {
                         if (((long)numView.getTag()-list.getStepAmount()) < 1) // 先减，再判断
                         {
                             //numView.setTag((long)numView.getTag()+list.getStepAmount());
-                            ToastUtils.showShortToast(context, "亲，数量至少为"+list.getStepAmount()+"哦~");
-                            numView.setText(String.valueOf ( list.getStepAmount()));
+                            ToastUtils.showShortToast(context, "亲，数量至少为"+(list.getToAmount()>list.getStepAmount()?list.getStepAmount():list.getToAmount())+"哦~");
+                            numView.setText(String.valueOf ( (list.getToAmount()>list.getStepAmount()?list.getStepAmount():list.getToAmount())));
                         } else
                         {
                             numView.setTag((long)numView.getTag()-list.getStepAmount());
