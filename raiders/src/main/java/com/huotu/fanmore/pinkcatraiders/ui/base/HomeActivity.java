@@ -611,7 +611,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             case Contant.SWITCH_UI: {
                 String tag = msg.obj.toString ( );
                 if ( tag.equals ( Contant.TAG_1 ) ) {
-                    application.mFragManager.setCurrentFrag ( FragManager.FragType.HOME );
+                    application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
                 }
                 else if ( tag.equals ( Contant.TAG_2 ) ) {
                     application.mFragManager.setCurrentFrag ( FragManager.FragType.NEWEST );
@@ -623,6 +623,25 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     application.mFragManager.setCurrentFrag ( FragManager.FragType.PROFILE );
                 }
                 else if ( tag.equals ( Contant.TAG_5 ) ) {
+
+                    //判断是否登陆
+                    if(!application.isLogin())
+                    {
+                        guideLoginPopWin = new GuideLoginPopWin(HomeActivity.this, mHandler, HomeActivity.this, wManager);
+                        guideLoginPopWin.showWin();
+                        guideLoginPopWin.showAtLocation(
+                                findViewById(R.id.titleLayout),
+                                Gravity.CENTER, 0, 0
+                        );
+                    }
+                    else
+                    {
+                        /*AuthParamUtils paramUtils = new AuthParamUtils ( application, System.currentTimeMillis(),HomeActivity.this );
+                    //String url = paramUtils.obtainUrl();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("url","http://cosytest.51flashmall.com/");
+                    ActivityUtils.getInstance().showActivity(HomeActivity.this, MallHomeActivity.class, bundle);*/
+                    }
 
 //                    String url = Contant.REQUEST_URL + Contant.GETMALLURL;
 //                    AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
@@ -687,25 +706,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 //
 //
               }
-
-                    //判断是否登陆
-                    if(!application.isLogin())
-                    {
-                        guideLoginPopWin = new GuideLoginPopWin(HomeActivity.this, mHandler, HomeActivity.this, wManager);
-                        guideLoginPopWin.showWin();
-                        guideLoginPopWin.showAtLocation(
-                                findViewById(R.id.titleLayout),
-                                Gravity.CENTER, 0, 0
-                        );
-                    }
-                    else
-                    {
-                        /*AuthParamUtils paramUtils = new AuthParamUtils ( application, System.currentTimeMillis(),HomeActivity.this );
-                    //String url = paramUtils.obtainUrl();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("url","http://cosytest.51flashmall.com/");
-                    ActivityUtils.getInstance().showActivity(HomeActivity.this, MallHomeActivity.class, bundle);*/
-                    }
 
 
             }
