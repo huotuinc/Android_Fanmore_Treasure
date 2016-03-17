@@ -141,10 +141,12 @@ public class RaidersNumberActivity extends BaseActivity implements View.OnClickL
                         partnerCount.setText("参与了"+raiderNumber.getAmount()+"人次，以下是所有的夺宝号码。");
                         List<Long> numbers = raiderNumber.getNumbers();
                         Iterator<Long> it = numbers.iterator();
+                        StringBuilder builder = new StringBuilder();
                         while (it.hasNext())
                         {
-                            number.setText(it.next()+"     ");
+                            builder.append(it.next()+"   ");
                         }
+                        number.setText(builder.toString().substring(0, builder.toString().length()));
                     } else {
                         ToastUtils.showMomentToast(RaidersNumberActivity.this, RaidersNumberActivity.this, "数据加载失败，即将关闭界面");
                     }
