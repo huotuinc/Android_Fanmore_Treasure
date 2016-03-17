@@ -737,7 +737,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                 }
                                 else
                                 {
-                                    ToastUtils.showLongToast ( HomeActivity.this, "打开链接失败" );
+                                    ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "打开链接失败");
                                 }
                             }
                         }, new Response.ErrorListener ( ) {
@@ -745,7 +745,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                             @Override
                             public
                             void onErrorResponse ( VolleyError error ) {
-                                ToastUtils.showLongToast ( HomeActivity.this, "打开链接失败" );
+                                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "打开链接失败");
                             }
                         }
                                       );
@@ -876,11 +876,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 List<ListModel> datas = (List<ListModel>) msg.obj;
                 if(0==payNum||0==prices)
                 {
-                    ToastUtils.showShortToast(HomeActivity.this, "购物车为空");
+                    ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "购物车为空");
                 }
                 else if(null==datas || datas.isEmpty())
                 {
-                    ToastUtils.showShortToast(HomeActivity.this, "购物车为空");
+                    ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "购物车为空");
                 }
                 else
                 {
@@ -977,7 +977,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             {
                 if(1==msg.arg1)
                 {
-                    ToastUtils.showShortToast(HomeActivity.this, "未选择删除的商品");
+                    ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "未选择删除的商品");
                 }
                 else if(0==msg.arg1)
                 {
@@ -1011,7 +1011,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         }
                         lists.removeAll(removes);
                         progress.dismissView();
-                        ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除成功", 500);
+                        ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除成功");
                         //全选按钮置空
                         funcPopWin.setUNSelectAll();
                         localCartOutput.getResultData().setLists(lists);
@@ -1062,7 +1062,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                                 }
                                                 //全选按钮置空
                                                 funcPopWin.setUNSelectAll();
-                                                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除成功", 500);
+                                                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除成功");
 
                                             } else {
                                                 progress.dismissView();
@@ -1070,7 +1070,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                                 funcPopWin.setUNSelectAll();
                                                 VolleyUtil.cancelAllRequest();
                                                 //上传失败
-                                                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除失败", 500);
+                                                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除失败");
                                             }
                                         }
                                     }, new Response.ErrorListener() {
@@ -1082,7 +1082,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                             funcPopWin.setUNSelectAll();
                                             VolleyUtil.cancelAllRequest();
                                             //系统级别错误
-                                            ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除失败", 500);
+                                            ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除失败");
                                         }
                                     }
                             );

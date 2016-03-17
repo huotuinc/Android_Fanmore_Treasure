@@ -1,5 +1,6 @@
 package com.huotu.fanmore.pinkcatraiders.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -208,13 +209,13 @@ public class ListAdapter extends BaseAdapter {
                         if (((long)numView.getTag()+list.getStepAmount()) < 1) // 先加，再判断
                         {
                             //buyNum  = buyNum-list.getStepAmount();
-                            ToastUtils.showShortToast(context, "亲，数量至少为" + list.getStepAmount() + "哦~");
+                            ToastUtils.showMomentToast((Activity) context, context, "亲，数量至少为" + list.getStepAmount() + "哦~");
                             numView.setText(String.valueOf ( list.getStepAmount()));
                         }
                         else if(((long)numView.getTag()+list.getStepAmount()) > list.getRemainAmount())
                         {
                             //buyNum  = buyNum-list.getStepAmount();
-                            ToastUtils.showShortToast(context, "亲，数量不能超过" + list.getRemainAmount() + "哦~");
+                            ToastUtils.showMomentToast((Activity) context, context, "亲，数量不能超过" + list.getRemainAmount() + "哦~");
                             numView.setText(String.valueOf(numView.getTag()));
                         }
                         else
@@ -271,7 +272,7 @@ public class ListAdapter extends BaseAdapter {
                     else if(((long)numView.getTag()-list.getStepAmount()) > list.getRemainAmount())
                     {
                         numView.setTag((long)numView.getTag()+list.getStepAmount());
-                        ToastUtils.showShortToast(context, "亲，数量不能超过" + list.getRemainAmount() + "哦~");
+                        ToastUtils.showMomentToast((Activity) context, context, "亲，数量不能超过" + list.getRemainAmount() + "哦~");
                         numView.setText(String.valueOf((long)numView.getTag()));
                     }
                     else
@@ -280,7 +281,7 @@ public class ListAdapter extends BaseAdapter {
                         if (((long)numView.getTag()-list.getStepAmount()) < 1) // 先减，再判断
                         {
                             //numView.setTag((long)numView.getTag()+list.getStepAmount());
-                            ToastUtils.showShortToast(context, "亲，数量至少为"+(list.getRemainAmount()>list.getStepAmount()?list.getStepAmount():list.getRemainAmount())+"哦~");
+                            ToastUtils.showMomentToast((Activity) context, context, "亲，数量至少为" + (list.getRemainAmount() > list.getStepAmount() ? list.getStepAmount() : list.getRemainAmount()) + "哦~");
                             numView.setText(String.valueOf ( (list.getRemainAmount()>list.getStepAmount()?list.getStepAmount():list.getRemainAmount())));
                         } else
                         {

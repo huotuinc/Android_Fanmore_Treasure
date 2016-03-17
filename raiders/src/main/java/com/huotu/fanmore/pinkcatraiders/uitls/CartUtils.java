@@ -87,7 +87,7 @@ public class CartUtils {
                         cartCountIt.setCount(cartCountIt.getCount()+1);
                         CartCountModel.save(cartCountIt);
                     }
-                    ToastUtils.showMomentToast((Activity) context, context, "添加清单成功", 500);
+                    ToastUtils.showMomentToast((Activity) context, context, "添加清单成功");
                 }
                 else
                 {
@@ -136,7 +136,7 @@ public class CartUtils {
                         cartCountIt.setCount(cartCountIt.getCount()+1);
                         CartCountModel.save(cartCountIt);
                     }
-                    ToastUtils.showMomentToast((Activity) context, context, "添加清单成功", 500);
+                    ToastUtils.showMomentToast((Activity) context, context, "添加清单成功");
                 }
 
             }
@@ -173,12 +173,12 @@ public class CartUtils {
                                     CartCountModel.save(cartCountIt);
                                 }
                                 //上传成功
-                                ToastUtils.showMomentToast((Activity) context, context, "添加清单成功", 500);
+                                ToastUtils.showMomentToast((Activity) context, context, "添加清单成功");
                             }
                             else
                             {
                                 //上传失败
-                                ToastUtils.showMomentToast((Activity) context, context, "添加清单失败", 500);
+                                ToastUtils.showMomentToast((Activity) context, context, "添加清单失败");
                             }
                         }
                     }, new Response.ErrorListener ( ) {
@@ -188,7 +188,7 @@ public class CartUtils {
                         void onErrorResponse ( VolleyError error ) {
                             progress.dismissView ( );
                             //系统级别错误
-                            ToastUtils.showMomentToast((Activity) context, context, "添加清单失败", 500);
+                            ToastUtils.showMomentToast((Activity) context, context, "添加清单失败");
                         }
                     }
             );

@@ -342,17 +342,17 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
         //保存地址数据
         if( TextUtils.isEmpty ( receiverName.getText () ))
         {
-            ToastUtils.showLongToast ( AddAddressActivity.this, "请输入收货人" );
+            ToastUtils.showMomentToast(AddAddressActivity.this,  AddAddressActivity.this, "请输入收货人" );
             return;
         }
         else if(TextUtils.isEmpty ( receiverPhone.getText () ))
         {
-            ToastUtils.showLongToast ( AddAddressActivity.this, "请输入收货手机" );
+            ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "请输入收货手机");
             return;
         }
         else if(TextUtils.isEmpty ( detail.getText () ))
         {
-            ToastUtils.showLongToast ( AddAddressActivity.this, "请输入详细地址" );
+            ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "请输入详细地址");
             return;
         }
         else

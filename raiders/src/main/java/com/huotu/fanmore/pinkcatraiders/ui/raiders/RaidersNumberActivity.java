@@ -146,17 +146,17 @@ public class RaidersNumberActivity extends BaseActivity implements View.OnClickL
                             number.setText(it.next()+"     ");
                         }
                     } else {
-                        ToastUtils.showShortToast(RaidersNumberActivity.this, "数据加载失败，即将关闭界面");
+                        ToastUtils.showMomentToast(RaidersNumberActivity.this, RaidersNumberActivity.this, "数据加载失败，即将关闭界面");
                     }
                 } else {
                     //异常处理，自动切换成无数据
-                    ToastUtils.showShortToast(RaidersNumberActivity.this, "数据加载失败，即将关闭界面");
+                    ToastUtils.showMomentToast(RaidersNumberActivity.this, RaidersNumberActivity.this, "数据加载失败，即将关闭界面");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                ToastUtils.showShortToast(RaidersNumberActivity.this, "数据加载失败，即将关闭界面");
+                ToastUtils.showMomentToast(RaidersNumberActivity.this, RaidersNumberActivity.this, "数据加载失败，即将关闭界面");
             }
         });
     }

@@ -110,11 +110,11 @@ public class ChangePasswordActivity extends BaseActivity implements Handler.Call
     @OnClick(R.id.btn_commit)
     void modifyPassword(){
         if ( TextUtils.isEmpty(edtOldPsd.getText()) ) {
-            ToastUtils.showLongToast(ChangePasswordActivity.this, "请输入旧密码");
+            ToastUtils.showMomentToast(ChangePasswordActivity.this, ChangePasswordActivity.this, "请输入旧密码");
             return;
         }
         else if ( TextUtils.isEmpty ( edtNewPwd.getText ( ) ) ) {
-            ToastUtils.showLongToast ( ChangePasswordActivity.this, "请输入新密码" );
+            ToastUtils.showMomentToast(ChangePasswordActivity.this, ChangePasswordActivity.this, "请输入新密码");
             return;
         }
         else {
@@ -144,8 +144,8 @@ public class ChangePasswordActivity extends BaseActivity implements Handler.Call
                     changepsd = jsonUtil.toBean(response.toString(), changepsd);
                     if (1 == changepsd.getResultCode()) {
 
-                              ToastUtils.showShortToast(ChangePasswordActivity.this,"修改成功");
-                                ActivityUtils.getInstance().skipActivity(ChangePasswordActivity.this, UserSettingActivity.class);
+                        ToastUtils.showMomentToast(ChangePasswordActivity.this, ChangePasswordActivity.this, "修改成功");
+                        ActivityUtils.getInstance().skipActivity(ChangePasswordActivity.this, UserSettingActivity.class);
 
 
                             }

@@ -146,7 +146,7 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
     @OnClick(R.id.titleRightImage)
     void saveData() {
         if (TextUtils.isEmpty(modityTextInput.getText())) {
-            ToastUtils.showLongToast(ModifyInfoActivity.this, "请输入修改后的信息");
+            ToastUtils.showMomentToast(ModifyInfoActivity.this, ModifyInfoActivity.this, "请输入修改后的信息");
             return;
         } else {
             if (bundle.get("moblieband") == 1) {

@@ -487,7 +487,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
             {
                 titleLayoutL.setClickable(true);
                 successProgress.dismissView();
-                ToastUtils.showShortToast(this, "授权失败");
+                ToastUtils.showMomentToast(UserSettingActivity.this, this, "授权失败");
             }
             break;
             case Contant.MSG_AUTH_ERROR:
@@ -499,7 +499,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                 if("cn.sharesdk.wechat.utils.WechatClientNotExistException".equals ( throwable.toString () ))
                 {
                     //手机没有安装微信客户端
-                    ToastUtils.showShortToast(this, "手机没有安装微信客户端");
+                    ToastUtils.showMomentToast(UserSettingActivity.this, this, "手机没有安装微信客户端");
 
                 }
                 else
@@ -507,7 +507,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                     titleLayoutL.setClickable ( true );
                     successProgress.dismissView();
 //                    //提示授权失败
-                    ToastUtils.showShortToast(this, "授权操作遇到错误");
+                    ToastUtils.showMomentToast(UserSettingActivity.this, this, "授权操作遇到错误");
 
                 }
 
@@ -520,7 +520,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                 successProgress.dismissView();
 
 
-                ToastUtils.showShortToast(this, "授权操作已取消");
+                ToastUtils.showMomentToast(UserSettingActivity.this, this, "授权操作已取消");
 
 
             }
@@ -529,7 +529,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
             {
                 successProgress.dismissView();
 
-                ToastUtils.showShortToast(this, "已经获取用户信息");
+                ToastUtils.showMomentToast(UserSettingActivity.this, this, "已经获取用户信息");
 
 
 
@@ -561,13 +561,13 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                                 if(null != user) {
                                     BaseApplication.getInstance().writeUserInfo(user);
                                     initData();
-                                    ToastUtils.showShortToast(UserSettingActivity.this, "绑定成功");
+                                    ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "绑定成功");
                                 } else
                                 {
-                                    ToastUtils.showShortToast(UserSettingActivity.this, "未请求到数据");
+                                    ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "未请求到数据");
                                 }
                             }else if (52011==bindoutput.getResultCode()){
-                                ToastUtils.showShortToast(UserSettingActivity.this, "该QQ号已经被绑定");
+                                ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "该QQ号已经被绑定");
                             }
                             else {
                                 //异常处理，自动切换成无数据
@@ -617,10 +617,10 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                                 if(null != user) {
                                     BaseApplication.getInstance().writeUserInfo(user);
                                     initData();
-                                    ToastUtils.showShortToast(UserSettingActivity.this, "绑定成功");
+                                    ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "绑定成功");
                                 } else
                                 {
-                                    ToastUtils.showShortToast(UserSettingActivity.this, "未请求到数据");
+                                    ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "未请求到数据");
                                 }
                             } else {
                                 //异常处理，自动切换成无数据
@@ -655,14 +655,14 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
             {
                 successProgress.dismissView();
                 //提示授权成功
-                ToastUtils.showShortToast(this, "获取用户信息失败");
+                ToastUtils.showMomentToast(UserSettingActivity.this, this, "获取用户信息失败");
 
             }
             break;
             case Contant.INIT_MENU_ERROR:
             {
                 successProgress.dismissView();
-                ToastUtils.showShortToast(this, "获取用户信息失败");
+                ToastUtils.showMomentToast(UserSettingActivity.this, this, "获取用户信息失败");
 
             }
             break;
@@ -714,7 +714,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
         if (requestCode == 0) {// camera back
             Bitmap bitmap = BitmapUtils.readBitmapByPath ( imgPath );
             if (bitmap == null) {
-                ToastUtils.showLongToast ( UserSettingActivity.this, "未获取到图片!" );
+                ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "未获取到图片!");
                 return;
             }
             if (null == cropperView)
@@ -743,8 +743,8 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                     }
 
                     if (bitmap == null) {
-                        ToastUtils.showLongToast(UserSettingActivity.this,
-                                                 "未获取到图片!");
+                        ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this,
+                                "未获取到图片!");
                         return;
                     }
                 } else if (uri.toString().startsWith("file:///")) {
@@ -752,8 +752,8 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                                                            uri.toString().length());
                     bitmap = BitmapUtils.readBitmapByPath(path);
                     if (bitmap == null) {
-                        ToastUtils.showLongToast(UserSettingActivity.this,
-                                                 "未获取到图片!");
+                        ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this,
+                                "未获取到图片!");
                         return;
                     }
 
@@ -787,7 +787,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                 Gravity.CENTER, 0, 0
         );
         if( false == UserSettingActivity.this.canConnect() ){
-            ToastUtils.showShortToast(UserSettingActivity.this, "网络有问题");
+            ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "网络有问题");
             return;
         }
         else
@@ -885,10 +885,10 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                     if(null != user) {
                         BaseApplication.getInstance().writeUserInfo(user);
                         initData();
-                        ToastUtils.showShortToast(UserSettingActivity.this, "解绑成功");
+                        ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "解绑成功");
                     } else
                     {
-                        ToastUtils.showShortToast(UserSettingActivity.this, "未请求到数据");
+                        ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "未请求到数据");
                     }
 
                 } else {
