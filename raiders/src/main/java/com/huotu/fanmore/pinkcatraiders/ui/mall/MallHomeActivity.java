@@ -72,51 +72,11 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public boolean handleMessage(Message msg) {
-//        switch ( msg.what )
-//        {
-//            //加载页面
-//
-//            case Constant.FRESHEN_PAGE_MESSAGE_TAG:
-//            {
-//                //刷新界面
-//                String url = msg.obj.toString ();
-//                webView.loadUrl(url);
-//            }
-//            break;
-//
-//
-//
-//
-//            case Constant.SWITCH_USER_NOTIFY:
-//            {
-//                SwitchUserModel.SwitchUser user = ( SwitchUserModel.SwitchUser ) msg.obj;
-//                //更新userId
-//                application.writeMemberId ( String.valueOf ( user.getUserid ( ) ) );
-//                //更新昵称
-//                application.writeUserName ( user.getWxNickName () );
-//                application.writeUserIcon ( user.getWxHeadImg ( ) );
-//
-//                application.writeMemberLevel(user.getLevelName());
-//
-//
-//            }
-//            break;
-//            case Constant.LOAD_SWITCH_USER_OVER:
-//            {
-//                progress.dismissProgress();
-//            }
-//            break;
-//            case Constant.PAY_NET:
-//            {
-//                PayModel payModel = (PayModel) msg.obj;
-//                //调用JS
-//                webView.loadUrl("javascript:utils.Go2Payment(" + payModel.getCustomId() + "," + payModel.getTradeNo() + "," + payModel.getPaymentType() + ", "
-//                        + "false);\n");
-//            }
-//            break;
-//            default:
-//                break;
-//        }
+        switch (msg.what)
+        {
+            default:
+                break;
+        }
         return false;
     }
 
@@ -186,6 +146,7 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
         viewPage.getSettings().setLoadsImagesAutomatically(true);
         viewPage.loadUrl(bundle.getString("url"));
         underwebView.loadUrl(bundle.getString("bottomurl"));
+        //底部webview控制器
 
         viewPage.setWebViewClient(
                 new WebViewClient() {

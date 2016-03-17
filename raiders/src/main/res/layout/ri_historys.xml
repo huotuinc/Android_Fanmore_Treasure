@@ -17,6 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         ptr:ptrAnimationStyle= "flip"
+        android:divider="@null"
+        android:dividerHeight="0px"
         android:layout_above="@+id/bottomL"
         ptr:ptrMode= "both">
         </com.handmark.pulltorefresh.library.PullToRefreshListView>
