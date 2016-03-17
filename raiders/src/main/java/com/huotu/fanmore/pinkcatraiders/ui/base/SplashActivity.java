@@ -336,7 +336,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                                             }
                                                             else
                                                             {
-                                                                ToastUtils.showLongToast ( SplashActivity.this, "初始化数据失败" );
+                                                                ToastUtils.showMomentToast(SplashActivity.this, SplashActivity.this, "初始化数据失败");
                                                             }
                                                         }
                                                     }
@@ -345,14 +345,14 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                                     @Override
                                                     public
                                                     void onErrorResponse ( VolleyError error ) {
-                                                        ToastUtils.showLongToast ( SplashActivity.this, "初始化数据失败" );
+                                                        ToastUtils.showMomentToast(SplashActivity.this, SplashActivity.this, "初始化数据失败");
                                                     }
                                                 }
                                         );
                                     }
                                     else {
                                         //异常处理，自动切换成无数据
-                                        ToastUtils.showLongToast ( SplashActivity.this, "初始化数据失败" );
+                                        ToastUtils.showMomentToast(SplashActivity.this, SplashActivity.this, "初始化数据失败");
                                     }
                                 }
                             }, new Response.ErrorListener ( ) {
@@ -362,7 +362,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                 void onErrorResponse ( VolleyError error ) {
                                     //初始化失败
                                     //异常处理，自动切换成无数据
-                                    ToastUtils.showLongToast ( SplashActivity.this, "初始化数据失败" );
+                                    ToastUtils.showMomentToast(SplashActivity.this, SplashActivity.this, "未连接到服务器");
                                 }
                             }
                     );

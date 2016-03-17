@@ -192,7 +192,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                         }
                         else {
                             //异常处理，自动切换成无数据
-                            ToastUtils.showShortToast ( RechargeActivity.this, "加载默认金额失败" );
+                            ToastUtils.showMomentToast(RechargeActivity.this, RechargeActivity.this, "加载默认金额失败");
                         }
                     }
                 }, new Response.ErrorListener ( ) {
@@ -203,7 +203,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                         if ( RechargeActivity.this.isFinishing ( ) ) {
                             return;
                         }
-                        ToastUtils.showShortToast ( RechargeActivity.this, "加载默认金额失败" );
+                        ToastUtils.showMomentToast(RechargeActivity.this, RechargeActivity.this, "加载默认金额失败");
                     }
                 }
                               );
@@ -263,12 +263,12 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
     {
         if(-1 == money)
         {
-            ToastUtils.showShortToast ( RechargeActivity.this, "请选择充值的面额" );
+            ToastUtils.showMomentToast(RechargeActivity.this, RechargeActivity.this, "请选择充值的面额" );
             return;
         }
         else if(-1 == payType)
         {
-            ToastUtils.showShortToast ( RechargeActivity.this, "请选择支付方式" );
+            ToastUtils.showMomentToast(RechargeActivity.this, RechargeActivity.this, "请选择支付方式");
             return;
         }
         else
@@ -332,12 +332,12 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                                 else
                                 {
                                     //无效支付
-                                    ToastUtils.showShortToast ( RechargeActivity.this, "无效支付信息" );
+                                    ToastUtils.showMomentToast(RechargeActivity.this, RechargeActivity.this, "无效支付信息");
                                 }
                             }
                             else {
                                 //异常处理，自动切换成无数据
-                                ToastUtils.showShortToast ( RechargeActivity.this, "提交支付信息失败" );
+                                ToastUtils.showMomentToast(RechargeActivity.this, RechargeActivity.this, "提交支付信息失败");
                             }
                         }
                     }, new Response.ErrorListener ( ) {
@@ -350,7 +350,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                             if ( RechargeActivity.this.isFinishing ( ) ) {
                                 return;
                             }
-                            ToastUtils.showShortToast ( RechargeActivity.this, "提交支付信息失败" );
+                            ToastUtils.showMomentToast(RechargeActivity.this, RechargeActivity.this, "提交支付信息失败");
                         }
                     }
                                   );

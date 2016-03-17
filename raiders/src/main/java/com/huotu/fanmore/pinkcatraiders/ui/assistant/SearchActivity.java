@@ -259,7 +259,7 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
         searchHistoryTag.setVisibility ( View.GONE );
         key = searchL.getText ( ).toString ( );
         if ( TextUtils.isEmpty ( key ) ) {
-            ToastUtils.showShortToast ( SearchActivity.this, "请输入搜索关键字" );
+            ToastUtils.showMomentToast(SearchActivity.this, SearchActivity.this, "请输入搜索关键字");
             return;
         }
         else {
@@ -373,7 +373,7 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
                                       {
                                           //异常处理，自动切换成无数据
                                           searchGrid.setEmptyView(emptyView);
-                                          ToastUtils.showLongToast(SearchActivity.this,"没有搜索到该商品！~");
+                                          ToastUtils.showMomentToast(SearchActivity.this, SearchActivity.this, "没有搜索到该商品！~");
                                       }
                                   }
                               }, new Response.ErrorListener() {

@@ -135,6 +135,8 @@ public class LoginActivity extends BaseActivity
     RelativeLayout  loginL;
     @Bind(R.id.tv_forgetpsd)
     TextView tv_forgetpsd;
+    @Bind(R.id.titleLeftImage)
+    ImageView titleLeftImage;
 
 
     @Override
@@ -155,7 +157,7 @@ public class LoginActivity extends BaseActivity
             {
                 btn_wx.setClickable(true);
                 progress.dismissView();
-                ToastUtils.showShortToast(this, "登录失败");
+                ToastUtils.showMomentToast(LoginActivity.this, this, "登录失败");
             }
             break;
             case Contant.MSG_AUTH_ERROR:
@@ -167,7 +169,7 @@ public class LoginActivity extends BaseActivity
                 if("cn.sharesdk.wechat.utils.WechatClientNotExistException".equals ( throwable.toString () ))
                 {
                     //手机没有安装微信客户端
-                    ToastUtils.showShortToast(this, "手机没有安装微信客户端");
+                    ToastUtils.showMomentToast(LoginActivity.this, this, "手机没有安装微信客户端");
 
                 }
                 else
@@ -175,7 +177,7 @@ public class LoginActivity extends BaseActivity
                     loginL.setClickable ( true );
                     progress.dismissView();
 //                    //提示授权失败
-                    ToastUtils.showShortToast(this, "授权操作遇到错误");
+                    ToastUtils.showMomentToast(LoginActivity.this, this, "授权操作遇到错误");
 
                 }
 
@@ -186,7 +188,7 @@ public class LoginActivity extends BaseActivity
                 loginL.setClickable ( true );
                 //提示取消授权
                 progress.dismissView();
-                ToastUtils.showShortToast(this, "授权操作已取消");
+                ToastUtils.showMomentToast(LoginActivity.this, this, "授权操作已取消");
 
 
             }
@@ -194,7 +196,7 @@ public class LoginActivity extends BaseActivity
             case Contant.MSG_USERID_FOUND:
             {
 
-                ToastUtils.showShortToast(this, "已经获取用户信息");
+                ToastUtils.showMomentToast(LoginActivity.this, this, "已经获取用户信息");
 
 
             }
@@ -350,14 +352,14 @@ public class LoginActivity extends BaseActivity
             {
                 progress.dismissView();
                 //提示授权成功
-                ToastUtils.showShortToast(this, "获取用户信息失败");
+                ToastUtils.showMomentToast(LoginActivity.this, this, "获取用户信息失败");
 
             }
             break;
             case Contant.INIT_MENU_ERROR:
             {
                 progress.dismissView();
-                ToastUtils.showShortToast(this, "获取用户信息失败");
+                ToastUtils.showMomentToast(LoginActivity.this, this, "获取用户信息失败");
 
             }
             break;
@@ -527,6 +529,7 @@ public class LoginActivity extends BaseActivity
         stubTitleText.inflate();
         TextView titleText= (TextView) findViewById(R.id.titleText);
         titleText.setText("用户登录");
+
         titleText.setTextColor(getResources().getColor(R.color.color_white));
         btn_wx.setOnClickListener(this);
         tv_qq.setOnClickListener(this);
@@ -534,6 +537,8 @@ public class LoginActivity extends BaseActivity
         tv_wx.setOnClickListener(this);
         tv_forgetpsd.setOnClickListener(this);
         SystemTools.loadBackground(titleLayoutL, bgDraw);
+        SystemTools.loadBackground(titleLeftImage, res.getDrawable(R.mipmap.title_back_white));
+
     }
 
     @OnClick(R.id.btn_login)
@@ -541,12 +546,12 @@ public class LoginActivity extends BaseActivity
     {
         if(TextUtils.isEmpty(edtUserName.getText()))
         {
-            ToastUtils.showLongToast(LoginActivity.this, "请输入邮箱或者手机号");
+            ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "请输入邮箱或者手机号");
             return;
         }
         else if(TextUtils.isEmpty(edtPwd.getText()))
         {
-            ToastUtils.showLongToast(LoginActivity.this, "请输入密码");
+            ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "请输入密码");
             return;
         }
         else
@@ -636,6 +641,12 @@ public class LoginActivity extends BaseActivity
                 }
             });
         }
+    }
+
+    @OnClick(R.id.titleLeftImage)
+    void doBack()
+    {
+        closeSelf(LoginActivity.this);
     }
 
     @OnClick(R.id.btn_phonereg)
@@ -737,7 +748,7 @@ public class LoginActivity extends BaseActivity
             }
             else
             {
-                ToastUtils.showShortToast(LoginActivity.this, "未请求到数据");
+                ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "未请求到数据");
             }
         }};
 

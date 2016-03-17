@@ -32,7 +32,7 @@ public class ToastUtils
         alarmDialog.show();
     }
 
-    public static void showMomentToast(final Activity activity, final Context context, final String showMsg, final long time)
+    public static void showMomentToast(final Activity activity, final Context context, final String showMsg)
     {
         activity.runOnUiThread(new Runnable() {
             public void run() {
@@ -41,13 +41,14 @@ public class ToastUtils
                     alarmDialog = null;
                 }
                 alarmDialog = new AlarmDailog(context, showMsg);
+                alarmDialog.setDuration(Toast.LENGTH_SHORT);
                 alarmDialog.show();
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         alarmDialog.cancel();
                     }
-                }, time);
+                }, 300);
             }
         });
     }

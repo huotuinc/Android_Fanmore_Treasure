@@ -205,12 +205,12 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
         moneyTag = balance1.getMoney().longValue();
         if(-1 == moneyTag || 0==moneyTag)
         {
-            ToastUtils.showShortToast(PayOrderActivity.this, "购买金额为空");
+            ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "购买金额为空");
             return;
         }
         else if(-1 == payType)
         {
-            ToastUtils.showShortToast ( PayOrderActivity.this, "请选择支付方式" );
+            ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "请选择支付方式");
             return;
         }
         else if(2==payType)
@@ -240,7 +240,7 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                     PayOutputModel payOutput = response;
                     if(1==payOutput.getResultCode())
                     {
-                        ToastUtils.showShortToast(PayOrderActivity.this, "余额支付成功, 2秒后关闭订单");
+                        ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "余额支付成功, 2秒后关闭订单");
                         mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -267,13 +267,13 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                                             MyBroadcastReceiver.sendBroadcast(PayOrderActivity.this, MyBroadcastReceiver.SHOP_CART, bundle);
                                             closeSelf(PayOrderActivity.this);
                                         } else {
-                                            ToastUtils.showShortToast(PayOrderActivity.this, "刷新余额出现问题");
+                                            ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "刷新余额出现问题");
                                         }
                                     }
                                 }, new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
-                                        ToastUtils.showShortToast(PayOrderActivity.this, "刷新余额出现问题");
+                                        ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "刷新余额出现问题");
                                     }
                                 });
                             }
@@ -281,7 +281,7 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                     }
                     else
                     {
-                        ToastUtils.showShortToast(PayOrderActivity.this, "余额支付失败");
+                        ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "余额支付失败");
                     }
 
                 }
@@ -295,7 +295,7 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                     if ( PayOrderActivity.this.isFinishing ( ) ) {
                         return;
                     }
-                    ToastUtils.showShortToast ( PayOrderActivity.this, "余额支付失败" );
+                    ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "余额支付失败");
                 }
             });
         }
@@ -357,12 +357,12 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                                 else
                                 {
                                     //无效支付
-                                    ToastUtils.showShortToast ( PayOrderActivity.this, "无效支付信息" );
+                                    ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "无效支付信息");
                                 }
                             }
                             else {
                                 //异常处理，自动切换成无数据
-                                ToastUtils.showShortToast ( PayOrderActivity.this, "提交支付信息失败" );
+                                ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "提交支付信息失败");
                             }
                         }
                     }, new Response.ErrorListener ( ) {
@@ -375,7 +375,7 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                             if ( PayOrderActivity.this.isFinishing ( ) ) {
                                 return;
                             }
-                            ToastUtils.showShortToast ( PayOrderActivity.this, "提交支付信息失败" );
+                            ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "提交支付信息失败");
                         }
                     }
             );

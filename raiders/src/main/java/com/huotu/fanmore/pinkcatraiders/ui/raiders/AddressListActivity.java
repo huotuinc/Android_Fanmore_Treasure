@@ -268,7 +268,7 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
                         else
                         {
                             //上传失败
-                            ToastUtils.showLongToast ( AddressListActivity.this, "地址删除失败" );
+                            ToastUtils.showMomentToast(AddressListActivity.this, AddressListActivity.this, "地址删除失败");
                         }
                     }
                 }, new Response.ErrorListener ( ) {
@@ -278,7 +278,7 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
                     void onErrorResponse ( VolleyError error ) {
                         progress.dismissView ( );
                         //系统级别错误
-                        ToastUtils.showLongToast ( AddressListActivity.this, "地址删除失败" );
+                        ToastUtils.showMomentToast(AddressListActivity.this, AddressListActivity.this, "地址删除失败");
                     }
                 }
                                );

@@ -149,7 +149,7 @@ public class RaidersAdapter extends BaseAdapter {
                 });
             }catch (Exception e)
             {
-                ToastUtils.showLongToast(mContext, "列表数据加载失败");
+                ToastUtils.showMomentToast((Activity) mContext, mContext, "列表数据加载失败");
             }
         }
         else

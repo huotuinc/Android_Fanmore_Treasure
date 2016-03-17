@@ -156,7 +156,7 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
     void uploadImg ( ) {
 
         if ( 4 <= cropBitmaps.size ( ) ) {
-            ToastUtils.showShortToast ( ShareOrderActivity.this, "最多选择4张图片" );
+            ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "最多选择4张图片");
         }
         else {
             //上传晒单图片
@@ -191,11 +191,11 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
     void doPulish ( ) {
 
         if ( TextUtils.isEmpty ( orderTitle.getText ( ) ) ) {
-            ToastUtils.showShortToast ( ShareOrderActivity.this, "请输入标题" );
+            ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "请输入标题");
             return;
         }
         else if ( TextUtils.isEmpty ( orderMsg.getText ( ) ) ) {
-            ToastUtils.showShortToast ( ShareOrderActivity.this, "请输入标题" );
+            ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "请输入标题");
             return;
         }
 
@@ -343,7 +343,7 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
         if (requestCode == 0) {// camera back
             Bitmap bitmap = BitmapUtils.readBitmapByPath ( imgPath );
             if (bitmap == null) {
-                ToastUtils.showLongToast ( ShareOrderActivity.this, "未获取到图片!" );
+                ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "未获取到图片!");
                 return;
             }
             if (null == cropperView)
@@ -372,8 +372,8 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
                     }
 
                     if (bitmap == null) {
-                        ToastUtils.showLongToast(ShareOrderActivity.this,
-                                                 "未获取到图片!");
+                        ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this,
+                                "未获取到图片!");
                         return;
                     }
                 } else if (uri.toString().startsWith("file:///")) {
@@ -381,8 +381,8 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
                                                            uri.toString().length());
                     bitmap = BitmapUtils.readBitmapByPath(path);
                     if (bitmap == null) {
-                        ToastUtils.showLongToast(ShareOrderActivity.this,
-                                                 "未获取到图片!");
+                        ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this,
+                                "未获取到图片!");
                         return;
                     }
 

@@ -189,11 +189,11 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
     void checkAuthCode () {
 
         if ( TextUtils.isEmpty ( edtPhone.getText ( ) ) ) {
-            ToastUtils.showLongToast ( MobileRegActivity.this, "请输入邮箱或者手机号" );
+            ToastUtils.showMomentToast(MobileRegActivity.this, MobileRegActivity.this, "请输入邮箱或者手机号");
             return;
         }
         else if ( TextUtils.isEmpty ( edtCode.getText ( ) ) ) {
-            ToastUtils.showLongToast ( MobileRegActivity.this, "请输入验证码" );
+            ToastUtils.showMomentToast(MobileRegActivity.this, MobileRegActivity.this, "请输入验证码");
             return;
         }
         else {
@@ -334,7 +334,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
 
                             } else
                             {
-                                ToastUtils.showShortToast(MobileRegActivity.this, "未请求到数据");
+                                ToastUtils.showMomentToast(MobileRegActivity.this, MobileRegActivity.this, "未请求到数据");
                             }
 
 
@@ -417,7 +417,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                     if(getCode.getResultData().isVoiceAble()==false)
                     {
                         try {
-                           ToastUtils.showShortToast(MobileRegActivity.this,"获取成功");
+                            ToastUtils.showMomentToast(MobileRegActivity.this, MobileRegActivity.this, "获取成功");
                         } catch (Exception e)
                         {
                             //未获取该用户信息
@@ -492,7 +492,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                             checkUserName();
 //                        }
                     } else {
-                        ToastUtils.showShortToast(MobileRegActivity.this, "手机号不能为空");
+                        ToastUtils.showMomentToast(MobileRegActivity.this, MobileRegActivity.this, "手机号不能为空");
                     }
                 }
             break;
@@ -536,7 +536,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                 // 刷新获取按钮状态，设置为可获取语音
                 btn_code.setText("尝试语音获取");
                 btn_code.setTag(Contant.SMS_TYPE_VOICE);
-                ToastUtils.showLongToast(MobileRegActivity.this,
+                ToastUtils.showMomentToast(MobileRegActivity.this, MobileRegActivity.this,
                         "还没收到短信，请尝试语音获取");
             }
         }

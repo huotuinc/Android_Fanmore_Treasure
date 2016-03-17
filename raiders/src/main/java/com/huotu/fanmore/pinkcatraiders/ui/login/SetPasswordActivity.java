@@ -118,7 +118,7 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
             case R.id.btn_commitpsd:{
                 if(TextUtils.isEmpty(edtpsd.getText()))
                 {
-                    ToastUtils.showLongToast(SetPasswordActivity.this, "请输入密码");
+                    ToastUtils.showMomentToast(SetPasswordActivity.this, SetPasswordActivity.this, "请输入密码");
                     return;
                 }
                 else {
@@ -215,7 +215,7 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
                                 base = jsonUtil.toBean(response.toString(), base);
                                 if (null != base && (1 == base.getResultCode())) {
 
-                                    ToastUtils.showShortToast(SetPasswordActivity.this, "修改密码成功");
+                                    ToastUtils.showMomentToast(SetPasswordActivity.this, SetPasswordActivity.this, "修改密码成功");
                                     ActivityUtils.getInstance().skipActivity(SetPasswordActivity.this, LoginActivity.class);
                                 } else if (54001 == base.getResultCode()) {
                                     //异常处理，自动切换成无数据

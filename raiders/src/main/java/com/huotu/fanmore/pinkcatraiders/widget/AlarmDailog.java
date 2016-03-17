@@ -26,7 +26,7 @@ public class AlarmDailog extends Toast
         noticeText.setText(dialogNotice);
         toast = new Toast(context);
         toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
-        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setDuration(Toast.LENGTH_SHORT);
         //让Toast显示为我们自定义的样子 
         toast.setView(layout); 
     }
