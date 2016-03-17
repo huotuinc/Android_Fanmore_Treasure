@@ -106,6 +106,7 @@ public class Contant {
     public static final int REDPACKAGE_COUNT = 0x00000050;
 
     public static final int GO_LOGIN = 0x00000051;
+    public static final int WINNER_STATUS = 0x00000052;
     /**
      * 菜单标记1
      */
@@ -326,4 +327,8 @@ public class Contant {
     public static final String MESSAGE = "messages";
     //未登录情况下加入购物车
     public static final String JOIN_ALL_CART_TO_SERVER = "joinAllCartToServer";
+    //添加收货地址
+    public static final String ADD_LOTTERY_RECEIVER_INFO = "addLotteryReceiverInfo";
+    //确认收货
+    public static final String CONFIRM_RECEIPT = "confirmReceipt";
 }

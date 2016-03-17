@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popLayout"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="20dp"
+    android:background="@android:color/transparent">
+    <TextView
+        android:id="@+id/jumpNotice"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/text_size_16"/>
+    <TextView
+        android:id="@+id/jumpBtn"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:textColor="@color/title_bg"
+        android:textSize="@dimen/text_size_16"
+        android:text="去设置"/>
+</LinearLayout>
