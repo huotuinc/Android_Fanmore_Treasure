@@ -46,6 +46,7 @@ public class RaidersAdapter extends BaseAdapter {
     private Activity aty;
     public RaidersModel raider;
     private Handler mHandler;
+    public long index;
 
     public RaidersAdapter(List<RaidersModel> raiders, Context mContext, Activity aty, Handler mHandler)
     {
@@ -71,7 +72,7 @@ public class RaidersAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         Resources resources = mContext.getResources();
         if (convertView == null)
@@ -118,13 +119,12 @@ public class RaidersAdapter extends BaseAdapter {
                     holder.luckyNo.setText("幸运号：" + raider.getLunkyNumber());
                     holder.announcedTime.setText("揭晓时间：" + DateUtils.transformDataformat1(raider.getAwardingDate()));
                 }
-
                 holder.raidersNoLeftL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //点击查看夺宝详情
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("raider", raider);
+                        bundle.putSerializable("raider", raiders.get(position));
                         ActivityUtils.getInstance().showActivity(aty, RaidersDetailActivity.class, bundle);
                     }
                 });
@@ -133,7 +133,7 @@ public class RaidersAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         Bundle bundle = new Bundle();
-                        bundle.putLong("issuId", raider.getIssueId());
+                        bundle.putLong("issuId", raiders.get(position).getIssueId());
                         ActivityUtils.getInstance().showActivity(aty, RaidersNumberActivity.class, bundle);
                     }
                 });
@@ -141,10 +141,19 @@ public class RaidersAdapter extends BaseAdapter {
                 holder.addBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Message message = mHandler.obtainMessage();
-                        message.what = Contant.APPAND_LIST;
-                        message.obj = raider;
-                        mHandler.sendMessage(message);
+                        if(raiders.get(position).getToAmount()==raiders.get(position).getRemainAmount())
+                        {
+                            //提示全买，不可追加
+                            ToastUtils.showMomentToast((Activity) mContext, mContext, "本期产品全售光不可追加");
+                        }
+                        else
+                        {
+                            Message message = mHandler.obtainMessage();
+                            message.what = Contant.APPAND_LIST;
+                            message.obj = raiders.get(position);
+                            mHandler.sendMessage(message);
+                        }
+
                     }
                 });
             }catch (Exception e)

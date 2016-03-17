@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/productName"
-            android:text="sasasa"
+            android:text=""
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_size_16"
             android:singleLine="true"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/text_gray"
             android:textSize="@dimen/text_size_14"
-            android:text="wqwqeqweq"/>
+            android:text=""/>
         <TextView
             android:id="@+id/partnerCount"
             android:layout_below="@+id/productIssue"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/text_gray"
             android:textSize="@dimen/text_size_14"
-            android:text="wqwqeqweq"/>
+            android:text=""/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -55,7 +55,7 @@
             android:id="@+id/number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="sssss"
+            android:text=""
             android:layout_centerVertical="true"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_size_16" />
