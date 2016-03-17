@@ -71,10 +71,9 @@ public class HomeViewPagerAdapter extends PagerAdapter {
                                        @Override
                                        public
                                        void onClick ( View v ) {
-
                                            Message message = mHandler.obtainMessage ();
                                            message.what = Contant.CAROUSE_URL;
-                                           message.obj = datas.get ( position%datas.size() ).getPid ();
+                                           message.obj = datas.get ( position%datas.size() );
                                            mHandler.sendMessage ( message );
                                        }
                                    } );

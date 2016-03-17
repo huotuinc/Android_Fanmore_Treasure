@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ import com.huotu.fanmore.pinkcatraiders.model.AppBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BalanceOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
+import com.huotu.fanmore.pinkcatraiders.model.CarouselModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartModel;
@@ -50,6 +52,7 @@ import com.huotu.fanmore.pinkcatraiders.model.OutputUrlModel;
 
 import com.huotu.fanmore.pinkcatraiders.model.LocalCartOutputModel;
 
+import com.huotu.fanmore.pinkcatraiders.model.ProductDetailsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
@@ -63,15 +66,19 @@ import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.ui.mall.MallHomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.ConfirmOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.PayOrderActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.product.ProductDetailActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.CartUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
+import com.huotu.fanmore.pinkcatraiders.widget.CircleImageView;
 import com.huotu.fanmore.pinkcatraiders.widget.FunPopWin1;
 import com.huotu.fanmore.pinkcatraiders.widget.FuncPopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.GuideLoginPopWin;
@@ -710,45 +717,74 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case Contant.CAROUSE_URL:
             {
-                long pid = ( long ) msg.obj;
-                String url = Contant.REQUEST_URL + Contant.GET_SLIDE_DETAIL;
-                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
-                Map<String, Object> maps = new HashMap<String, Object> ();
-                maps.put ( "slideId", String.valueOf ( pid ) );
-                String suffix = params.obtainGetParam(maps);
-                url = url + suffix;
-                HttpUtils httpUtils = new HttpUtils();
-                httpUtils.doVolleyGet (
-                        url, new Response.Listener< JSONObject > ( ) {
+                CarouselModel model = ( CarouselModel ) msg.obj;
+                if(model.getGoodsId()>0)
+                {
+                    //直接跳转到goods详情
+                    final ProductModel productModel = new ProductModel();
+                    productModel.setPid(model.getGoodsId());
+                    String url = Contant.REQUEST_URL + Contant.GET_GOODS_DTAIL_BY_GOODS_ID;
+                    AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                    Map<String, Object> maps = new HashMap<String, Object>();
+                    //商品id
+                    maps.put("goodsId", productModel.getPid());
+                    String suffix = params.obtainGetParam(maps);
+                    url = url + suffix;
+                    HttpUtils httpUtils = new HttpUtils();
+                    httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    if (HomeActivity.this.isFinishing()) {
+                                        return;
+                                    }
+                                    JSONUtil<ProductDetailsOutputModel> jsonUtil = new
+                                            JSONUtil<ProductDetailsOutputModel>();
+                                    ProductDetailsOutputModel productDetailsOutput = new
+                                            ProductDetailsOutputModel();
+                                    productDetailsOutput = jsonUtil.toBean(
+                                            response.toString(),
+                                            productDetailsOutput
+                                    );
+                                    if (null != productDetailsOutput && null != productDetailsOutput
+                                            .getResultData() && (
+                                            1 == productDetailsOutput.getResultCode(
+                                            )
+                                    )) {
+                                        productModel.setImgs(productDetailsOutput.getResultData().getData().getPictureUrl());
+                                        Bundle bundle = new Bundle();
+                                        bundle.putInt("tip", 1);
+                                        bundle.putSerializable("product", productModel);
+                                        ActivityUtils.getInstance().showActivity(HomeActivity.this, ProductDetailActivity.class, bundle);
 
-                            @Override
-                            public
-                            void onResponse ( JSONObject response ) {
-                                JSONUtil<SlideDetailOutputModel > jsonUtil = new JSONUtil<SlideDetailOutputModel>();
-                                SlideDetailOutputModel slideDetail = new SlideDetailOutputModel();
-                                slideDetail = jsonUtil.toBean(response.toString(), slideDetail);
-                                if(null != slideDetail && null != slideDetail.getResultData() && (1==slideDetail.getResultCode()))
-                                {
-                                    String url = slideDetail.getResultData ().getData ();
-                                    Bundle bundle = new Bundle ( );
-                                    bundle.putString ( "title", "详情信息" );
-                                    bundle.putString ( "link", url );
-                                    ActivityUtils.getInstance ().showActivity ( HomeActivity.this, WebExhibitionActivity.class, bundle );
+                                    } else {
+                                        //异常处理，自动切换成无数据
+                                        ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "无效商品无法打开");
+                                    }
                                 }
-                                else
-                                {
-                                    ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "打开链接失败");
+                            }, new Response.ErrorListener() {
+
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "无效商品无法打开");
+                                    //暂无数据提示
+
                                 }
                             }
-                        }, new Response.ErrorListener ( ) {
-
-                            @Override
-                            public
-                            void onErrorResponse ( VolleyError error ) {
-                                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "打开链接失败");
-                            }
-                        }
-                                      );
+                    );
+                }
+                else
+                {
+                    if(null==model.getLink() || model.getLink().isEmpty())
+                    {
+                        ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "商品链接无效");
+                    }
+                    else {
+                        Bundle bundle = new Bundle ( );
+                        bundle.putString ( "title", "详情信息" );
+                        bundle.putString ( "link", model.getLink() );
+                        ActivityUtils.getInstance ().showActivity ( HomeActivity.this, WebExhibitionActivity.class, bundle );
+                    }
+                }
             }
             break;
             case Contant.CART_SELECT:
