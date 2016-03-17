@@ -60,14 +60,14 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
     RelativeLayout titleLayoutL;
     @Bind(R.id.underwebView)
      WebView underwebView;
-    @Bind(R.id.progressBar)
-     ProgressBar bar;
     @Bind(R.id.titleLeftImage)
     ImageView titleLeftImage;
     @Bind(R.id.stubTitleText)
     ViewStub stubTitleText;
     @Bind(R.id.webPage)
     PullToRefreshWebView webPage;
+    @Bind(R.id.progressBar)
+    ProgressBar progressBar;
     public Bundle bundle;
 
     @Override
@@ -135,6 +135,7 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
         application = (BaseApplication) this.getApplication();
         wManager = this.getWindowManager();
         bundle = this.getIntent().getExtras();
+        progressBar.setMax(100);
         initTitle();
         initWebPage();
     }
@@ -197,6 +198,7 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
         viewPage.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
+                progressBar.setProgress(newProgress);
                 if (100 == newProgress) {
                     webPage.onRefreshComplete();
                 }
