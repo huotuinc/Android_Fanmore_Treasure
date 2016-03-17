@@ -256,7 +256,7 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                                 status2Time.setText(DateUtils.transformDataformat11(deliveryModel.getConfirmAddressTime()));
                                 SystemTools.loadBackground(status3Icon, resources.getDrawable(R.mipmap.prize_selected));
                                 status3Tag.setText("等待奖品派发");
-                                status3Time.setText("请稍后...");
+                                status3Time.setText("请稍候...");
                                 status3Time.setTextColor(resources.getColor(R.color.title_bg));
                                 SystemTools.loadBackground(status4Icon, resources.getDrawable(R.mipmap.prize_unselect));
                                 status4Tag.setText("确认收货");
