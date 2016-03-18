@@ -121,6 +121,7 @@
             </RelativeLayout>
 
             <!--未登录全价-->
+
             <!--未登录-->
             <RelativeLayout
                 android:id="@+id/unlogin"
@@ -139,6 +140,15 @@
                 android:visibility="gone">
                 <include
                     layout="@layout/announced_detail"/>
+            </RelativeLayout>
+            <!--倒计时-->
+            <RelativeLayout
+                android:id="@+id/countdownDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+                <include
+                    layout="@layout/countdown_detail"/>
             </RelativeLayout>
             <!--揭晓详情-->
         </RelativeLayout>

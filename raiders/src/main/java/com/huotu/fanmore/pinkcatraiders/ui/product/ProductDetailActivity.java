@@ -58,6 +58,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.TimeCount;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.CircleImageView;
@@ -122,6 +123,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     RelativeLayout unlogin;
     @Bind(R.id.announcedDetail)
     RelativeLayout announcedDetail;
+    @Bind(R.id.countdownDetail)
+    RelativeLayout countdownDetail;
     @Bind(R.id.graphicDetails)
     LinearLayout graphicDetails;
     @Bind(R.id.historys)
@@ -151,6 +154,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     public ImageView cartImg;
     public TextView bottomOtherCartAmount;
     public NewOpenListModel newopenlist;
+    private TimeCount tc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -591,36 +595,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             raidersNo.setText("夺宝号码："+ productDetail.getLuckyNumber());
                                         } else if(1 == productDetail.getStatus()) {
                                             //倒计时
-                                            announcedDetail.setVisibility(View.VISIBLE);
-                                            CircleImageView accountLogo = (CircleImageView)
-                                                    announcedDetail.findViewById(R.id.accountLogo);
-                                            BitmapLoader.create().loadRoundImage(
-                                                    ProductDetailActivity.this, accountLogo,
-                                                    "http://v1.qzone"
-                                                            + ".cc/avatar/201404/10/00/12/534571832f9ea304"
-                                                            + ".jpg!200x200.jpg", R.mipmap.error
-                                            );
-                                            TextView winnerName = (TextView) ProductDetailActivity
-                                                    .this.findViewById(R.id.winnerName);
-                                            winnerName.setText("中奖者：百晓生");
-                                            TextView winnerIp = (TextView) ProductDetailActivity
-                                                    .this.findViewById(R.id.winnerIp);
-                                            winnerIp.setText("铁岭：10.10.123.45");
-                                            TextView winnerId = (TextView) ProductDetailActivity
-                                                    .this.findViewById(R.id.winnerId);
-                                            winnerId.setText("用户ID：23000909");
-                                            TextView partnerUser = (TextView) ProductDetailActivity
-                                                    .this.findViewById(R.id.partnerUser);
-                                            partnerUser.setText("本期参与：3000次");
-                                            TextView partnerTime = (TextView) ProductDetailActivity
-                                                    .this.findViewById(R.id.partnerTime);
-                                            partnerTime.setText("揭晓时间：2015-12-11 14:20:11");
-                                            TextView luckyNo = (TextView) ProductDetailActivity
-                                                    .this.findViewById(R.id.luckyNo);
-                                            luckyNo.setText("幸运号：32890");
-                                            TextView calculationDetail = (TextView)
-                                                    announcedDetail.findViewById(R.id.calculationDetail);
-                                            calculationDetail.setText("幸运号：32890");
+                                            countdownDetail.setVisibility(View.VISIBLE);
+                                            TextView issue = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.issue);
+                                            issue.setText("期号：" + productDetail.getIssueId());
+                                            TextView countdown = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.countdown);
+                                            tc = new TimeCount(productDetail.getRemainSecond()*1000, 100, countdown);
+                                            tc.start();
                                         }
                                         else if(2 == productDetail.getStatus()) {
                                             //已揭晓
@@ -1096,6 +1078,9 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         super.onDestroy();
         VolleyUtil.cancelAllRequest();
         ButterKnife.unbind(this);
+        if ( null != tc ) {
+            tc.Stop ( );
+        }
     }
 
     @Override

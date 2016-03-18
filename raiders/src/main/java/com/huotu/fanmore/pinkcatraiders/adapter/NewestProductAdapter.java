@@ -106,7 +106,7 @@ public class NewestProductAdapter extends BaseAdapter {
 
                 long millSec = product.getToAwardingTime();
 
-                TimeCount tc = new TimeCount(millSec*1000, 100, holder.countdown);
+                tc = new TimeCount(millSec*1000, 100, holder.countdown);
                 tc.start();
             }  else if (2==product.getStatus()){
                 holder.Rl1.setVisibility(View.GONE);

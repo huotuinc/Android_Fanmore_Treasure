@@ -17,7 +17,7 @@
             android:id="@+id/noLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="期号：12345"
+            android:text=""
             android:textColor="@color/color_gray"
             android:textSize="@dimen/text_size_14"/>
         <ProgressBar
@@ -37,7 +37,7 @@
             android:layout_below="@+id/partnerProgress"
             android:layout_marginTop="5dp"
             android:layout_alignParentLeft="true"
-            android:text="总需人数：1234次"
+            android:text=""
             android:textColor="@color/color_gray"
             android:textSize="@dimen/text_size_14"/>
         <TextView
@@ -47,7 +47,7 @@
             android:layout_below="@+id/partnerProgress"
             android:layout_marginTop="5dp"
             android:layout_alignParentRight="true"
-            android:text="剩余：123"
+            android:text=""
             android:textColor="@color/color_gray"
             android:textSize="@dimen/text_size_14"/>
     </RelativeLayout>
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/text_gray"
             android:textSize="@dimen/text_size_14"
-            android:text="您参与了：1次"
+            android:text=""
             />
         <TextView
             android:id="@+id/raidersNo"
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/text_gray"
             android:textSize="@dimen/text_size_14"
-            android:text="夺宝号码：1000589"
+            android:text=""
             />
     </RelativeLayout>
     <!--参与人数-->
