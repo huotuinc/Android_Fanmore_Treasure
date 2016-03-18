@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.adapter.WinAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
@@ -331,7 +332,6 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                                         //确认收货接口
                                         Message message = mHandler.obtainMessage();
                                         message.what = Contant.WINNER_STATUS;
-                                        message.obj = deliveryModel.getIssueId();
                                         message.arg1 = 2;
                                         mHandler.sendMessage(message);
                                     }
@@ -367,7 +367,6 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                                         //确认收货接口
                                         Message message = mHandler.obtainMessage();
                                         message.what = Contant.WINNER_STATUS;
-                                        message.obj = deliveryModel.getIssueId();
                                         message.arg1 = 2;
                                         mHandler.sendMessage(message);
                                     }
@@ -555,11 +554,8 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                 if(2==tag)
                 {
                     //确认并晒单
-                    long issuId = (long) msg.obj;
-
                     Bundle bundle = new Bundle();
-                    bundle.putLong("issue", issuId);
-
+                    bundle.putSerializable("winner", winner);
                     ActivityUtils.getInstance().showActivity(WinLogDetailActivity.this, ShareOrderActivity.class, bundle);
                 }
             }

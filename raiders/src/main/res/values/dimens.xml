@@ -87,4 +87,7 @@
     <dimen name="package_bottom">60dp</dimen>
     <dimen name="radpackage_msg_bg_size">220dp</dimen>
     <dimen name="redpackage_msg_top">50dp</dimen>
+    <dimen name="shareorder_title_height">30dp</dimen>
+    <dimen name="shareorder_con_height">150dp</dimen>
+    <dimen name="showOrderImageSize">50dp</dimen>
 </resources>

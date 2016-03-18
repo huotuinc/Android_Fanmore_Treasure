@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -29,11 +30,11 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.huotu.android.library.libedittext.EditText;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
+import com.huotu.fanmore.pinkcatraiders.model.AppUserBuyFlowModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.BottomModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
@@ -104,6 +105,17 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
     @Bind ( R.id.addImgBtn )
     ImageView addImgBtn;
 
+    @Bind(R.id.shareOrderTitle)
+    TextView shareOrderTitle;
+    @Bind(R.id.shareOrderIusse)
+    TextView shareOrderIusse;
+    @Bind(R.id.parentCount)
+    TextView parentCount;
+    @Bind(R.id.luckyNumber)
+    TextView luckyNumber;
+    @Bind(R.id.time)
+    TextView time;
+
     public Bundle bundle;
 
     private String imgPath;
@@ -118,19 +130,34 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
     public
     NoticePopWindow noticePop;
 
+    @Bind(R.id.preImgL)
+    LinearLayout preImgL;
+
     @Override
     protected
     void onCreate ( Bundle savedInstanceState ) {
 
-        super.onCreate ( savedInstanceState );
-        setContentView ( R.layout.ri_share_order );
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.ri_share_order);
         ButterKnife.bind ( this );
         application = ( BaseApplication ) this.getApplication ( );
         resources = this.getResources ( );
         mHandler = new Handler ( this );
-        wManager = this.getWindowManager ( );
+        wManager = this.getWindowManager();
         bundle = this.getIntent ( ).getExtras ( );
-        initTitle ( );
+       // preImgL.removeAllViews();
+        initTitle();
+        initView();
+    }
+
+    private void initView()
+    {
+        AppUserBuyFlowModel winner = (AppUserBuyFlowModel) bundle.getSerializable("winner");
+        shareOrderTitle.setText(winner.getTitle());
+        shareOrderIusse.setText(winner.getIssueId());
+        parentCount.setText(String.valueOf(winner.getAmount()));
+        luckyNumber.setText(String.valueOf(winner.getLuckyNumber()));
+        time.setText(winner.getAwardingDate());
     }
 
     private
@@ -143,7 +170,7 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
         progress = new ProgressPopupWindow ( ShareOrderActivity.this, ShareOrderActivity.this, wManager );
         stubTitleText.inflate ( );
         TextView titleText = ( TextView ) this.findViewById ( R.id.titleText );
-        titleText.setText ( "晒单" );
+        titleText.setText("晒单");
     }
 
     @OnClick ( R.id.titleLeftImage )
@@ -300,6 +327,15 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
                 }
             }
             break;
+            case 0x00110022:
+            {
+                Bitmap cropBitmap = (Bitmap) msg.obj;
+                ImageView imageView = new ImageView(ShareOrderActivity.this);
+                imageView.setImageBitmap(cropBitmap);
+                imageView.setLayoutParams(new LinearLayout.LayoutParams((int)resources.getDimension(R.dimen.showOrderImageSize), (int)resources.getDimension(R.dimen.showOrderImageSize)));
+                preImgL.addView(imageView);
+            }
+            break;
             default:
                 break;
         }
@@ -406,6 +442,11 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
         if (null == bitmap)
             return;
         Bitmap cropBitmap = bitmap;
+        //预览图片
+        Message message = mHandler.obtainMessage();
+        message.what = 0x00110022;
+        message.obj = cropBitmap;
+        mHandler.sendMessage(message);
         cropBitmaps.add ( cropBitmap );
     }
 }
