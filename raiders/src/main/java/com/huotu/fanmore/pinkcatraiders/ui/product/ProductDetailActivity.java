@@ -401,11 +401,23 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                     getCommentLog();
                                 } else {
                                     //暂无数据提示
-
+                                    ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "为请求到数据，1秒后退出");
+                                    mHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            closeSelf(ProductDetailActivity.this);
+                                        }
+                                    }, 1000);
                                 }
-                            } else {
+                            } else if(1!=productDetailsOutput.getResultCode()) {
                                 //异常处理，自动切换成无数据
-
+                                ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "请求数据出错，1秒后退出");
+                                mHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        closeSelf(ProductDetailActivity.this);
+                                    }
+                                }, 1000);
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -418,7 +430,13 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                 return;
                             }
                             //暂无数据提示
-
+                            ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "请求数据出错，1秒后退出");
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    closeSelf(ProductDetailActivity.this);
+                                }
+                            }, 1000);
                         }
                     }
             );
@@ -697,7 +715,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             if ( partnerHistorys != null && partnerHistorys.size() > 0)
             {
                 PartnerHistorysModel partnerHistory = partnerHistorys.get(partnerHistorys.size() - 1);
-                maps.put("lastId", partnerHistory.getPid());
+                maps.put("lastId", String.valueOf(partnerHistory.getDate()));
             } else{
                 maps.put("lastId", 0);
             }

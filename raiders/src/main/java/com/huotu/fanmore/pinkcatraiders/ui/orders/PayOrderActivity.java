@@ -226,7 +226,7 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
             maps.put ( "money", String.valueOf ( moneyTag ) );
             maps.put ( "payType", String.valueOf ( payType ) );
             maps.put ( "redPacketsId", String.valueOf ( balance1.getRedPacketsId() ) );
-            //maps.put("allPay", 1);
+            maps.put("allPay", 1);
             Map<String, Object> param = params.obtainPostParam(maps);
             PayOutputModel payOutput = new PayOutputModel();
             HttpUtils<PayOutputModel> httpUtils = new HttpUtils<PayOutputModel> ();
@@ -311,7 +311,7 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
             Map< String, Object > maps   = new HashMap< String, Object >( );
             maps.put ( "money", String.valueOf ( moneyTag ) );
             maps.put ( "payType", String.valueOf ( payType ) );
-            //maps.put("allPay", 1);
+            maps.put("allPay", 1);
             maps.put ( "redPacketsId", String.valueOf ( balance1.getRedPacketsId() ) );
             Map<String, Object> param = params.obtainPostParam(maps);
             PayOutputModel payOutput = new PayOutputModel();

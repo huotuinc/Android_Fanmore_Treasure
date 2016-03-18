@@ -79,7 +79,6 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public List<ProductModel> products;
     public AreaProductAdapter adapter;
-    public Bundle bundle;
     TextView titleCount;
 
     @Override
@@ -95,8 +94,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
         TextView label = (TextView) emptyView.findViewById(R.id.emptyTag);
         TextView contrl = (TextView) emptyView.findViewById(R.id.emptyBtn);
         contrl.setVisibility(View.GONE);
-        bundle = this.getIntent().getExtras();
-        label.setText("暂无"+bundle.getLong("step")+"元专区数据");
+        label.setText("暂无专区商品数据");
         initTitle();
         initList();
     }
@@ -112,14 +110,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
         SystemTools.loadBackground(titleRightImage, rightDraw);
         stubTitleText1.inflate();
         TextView titleText = (TextView) this.findViewById(R.id.titleText);
-        if(10 == bundle.getLong("step"))
-        {
-            titleText.setText("十元专区");
-        }
-        else if(5 == bundle.getLong("step"))
-        {
-            titleText.setText("五元专区");
-        }
+        titleText.setText("专区商品");
         titleCount = (TextView) this.findViewById(R.id.titleCount);
         titleCount.setText("（0）");
     }
@@ -153,7 +144,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
         String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_AREA;
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), AreaActivity.this);
         Map<String, Object> maps = new HashMap<String, Object>();
-        maps.put("step", bundle.get("step"));
+        maps.put("step", "0");
         String suffix = params.obtainGetParam(maps);
         url = url + suffix;
         HttpUtils httpUtils = new HttpUtils();

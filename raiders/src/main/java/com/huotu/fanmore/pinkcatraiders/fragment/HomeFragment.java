@@ -9,6 +9,8 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +54,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.redpackage.ReadPackageActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
@@ -226,8 +229,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     void showZqUi() {
 
         Bundle bundle = new Bundle();
-        bundle.putLong("step", 10);
-        ActivityUtils.getInstance().showActivity(getActivity(), AreaActivity.class, bundle);
+        ActivityUtils.getInstance().showActivity(getActivity(), AreaActivity.class);
     }
 
     @OnClick(R.id.redPackageL)
@@ -754,8 +756,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                                 {
                                     NoticeModel notice = iterator.next ( );
                                     TextView textView = new TextView ( getActivity () );
-                                    textView.setText ( notice.getTitle () );
-                                    list.add ( textView );
+                                    textView.setSingleLine(true);
+                                    textView.setEllipsize(TextUtils.TruncateAt.END);
+                                    textView.setText(Html.fromHtml("<font color=\"#54595f\">恭喜</font><font color=\"#0c83d4\">" + notice.getName() + "</font><font color=\"#54595f\">在</font><font color=\"#d4750c\">" + DateUtils.getMinHome(notice.getTime()) + "</font><font color=\"#54595f\">获得</font><font color=\"#0c83d4\">" + notice.getTitle() + "</font>"));
+                                    list.add(textView );
                                 }
 
                                 Iterator<TextView> it = list.iterator ();

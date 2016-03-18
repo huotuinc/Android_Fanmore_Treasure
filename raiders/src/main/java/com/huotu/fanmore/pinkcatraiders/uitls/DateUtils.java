@@ -1,6 +1,7 @@
 package com.huotu.fanmore.pinkcatraiders.uitls;
 
 import android.support.v4.app.NotificationCompatSideChannelService;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -252,6 +253,32 @@ public class DateUtils {
             {
                 return "距离结束还有很多时间";
             }
+        }
+    }
+
+    public static String getMinHome(String sec)
+    {
+        if(null==sec || TextUtils.isEmpty(sec))
+        {
+            return "1分钟前";
+        }
+        else if(Long.parseLong(sec)<=0)
+        {
+            return "1分钟前";
+        }
+        else
+        {
+            int min = (int) (Long.parseLong(sec)/(int)60);
+            if(min<=60)
+            {
+                return min+"分钟前";
+            }
+            else
+            {
+                int hour = (int) (Long.parseLong(sec)/((int)60*60));
+                return hour+"小时前";
+            }
+
         }
     }
 
