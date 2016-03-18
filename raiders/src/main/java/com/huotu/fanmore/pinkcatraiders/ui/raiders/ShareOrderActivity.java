@@ -236,7 +236,7 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ShareOrderActivity.this);
         //1 拼装参数
         Map<String, Object> maps = new HashMap<String, Object> ();
-        maps.put ( "issuId", String.valueOf ( bundle.getLong ( "issue" ) ) );
+        maps.put ( "issueId", String.valueOf ( bundle.getLong ( "issue" ) ) );
         maps.put ( "title", orderTitle.getText ().toString ( ) );
         maps.put ( "content", orderMsg.getText ().toString () );
         maps.put ( "profileData", (Bitmap[])cropBitmaps.toArray(new Bitmap[cropBitmaps.size ()]) );
