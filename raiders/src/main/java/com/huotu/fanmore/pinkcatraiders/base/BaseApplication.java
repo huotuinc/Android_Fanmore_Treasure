@@ -153,6 +153,12 @@ public class BaseApplication extends Application {
         PreferenceHelper.writeString(getApplicationContext(),Contant.LOGIN_USER_INFO,Contant.LOGIN_AUTH_USERNAME,user.getUsername());
     }
 
+    //获取积分
+    public long readMallPoints()
+    {
+        return PreferenceHelper.readLong(getApplicationContext(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_INREGRAL);
+    }
+
     //获取是否有密码
     public int readHaspassword()
     {

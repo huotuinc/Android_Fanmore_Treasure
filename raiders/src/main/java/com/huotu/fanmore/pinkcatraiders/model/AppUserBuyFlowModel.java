@@ -14,6 +14,15 @@ class AppUserBuyFlowModel extends BaseModel {
     private long pid;
     private String title;
     private long toAmount;
+    private String time;
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public
     long getAmount ( ) {

@@ -169,16 +169,16 @@ public class WinLogActivity extends BaseActivity implements View.OnClickListener
         maps.put("userId", String.valueOf ( application.readUerId () ));
         if ( OperateTypeEnum.REFRESH == operateType )
         {// 下拉
-            maps.put("lastId", 0);
+            maps.put("lastTime", 0);
         } else if (OperateTypeEnum.LOADMORE == operateType)
         {// 上拉
             if ( winners != null && winners.size() > 0)
             {
                 AppUserBuyFlowModel winner = winners.get(winners.size() - 1);
-                maps.put("lastId", winner.getPid());
+                maps.put("lastTime", winner.getTime());
             } else if (winners != null && winners.size() == 0)
             {
-                maps.put("lastId", 0);
+                maps.put("lastTime", 0);
             }
         }
         String suffix = params.obtainGetParam(maps);

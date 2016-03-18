@@ -58,6 +58,8 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
 
     @Bind(R.id.profilePullRefresh)
     PullToRefreshScrollView profilePullRefresh;
+    @Bind(R.id.mallPoints)
+    TextView mallPoints;
 
     @Override
     public void onReshow() {
@@ -119,6 +121,7 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
     private void loadData()
     {
         profilePullRefresh.onRefreshComplete();
+        mallPoints.setText(String.valueOf(application.readMallPoints())+"积分");
         String imgurl= PreferenceHelper.readString (getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_UDERHEAD);
         BitmapLoader.create().loadRoundImage ( getActivity ( ), userimg, imgurl, R.mipmap.error );
         TVUserName.setText ( PreferenceHelper.readString ( getActivity ( ), Contant

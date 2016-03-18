@@ -129,16 +129,16 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
         maps.put("type", "1");
         if ( OperateTypeEnum.REFRESH == operateType )
         {// 下拉
-            maps.put("lastId", 0);
+            maps.put("lastTime", 0);
         } else if (OperateTypeEnum.LOADMORE == operateType)
         {// 上拉
             if ( raiders != null && raiders.size() > 0)
             {
                 RaidersModel raider = raiders.get(raiders.size() - 1);
-                maps.put("lastId", raider.getPid());
+                maps.put("lastTime", raider.getTime());
             } else if (raiders != null && raiders.size() == 0)
             {
-                maps.put("lastId", 0);
+                maps.put("lastTime", 0);
             }
         }
         String suffix = params.obtainGetParam(maps);
