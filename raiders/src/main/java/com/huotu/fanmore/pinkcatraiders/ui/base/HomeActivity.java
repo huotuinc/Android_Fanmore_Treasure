@@ -7,17 +7,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.text.InputType;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,7 +21,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.huotu.fanmore.pinkcatraiders.R;
-import com.huotu.fanmore.pinkcatraiders.adapter.ListAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.NewestGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.PopGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.ProgressGridAdapter;
@@ -33,10 +28,6 @@ import com.huotu.fanmore.pinkcatraiders.adapter.TotalGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
-import com.huotu.fanmore.pinkcatraiders.fragment.HomeFragment;
-import com.huotu.fanmore.pinkcatraiders.fragment.ListFragment;
-import com.huotu.fanmore.pinkcatraiders.fragment.NewestFragment;
-import com.huotu.fanmore.pinkcatraiders.fragment.ProfileFragment;
 
 import com.huotu.fanmore.pinkcatraiders.model.AppBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BalanceOutputModel;
@@ -45,7 +36,6 @@ import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.CarouselModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
-import com.huotu.fanmore.pinkcatraiders.model.CartModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 
 import com.huotu.fanmore.pinkcatraiders.model.OutputUrlModel;
@@ -53,8 +43,6 @@ import com.huotu.fanmore.pinkcatraiders.model.OutputUrlModel;
 import com.huotu.fanmore.pinkcatraiders.model.LocalCartOutputModel;
 
 import com.huotu.fanmore.pinkcatraiders.model.ProductDetailsOutputModel;
-import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
-import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.MsgActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.SearchActivity;
@@ -64,24 +52,18 @@ import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 
 import com.huotu.fanmore.pinkcatraiders.ui.mall.MallHomeActivity;
-import com.huotu.fanmore.pinkcatraiders.ui.orders.ConfirmOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.PayOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.product.ProductDetailActivity;
-import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
-import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.CartUtils;
-import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
-import com.huotu.fanmore.pinkcatraiders.widget.CircleImageView;
 import com.huotu.fanmore.pinkcatraiders.widget.FunPopWin1;
 import com.huotu.fanmore.pinkcatraiders.widget.FuncPopWin;
-import com.huotu.fanmore.pinkcatraiders.widget.GuideLoginPopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.MorePopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
@@ -235,8 +217,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     public int payNum = 0;
 
     private MyBroadcastReceiver myBroadcastReceiver;
-
-    public GuideLoginPopWin guideLoginPopWin;
 
     @Override
     protected
@@ -634,14 +614,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     //判断是否登陆
                     if(!application.isLogin())
                     {
-
-                        guideLoginPopWin = new GuideLoginPopWin(HomeActivity.this, mHandler, HomeActivity.this, wManager);
-                        guideLoginPopWin.showWin();
-                        guideLoginPopWin.showAtLocation(
-                                findViewById(R.id.titleLayout),
-                                Gravity.CENTER, 0, 0
-                        );
-
+                        ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class);
                     } else {
 
                         String url = Contant.REQUEST_URL + Contant.GETMALLURL;
@@ -926,13 +899,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         //跳转到登陆
                         CartDataModel cartData = CartDataModel.findById(CartDataModel.class, 1000l);
                         String cartStr = cartData.getCartData();
-                        guideLoginPopWin = new GuideLoginPopWin(HomeActivity.this, mHandler, HomeActivity.this, wManager);
-                        guideLoginPopWin.setLoginData(cartStr);
-                        guideLoginPopWin.showWin();
-                        guideLoginPopWin.showAtLocation(
-                                findViewById(R.id.titleLayout),
-                                Gravity.CENTER, 0, 0
-                        );
+                        Bundle bundle = new Bundle();
+                        bundle.putString("loginData", cartStr);
+                        ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class, bundle);
                     }
                     else
                     {
@@ -951,7 +920,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         String url = Contant.REQUEST_URL + Contant.BALANCE;
                         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
                         Map<String, Object> maps = new HashMap<String, Object> ();
-                        maps.put ( "carts",  carts);
+                        maps.put("carts", carts);
                         Map<String, Object> param = params.obtainPostParam(maps);
                         BalanceOutputModel base = new BalanceOutputModel ();
                         HttpUtils<BalanceOutputModel> httpUtils = new HttpUtils<BalanceOutputModel> ();
@@ -971,12 +940,12 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                             baseBalance.setRedPacketsNumber(balance.getRedPacketsNumber());
                                             baseBalance.setRedPacketsRemark(balance.getRedPacketsRemark());
                                             baseBalance.setRedPacketsStartTime(balance.getRedPacketsStartTime());
-                                            baseBalance.setRedPacketsStatus(null==balance.getRedPacketsStatus()?null:balance.getRedPacketsStatus().getName());
+                                            baseBalance.setRedPacketsStatus(null == balance.getRedPacketsStatus() ? null : balance.getRedPacketsStatus().getName());
                                             baseBalance.setTotalMoney(balance.getTotalMoney());
                                             baseBalance.setRedPacketsTitle(balance.getRedPacketsTitle());
                                             Bundle bundle = new Bundle();
                                             bundle.putSerializable("baseBalance", baseBalance);
-                                            ActivityUtils.getInstance ().showActivity(HomeActivity.this, PayOrderActivity.class, bundle );
+                                            ActivityUtils.getInstance().showActivity(HomeActivity.this, PayOrderActivity.class, bundle);
                                         } else {
                                             progress.dismissView();
                                             VolleyUtil.cancelAllRequest();
@@ -1130,21 +1099,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
                     }
 
-                }
-            }
-            break;
-            case Contant.GO_LOGIN:
-            {
-                String loginData = (String) msg.obj;
-                if(null==loginData || "".equals(loginData))
-                {
-                    ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class);
-                }
-                else
-                {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("loginData", loginData);
-                    ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class, bundle);
                 }
             }
             break;

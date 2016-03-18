@@ -246,13 +246,16 @@ public class LoginActivity extends BaseActivity
                                     try {
                                         //加载用户信息
                                         application.writeUserInfo(appWXLoginModel.getResultData().getUser());
-
                                         if(bundle!=null&&null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
-
-
-
                                         {
-                                            uploadCartData();
+                                            ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "登陆成功，1秒后开始自动结算");
+                                            mHandler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    uploadCartData();
+                                                }
+                                            },1000);
+
                                         }
                                         else
                                         {
@@ -337,14 +340,6 @@ public class LoginActivity extends BaseActivity
 
                     VolleyUtil.addRequest(loginRequest);
                 }
-
-
-
-
-
-
-
-
             }
             break;
 
@@ -448,7 +443,25 @@ public class LoginActivity extends BaseActivity
                                                     Bundle bundle = new Bundle();
                                                     bundle.putSerializable("baseBalance", baseBalance);
                                                     ActivityUtils.getInstance ().skipActivity(LoginActivity.this, PayOrderActivity.class, bundle );
-                                                } else {
+                                                } else if(1115 == base1.getResultCode()) {
+                                                    progress.dismissView();
+                                                    VolleyUtil.cancelAllRequest();
+                                                    //上传失败
+                                                    noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "该期商品已经过期，请重新购买");
+                                                    noticePop.showNotice();
+                                                    noticePop.showAtLocation(
+                                                            findViewById(R.id.titleLayout),
+                                                            Gravity.CENTER, 0, 0
+                                                    );
+                                                    mHandler.postDelayed(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            //跳转到首页
+                                                            ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                                                        }
+                                                    }, 1000);
+                                                }
+                                                else {
                                                     progress.dismissView();
                                                     VolleyUtil.cancelAllRequest();
                                                     //上传失败
@@ -458,6 +471,13 @@ public class LoginActivity extends BaseActivity
                                                             findViewById(R.id.titleLayout),
                                                             Gravity.CENTER, 0, 0
                                                     );
+                                                    mHandler.postDelayed(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            //跳转到首页
+                                                            ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                                                        }
+                                                    }, 1000);
                                                 }
                                             }
                                         }, new Response.ErrorListener() {
@@ -473,6 +493,13 @@ public class LoginActivity extends BaseActivity
                                                         findViewById(R.id.titleLayout),
                                                         Gravity.CENTER, 0, 0
                                                 );
+                                                mHandler.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        //跳转到首页
+                                                        ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                                                    }
+                                                }, 1000);
                                             }
                                         }
                                 );
@@ -590,7 +617,13 @@ public class LoginActivity extends BaseActivity
                                 if(bundle!=null&&null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
 
                                 {
-                                    uploadCartData();
+                                    ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "登陆成功，1秒后开始自动结算");
+                                    mHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            uploadCartData();
+                                        }
+                                    }, 1000);
                                 }
                                 else
                                 {
@@ -738,7 +771,13 @@ public class LoginActivity extends BaseActivity
                 if(null!=bundle&&null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
 
                 {
-                    uploadCartData();
+                    ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "登陆成功，1秒后开始自动结算");
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            uploadCartData();
+                        }
+                    }, 1000);
                 }
                 else
                 {
