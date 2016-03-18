@@ -6,7 +6,9 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,16 +37,18 @@ import butterknife.ButterKnife;
  */
 public class NewestProductAdapter extends BaseAdapter {
 
+    private GridView gv;
     private List<NewOpenListModel> newestProducts;
     private Context context;
     private Activity aty;
     private TimeCount tc;
-    public NewestProductAdapter(List<NewOpenListModel> newestProducts,Activity aty,Context context, TimeCount tc)
+    public NewestProductAdapter(GridView gv, List<NewOpenListModel> newestProducts,Activity aty,Context context, TimeCount tc)
     {
         this.newestProducts = newestProducts;
         this.context = context;
         this.aty = aty;
         this.tc = tc;
+        this.gv = gv;
     }
 
     @Override
@@ -71,11 +75,15 @@ public class NewestProductAdapter extends BaseAdapter {
             convertView = View.inflate(context, R.layout.newest_product_item, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
+            // 绑定listener监听器，检测convertview的height
+            holder.update();
         }
         else
         {
             holder = (ViewHolder) convertView.getTag();
         }
+        holder.nickName.setTag(position);
+        holder.luckyNumber.setTag(convertView);
         if(null!=newestProducts&&!newestProducts.isEmpty()&&null!=newestProducts.get(position))
         {
             final NewOpenListModel product = newestProducts.get(position);
@@ -174,5 +182,31 @@ public class NewestProductAdapter extends BaseAdapter {
         TextView time;
         @Bind(R.id.newestProductLL)
         RelativeLayout newestProductLL;
+
+        public void update() {
+            nickName.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    int position = (int) nickName.getTag();
+                    // 这里是保证同一行的item高度是相同的！！也就是同一行是齐整的 height相等
+                    if (position > 0 && position % 2 == 1) {
+                        View v = (View) luckyNumber.getTag();
+                        int height = v.getHeight();
+                        View view = gv.getChildAt(position - 1);
+                        int lastheight = view.getHeight();
+                        // 得到同一行的最后一个item和前一个item想比较，把谁的height大，就把两者中                                                                // height小的item的高度设定为height较大的item的高度一致，也就是保证同一                                                                 // 行高度相等即可
+                        if (height > lastheight) {
+                            view.setLayoutParams(new GridView.LayoutParams(
+                                    GridView.LayoutParams.FILL_PARENT,
+                                    height));
+                        } else if (height < lastheight) {
+                            v.setLayoutParams(new GridView.LayoutParams(
+                                    GridView.LayoutParams.FILL_PARENT,
+                                    lastheight));
+                        }
+                    }
+                }
+            });
+        }
     }
 }

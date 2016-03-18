@@ -15,6 +15,9 @@ class AppUserBuyFlowModel extends BaseModel {
     private String title;
     private long toAmount;
     private String time;
+    private long	deliveryId;
+    //发货状态 (0, "获得奖品"), (1, "确认收货地址"), (2, "等待奖品派发"), (4, "确认收货"), (5, "已收货"), (6, "已晒单")
+    private int	deliveryStatus;
 
     public String getTime() {
         return time;
@@ -22,6 +25,22 @@ class AppUserBuyFlowModel extends BaseModel {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public long getDeliveryId() {
+        return deliveryId;
+    }
+
+    public void setDeliveryId(long deliveryId) {
+        this.deliveryId = deliveryId;
+    }
+
+    public int getDeliveryStatus() {
+        return deliveryStatus;
+    }
+
+    public void setDeliveryStatus(int deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
     }
 
     public

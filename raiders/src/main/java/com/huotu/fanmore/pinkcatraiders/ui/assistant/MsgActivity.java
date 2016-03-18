@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
@@ -153,19 +154,21 @@ class MsgActivity extends BaseActivity implements Handler.Callback, View.OnClick
         Paging paging = new Paging();
         if ( OperateTypeEnum.REFRESH == operateType )
         {// 下拉
-            paging.setPagingTag("");
+            maps.put("pagingSize", 10);
+            maps.put("pagingTag", "");
 
         } else if (OperateTypeEnum.LOADMORE == operateType)
         {// 上拉
             if ( msgs != null && msgs.size() > 0)
             {
-                paging.setPagingTag(String.valueOf(msgs.get(msgs.size()-1).getMessageOrder()));
-            } else
-            {
-                paging.setPagingTag("");
+                maps.put("pagingSize", 10);
+                maps.put("pagingTag", String.valueOf(msgs.get(msgs.size() - 1).getMessageOrder()));
+            } else {
+                maps.put("pagingSize", 10);
+                maps.put("pagingTag", "");
             }
         }
-        maps.put("paging", paging.getPagingTag());
+
         String suffix = params.obtainGetParam(maps);
         url = url + suffix;
         HttpUtils httpUtils = new HttpUtils();
@@ -269,7 +272,7 @@ class MsgActivity extends BaseActivity implements Handler.Callback, View.OnClick
 
     public class Paging
     {
-        private Integer pagingSize;
+        private int pagingSize;
         private String pagingTag;
 
         public String getPagingTag()

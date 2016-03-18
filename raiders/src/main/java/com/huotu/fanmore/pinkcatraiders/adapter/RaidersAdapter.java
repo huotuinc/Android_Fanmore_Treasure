@@ -141,7 +141,7 @@ public class RaidersAdapter extends BaseAdapter {
                 holder.addBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(raiders.get(position).getToAmount()==raiders.get(position).getRemainAmount())
+                        if(raiders.get(position).getToAmount()==raiders.get(position).getAttendAmount())
                         {
                             //提示全买，不可追加
                             ToastUtils.showMomentToast((Activity) mContext, mContext, "本期产品全售光不可追加");

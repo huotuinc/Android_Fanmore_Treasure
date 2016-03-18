@@ -117,21 +117,12 @@ public class CountResultActivity extends BaseActivity implements View.OnClickLis
     {
         getDetailData();
         productDetailPullRefresh.setOnRefreshListener(
-                new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
-
+                new PullToRefreshBase.OnRefreshListener<ScrollView>() {
                     @Override
-                    public void onPullDownToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
-
+                    public void onRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
                         operateType = OperateTypeEnum.REFRESH;
                         getDetailData();
                     }
-
-                    @Override
-                    public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
-
-                    }
-
-
                 }
         );
         numlist = new ArrayList<UserNumberModel>();
@@ -201,7 +192,6 @@ public class CountResultActivity extends BaseActivity implements View.OnClickLis
                                 numlist.clear();
                                 numlist.addAll(CountResult.getUserNumbers());
                                 countResultList.notifyDataSetChanged();
-
 
                             } else {
                                 //暂无数据提示

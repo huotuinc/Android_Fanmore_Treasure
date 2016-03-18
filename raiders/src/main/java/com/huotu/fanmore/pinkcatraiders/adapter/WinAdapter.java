@@ -16,10 +16,12 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.model.AppUserBuyFlowModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RedPacketsModel;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.ShareOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.WinLogDetailActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 
 import java.util.List;
@@ -68,7 +70,7 @@ public class WinAdapter extends BaseAdapter {
 
     @Override
     public
-    View getView ( int position, View convertView, ViewGroup parent ) {
+    View getView ( final int position, View convertView, ViewGroup parent ) {
 
         ViewHolder holder = null;
         Resources resources = mContext.getResources();
@@ -84,26 +86,68 @@ public class WinAdapter extends BaseAdapter {
         }
         if(null!=winners&&!winners.isEmpty()&&null!=winners.get(position))
         {
-            final AppUserBuyFlowModel winner = winners.get(position);
             BitmapLoader.create().displayUrl(
-                    mContext, holder.pictureUrl, winner
+                    mContext, holder.pictureUrl, winners.get(position)
                             .getDefaultPictureUrl(), R.mipmap.error
             );
-            holder.title.setText(winner.getTitle());
-            holder.issueId.setText("参与期号：" + winner.getIssueId());
-            holder.toAmount.setText ( "总需："+winner.getToAmount() );
-            holder.lunkyNumber.setText ( String.valueOf ( winner.getLuckyNumber () ));
-            holder.attendAmount.setText ( "本期参与人数："+ winner.getAmount() );
-            holder.awardingDate.setText("揭晓时间：" + DateUtils.transformDataformat6(winner.getAwardingDate()));
-            holder.addBtn.setOnClickListener(new View.OnClickListener() {
+            holder.title.setText(winners.get(position).getTitle());
+            holder.issueId.setText("参与期号：" + winners.get(position).getIssueId());
+            holder.toAmount.setText ( "总需："+winners.get(position).getToAmount() );
+            holder.lunkyNumber.setText ( String.valueOf ( winners.get(position).getLuckyNumber() ));
+            holder.attendAmount.setText ( "本期参与人数："+ winners.get(position).getAmount() );
+            holder.awardingDate.setText("揭晓时间：" + DateUtils.transformDataformat6(winners.get(position).getAwardingDate()));
+            //根据状态获取操作凭据
+            if(0==winners.get(position).getDeliveryStatus()) {
+                //获取商品
+                holder.addBtn.setText("确认收货地址");
+                holder.addBtn.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("winner", winner);
-                    ActivityUtils.getInstance().showActivity(aty, WinLogDetailActivity.class, bundle);
-                }
-            });
+                    @Override
+                    public void onClick(View v) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("winner", winners.get(position));
+                        ActivityUtils.getInstance().showActivity(aty, WinLogDetailActivity.class, bundle);
+                    }
+                });
+            }
+            else if(1==winners.get(position).getDeliveryStatus())
+            {
+                holder.addBtn.setText("等待奖品派发");
+                holder.addBtn.setTextColor(resources.getColor(R.color.color_white));
+                SystemTools.loadBackground(holder.addBtn, resources.getDrawable(R.drawable.button_common_4));
+            }
+            else if(2==winners.get(position).getDeliveryStatus())
+            {
+                holder.addBtn.setText("确认收货");
+                holder.addBtn.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("winner", winners.get(position));
+                        ActivityUtils.getInstance().showActivity(aty, WinLogDetailActivity.class, bundle);
+                    }
+                });
+            }
+            else if(5==winners.get(position).getDeliveryStatus())
+            {
+                holder.addBtn.setText("去晒单");
+                holder.addBtn.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("winner", winners.get(position));
+                        ActivityUtils.getInstance().showActivity(aty, ShareOrderActivity.class, bundle);
+                    }
+                });
+            }
+            else if(6==winners.get(position).getDeliveryStatus())
+            {
+                holder.addBtn.setText("已晒单");
+                holder.addBtn.setTextColor(resources.getColor(R.color.color_white));
+                SystemTools.loadBackground(holder.addBtn, resources.getDrawable(R.drawable.button_common_4));
+            }
         }
         return convertView;
     }

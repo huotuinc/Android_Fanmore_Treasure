@@ -238,13 +238,13 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         mHandler = new Handler ( this );
         myBroadcastReceiver = new MyBroadcastReceiver(HomeActivity.this, this, MyBroadcastReceiver.JUMP_CART);
         //设置沉浸模式
-        setImmerseLayout ( this.findViewById ( R.id.titleLayoutL ) );
+        setImmerseLayout(this.findViewById(R.id.titleLayoutL));
         wManager = this.getWindowManager ( );
         funcPopWin = new FuncPopWin ( HomeActivity.this, HomeActivity.this, wManager, mHandler  );
         funcPopWin1 = new FunPopWin1 ( HomeActivity.this, HomeActivity.this, wManager, mHandler );
         am = this.getAssets ( );
         //初始化title面板
-        initTitle ( );
+        initTitle();
         if ( null == savedInstanceState ) {
             application.mFragManager.setCurrentFrag ( FragManager.FragType.HOME );
 
@@ -255,7 +255,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     .getSerializable ( "curFragType" );
             application.mFragManager.setCurrentFrag ( FragManager.FragType.HOME );
         }
-        initView ( );
+        initView();
     }
 
     private
@@ -291,7 +291,14 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         int tag = ( int ) titleRightImage.getTag ();
         if(0 == tag)
         {
-            ActivityUtils.getInstance ( ).showActivity ( HomeActivity.this, MsgActivity.class );
+            if(application.isLogin())
+            {
+                ActivityUtils.getInstance ( ).showActivity ( HomeActivity.this, MsgActivity.class );
+            }
+            else
+            {
+                ActivityUtils.getInstance ( ).showActivity ( HomeActivity.this, LoginActivity.class );
+            }
         }
         else if(1 == tag)
         {
@@ -1036,17 +1043,25 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                 Gravity.CENTER, 0, 0
                         );
                         final List<Long> deletes = (List<Long>) msg.obj;
+                        List<DeleteModel> deleteLs = new ArrayList<DeleteModel>();
                         for(int i=0; i<deletes.size(); i++)
                         {
-                            Long chartId = deletes.get(i);
-                            String url = Contant.REQUEST_URL + Contant.DELETE_CART;
-                            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
-                            Map<String, Object> maps = new HashMap<String, Object> ();
-                            maps.put ( "shoppingCartId",  String.valueOf(chartId));
-                            Map<String, Object> param = params.obtainPostParam(maps);
-                            BaseModel base = new BaseModel ();
-                            HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
-                            httpUtils.doVolleyPost(
+                            DeleteModel model = new DeleteModel();
+                            model.setShoppingCartId(deletes.get(i));
+                            deleteLs.add(model);
+                        }
+                        //转换参数
+                        //转成json格式参数
+                        Gson gson = new Gson();
+                        String carts = gson.toJson(deleteLs);
+                        String url = Contant.REQUEST_URL + Contant.DELETE_CART;
+                        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                        Map<String, Object> maps = new HashMap<String, Object> ();
+                        maps.put ( "shoppingCarts",  carts);
+                        Map<String, Object> param = params.obtainPostParam(maps);
+                        BaseModel base = new BaseModel ();
+                        HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
+                        httpUtils.doVolleyPost(
                                     base, url, param, new Response.Listener<BaseModel>() {
                                         @Override
                                         public void onResponse(BaseModel response) {
@@ -1057,17 +1072,17 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                                 {
                                                     CartCountModel cartCount = new CartCountModel();
                                                     cartCount.setId(1l);
-                                                    cartCount.setCount(0);
+                                                    cartCount.setCount(deletes.size());
                                                     CartCountModel.save(cartCount);
                                                 }
                                                 else
                                                 {
-                                                    cartCountIt.setCount(cartCountIt.getCount()-1);
+                                                    cartCountIt.setCount(cartCountIt.getCount()-deletes.size());
                                                     CartCountModel.save(cartCountIt);
                                                 }
                                                 //全选按钮置空
                                                 funcPopWin.setUNSelectAll();
-                                                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除成功");
+                                                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "成功删除"+deletes.size()+"条记录");
 
                                             } else {
                                                 progress.dismissView();
@@ -1090,8 +1105,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                             ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除失败");
                                         }
                                     }
-                            );
-                        }
+                        );
 
                         progress.dismissView();
                         Bundle bundle = new Bundle();
@@ -1174,6 +1188,19 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
         public void setBuyAmount(long buyAmount) {
             this.buyAmount = buyAmount;
+        }
+    }
+
+    public class DeleteModel
+    {
+        private long shoppingCartId;
+
+        public long getShoppingCartId() {
+            return shoppingCartId;
+        }
+
+        public void setShoppingCartId(long shoppingCartId) {
+            this.shoppingCartId = shoppingCartId;
         }
     }
 }

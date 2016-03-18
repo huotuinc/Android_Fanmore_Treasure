@@ -260,8 +260,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                     //是否登录
                                     if (application.isLogin()) {
                                         //登录
-                                        if (3 != productDetail.getStatus()) {
-                                            //未揭晓
+                                        if (0 == productDetail.getStatus()) {
+                                            //进行中
                                             loginedDetail.setVisibility(View.VISIBLE);
 
                                             TextView noLabel = (TextView) loginedDetail.findViewById(R.id.noLabel);
@@ -300,8 +300,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             TextView raidersNo = (TextView) ProductDetailActivity
                                                     .this.findViewById(R.id.raidersNo);
                                             raidersNo.setText("夺宝号码：" + ((null!=productDetail.getNumbers()&&!productDetail.getNumbers().isEmpty())?productDetail.getNumbers().get(0):"暂无夺宝号码"));
-                                        } else {
-                                            //揭晓
+                                        } else if(1 == productDetail.getStatus()) {
+                                            //倒计时
                                             announcedDetail.setVisibility(View.VISIBLE);
                                             CircleImageView accountLogo = (CircleImageView)
                                                     loginedDetail.findViewById(R.id.accountLogo);
@@ -333,11 +333,46 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     loginedDetail.findViewById(R.id.calculationDetail);
                                             calculationDetail.setText("幸运号：32890");
                                         }
-                                    } else {
-                                        //未登陆
-                                        if (3 != productDetail.getStatus()) {
-                                            //未揭晓
-                                                unlogin.setVisibility(View.VISIBLE);
+                                        else if(2 == productDetail.getStatus())
+                                        {
+                                            //已揭晓
+                                            announcedDetail.setVisibility(View.VISIBLE);
+                                            CircleImageView accountLogo = (CircleImageView)
+                                                    loginedDetail.findViewById(R.id.accountLogo);
+                                            BitmapLoader.create().loadRoundImage(
+                                                    ProductDetailActivity.this, accountLogo,
+                                                    "http://v1.qzone"
+                                                            + ".cc/avatar/201404/10/00/12/534571832f9ea304"
+                                                            + ".jpg!200x200.jpg", R.mipmap.error
+                                            );
+                                            TextView winnerName = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.winnerName);
+                                            winnerName.setText("中奖者：百晓生");
+                                            TextView winnerIp = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.winnerIp);
+                                            winnerIp.setText("铁岭：10.10.123.45");
+                                            TextView winnerId = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.winnerId);
+                                            winnerId.setText("用户ID：23000909");
+                                            TextView partnerUser = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.partnerUser);
+                                            partnerUser.setText("本期参与：3000次");
+                                            TextView partnerTime = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.partnerTime);
+                                            partnerTime.setText("揭晓时间：2015-12-11 14:20:11");
+                                            TextView luckyNo = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.luckyNo);
+                                            luckyNo.setText("幸运号：32890");
+                                            TextView calculationDetail = (TextView)
+                                                    loginedDetail.findViewById(R.id.calculationDetail);
+                                            calculationDetail.setText("幸运号：32890");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (0 == productDetail.getStatus()) {
+                                            //进行中
+                                            unlogin.setVisibility(View.VISIBLE);
                                             TextView noLabel = (TextView) unlogin.findViewById(R.id.noLabel);
                                             noLabel.setText("期号：" + productDetail.getIssueId());
                                             ProgressBar progressBar = (ProgressBar)
@@ -368,9 +403,35 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     "剩余：" + productDetail
                                                             .getRemainAmount()
                                             );
-                                        } else {
-                                            //揭晓
-
+                                        } else if(1==productDetail.getStatus())
+                                        {
+                                            //倒计时
+                                            announcedDetail.setVisibility(View.VISIBLE);
+                                            CircleImageView accountLogo = (CircleImageView)
+                                                    announcedDetail.findViewById(R.id.accountLogo);
+                                            BitmapLoader.create().loadRoundImage(
+                                                    ProductDetailActivity.this, accountLogo,
+                                                    "http://v1.qzone"
+                                                            + ".cc/avatar/201404/10/00/12/534571832f9ea304"
+                                                            + ".jpg!200x200.jpg", R.mipmap.error);
+                                            TextView winnerName = (TextView) announcedDetail.findViewById(R.id.winnerName);
+                                            winnerName.setText("中奖者：百晓生");
+                                            TextView winnerIp = (TextView) announcedDetail.findViewById(R.id.winnerIp);
+                                            winnerIp.setText("铁岭：10.10.123.45");
+                                            TextView winnerId = (TextView) announcedDetail.findViewById(R.id.winnerId);
+                                            winnerId.setText("用户ID：23000909");
+                                            TextView partnerUser = (TextView) announcedDetail.findViewById(R.id.partnerUser);
+                                            partnerUser.setText("本期参与：3000次");
+                                            TextView partnerTime = (TextView) announcedDetail.findViewById(R.id.partnerTime);
+                                            partnerTime.setText("揭晓时间：2015-12-11 14:20:11");
+                                            TextView luckyNo = (TextView) announcedDetail.findViewById(R.id.luckyNo);
+                                            luckyNo.setText("幸运号：32890");
+                                            TextView calculationDetail = (TextView) announcedDetail.findViewById(R.id.calculationDetail);
+                                            calculationDetail.setText("幸运号：32890");
+                                        }
+                                        else if(2==productDetail.getStatus())
+                                        {
+                                            //已揭晓
                                             announcedDetail.setVisibility(View.VISIBLE);
                                             CircleImageView accountLogo = (CircleImageView)
                                                     announcedDetail.findViewById(R.id.accountLogo);
@@ -488,8 +549,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                     //是否登录
                                     if (application.isLogin()) {
                                         //登录
-                                        if (3 != productDetail.getStatus()) {
-                                            //未揭晓
+                                        if (0 == productDetail.getStatus()) {
+                                            //进行中
                                             loginedDetail.setVisibility(View.VISIBLE);
                                             TextView noLabel = (TextView) ProductDetailActivity
                                                     .this.findViewById(R.id.noLabel);
@@ -524,13 +585,12 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             );
                                             TextView parentCount = (TextView) ProductDetailActivity
                                                     .this.findViewById(R.id.parentCount);
-                                            parentCount.setText("您参与了：1人次");
+                                            parentCount.setText("您参与了："+productDetail.getNumbers().size()+"人次");
                                             TextView raidersNo = (TextView) ProductDetailActivity
                                                     .this.findViewById(R.id.raidersNo);
-                                            raidersNo.setText("夺宝号码：1000589");
-                                        } else {
-                                            //揭晓
-
+                                            raidersNo.setText("夺宝号码："+ productDetail.getLuckyNumber());
+                                        } else if(1 == productDetail.getStatus()) {
+                                            //倒计时
                                             announcedDetail.setVisibility(View.VISIBLE);
                                             CircleImageView accountLogo = (CircleImageView)
                                                     announcedDetail.findViewById(R.id.accountLogo);
@@ -562,11 +622,41 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     announcedDetail.findViewById(R.id.calculationDetail);
                                             calculationDetail.setText("幸运号：32890");
                                         }
+                                        else if(2 == productDetail.getStatus()) {
+                                            //已揭晓
+                                            announcedDetail.setVisibility(View.VISIBLE);
+                                            CircleImageView accountLogo = (CircleImageView)
+                                                    announcedDetail.findViewById(R.id.accountLogo);
+                                            BitmapLoader.create().loadRoundImage(
+                                                    ProductDetailActivity.this, accountLogo,
+                                                    productDetail.getAwardingUserHead(), R.mipmap.error
+                                            );
+                                            TextView winnerName = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.winnerName);
+                                            winnerName.setText("中奖者："+productDetail.getAwardingUserName());
+                                            TextView winnerIp = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.winnerIp);
+                                            winnerIp.setText(productDetail.getAwardingUserCityName()+"："+productDetail.getAwardingUserIp());
+                                            TextView winnerId = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.winnerId);
+                                            winnerId.setText("用户ID："+productDetail.getAwardingUserId());
+                                            TextView partnerUser = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.partnerUser);
+                                            partnerUser.setText("本期参与："+productDetail.getAwardingUserBuyCount()+"次");
+                                            TextView partnerTime = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.partnerTime);
+                                            partnerTime.setText("揭晓时间："+DateUtils.transformDataformat6(productDetail.getAwardingDate()));
+                                            TextView luckyNo = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.luckyNo);
+                                            luckyNo.setText("幸运号："+productDetail.getLuckyNumber());
+                                            TextView calculationDetail = (TextView)
+                                                    announcedDetail.findViewById(R.id.calculationDetail);
+                                            calculationDetail.setText("计算详情");
+                                        }
                                     } else {
                                         //未登陆
-                                        if (3 != productDetail.getStatus()) {
+                                        if (0 == productDetail.getStatus()) {
                                             //未揭晓
-
                                             unlogin.setVisibility(View.VISIBLE);
                                             TextView noLabel = (TextView) ProductDetailActivity
                                                     .this.findViewById(R.id.noLabel);
@@ -599,9 +689,39 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     "剩余：" + productDetail
                                                             .getRemainAmount()
                                             );
-                                        } else {
-                                            //揭晓
-
+                                        } else if(1 == productDetail.getStatus()) {
+                                            //倒计时
+                                            announcedDetail.setVisibility(View.VISIBLE);
+                                            CircleImageView accountLogo = (CircleImageView)
+                                                    announcedDetail.findViewById(R.id.accountLogo);
+                                            BitmapLoader.create().loadRoundImage(
+                                                    ProductDetailActivity.this, accountLogo,
+                                                    "http://v1.qzone"
+                                                            + ".cc/avatar/201404/10/00/12/534571832f9ea304"
+                                                            + ".jpg!200x200.jpg", R.mipmap.error);
+                                            TextView winnerName = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.winnerName);
+                                            winnerName.setText("中奖者：百晓生");
+                                            TextView winnerIp = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.winnerIp);
+                                            winnerIp.setText("铁岭：10.10.123.45");
+                                            TextView winnerId = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.winnerId);
+                                            winnerId.setText("用户ID：23000909");
+                                            TextView partnerUser = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.partnerUser);
+                                            partnerUser.setText("本期参与：3000次");
+                                            TextView partnerTime = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.partnerTime);
+                                            partnerTime.setText("揭晓时间：2015-12-11 14:20:11");
+                                            TextView luckyNo = (TextView) ProductDetailActivity
+                                                    .this.findViewById(R.id.luckyNo);
+                                            luckyNo.setText("幸运号：32890");
+                                            TextView calculationDetail = (TextView) announcedDetail.findViewById(R.id.calculationDetail);
+                                            calculationDetail.setText("幸运号：32890");
+                                        }
+                                        else if(2 == productDetail.getStatus()) {
+                                            //已揭晓
                                             announcedDetail.setVisibility(View.VISIBLE);
                                             CircleImageView accountLogo = (CircleImageView)
                                                     announcedDetail.findViewById(R.id.accountLogo);

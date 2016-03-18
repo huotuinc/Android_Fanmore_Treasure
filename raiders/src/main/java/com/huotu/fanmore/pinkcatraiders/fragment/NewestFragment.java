@@ -125,7 +125,7 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
             }
         });
         newestProducts = new ArrayList<NewOpenListModel>();
-        adapter = new NewestProductAdapter(newestProducts,getActivity(),getActivity(),  tc);
+        adapter = new NewestProductAdapter(newestGrid.getRefreshableView(), newestProducts,getActivity(),getActivity(),  tc);
         newestGrid.setAdapter(adapter);
        firstGetData();
     }
@@ -150,14 +150,7 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
             if ( OperateTypeEnum.REFRESH == operateType )
             {// 下拉
                 maps.put("lastId", 0);
-                if ( newestProducts != null &&newestProducts.size() > 0)
-                {
-                    NewOpenListModel product = newestProducts.get(0);
-                    maps.put("curType", product.getType());
-                } else
-                {
-                    maps.put("curType", 0);
-                }
+                maps.put("curType", 0);
             } else if (OperateTypeEnum.LOADMORE == operateType)
             {// 上拉
                 if ( newestProducts != null &&newestProducts.size() > 0)
@@ -167,7 +160,7 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
                     maps.put("curType", product.getType());
                 } else
                 {
-                    maps.put("lastId",0);
+                    maps.put("lastId", 0);
                     maps.put("curType", 0);
                 }
             }
