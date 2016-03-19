@@ -63,6 +63,7 @@
     </RelativeLayout>
     <!--参与人数-->
     <RelativeLayout
+        android:id="@+id/bottomOperatorL"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/partner_area_height"
         android:paddingLeft="25dp"

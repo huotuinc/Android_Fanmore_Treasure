@@ -35,6 +35,7 @@ import com.huotu.fanmore.pinkcatraiders.model.DeliveryOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.MyAddressListModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayOutputModel;
+import com.huotu.fanmore.pinkcatraiders.ui.assistant.AddAddressActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
@@ -144,8 +145,7 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
     //引导图片资源
     //地址列表
     public List< MyAddressListModel > lists = new ArrayList<MyAddressListModel>();
-    public JumpToolsPopWin jumpTools;
-
+    public JumpToolsPopWin jumpToolsPopWin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +158,6 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
         mHandler = new Handler ( this );
         bundle = this.getIntent().getExtras();
         winner = (AppUserBuyFlowModel) bundle.getSerializable("winner");
-        jumpTools = new JumpToolsPopWin(WinLogDetailActivity.this, WinLogDetailActivity.this, wManager);
         initTitle();
         initScroll();
     }
@@ -435,60 +434,22 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                                 {
                                     lists.clear();
                                     lists.addAll(addressOutput.getResultData().getList());
-                                    //默认选第一个地址
-
-                                    MyAddressListModel model = lists.get(0);
-                                    String url = Contant.REQUEST_URL + Contant.ADD_LOTTERY_RECEIVER_INFO;
-                                    AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), WinLogDetailActivity.this);
-                                    //1 拼装参数
-                                    Map<String, Object> maps = new HashMap<String, Object> ();
-                                    maps.put("deliveryId", deliveryId);
-                                    maps.put("receiver", model.getReceiver());
-                                    maps.put("mobile", model.getMobile());
-                                    maps.put("details", model.getDetails());
-                                    maps = params.obtainAllParamUTF8 ( maps );
-                                    //获取sign
-                                    String signStr = params.obtainSignUTF8 ( maps );
-                                    maps.put("receiver", URLEncoder.encode(model.getReceiver()));
-                                    maps.put("details", URLEncoder.encode(model.getDetails()));
-                                    maps.put ( "sign", signStr);
-                                    //拼装URL
-                                    String suffix = params.obtainGetParamUTF8 (maps);
-                                    url = url + suffix;
-                                    HttpUtils httpUtils = new HttpUtils();
-                                    httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
-                                        @Override
-                                        public void onResponse(JSONObject response) {
-                                            JSONUtil<BaseModel> jsonUtil = new JSONUtil<BaseModel>();
-                                            BaseModel base = new BaseModel();
-                                            base = jsonUtil.toBean(response.toString(), base);
-                                            if(1==base.getResultCode())
-                                            {
-                                                //刷新列表
-                                                firstGetData();
-                                            }
-                                            else
-                                            {
-                                                ToastUtils.showMomentToast(WinLogDetailActivity.this, WinLogDetailActivity.this, "添加地址失败");
-                                            }
-
-                                        }
-                                    }, new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            ToastUtils.showMomentToast(WinLogDetailActivity.this, WinLogDetailActivity.this, "添加地址失败");
-                                        }
-                                    });
+                                    //弹出地址选择框
+                                    jumpToolsPopWin = new JumpToolsPopWin(WinLogDetailActivity.this, WinLogDetailActivity.this, wManager, lists, mHandler);
+                                    jumpToolsPopWin.showWin();
+                                    jumpToolsPopWin.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
                                 }
                                 else
                                 {
                                     //异常处理，自动切换成无数据
                                     //提示未设置地址
-                                    jumpTools.showWin("你未设置收货地址", AddressListActivity.class);
-                                    jumpTools.showAtLocation(
-                                            findViewById(R.id.titleLayout),
-                                            Gravity.CENTER, 0, 0
-                                    );
+                                    ToastUtils.showMomentToast(WinLogDetailActivity.this, WinLogDetailActivity.this, "去设置地址");
+                                    mHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ActivityUtils.getInstance ().showActivity ( WinLogDetailActivity.this, AddAddressActivity.class );
+                                        }
+                                    }, 1000);
                                 }
 
                             }
@@ -496,23 +457,26 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                             {
                                 //异常处理，自动切换成无数据
                                 //提示未设置地址
-                                jumpTools.showWin("你未设置收货地址", AddressListActivity.class);
-                                jumpTools.showAtLocation(
-                                        findViewById(R.id.titleLayout),
-                                        Gravity.CENTER, 0, 0
-                                );
-
+                                ToastUtils.showMomentToast(WinLogDetailActivity.this, WinLogDetailActivity.this, "去设置地址");
+                                mHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ActivityUtils.getInstance ().showActivity ( WinLogDetailActivity.this, AddAddressActivity.class );
+                                    }
+                                }, 1000);
                             }
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             //提示未设置地址
-                            jumpTools.showWin("你未设置收货地址", AddressListActivity.class);
-                            jumpTools.showAtLocation(
-                                    findViewById(R.id.titleLayout),
-                                    Gravity.CENTER, 0, 0
-                            );
+                            ToastUtils.showMomentToast(WinLogDetailActivity.this, WinLogDetailActivity.this, "去设置地址");
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ActivityUtils.getInstance ().showActivity ( WinLogDetailActivity.this, AddAddressActivity.class );
+                                }
+                            }, 1000);
                         }
                     });
                 }
@@ -560,6 +524,51 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                 }
             }
             break;
+            case Contant.ADDRESS_SELECT:
+            {
+                MyAddressListModel model = (MyAddressListModel) msg.obj;
+                String url = Contant.REQUEST_URL + Contant.ADD_LOTTERY_RECEIVER_INFO;
+                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), WinLogDetailActivity.this);
+                //1 拼装参数
+                Map<String, Object> maps = new HashMap<String, Object> ();
+                maps.put("deliveryId", model.getAddressId());
+                maps.put("receiver", model.getReceiver());
+                maps.put("mobile", model.getMobile());
+                maps.put("details", model.getDetails());
+                maps = params.obtainAllParamUTF8 ( maps );
+                //获取sign
+                String signStr = params.obtainSignUTF8 ( maps );
+                maps.put("receiver", URLEncoder.encode(model.getReceiver()));
+                maps.put("details", URLEncoder.encode(model.getDetails()));
+                maps.put ( "sign", signStr);
+                //拼装URL
+                String suffix = params.obtainGetParamUTF8 (maps);
+                url = url + suffix;
+                HttpUtils httpUtils = new HttpUtils();
+                httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JSONUtil<BaseModel> jsonUtil = new JSONUtil<BaseModel>();
+                        BaseModel base = new BaseModel();
+                        base = jsonUtil.toBean(response.toString(), base);
+                        if(1==base.getResultCode())
+                        {
+                            //刷新列表
+                            firstGetData();
+                        }
+                        else
+                        {
+                            ToastUtils.showMomentToast(WinLogDetailActivity.this, WinLogDetailActivity.this, "添加地址失败");
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        ToastUtils.showMomentToast(WinLogDetailActivity.this, WinLogDetailActivity.this, "添加地址失败");
+                    }
+                });
+            }
             default:
                 break;
         }

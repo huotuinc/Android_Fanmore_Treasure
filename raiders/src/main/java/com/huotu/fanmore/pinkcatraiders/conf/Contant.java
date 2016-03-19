@@ -107,6 +107,8 @@ public class Contant {
 
     public static final int GO_LOGIN = 0x00000051;
     public static final int WINNER_STATUS = 0x00000052;
+
+    public static final int ADDRESS_SELECT = 0x00000071;
     /**
      * 菜单标记1
      */
@@ -189,8 +191,8 @@ public class Contant {
 
     //接口请求地址
     //loginapi
-    public static final String REQUEST_URL = "http://192.168.1.254:10001/app/";
-    //public static final String REQUEST_URL = "http://192.168.3.27:8080/duobao/app/";
+    //public static final String REQUEST_URL = "http://192.168.1.254:10001/app/";
+    public static final String REQUEST_URL = "http://192.168.3.30:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
    //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
@@ -331,4 +333,6 @@ public class Contant {
     public static final String ADD_LOTTERY_RECEIVER_INFO = "addLotteryReceiverInfo";
     //确认收货
     public static final String CONFIRM_RECEIPT = "confirmReceipt";
+    //上传晒单图片
+    public static final String ADD_SHARE_ORDER_IMG = "addShareOrderImg";
 }

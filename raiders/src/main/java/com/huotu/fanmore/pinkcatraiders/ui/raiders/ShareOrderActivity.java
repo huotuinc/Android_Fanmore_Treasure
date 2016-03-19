@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -34,12 +35,14 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
+import com.huotu.fanmore.pinkcatraiders.model.AppBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.AppUserBuyFlowModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.BottomModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.PartnerHistorysModel;
 import com.huotu.fanmore.pinkcatraiders.model.PartnerHistorysOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.UpdateProfileModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
@@ -56,6 +59,7 @@ import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -102,8 +106,14 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
     @Bind ( R.id.orderMsg )
     EditText orderMsg;
 
-    @Bind ( R.id.addImgBtn )
-    ImageView addImgBtn;
+    @Bind ( R.id.addImgBtn1 )
+    ImageView addImgBtn1;
+    @Bind ( R.id.addImgBtn2 )
+    ImageView addImgBtn2;
+    @Bind ( R.id.addImgBtn3 )
+    ImageView addImgBtn3;
+    @Bind ( R.id.addImgBtn4 )
+    ImageView addImgBtn4;
 
     @Bind(R.id.shareOrderTitle)
     TextView shareOrderTitle;
@@ -122,8 +132,6 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
 
     private CropperView cropperView;
 
-    private List< Bitmap > cropBitmaps = new ArrayList< Bitmap > ( );
-
     public
     ProgressPopupWindow progress;
 
@@ -132,6 +140,7 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
 
     @Bind(R.id.preImgL)
     LinearLayout preImgL;
+    public List<String> imgs = new ArrayList<String>();
 
     @Override
     protected
@@ -164,11 +173,11 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
     void initTitle ( ) {
         //背景色
         Drawable bgDraw = resources.getDrawable ( R.drawable.account_bg_bottom );
-        SystemTools.loadBackground ( titleLayoutL, bgDraw );
+        SystemTools.loadBackground(titleLayoutL, bgDraw);
         Drawable leftDraw = resources.getDrawable ( R.mipmap.back_gray );
-        SystemTools.loadBackground ( titleLeftImage, leftDraw );
+        SystemTools.loadBackground(titleLeftImage, leftDraw);
         progress = new ProgressPopupWindow ( ShareOrderActivity.this, ShareOrderActivity.this, wManager );
-        stubTitleText.inflate ( );
+        stubTitleText.inflate();
         TextView titleText = ( TextView ) this.findViewById ( R.id.titleText );
         titleText.setText("晒单");
     }
@@ -176,16 +185,84 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
     @OnClick ( R.id.titleLeftImage )
     void doBack ( ) {
 
-        closeSelf ( ShareOrderActivity.this );
+        closeSelf(ShareOrderActivity.this);
     }
 
-    @OnClick ( R.id.addImgBtn )
-    void uploadImg ( ) {
+    @OnClick ( R.id.addImgBtn1 )
+    void uploadImg1 ( ) {
+        addImgBtn1.setTag(0);
+        addImgBtn2.setTag(null);
+        addImgBtn3.setTag(null);
+        addImgBtn4.setTag(null);
 
-        if ( 4 <= cropBitmaps.size ( ) ) {
-            ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "最多选择4张图片");
-        }
-        else {
+        //上传晒单图片
+        Map< String, String > param = new HashMap< String, String > ( );
+        //插入图片
+        //上传封面
+        List< BottomModel > bottoms = new ArrayList< BottomModel > ( );
+        BottomModel bottom1 = new BottomModel ( );
+        bottom1.setBottomTag ( "camera" );
+        bottom1.setBottomName ( "拍照" );
+        bottoms.add ( bottom1 );
+        BottomModel bottom2 = new BottomModel ( );
+        bottom2.setBottomTag ( "fromSD" );
+        bottom2.setBottomName ( "从手机相册选择" );
+        bottoms.add ( bottom2 );
+        BottomModel bottom3 = new BottomModel ( );
+        bottom3.setBottomTag ( "cancel" );
+        bottom3.setBottomName ( "取消" );
+        bottoms.add ( bottom3 );
+        //回复点击事件
+        CommonPopWin commonPopWin = new CommonPopWin ( ShareOrderActivity.this, bottoms,
+                                                           application, wManager, mHandler,
+                                                           titleLeftImage, param );
+        commonPopWin.initView ( );
+        commonPopWin.showAtLocation ( titleLeftImage, Gravity.BOTTOM, 0, 0 );
+        commonPopWin.setOnDismissListener ( new PoponDismissListener ( ShareOrderActivity
+                                                                                   .this ) );
+    }
+
+    @OnClick ( R.id.addImgBtn2 )
+    void uploadImg2 ( ) {
+
+        addImgBtn1.setTag(null);
+        addImgBtn2.setTag(0);
+        addImgBtn3.setTag(null);
+        addImgBtn4.setTag(null);
+        //上传晒单图片
+        Map< String, String > param = new HashMap< String, String > ( );
+        //插入图片
+        //上传封面
+        List< BottomModel > bottoms = new ArrayList< BottomModel > ( );
+        BottomModel bottom1 = new BottomModel ( );
+        bottom1.setBottomTag ( "camera" );
+        bottom1.setBottomName ( "拍照" );
+        bottoms.add ( bottom1 );
+        BottomModel bottom2 = new BottomModel ( );
+        bottom2.setBottomTag ( "fromSD" );
+        bottom2.setBottomName ( "从手机相册选择" );
+        bottoms.add ( bottom2 );
+        BottomModel bottom3 = new BottomModel ( );
+        bottom3.setBottomTag ( "cancel" );
+        bottom3.setBottomName ( "取消" );
+        bottoms.add ( bottom3 );
+            //回复点击事件
+        CommonPopWin commonPopWin = new CommonPopWin ( ShareOrderActivity.this, bottoms,
+                    application, wManager, mHandler,
+                    titleLeftImage, param );
+        commonPopWin.initView ( );
+        commonPopWin.showAtLocation ( titleLeftImage, Gravity.BOTTOM, 0, 0 );
+        commonPopWin.setOnDismissListener ( new PoponDismissListener ( ShareOrderActivity
+                    .this ) );
+    }
+
+    @OnClick ( R.id.addImgBtn3 )
+    void uploadImg3 ( ) {
+
+        addImgBtn1.setTag(null);
+        addImgBtn2.setTag(null);
+        addImgBtn3.setTag(0);
+        addImgBtn4.setTag(null);
             //上传晒单图片
             Map< String, String > param = new HashMap< String, String > ( );
             //插入图片
@@ -205,13 +282,47 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
             bottoms.add ( bottom3 );
             //回复点击事件
             CommonPopWin commonPopWin = new CommonPopWin ( ShareOrderActivity.this, bottoms,
-                                                           application, wManager, mHandler,
-                                                           titleLeftImage, param );
+                    application, wManager, mHandler,
+                    titleLeftImage, param );
             commonPopWin.initView ( );
             commonPopWin.showAtLocation ( titleLeftImage, Gravity.BOTTOM, 0, 0 );
             commonPopWin.setOnDismissListener ( new PoponDismissListener ( ShareOrderActivity
-                                                                                   .this ) );
-        }
+                    .this ) );
+    }
+
+    @OnClick ( R.id.addImgBtn4 )
+    void uploadImg4 ( ) {
+
+        addImgBtn1.setTag(null);
+        addImgBtn2.setTag(null);
+        addImgBtn3.setTag(null);
+        addImgBtn4.setTag(0);
+
+            //上传晒单图片
+            Map< String, String > param = new HashMap< String, String > ( );
+            //插入图片
+            //上传封面
+            List< BottomModel > bottoms = new ArrayList< BottomModel > ( );
+            BottomModel bottom1 = new BottomModel ( );
+            bottom1.setBottomTag ( "camera" );
+            bottom1.setBottomName("拍照");
+            bottoms.add(bottom1);
+            BottomModel bottom2 = new BottomModel ( );
+            bottom2.setBottomTag("fromSD");
+            bottom2.setBottomName("从手机相册选择");
+            bottoms.add ( bottom2 );
+            BottomModel bottom3 = new BottomModel ( );
+            bottom3.setBottomTag("cancel");
+            bottom3.setBottomName("取消");
+            bottoms.add(bottom3);
+            //回复点击事件
+            CommonPopWin commonPopWin = new CommonPopWin ( ShareOrderActivity.this, bottoms,
+                    application, wManager, mHandler,
+                    titleLeftImage, param );
+            commonPopWin.initView ( );
+            commonPopWin.showAtLocation ( titleLeftImage, Gravity.BOTTOM, 0, 0 );
+            commonPopWin.setOnDismissListener(new PoponDismissListener(ShareOrderActivity
+                    .this));
     }
 
     @OnClick ( R.id.textright )
@@ -239,7 +350,7 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
         maps.put ( "issueId", String.valueOf ( bundle.getLong ( "issue" ) ) );
         maps.put ( "title", orderTitle.getText ().toString ( ) );
         maps.put ( "content", orderMsg.getText ().toString () );
-        maps.put ( "profileData", (Bitmap[])cropBitmaps.toArray(new Bitmap[cropBitmaps.size ()]) );
+        maps.put ( "profileData", null);
         maps = params.obtainAllParamUTF8 ( maps );
         //获取sign
         String signStr = params.obtainSignUTF8 ( maps );
@@ -330,10 +441,92 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
             case 0x00110022:
             {
                 Bitmap cropBitmap = (Bitmap) msg.obj;
-                ImageView imageView = new ImageView(ShareOrderActivity.this);
-                imageView.setImageBitmap(cropBitmap);
-                imageView.setLayoutParams(new LinearLayout.LayoutParams((int)resources.getDimension(R.dimen.showOrderImageSize), (int)resources.getDimension(R.dimen.showOrderImageSize)));
-                preImgL.addView(imageView);
+                //上传晒单图片
+                progress.showProgress ( "正在上传晒单图片" );
+                progress.showAtLocation(
+                        titleLayoutL,
+                        Gravity.CENTER, 0, 0
+                );
+                if( false == ShareOrderActivity.this.canConnect() ){
+                    ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "网络有问题");
+                }
+                else
+                {
+                    Object profileData = null;
+                    ByteArrayOutputStream bao = new ByteArrayOutputStream();
+                    cropBitmap.compress(Bitmap.CompressFormat.PNG, 90, bao);
+                    byte[] buffer = bao.toByteArray();
+                    String imgStr = Base64.encodeToString(
+                            buffer, 0, buffer.length,
+                            Base64.DEFAULT
+                    );
+                    profileData = imgStr;
+                    String url = Contant.REQUEST_URL + Contant.ADD_SHARE_ORDER_IMG;
+                    AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ShareOrderActivity.this);
+                    Map<String, Object> maps = new HashMap<String, Object> ();
+                    maps.put ( "profileData", profileData );
+                    Map<String, Object> param = params.obtainPostParam(maps);
+                    UploadOrderOutputModel updateProfile = new UploadOrderOutputModel ();
+                    HttpUtils<UploadOrderOutputModel> httpUtils = new HttpUtils<UploadOrderOutputModel> ();
+                    httpUtils.doVolleyPost (
+                            updateProfile, url, param, new Response.Listener< UploadOrderOutputModel > ( ) {
+                                @Override
+                                public
+                                void onResponse ( UploadOrderOutputModel response ) {
+                                    progress.dismissView ();
+                                    UploadOrderOutputModel updateProfile = response;
+                                    if(1==updateProfile.getResultCode ()&&null!=updateProfile.getResultData()&&null!=updateProfile
+                                            .getResultData().filename)
+                                    {
+                                        //上传成功
+                                        ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "上传晒单图片成功");
+                                        imgs.add(updateProfile.getResultData().getFilename());
+                                        if(0==addImgBtn1.getTag())
+                                        {
+                                            addImgBtn1.setTag(null);
+                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn1, updateProfile.getResultData().getUrl(), R.mipmap.error);
+                                            addImgBtn1.setEnabled(false);
+                                            addImgBtn1.setClickable(false);
+                                        }
+                                        else if(0==addImgBtn2.getTag())
+                                        {
+                                            addImgBtn2.setTag(null);
+                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn2, updateProfile.getResultData().getUrl(), R.mipmap.error);
+                                            addImgBtn2.setEnabled(false);
+                                            addImgBtn2.setClickable(false);
+                                        }
+                                        else if(0==addImgBtn3.getTag())
+                                        {
+                                            addImgBtn3.setTag(null);
+                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn3, updateProfile.getResultData().getUrl(), R.mipmap.error);
+                                            addImgBtn3.setEnabled(false);
+                                            addImgBtn3.setClickable(false);
+                                        }
+                                        else if(0==addImgBtn4.getTag())
+                                        {
+                                            addImgBtn4.setTag(null);
+                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn4, updateProfile.getResultData().getUrl(), R.mipmap.error);
+                                            addImgBtn4.setEnabled(false);
+                                            addImgBtn4.setClickable(false);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "上传晒单图片失败");
+                                    }
+                                }
+                            }, new Response.ErrorListener ( ) {
+
+                                @Override
+                                public
+                                void onErrorResponse ( VolleyError error ) {
+                                    progress.dismissView();
+                                    //系统级别错误
+                                    ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "上传晒单图片失败");
+                                }
+                            }
+                    );
+                }
             }
             break;
             default:
@@ -447,6 +640,40 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
         message.what = 0x00110022;
         message.obj = cropBitmap;
         mHandler.sendMessage(message);
-        cropBitmaps.add ( cropBitmap );
+    }
+
+    public class UploadOrderOutputModel extends BaseModel
+    {
+        private UploadOrderInnerModel resultData;
+
+        public UploadOrderInnerModel getResultData() {
+            return resultData;
+        }
+
+        public void setResultData(UploadOrderInnerModel resultData) {
+            this.resultData = resultData;
+        }
+
+        public class UploadOrderInnerModel
+        {
+            private String url;
+            private String filename;
+
+            public String getUrl() {
+                return url;
+            }
+
+            public void setUrl(String url) {
+                this.url = url;
+            }
+
+            public String getFilename() {
+                return filename;
+            }
+
+            public void setFilename(String filename) {
+                this.filename = filename;
+            }
+        }
     }
 }

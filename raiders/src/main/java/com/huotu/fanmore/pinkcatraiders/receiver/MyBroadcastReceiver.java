@@ -160,7 +160,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         }
         else if(intent.getAction().equals(JUMP_CART))
         {
-            listener.onFinishReceiver(ReceiverType.jumpCart,null);
+            listener.onFinishReceiver(ReceiverType.jumpCart,intent.getExtras());
         }
         else if(intent.getAction().equals(TITLE_MSG_TAG))
         {

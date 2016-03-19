@@ -507,7 +507,9 @@ public class LoginActivity extends BaseActivity
                             else
                             {
                                 //跳转到购物车
-                                MyBroadcastReceiver.sendBroadcast(LoginActivity.this, MyBroadcastReceiver.JUMP_CART);
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("type", 1);
+                                MyBroadcastReceiver.sendBroadcast(LoginActivity.this, MyBroadcastReceiver.JUMP_CART, bundle);
                                 ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
                             }
                         }
@@ -518,7 +520,9 @@ public class LoginActivity extends BaseActivity
                         void onErrorResponse ( VolleyError error ) {
                             CartDataModel.deleteAll(CartDataModel.class);
                             //跳转到购物车
-                            MyBroadcastReceiver.sendBroadcast(LoginActivity.this, MyBroadcastReceiver.JUMP_CART);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("type", 1);
+                            MyBroadcastReceiver.sendBroadcast(LoginActivity.this, MyBroadcastReceiver.JUMP_CART, bundle);
                             ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
                         }
                     }

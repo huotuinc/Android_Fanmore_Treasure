@@ -107,6 +107,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="@dimen/partner_area_height"
+        android:id="@+id/bottomOperatorL"
         android:paddingLeft="25dp"
         android:layout_below="@+id/announcedPeopleDetail"
         android:paddingRight="25dp"
