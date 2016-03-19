@@ -35,6 +35,7 @@ import com.huotu.fanmore.pinkcatraiders.model.DeliveryOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.MyAddressListModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.WinExesptionModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.AddAddressActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -436,7 +437,7 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                                     lists.addAll(addressOutput.getResultData().getList());
                                     //弹出地址选择框
                                     jumpToolsPopWin = new JumpToolsPopWin(WinLogDetailActivity.this, WinLogDetailActivity.this, wManager, lists, mHandler);
-                                    jumpToolsPopWin.showWin();
+                                    jumpToolsPopWin.showWin(deliveryId);
                                     jumpToolsPopWin.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
                                 }
                                 else
@@ -526,20 +527,22 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
             break;
             case Contant.ADDRESS_SELECT:
             {
-                MyAddressListModel model = (MyAddressListModel) msg.obj;
+                WinExesptionModel model = (WinExesptionModel) msg.obj;
+                long deliveryId = model.getDeliveryId();
+                MyAddressListModel addressListModel = model.getAddress();
                 String url = Contant.REQUEST_URL + Contant.ADD_LOTTERY_RECEIVER_INFO;
                 AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), WinLogDetailActivity.this);
                 //1 拼装参数
                 Map<String, Object> maps = new HashMap<String, Object> ();
-                maps.put("deliveryId", model.getAddressId());
-                maps.put("receiver", model.getReceiver());
-                maps.put("mobile", model.getMobile());
-                maps.put("details", model.getDetails());
+                maps.put("deliveryId", deliveryId);
+                maps.put("receiver", addressListModel.getReceiver());
+                maps.put("mobile", addressListModel.getMobile());
+                maps.put("details", addressListModel.getDetails());
                 maps = params.obtainAllParamUTF8 ( maps );
                 //获取sign
                 String signStr = params.obtainSignUTF8 ( maps );
-                maps.put("receiver", URLEncoder.encode(model.getReceiver()));
-                maps.put("details", URLEncoder.encode(model.getDetails()));
+                maps.put("receiver", URLEncoder.encode(addressListModel.getReceiver()));
+                maps.put("details", URLEncoder.encode(addressListModel.getDetails()));
                 maps.put ( "sign", signStr);
                 //拼装URL
                 String suffix = params.obtainGetParamUTF8 (maps);

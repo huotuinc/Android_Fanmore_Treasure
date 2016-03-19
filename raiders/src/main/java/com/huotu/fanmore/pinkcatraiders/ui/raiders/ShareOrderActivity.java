@@ -64,6 +64,8 @@ import java.io.File;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -141,6 +143,8 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
     @Bind(R.id.preImgL)
     LinearLayout preImgL;
     public List<String> imgs = new ArrayList<String>();
+    public List<String> miniImgs = new ArrayList<String>();
+    public  AppUserBuyFlowModel winner;
 
     @Override
     protected
@@ -161,7 +165,7 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
 
     private void initView()
     {
-        AppUserBuyFlowModel winner = (AppUserBuyFlowModel) bundle.getSerializable("winner");
+        winner = (AppUserBuyFlowModel) bundle.getSerializable("winner");
         shareOrderTitle.setText(winner.getTitle());
         shareOrderIusse.setText(winner.getIssueId());
         parentCount.setText(String.valueOf(winner.getAmount()));
@@ -347,10 +351,13 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ShareOrderActivity.this);
         //1 拼装参数
         Map<String, Object> maps = new HashMap<String, Object> ();
-        maps.put ( "issueId", String.valueOf ( bundle.getLong ( "issue" ) ) );
-        maps.put ( "title", orderTitle.getText ().toString ( ) );
-        maps.put ( "content", orderMsg.getText ().toString () );
-        maps.put ( "profileData", null);
+        maps.put ( "issueId", String.valueOf(winner.getIssueId()) );
+        maps.put ( "title", orderTitle.getText ().toString() );
+        maps.put ( "content", orderMsg.getText ().toString() );
+        String profileData = creatProfileData(imgs);
+        maps.put ( "filenames", profileData);
+        String miniProfileData = creatProfileData(miniImgs);
+        maps.put ( "miniFilenames", miniProfileData);
         maps = params.obtainAllParamUTF8 ( maps );
         //获取sign
         String signStr = params.obtainSignUTF8 ( maps );
@@ -481,31 +488,32 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
                                         //上传成功
                                         ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "上传晒单图片成功");
                                         imgs.add(updateProfile.getResultData().getFilename());
+                                        miniImgs.add(updateProfile.getResultData().getMiniFilename());
                                         if(0==addImgBtn1.getTag())
                                         {
                                             addImgBtn1.setTag(null);
-                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn1, updateProfile.getResultData().getUrl(), R.mipmap.error);
+                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn1, updateProfile.getResultData().getMiniUrl(), R.mipmap.error);
                                             addImgBtn1.setEnabled(false);
                                             addImgBtn1.setClickable(false);
                                         }
                                         else if(0==addImgBtn2.getTag())
                                         {
                                             addImgBtn2.setTag(null);
-                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn2, updateProfile.getResultData().getUrl(), R.mipmap.error);
+                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn2, updateProfile.getResultData().getMiniUrl(), R.mipmap.error);
                                             addImgBtn2.setEnabled(false);
                                             addImgBtn2.setClickable(false);
                                         }
                                         else if(0==addImgBtn3.getTag())
                                         {
                                             addImgBtn3.setTag(null);
-                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn3, updateProfile.getResultData().getUrl(), R.mipmap.error);
+                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn3, updateProfile.getResultData().getMiniUrl(), R.mipmap.error);
                                             addImgBtn3.setEnabled(false);
                                             addImgBtn3.setClickable(false);
                                         }
                                         else if(0==addImgBtn4.getTag())
                                         {
                                             addImgBtn4.setTag(null);
-                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn4, updateProfile.getResultData().getUrl(), R.mipmap.error);
+                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn4, updateProfile.getResultData().getMiniUrl(), R.mipmap.error);
                                             addImgBtn4.setEnabled(false);
                                             addImgBtn4.setClickable(false);
                                         }
@@ -658,6 +666,24 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
         {
             private String url;
             private String filename;
+            private String miniUrl;
+            private String miniFilename;
+
+            public String getMiniUrl() {
+                return miniUrl;
+            }
+
+            public void setMiniUrl(String miniUrl) {
+                this.miniUrl = miniUrl;
+            }
+
+            public String getMiniFilename() {
+                return miniFilename;
+            }
+
+            public void setMiniFilename(String miniFilename) {
+                this.miniFilename = miniFilename;
+            }
 
             public String getUrl() {
                 return url;
@@ -674,6 +700,25 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
             public void setFilename(String filename) {
                 this.filename = filename;
             }
+        }
+    }
+
+    private String creatProfileData(List<String> imgLList)
+    {
+        StringBuilder builder = new StringBuilder();
+
+        if(null==imgLList||imgLList.isEmpty())
+        {
+            return "";
+        }
+        else
+        {
+            for(int i=0; i<imgLList.size(); i++)
+            {
+                builder.append(imgLList.get(i)+",");
+            }
+
+            return builder.toString().substring(0, builder.toString().length()-1);
         }
     }
 }

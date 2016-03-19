@@ -20,6 +20,7 @@ import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
 import com.huotu.fanmore.pinkcatraiders.model.MyAddressListModel;
 import com.huotu.fanmore.pinkcatraiders.model.PartnerHistorysModel;
+import com.huotu.fanmore.pinkcatraiders.model.WinExesptionModel;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.AddressListActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
@@ -51,7 +52,7 @@ public class JumpToolsPopWin extends PopupWindow {
     }
 
     public
-    void showWin ( ) {
+    void showWin ( final long deliveryId ) {
 
         Resources resources = context.getResources();
         View view = LayoutInflater.from(context).inflate (
@@ -81,9 +82,12 @@ public class JumpToolsPopWin extends PopupWindow {
                     @Override
                     public void onClick(View v) {
                         dismissView();
+                        WinExesptionModel winExesptionModel = new WinExesptionModel();
+                        winExesptionModel.setAddress(address);
+                        winExesptionModel.setDeliveryId(deliveryId);
                         Message message = mHandler.obtainMessage();
                         message.what = Contant.ADDRESS_SELECT;
-                        message.obj = address;
+                        message.obj = winExesptionModel;
                         mHandler.sendMessage(message);
                     }
                 });
