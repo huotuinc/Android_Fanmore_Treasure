@@ -84,6 +84,7 @@ public class NewestGridAdapter extends BaseAdapter {
             if(0!=product.getAreaAmount())
             {
                 holder.productTag.setText("专区\n商品");
+
                 SystemTools.loadBackground(holder.productTag, resources.getDrawable(R.mipmap.area_1));
             }
             holder.productName.setText(product.getTitle());

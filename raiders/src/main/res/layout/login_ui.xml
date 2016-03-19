@@ -29,7 +29,10 @@
         >
         <ImageView
             android:id="@+id/imgUser1"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@mipmap/btn_user"/>
@@ -60,7 +63,10 @@
         android:layout_height="wrap_content"
         >
         <ImageView
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@mipmap/btn_psw"/>
@@ -103,7 +109,7 @@
         android:layout_below="@+id/loginLay"
         android:background="@drawable/btn_login"
         android:text="登录"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:textColor="@color/color_white"
         android:layout_width="match_parent"
         android:layout_height="40dp" />
@@ -115,14 +121,16 @@
         android:layout_height="40dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:textColor="@color/title_bg"
         android:text="通过手机号注册"
-        android:textSize="20sp"/>
+        android:textSize="15sp"/>
     <FrameLayout
         android:id="@+id/FL"
-        android:layout_marginTop="40dp"
-        android:layout_below="@+id/btn_phonereg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/otherlogin"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
     <TextView
         android:id="@+id/line"
         android:layout_width="match_parent"
@@ -141,15 +149,16 @@
         android:background="@color/color_white"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:textSize="18sp"/>
+        android:textSize="15sp"/>
     </FrameLayout>
     <RelativeLayout
-        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/FL"
-        android:layout_centerInParent="true"
-        android:id="@+id/otherlogin">
+        android:id="@+id/otherlogin"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
 <ImageView
     android:id="@+id/btn_wx"
 
@@ -158,6 +167,7 @@
     android:background="@mipmap/wechat"/>
         <TextView
             android:id="@+id/tv_wx"
+            android:textSize="14sp"
             android:layout_below="@+id/btn_wx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -172,7 +182,7 @@
     </RelativeLayout>
 
     <TextView
-
+        android:textSize="14sp"
         android:id="@+id/tv_qq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
