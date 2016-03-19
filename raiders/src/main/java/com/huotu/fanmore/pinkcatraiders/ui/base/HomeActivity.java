@@ -1130,42 +1130,82 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
         if(type == MyBroadcastReceiver.ReceiverType.jumpCart)
         {
-            titleMsgAmount.setVisibility(View.GONE);
-            Bundle bundle = new Bundle();
-            bundle.putInt("type", 0);
-            MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
-            //显示清单列表
-            //设置选中状态
-            Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal );
-            SystemTools.loadBackground(oneBuy, oneBuyDraw);
-            obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
-            //标题栏右图标
-            //编辑模式
-            titleRightImage.setTag ( 1 );
-            Drawable rightDraw = resources.getDrawable(R.mipmap.title_edit);
-            SystemTools.loadBackground(titleRightImage, rightDraw);
-            //重置其他
-            Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
-            SystemTools.loadBackground(newest, newestDraw);
-            newestLabel.setTextColor(resources.getColor(R.color.text_black));
-            Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_press);
-            SystemTools.loadBackground(list, listDraw);
-            listLabel.setTextColor(resources.getColor(R.color.title_bg));
-            Drawable mallDraw = resources.getDrawable(R.mipmap.mall_icon_common);
-            SystemTools.loadBackground(mall, mallDraw);
-            mallLabel.setTextColor(resources.getColor(R.color.text_black));
-            Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
-            SystemTools.loadBackground(profile, profileDraw);
-            profileLabel.setTextColor(resources.getColor(R.color.text_black));
+            Bundle bundle = (Bundle) msg;
+            int types = bundle.getInt("type");
+            if(1==types) {
+                titleMsgAmount.setVisibility(View.GONE);
+                Bundle bundle1 = new Bundle();
+                bundle1.putInt("type", 0);
+                MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle1);
+                //显示清单列表
+                //设置选中状态
+                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
+                SystemTools.loadBackground(oneBuy, oneBuyDraw);
+                obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
+                //标题栏右图标
+                //编辑模式
+                titleRightImage.setTag(1);
+                Drawable rightDraw = resources.getDrawable(R.mipmap.title_edit);
+                SystemTools.loadBackground(titleRightImage, rightDraw);
+                //重置其他
+                Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
+                SystemTools.loadBackground(newest, newestDraw);
+                newestLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_press);
+                SystemTools.loadBackground(list, listDraw);
+                listLabel.setTextColor(resources.getColor(R.color.title_bg));
+                Drawable mallDraw = resources.getDrawable(R.mipmap.mall_icon_common);
+                SystemTools.loadBackground(mall, mallDraw);
+                mallLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
+                SystemTools.loadBackground(profile, profileDraw);
+                profileLabel.setTextColor(resources.getColor(R.color.text_black));
 
-            //显示清单操作弹出框
-            funcPopWin1.showLayout();
-            funcPopWin1.showAsDropDown(homeBottom, 0, -(2 * (int) resources.getDimension(R.dimen.bottom_height)));
-            //切换内容
-            String tag = Contant.TAG_3;
-            //加载具体的页面
-            Message message = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
-            mHandler.sendMessage(message);
+                //显示清单操作弹出框
+                funcPopWin1.showLayout();
+                funcPopWin1.showAsDropDown(homeBottom, 0, -(2 * (int) resources.getDimension(R.dimen.bottom_height)));
+                //切换内容
+                String tag = Contant.TAG_3;
+                //加载具体的页面
+                Message message = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
+                mHandler.sendMessage(message);
+            }
+            else if(0==types)
+            {
+                //跳转到首页产品列表
+
+                titleMsgAmount.setVisibility(View.VISIBLE);
+                //设置选中状态
+                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_press);
+                SystemTools.loadBackground(oneBuy, oneBuyDraw);
+                obBuyLabel.setTextColor(resources.getColor(R.color.title_bg));
+                //标题栏右图标
+                //消息模式
+                titleRightImage.setTag(0);
+                Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
+                SystemTools.loadBackground(titleRightImage, rightDraw);
+                //重置其他
+                Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
+                SystemTools.loadBackground(newest, newestDraw);
+                newestLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_normal);
+                SystemTools.loadBackground(list, listDraw);
+                listLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
+                SystemTools.loadBackground(profile, profileDraw);
+                Drawable mallDraw = resources.getDrawable(R.mipmap.mall_icon_common);
+                SystemTools.loadBackground(mall, mallDraw);
+                mallLabel.setTextColor(resources.getColor(R.color.text_black));
+                profileLabel.setTextColor(resources.getColor(R.color.text_black));
+                funcPopWin1.dismissView();
+                funcPopWin.dismissView();
+                //切换内容
+                String tag = Contant.TAG_1;
+                //加载具体的页面
+                Message message = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
+                mHandler.sendMessage(message );
+
+            }
         }
     }
 
