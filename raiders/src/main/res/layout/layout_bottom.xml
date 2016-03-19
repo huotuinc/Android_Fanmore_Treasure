@@ -42,7 +42,7 @@
                     android:layout_below="@id/oneBuy"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="2dp"
-                    android:text="1元购"
+                    android:text="首页"
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_12" />
             </RelativeLayout>

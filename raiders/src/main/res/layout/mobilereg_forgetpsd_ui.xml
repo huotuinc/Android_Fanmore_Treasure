@@ -43,7 +43,8 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:hint="请输入验证码"
                 android:imeOptions="actionNext"
                 android:inputType="phone"
@@ -75,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:text="提交验证码"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:padding="10dp"
             android:textColor="@color/color_white"
             android:background="@drawable/btn_login"/>
