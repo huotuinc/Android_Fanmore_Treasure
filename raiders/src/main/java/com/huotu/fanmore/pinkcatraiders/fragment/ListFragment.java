@@ -68,7 +68,6 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
     View emptyView = null;
     public List<ListModel> lists;
     public ListAdapter adapter;
-    public int cartAmount=0;
 
     private MyBroadcastReceiver myBroadcastReceiver;
 
@@ -223,7 +222,6 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                     rootAty.payAllNum = 0;
                     rootAty.prices = 0;
                     rootAty.payNum=0;
-                    cartAmount=0;
                     menuList.onRefreshComplete();
                     if(rootAty.isFinishing())
                     {
@@ -236,21 +234,6 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                     {
                         if(null != listOutputs.getResultData().getList() && !listOutputs.getResultData().getList().isEmpty())
                         {
-                            cartAmount = listOutputs.getResultData().getList().size();
-                            //记录购物车数量
-                            CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 1l);
-                            if(null==cartCountIt)
-                            {
-                                CartCountModel cartCount = new CartCountModel();
-                                cartCount.setId(1l);
-                                cartCount.setCount(cartAmount);
-                                CartCountModel.save(cartCount);
-                            }
-                            else
-                            {
-                                cartCountIt.setCount(cartAmount);
-                                CartCountModel.save(cartCountIt);
-                            }
                             lists.clear();
                             lists.addAll(listOutputs.getResultData().getList());
                             adapter.notifyDataSetChanged();

@@ -109,6 +109,7 @@ public class Contant {
     public static final int WINNER_STATUS = 0x00000052;
 
     public static final int ADDRESS_SELECT = 0x00000071;
+    public static final int CART_AMOUNT = 0x00000072;
     /**
      * 菜单标记1
      */

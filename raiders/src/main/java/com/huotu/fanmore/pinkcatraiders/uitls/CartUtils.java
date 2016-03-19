@@ -3,6 +3,7 @@ package com.huotu.fanmore.pinkcatraiders.uitls;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
+import android.os.Message;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -29,7 +30,7 @@ import java.util.Map;
  */
 public class CartUtils {
 
-    public static void addCartDone(BaseModel entiy, String issueId, final ProgressPopupWindow progress, BaseApplication application, final Context context, Handler mHandler)
+    public static void addCartDone(final BaseModel entiy, String issueId, final ProgressPopupWindow progress, BaseApplication application, final Context context, Handler mHandler)
     {
         //判断是否登陆
         if(!application.isLogin())
@@ -79,12 +80,12 @@ public class CartUtils {
                     {
                         CartCountModel cartCount = new CartCountModel();
                         cartCount.setId(0l);
-                        cartCount.setCount(1);
+                        cartCount.setCount(listModel.getUserBuyAmount());
                         CartCountModel.save(cartCount);
                     }
                     else
                     {
-                        cartCountIt.setCount(cartCountIt.getCount()+1);
+                        cartCountIt.setCount(cartCountIt.getCount() + listModel.getUserBuyAmount());
                         CartCountModel.save(cartCountIt);
                     }
                     ToastUtils.showMomentToast((Activity) context, context, "添加清单成功");
@@ -128,17 +129,16 @@ public class CartUtils {
                     {
                         CartCountModel cartCount = new CartCountModel();
                         cartCount.setId(0l);
-                        cartCount.setCount(1);
+                        cartCount.setCount(listModel.getUserBuyAmount());
                         CartCountModel.save(cartCount);
                     }
                     else
                     {
-                        cartCountIt.setCount(cartCountIt.getCount()+1);
+                        cartCountIt.setCount(cartCountIt.getCount()+listModel.getUserBuyAmount());
                         CartCountModel.save(cartCountIt);
                     }
                     ToastUtils.showMomentToast((Activity) context, context, "添加清单成功");
                 }
-
             }
         }
         else
@@ -159,17 +159,18 @@ public class CartUtils {
                             BaseModel base = response;
                             if(1==base.getResultCode ())
                             {
+                                ProductModel p = (ProductModel) entiy;
                                 CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
                                 if(null==cartCountIt)
                                 {
                                     CartCountModel cartCount = new CartCountModel();
                                     cartCount.setId(0l);
-                                    cartCount.setCount(1);
+                                    cartCount.setCount(p.getUserBuyAmount());
                                     CartCountModel.save(cartCount);
                                 }
                                 else
                                 {
-                                    cartCountIt.setCount(cartCountIt.getCount()+1);
+                                    cartCountIt.setCount(cartCountIt.getCount()+p.getUserBuyAmount());
                                     CartCountModel.save(cartCountIt);
                                 }
                                 //上传成功
@@ -193,5 +194,10 @@ public class CartUtils {
                     }
             );
         }
+        CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+        Message message = mHandler.obtainMessage();
+        message.what = Contant.CART_AMOUNT;
+        message.obj = cartCountIt.getCount();
+        mHandler.sendMessage(message);
     }
 }

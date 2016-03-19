@@ -215,6 +215,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     //购物车删除ID列表
     public double prices = 0;
     public int payNum = 0;
+    public long cartAmount=0;
 
     private MyBroadcastReceiver myBroadcastReceiver;
 
@@ -773,13 +774,17 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 {
                     //结算模式
                     prices = 0;
-
+                    cartAmount=0;
+                    //规整购物车数量
+                    CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
                     payNum = lists.size();
                     while (it.hasNext())
                     {
+
                         ListModel list = it.next();
+                        cartAmount+=(list.getUserBuyAmount()>list.getRemainAmount()?list.getRemainAmount():list.getUserBuyAmount());
                         double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                         double total = price*list.getUserBuyAmount();
                         prices+=total;
@@ -787,6 +792,19 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
                     funcPopWin1.setMsg(String.valueOf(payNum), String.valueOf(prices));
                     funcPopWin1.setData(lists);
+                    if(null==cartCountIt)
+                    {
+                        CartCountModel cartCount = new CartCountModel();
+                        cartCount.setId(0l);
+                        cartCount.setCount(0);
+                        CartCountModel.save(cartCount);
+                    }
+                    else
+                    {
+
+                        cartCountIt.setCount(cartAmount);
+                        CartCountModel.save(cartCountIt);
+                    }
                 }
                 else if(2==msg.arg1)
                 {

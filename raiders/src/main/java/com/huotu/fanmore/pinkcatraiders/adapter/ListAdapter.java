@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
@@ -193,7 +194,7 @@ public class ListAdapter extends BaseAdapter {
             //加减控件
             final EditText numView = holder.num;
             //数量
-            numView.setTag(list.getUserBuyAmount());
+            numView.setTag(list.getUserBuyAmount()>list.getRemainAmount()?list.getRemainAmount():list.getUserBuyAmount());
             numView.setText(String.valueOf(numView.getTag()));
             //加
             holder.addBtn.setOnClickListener(new View.OnClickListener() {
@@ -247,7 +248,20 @@ public class ListAdapter extends BaseAdapter {
 
                                     CartDataModel.save(cartData);
                                 }
-
+                            }
+                            //修改购物车数量
+                            CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                            if(null==cartCountIt)
+                            {
+                                CartCountModel cartCount = new CartCountModel();
+                                cartCount.setId(0l);
+                                cartCount.setCount(list.getUserBuyAmount());
+                                CartCountModel.save(cartCount);
+                            }
+                            else
+                            {
+                                cartCountIt.setCount(cartCountIt.getCount()+list.getUserBuyAmount());
+                                CartCountModel.save(cartCountIt);
                             }
                             Message message = mHandler.obtainMessage ( );
                             message.what = Contant.CART_SELECT;
@@ -313,6 +327,21 @@ public class ListAdapter extends BaseAdapter {
                                     CartDataModel.save(cartData);
                                 }
 
+                            }
+
+                            //修改购物车数量
+                            CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                            if(null==cartCountIt)
+                            {
+                                CartCountModel cartCount = new CartCountModel();
+                                cartCount.setId(0l);
+                                cartCount.setCount(list.getUserBuyAmount());
+                                CartCountModel.save(cartCount);
+                            }
+                            else
+                            {
+                                cartCountIt.setCount(cartCountIt.getCount()-list.getUserBuyAmount());
+                                CartCountModel.save(cartCountIt);
                             }
                             Message message = mHandler.obtainMessage ( );
                             message.what = Contant.CART_SELECT;

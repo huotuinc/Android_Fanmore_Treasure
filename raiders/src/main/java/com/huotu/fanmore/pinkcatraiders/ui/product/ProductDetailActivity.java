@@ -1020,23 +1020,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                         Gravity.CENTER, 0, 0
                 );
                 CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler);
-                //设置数量
-                CartCountModel cartCountIt0 = CartCountModel.findById(CartCountModel.class, 0l);
-                CartCountModel cartCountIt1 = CartCountModel.findById(CartCountModel.class, 1l);
-                if(null!=cartCountIt1)
-                {
-                    bottomOtherCartAmount.setText(String.valueOf(cartCountIt1.getCount()));
-                } else
-                {
-                    if(null!=cartCountIt0)
-                    {
-                        bottomOtherCartAmount.setText(String.valueOf(cartCountIt0.getCount()));
-                    }
-                    else
-                    {
-                        bottomOtherCartAmount.setText("0");
-                    }
-                }
+
             }
         });
         //购物车
@@ -1053,21 +1037,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         });
         //数量
         bottomOtherCartAmount = (TextView) this.findViewById(R.id.bottomOtherCartAmount);
-        CartCountModel cartCountIt0 = CartCountModel.findById(CartCountModel.class, 0l);
-        CartCountModel cartCountIt1 = CartCountModel.findById(CartCountModel.class, 1l);
-        if(null!=cartCountIt1)
+        CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+        if(null!=cartCountIt)
         {
-            bottomOtherCartAmount.setText(String.valueOf(cartCountIt1.getCount()));
-        } else
+                bottomOtherCartAmount.setText(String.valueOf(cartCountIt.getCount()));
+        }
+        else
         {
-            if(null!=cartCountIt0)
-            {
-                bottomOtherCartAmount.setText(String.valueOf(cartCountIt0.getCount()));
-            }
-            else
-            {
                 bottomOtherCartAmount.setText("0");
-            }
         }
         //设置宽度
         ViewGroup.LayoutParams pl = bottomOtherBtnLeft.getLayoutParams();
@@ -1199,6 +1176,16 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public boolean handleMessage(Message msg) {
+
+        switch (msg.what)
+        {
+            case Contant.CART_AMOUNT:
+            {
+                long amount = (long) msg.obj;
+                bottomOtherCartAmount.setText(String.valueOf(amount));
+            }
+            break;
+        }
         return false;
     }
 

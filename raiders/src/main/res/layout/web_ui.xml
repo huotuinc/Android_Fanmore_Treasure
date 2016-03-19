@@ -23,6 +23,14 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:scrollbars="none"/>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="3px"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/progress_mall_draw"/>
     </RelativeLayout>
 
 </LinearLayout>
