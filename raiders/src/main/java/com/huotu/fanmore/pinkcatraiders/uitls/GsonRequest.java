@@ -38,7 +38,7 @@ import java.util.Map;
  */
 public class GsonRequest<T> extends Request<T> {
 
-	public static final String TAG="volleyRequest";
+	public static final String TAG="MT_REQUEST";
 
 	/**
 	 * Gson parser 

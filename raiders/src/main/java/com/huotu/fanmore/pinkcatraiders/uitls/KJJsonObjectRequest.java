@@ -13,11 +13,13 @@ public class KJJsonObjectRequest extends JsonObjectRequest {
 
     public KJJsonObjectRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(method, url, jsonRequest, listener, errorListener);
-        setRetryPolicy(new DefaultRetryPolicy(15000,0,1.0f));
+        setRetryPolicy(new DefaultRetryPolicy(15000, 0, 1.0f));
+        this.setTag("MT_REQUEST");
     }
 
     public KJJsonObjectRequest(String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(url, jsonRequest, listener, errorListener);
         setRetryPolicy(new DefaultRetryPolicy(15000, 0, 1.0f));
+        this.setTag("MT_REQUEST");
     }
 }

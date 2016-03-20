@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public class CartUtils {
 
-    public static void addCartDone(final BaseModel entiy, String issueId, final ProgressPopupWindow progress, BaseApplication application, final Context context, Handler mHandler)
+    public static void addCartDone(final BaseModel entiy, String issueId, final ProgressPopupWindow progress, BaseApplication application, final Context context, final Handler mHandler)
     {
         //判断是否登陆
         if(!application.isLogin())
@@ -140,6 +140,11 @@ public class CartUtils {
                     ToastUtils.showMomentToast((Activity) context, context, "添加清单成功");
                 }
             }
+            CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+            Message message = mHandler.obtainMessage();
+            message.what = Contant.CART_AMOUNT;
+            message.obj = cartCountIt.getCount();
+            mHandler.sendMessage(message);
         }
         else
         {
@@ -175,6 +180,10 @@ public class CartUtils {
                                 }
                                 //上传成功
                                 ToastUtils.showMomentToast((Activity) context, context, "添加清单成功");
+                                Message message = mHandler.obtainMessage();
+                                message.what = Contant.CART_AMOUNT;
+                                message.obj = cartCountIt.getCount();
+                                mHandler.sendMessage(message);
                             }
                             else
                             {
@@ -194,10 +203,5 @@ public class CartUtils {
                     }
             );
         }
-        CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
-        Message message = mHandler.obtainMessage();
-        message.what = Contant.CART_AMOUNT;
-        message.obj = cartCountIt.getCount();
-        mHandler.sendMessage(message);
     }
 }
