@@ -80,7 +80,7 @@ public class PopGridAdapter  extends BaseAdapter {
         if(null!=productModels&&!productModels.isEmpty()&&null!=productModels.get(position))
         {
             final ProductModel product = productModels.get(position);
-            BitmapLoader.create().displayUrl(mContext, holder.productIcon, product.getPictureUrl(), R.mipmap.error);
+            BitmapLoader.create().displayUrlProductGride(mContext, holder.productIcon, product.getPictureUrl(), R.mipmap.error);
             if(0!=product.getAreaAmount())
             {
                 holder.productTag.setText("专区\n商品");

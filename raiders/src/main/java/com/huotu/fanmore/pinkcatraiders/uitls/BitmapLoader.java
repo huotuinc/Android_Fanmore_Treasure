@@ -93,6 +93,40 @@ public class BitmapLoader
         }, 0, 0 , ImageView.ScaleType.FIT_XY);
     }
 
+    public void displayUrlProductGride(Context context, final ImageView imageView, String logoUrl, final int errorImg)
+    {
+        VolleyUtil.getImageLoader(context).get(logoUrl, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
+                if (imageContainer != null && imageContainer.getBitmap() != null) {
+                    imageView.setImageBitmap(imageContainer.getBitmap());
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                imageView.setBackgroundResource(errorImg);
+            }
+        }, 0, 0 , ImageView.ScaleType.CENTER_INSIDE);
+    }
+
+    public void displayUrlBanner(Context context, final ImageView imageView, String logoUrl, final int errorImg)
+    {
+        VolleyUtil.getImageLoader(context).get(logoUrl, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
+                if (imageContainer != null && imageContainer.getBitmap() != null) {
+                    imageView.setImageBitmap(imageContainer.getBitmap());
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                imageView.setBackgroundResource(errorImg);
+            }
+        }, 0, 0 , ImageView.ScaleType.CENTER_INSIDE);
+    }
+
     /**
      * 
      * @方法描述：采用volly加载网络图片
