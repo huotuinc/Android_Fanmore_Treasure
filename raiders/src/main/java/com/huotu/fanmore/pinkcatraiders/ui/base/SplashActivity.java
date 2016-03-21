@@ -218,100 +218,23 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                                                     application.writeInitInfo ( "inited" );
                                                                 }
                                                                 else {
-                                                                    //判断是否登录
-//                                                                    if ( application.isLogin ( ) ) {
                                                                         ActivityUtils.getInstance ( ).skipActivity (
                                                                                 SplashActivity.this, HomeActivity.class );
-//                                                                    }
-//                                                                    else {
-//                                                                        ActivityUtils.getInstance ( )
-//                                                                                .skipActivity (
-//                                                                                        SplashActivity
-//                                                                                                .this,
-//                                                                                        LoginActivity.class
-//                                                                                );
-//                                                                    }
                                                                 }
                                                             }
                                                             else
                                                             {
-                                                                //判断数据库中是否有旧数据
-                                                                Iterator<CarouselModel> iterator = CarouselModel.findAll (
-                                                                        CarouselModel.class );
-                                                                if(iterator.hasNext ( ))
-                                                                {
-                                                                    if ( application.isFirst ( ) ) {
-                                                                        ActivityUtils.getInstance ( ).skipActivity (
-                                                                                SplashActivity.this, GuideActivity.class );
-                                                                        //写入初始化数据
-                                                                        application.writeInitInfo ( "inited" );
-                                                                    }
-                                                                    else {
-                                                                        //判断是否登录
-//                                                                        if ( application.isLogin ( ) ) {
-                                                                            ActivityUtils.getInstance ( ).skipActivity (
-                                                                                    SplashActivity.this, HomeActivity.class );
-//                                                                        }
-//                                                                        else {
-//                                                                            ActivityUtils.getInstance ( )
-//                                                                                    .skipActivity (
-//                                                                                            SplashActivity
-//                                                                                                    .this,
-//                                                                                            LoginActivity.class
-//                                                                                    );
-//                                                                        }
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    //使用默认图片
-                                                                    CarouselModel carousel1 = new CarouselModel (  );
-                                                                    carousel1.setGoodsId ( 0 );
-                                                                    carousel1.setPictureUrl (""
+                                                                //删除全部
+                                                                CarouselModel.deleteAll(
+                                                                        CarouselModel.class);
+                                                                //使用默认图片
+                                                                CarouselModel carousel = new CarouselModel (  );
+                                                                carousel.setGoodsId ( 0 );
+                                                                carousel.setPictureUrl ("");
+                                                                carousel.setPid ( 0 );
 
-                                                                    );
-                                                                    carousel1.setPid ( 0 );
-                                                                    CarouselModel.save ( carousel1 );
-                                                                    CarouselModel carousel2 = new CarouselModel (  );
-                                                                    carousel2.setGoodsId ( 1 );
-                                                                    carousel2.setPictureUrl (
-                                                                            ""
-                                                                    );
-                                                                    carousel2.setPid ( 1 );
-                                                                    CarouselModel.save ( carousel2 );
+                                                                CarouselModel.save ( carousel );
 
-                                                                    if ( application.isFirst ( ) ) {
-                                                                        ActivityUtils.getInstance ( ).skipActivity (
-                                                                                SplashActivity.this, GuideActivity.class );
-                                                                        //写入初始化数据
-                                                                        application.writeInitInfo ( "inited" );
-                                                                    }
-                                                                    else {
-                                                                        //判断是否登录
-//                                                                        if ( application.isLogin ( ) ) {
-                                                                            ActivityUtils.getInstance ( ).skipActivity (
-                                                                                    SplashActivity.this, HomeActivity.class );
-//                                                                        }
-//                                                                        else {
-//                                                                            ActivityUtils.getInstance ( )
-//                                                                                    .skipActivity (
-//                                                                                            SplashActivity
-//                                                                                                    .this,
-//                                                                                            LoginActivity.class
-//                                                                                    );
-//                                                                        }
-                                                                    }
-                                                                }
-
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            //判断数据库中是否有旧数据
-                                                            Iterator<CarouselModel> iterator = CarouselModel.findAll (
-                                                                    CarouselModel.class );
-                                                            if(iterator.hasNext ( ))
-                                                            {
                                                                 if ( application.isFirst ( ) ) {
                                                                     ActivityUtils.getInstance ( ).skipActivity (
                                                                             SplashActivity.this, GuideActivity.class );
@@ -319,25 +242,23 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                                                     application.writeInitInfo ( "inited" );
                                                                 }
                                                                 else {
-                                                                    //判断是否登录
-//                                                                    if ( application.isLogin ( ) ) {
-                                                                        ActivityUtils.getInstance ( ).skipActivity (
-                                                                                SplashActivity.this, HomeActivity.class );
-//                                                                    }
-//                                                                    else {
-//                                                                        ActivityUtils.getInstance ( )
-//                                                                                .skipActivity (
-//                                                                                        SplashActivity
-//                                                                                                .this,
-//                                                                                        LoginActivity.class
-//                                                                                );
-//                                                                    }
+                                                                    ActivityUtils.getInstance ( ).skipActivity (
+                                                                            SplashActivity.this, HomeActivity.class );
                                                                 }
                                                             }
-                                                            else
-                                                            {
-                                                                ToastUtils.showMomentToast(SplashActivity.this, SplashActivity.this, "初始化数据失败");
-                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                                if ( application.isFirst ( ) ) {
+                                                                    ActivityUtils.getInstance ( ).skipActivity (
+                                                                            SplashActivity.this, GuideActivity.class );
+                                                                    //写入初始化数据
+                                                                    application.writeInitInfo ( "inited" );
+                                                                }
+                                                                else {
+                                                                        ActivityUtils.getInstance ( ).skipActivity (
+                                                                                SplashActivity.this, HomeActivity.class );
+                                                                }
                                                         }
                                                     }
                                                 }, new Response.ErrorListener ( ) {
