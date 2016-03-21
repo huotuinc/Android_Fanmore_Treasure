@@ -364,7 +364,12 @@ public class ListAdapter extends BaseAdapter {
         }
         else
         {
-
+            //空数据，当数据清空时调用
+            Message message = mHandler.obtainMessage ( );
+            message.what = Contant.CART_SELECT;
+            message.arg1 = 6;
+            message.obj = lists;
+            mHandler.sendMessage ( message );
         }
         return convertView;
     }

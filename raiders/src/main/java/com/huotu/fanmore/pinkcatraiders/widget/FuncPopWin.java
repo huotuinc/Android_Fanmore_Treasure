@@ -71,7 +71,7 @@ public class FuncPopWin extends PopupWindow {
         funOpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(deletesAll.isEmpty())
+                if(null==deletesAll || deletesAll.isEmpty())
                 {
                     Message message = mHandler.obtainMessage();
                     message.what = Contant.LIST_DELETE;

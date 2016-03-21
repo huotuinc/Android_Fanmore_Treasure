@@ -22,6 +22,7 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.BaseBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
+import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.OrderDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayOutputModel;
@@ -262,6 +263,21 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
 
                                         if (null != userOutput && null != userOutput.getResultData() && null != userOutput.getResultData().getUser() && 1 == userOutput.getResultCode()) {
                                             application.writeUserInfo(userOutput.getResultData().getUser());
+                                            //修改购物车数量
+                                            CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                                            if(null==cartCountIt)
+                                            {
+                                                CartCountModel cartCount = new CartCountModel();
+                                                cartCount.setId(0l);
+                                                cartCount.setCount(0);
+                                                CartCountModel.save(cartCount);
+                                            }
+                                            else
+                                            {
+
+                                                cartCountIt.setCount(0);
+                                                CartCountModel.save(cartCountIt);
+                                            }
                                             //关闭支付订单界面
                                             Bundle bundle = new Bundle();
                                             bundle.putInt("type", 0);
@@ -278,7 +294,7 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                                     }
                                 });
                             }
-                        }, 2000);
+                        }, 1000);
                     }
                     else
                     {
@@ -330,6 +346,21 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                             PayOutputModel payOutput = response;
                             if ( null != payOutput && null != payOutput.getResultData ( )
                                     && ( 1 == payOutput.getResultCode ( ) ) ) {
+                                //修改购物车数量
+                                CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                                if(null==cartCountIt)
+                                {
+                                    CartCountModel cartCount = new CartCountModel();
+                                    cartCount.setId(0l);
+                                    cartCount.setCount(0);
+                                    CartCountModel.save(cartCount);
+                                }
+                                else
+                                {
+
+                                    cartCountIt.setCount(0);
+                                    CartCountModel.save(cartCountIt);
+                                }
                                 PayModel payModel = payOutput.getResultData().getData();
                                 //payType:0微信 1支付宝
                                 if(0==payType)

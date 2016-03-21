@@ -732,6 +732,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                             )
                                     )) {
                                         productModel.setImgs(productDetailsOutput.getResultData().getData().getPictureUrl());
+                                        productModel.setIssueId(productDetailsOutput.getResultData().getData().getIssueId());
+                                        productModel.setUserBuyAmount(productDetailsOutput.getResultData().getData().getStepAmount());
                                         Bundle bundle = new Bundle();
                                         bundle.putInt("tip", 1);
                                         bundle.putSerializable("product", productModel);
@@ -892,6 +894,26 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         deleteIds.add(ls.get(i).getSid());
                     }
                     funcPopWin.setDeletes(deleteIds);
+                }
+                else if(6==msg.arg1)
+                {
+                    //结算后，数据清空
+                    funcPopWin1.setMsg("0", "0");
+                    //修改购物车数量
+                    CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                    if(null==cartCountIt)
+                    {
+                        CartCountModel cartCount = new CartCountModel();
+                        cartCount.setId(0l);
+                        cartCount.setCount(0);
+                        CartCountModel.save(cartCount);
+                    }
+                    else
+                    {
+
+                        cartCountIt.setCount(0);
+                        CartCountModel.save(cartCountIt);
+                    }
                 }
 
             }
