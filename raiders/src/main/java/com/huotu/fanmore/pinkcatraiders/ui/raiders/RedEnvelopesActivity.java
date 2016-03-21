@@ -251,7 +251,6 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
         mFragmentList.add(redEnvelopesnouseFrag);
         tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), mFragmentList);
         RedViewPager.setAdapter(tabPagerAdapter);
-        RedViewPager.setOffscreenPageLimit(2);
         RedViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
            @Override
