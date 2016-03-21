@@ -241,14 +241,26 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                         else
                         {
                             lists.clear();
+                            adapter.notifyDataSetChanged();
                             menuList.setEmptyView(emptyView);
+                            Message message = rootAty.mHandler.obtainMessage ( );
+                            message.what = Contant.CART_SELECT;
+                            message.arg1 = 6;
+                            message.obj = lists;
+                            rootAty.mHandler.sendMessage(message);
                         }
                     }
                     else
                     {
                         lists.clear();
+                        adapter.notifyDataSetChanged();
                         //异常处理，自动切换成无数据
                         menuList.setEmptyView(emptyView);
+                        Message message = rootAty.mHandler.obtainMessage ( );
+                        message.what = Contant.CART_SELECT;
+                        message.arg1 = 6;
+                        message.obj = lists;
+                        rootAty.mHandler.sendMessage(message);
                     }
                 }
             }, new Response.ErrorListener() {
@@ -260,7 +272,13 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                         return;
                     }
                     lists.clear();
+                    adapter.notifyDataSetChanged();
                     menuList.setEmptyView(emptyView);
+                    Message message = rootAty.mHandler.obtainMessage ( );
+                    message.what = Contant.CART_SELECT;
+                    message.arg1 = 6;
+                    message.obj = lists;
+                    rootAty.mHandler.sendMessage(message);
                 }
             });
         }

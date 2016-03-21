@@ -732,6 +732,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                             )
                                     )) {
                                         productModel.setImgs(productDetailsOutput.getResultData().getData().getPictureUrl());
+                                        productModel.setIssueId(productDetailsOutput.getResultData().getData().getIssueId());
+                                        productModel.setUserBuyAmount(productDetailsOutput.getResultData().getData().getStepAmount());
                                         Bundle bundle = new Bundle();
                                         bundle.putInt("tip", 1);
                                         bundle.putSerializable("product", productModel);
@@ -844,6 +846,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
                 else if(1==msg.arg1)
                 {
+                    long deleteCartAmount= 0;
                     //购物车删除ID列表
                     List<Long> deleteIds = new ArrayList<Long>();
                     int deleteAllNum =0;
@@ -855,6 +858,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         {
                             deleteAllNum++;
                             deleteIds.add(lists.get(i).getSid());
+                            deleteCartAmount+=(lists.get(i).getUserBuyAmount()>lists.get(i).getRemainAmount()?lists.get(i).getRemainAmount():lists.get(i).getUserBuyAmount());
                         }
                     }
                     if(deleteIds.size()==lists.size())
@@ -870,6 +874,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     }
                     funcPopWin.setMsg ( String.valueOf ( deleteAllNum ) );
                     funcPopWin.setDeletes(deleteIds);
+                    funcPopWin.setDeleteCartAmount(deleteCartAmount);
 
                 }
                 else if(4==msg.arg1)
@@ -889,6 +894,26 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         deleteIds.add(ls.get(i).getSid());
                     }
                     funcPopWin.setDeletes(deleteIds);
+                }
+                else if(6==msg.arg1)
+                {
+                    //结算后，数据清空
+                    funcPopWin1.setMsg("0", "0");
+                    //修改购物车数量
+                    CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                    if(null==cartCountIt)
+                    {
+                        CartCountModel cartCount = new CartCountModel();
+                        cartCount.setId(0l);
+                        cartCount.setCount(0);
+                        CartCountModel.save(cartCount);
+                    }
+                    else
+                    {
+
+                        cartCountIt.setCount(0);
+                        CartCountModel.save(cartCountIt);
+                    }
                 }
 
             }
@@ -1015,11 +1040,13 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     if(!application.isLogin())
                     {
                         progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
-                        progress.showProgress ( "正在删除选中的商品" );
-                        progress.showAtLocation (titleLayoutL,
+                        progress.showProgress("正在删除选中的商品");
+                        progress.showAtLocation(titleLayoutL,
                                 Gravity.CENTER, 0, 0
                         );
-                        final List<Long> deletes = (List<Long>) msg.obj;
+                        FuncPopWin.DeleteCart deleteCart =  (FuncPopWin.DeleteCart) msg.obj;
+                        final List<Long> deletes = deleteCart.getDeletesAll();
+                        final long deleteAmount = deleteCart.getDeleteCartAmountAll();
                         //未登录状态
                         CartDataModel cartData = CartDataModel.findById(CartDataModel.class, 1000l);
                         //转换成JSON
@@ -1040,10 +1067,26 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                             }
                         }
                         lists.removeAll(removes);
+                        //规整购物车数量
+                        CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                        if(null==cartCountIt)
+                        {
+                            CartCountModel cartCount = new CartCountModel();
+                            cartCount.setId(0l);
+                            cartCount.setCount(0);
+                            CartCountModel.save(cartCount);
+                        }
+                        else
+                        {
+
+                            cartCountIt.setCount((cartCountIt.getCount()-deleteAmount>0)?cartCountIt.getCount()-deleteAmount:0);
+                            CartCountModel.save(cartCountIt);
+                        }
                         progress.dismissView();
                         ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除成功");
                         //全选按钮置空
                         funcPopWin.setUNSelectAll();
+
                         localCartOutput.getResultData().setLists(lists);
                         String str = jsonUtil.toJson(localCartOutput);
                         cartData.setCartData(str);
@@ -1060,7 +1103,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         progress.showAtLocation (titleLayoutL,
                                 Gravity.CENTER, 0, 0
                         );
-                        final List<Long> deletes = (List<Long>) msg.obj;
+                        FuncPopWin.DeleteCart deleteCart =  (FuncPopWin.DeleteCart) msg.obj;
+                        final List<Long> deletes = deleteCart.getDeletesAll();
+                        final long deleteAmount = deleteCart.getDeleteCartAmountAll();
                         List<DeleteModel> deleteLs = new ArrayList<DeleteModel>();
                         for(int i=0; i<deletes.size(); i++)
                         {
@@ -1085,22 +1130,26 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                         public void onResponse(BaseModel response) {
                                             BaseModel base = response;
                                             if (1 == base.getResultCode()) {
-                                                CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 1l);
+
+                                                //规整购物车数量
+                                                CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
                                                 if(null==cartCountIt)
                                                 {
                                                     CartCountModel cartCount = new CartCountModel();
-                                                    cartCount.setId(1l);
-                                                    cartCount.setCount(deletes.size());
+                                                    cartCount.setId(0l);
+                                                    cartCount.setCount(0);
                                                     CartCountModel.save(cartCount);
                                                 }
                                                 else
                                                 {
-                                                    cartCountIt.setCount(cartCountIt.getCount()-deletes.size());
+
+                                                    cartCountIt.setCount((cartCountIt.getCount()-deleteAmount>0)?cartCountIt.getCount()-deleteAmount:0);
                                                     CartCountModel.save(cartCountIt);
                                                 }
                                                 //全选按钮置空
                                                 funcPopWin.setUNSelectAll();
                                                 ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "成功删除"+deletes.size()+"条记录");
+
 
                                             } else {
                                                 progress.dismissView();

@@ -40,6 +40,7 @@ public class FuncPopWin extends PopupWindow {
     private
     Handler mHandler;
     public List<Long> deletesAll = new ArrayList<Long>();
+    public Long deleteCartAmountAll;
 
     public TextView funBtn;
     public Resources resources;
@@ -70,7 +71,7 @@ public class FuncPopWin extends PopupWindow {
         funOpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(deletesAll.isEmpty())
+                if(null==deletesAll || deletesAll.isEmpty())
                 {
                     Message message = mHandler.obtainMessage();
                     message.what = Contant.LIST_DELETE;
@@ -79,11 +80,14 @@ public class FuncPopWin extends PopupWindow {
                 }
                 else
                 {
+                    DeleteCart deleteCart = new DeleteCart();
+                    deleteCart.setDeletesAll(deletesAll);
+                    deleteCart.setDeleteCartAmountAll(deleteCartAmountAll);
                     //预处理删除操作
                     Message message = mHandler.obtainMessage();
                     message.what = Contant.LIST_DELETE;
                     message.arg1 = 0;
-                    message.obj = deletesAll;
+                    message.obj = deleteCart;
                     mHandler.sendMessage(message);
                 }
 
@@ -136,7 +140,7 @@ public class FuncPopWin extends PopupWindow {
     }
     public void setMsg(String num)
     {
-        msg.setText ( "共选择"+num+"件商品" );
+        msg.setText("共选择" + num + "件商品");
     }
 
     public void setDeletes(List<Long> deletes)
@@ -144,9 +148,36 @@ public class FuncPopWin extends PopupWindow {
         deletesAll = deletes;
     }
 
+    public void setDeleteCartAmount(long deleteCartAmount)
+    {
+        deleteCartAmountAll = deleteCartAmount;
+    }
+
     public void dismissView()
     {
         dismiss ();
 
+    }
+
+    public class DeleteCart
+    {
+        private long deleteCartAmountAll;
+        private List<Long> deletesAll;
+
+        public long getDeleteCartAmountAll() {
+            return deleteCartAmountAll;
+        }
+
+        public void setDeleteCartAmountAll(long deleteCartAmountAll) {
+            this.deleteCartAmountAll = deleteCartAmountAll;
+        }
+
+        public List<Long> getDeletesAll() {
+            return deletesAll;
+        }
+
+        public void setDeletesAll(List<Long> deletesAll) {
+            this.deletesAll = deletesAll;
+        }
     }
 }

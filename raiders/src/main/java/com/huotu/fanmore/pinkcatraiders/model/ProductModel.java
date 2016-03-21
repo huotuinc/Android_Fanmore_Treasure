@@ -78,12 +78,12 @@ public class ProductModel extends BaseModel {
         this.sid = sid;
     }
 
-    public long getUserBuyAmount() {
-        return userBuyAmount;
-    }
-
     public void setUserBuyAmount(long userBuyAmount) {
         this.userBuyAmount = userBuyAmount;
+    }
+
+    public long getUserBuyAmount() {
+        return userBuyAmount;
     }
 
     public void setSort(long sort) {
