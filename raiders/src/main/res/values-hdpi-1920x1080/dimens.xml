@@ -27,7 +27,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="home_switch_img">150dp</dimen>
     <dimen name="home_catagory_size">40dp</dimen>
-    <dimen name="icon_size_1">35dp</dimen>
+    <dimen name="icon_size_1">25dp</dimen>
     <dimen name="icon_size_40">40dp</dimen>
     <dimen name="icon_size_30">30dp</dimen>
     <dimen name="icon_size_20">20dp</dimen>

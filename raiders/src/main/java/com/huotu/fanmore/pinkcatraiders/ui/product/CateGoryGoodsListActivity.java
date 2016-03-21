@@ -217,7 +217,7 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                 if ( products != null && products.size() > 0)
                 {
                     ProductModel product = products.get(products.size() - 1);
-                    maps.put("lastSort", product.getPid());
+                    maps.put("lastSort", product.getSort());
                 } else if (products != null && products.size() == 0)
                 {
                     maps.put("lastSort", 0);
@@ -274,7 +274,7 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                 if ( products != null && products.size() > 0)
                 {
                     ProductModel product = products.get(products.size() - 1);
-                    maps.put("lastSort", products.size());
+                    maps.put("lastSort", product.getSort());
                 } else if (products != null && products.size() == 0)
                 {
                     maps.put("lastSort", 0);
@@ -330,7 +330,7 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                 if ( products != null && products.size() > 0)
                 {
                     ProductModel product = products.get(products.size() - 1);
-                    maps.put("lastSort", product.getPid());
+                    maps.put("lastSort", product.getSort());
                 } else if (products != null && products.size() == 0)
                 {
                     maps.put("lastSort", 0);

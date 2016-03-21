@@ -22,7 +22,7 @@
         android:layout_marginLeft="10dp"
         android:gravity="center"
         android:textColor="@color/color_white"
-        android:textSize="@dimen/text_size_12"/>
+        android:textSize="@dimen/text_size_8"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="fill_parent"

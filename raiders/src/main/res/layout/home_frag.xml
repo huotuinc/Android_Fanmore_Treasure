@@ -196,7 +196,7 @@
                 android:paddingTop="5dp"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                android:background="@drawable/account_bg_bottom">
+                android:background="@drawable/home_switch_normal">
                 <RelativeLayout
                     android:id="@+id/rqL"
                     android:paddingLeft="5dp"

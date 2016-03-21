@@ -51,7 +51,7 @@
             android:text="全部商品"
             android:layout_marginLeft="10dp"
             android:layout_gravity="center_vertical"
-            android:textSize="18sp"/>
+            />
     </LinearLayout>
     <TextView
         android:layout_marginLeft="50dp"

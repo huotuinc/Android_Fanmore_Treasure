@@ -204,12 +204,12 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
             searchHistoryTag.setVisibility ( View.GONE );
             //动态添加搜索历史
             while ( searchHistorys.hasNext ( ) ) {
-                SearchHistoryModel searchHistory = searchHistorys.next ( );
+                final SearchHistoryModel searchHistory = searchHistorys.next ( );
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                         ViewGroup
                                                                                      .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                RelativeLayout searchLayout = (RelativeLayout) LayoutInflater.from(SearchActivity.this).inflate ( R.layout.search_base, null );
-                TextView searchHistoryText = (TextView) searchLayout.findViewById(R.id.searchHistoryText);
+                 RelativeLayout searchLayout = (RelativeLayout) LayoutInflater.from(SearchActivity.this).inflate ( R.layout.search_base, null );
+                 final TextView searchHistoryText = (TextView) searchLayout.findViewById(R.id.searchHistoryText);
                 searchHistoryText.setText(searchHistory.getSearchKey ( ));
                 TextView searchHistoryTime = (TextView) searchLayout.findViewById(R.id.searchHistoryTime);
                 searchHistoryTime.setText(searchHistory.getTime());
@@ -219,7 +219,8 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
                                                       @Override
                                                       public
                                                       void onClick ( View v ) {
-                                                          doSearch ( );
+                                                          key=searchHistory.getSearchKey();
+                                                          doSearch (key);
                                                       }
                                                   } );
                 commentDetailL.addView(searchLayout);
@@ -252,12 +253,16 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
     }
 
     @OnClick ( R.id.titleRightImage )
-    void doSearch ( ) {
+    void Search(){
+        key = searchL.getText ( ).toString ( );
+        doSearch(key);
+    }
+    void doSearch ( String key ) {
 
         searchGrid.setVisibility ( View.VISIBLE );
         commentDetailLL.setVisibility ( View.GONE );
         searchHistoryTag.setVisibility ( View.GONE );
-        key = searchL.getText ( ).toString ( );
+
         if ( TextUtils.isEmpty ( key ) ) {
             ToastUtils.showMomentToast(SearchActivity.this, SearchActivity.this, "请输入搜索关键字");
             return;

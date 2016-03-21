@@ -205,7 +205,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
         currentIndex = 0;
         application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
-        Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+        Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
         Drawable press = resources.getDrawable(R.drawable.switch_press);
         rqLabel.setTextColor(resources.getColor(R.color.deep_red));
         zxLabel.setTextColor(resources.getColor(R.color.text_black));
@@ -615,7 +615,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         operateType = OperateTypeEnum.REFRESH;
         currentIndex = 0;
         application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
-        Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+        Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
         Drawable press = resources.getDrawable(R.drawable.switch_press);
         rqLabel.setTextColor(resources.getColor(R.color.deep_red));
         zxLabel.setTextColor(resources.getColor(R.color.text_black));
@@ -634,7 +634,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         operateType = OperateTypeEnum.REFRESH;
         currentIndex = 1;
         application.proFragManager.setCurrentFrag(FragManager.FragType.NEWEST_PRODUCT);
-        Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+        Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
         Drawable press = resources.getDrawable(R.drawable.switch_press);
         rqLabel.setTextColor(resources.getColor(R.color.text_black));
         zxLabel.setTextColor(resources.getColor(R.color.deep_red));
@@ -653,7 +653,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         operateType = OperateTypeEnum.REFRESH;
         currentIndex = 2;
         application.proFragManager.setCurrentFrag(FragManager.FragType.PROGRESS);
-        Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+        Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
         Drawable press = resources.getDrawable(R.drawable.switch_press);
         rqLabel.setTextColor(resources.getColor(R.color.text_black));
         zxLabel.setTextColor(resources.getColor(R.color.text_black));
@@ -677,7 +677,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             SystemTools.loadBackground ( zxrsLogo, resources.getDrawable ( R.mipmap.sort_up ) );
             currentIndex = 4;
             application.proFragManager.setCurrentFrag(FragManager.FragType.TOTAL);
-            Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+            Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
             Drawable press = resources.getDrawable ( R.drawable.switch_press );
             rqLabel.setTextColor(resources.getColor(R.color.text_black));
             zxLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
@@ -695,7 +695,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             SystemTools.loadBackground ( zxrsLogo, resources.getDrawable ( R.mipmap.sort_down ) );
             currentIndex = 3;
             application.proFragManager.setCurrentFrag(FragManager.FragType.TOTAL);
-            Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+            Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
             Drawable press = resources.getDrawable ( R.drawable.switch_press );
             rqLabel.setTextColor(resources.getColor(R.color.text_black));
             zxLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
