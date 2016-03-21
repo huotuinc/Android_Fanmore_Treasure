@@ -885,15 +885,18 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
                 else if(5==msg.arg1)
                 {
+                    long deleteCartAmount= 0;
                     List<Long> deleteIds = new ArrayList<Long>();
                     //全部选
                     List<ListModel> ls = (List<ListModel>) msg.obj;
                     funcPopWin.setMsg(String.valueOf(ls.size()));
                     for(int i=0; i<ls.size(); i++)
                     {
+                        deleteCartAmount+=(ls.get(i).getUserBuyAmount()>ls.get(i).getRemainAmount()?ls.get(i).getRemainAmount():ls.get(i).getUserBuyAmount());
                         deleteIds.add(ls.get(i).getSid());
                     }
                     funcPopWin.setDeletes(deleteIds);
+                    funcPopWin.setDeleteCartAmount(deleteCartAmount);
                 }
                 else if(6==msg.arg1)
                 {

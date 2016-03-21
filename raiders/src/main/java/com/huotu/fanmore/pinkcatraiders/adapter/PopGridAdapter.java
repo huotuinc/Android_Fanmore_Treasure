@@ -95,6 +95,10 @@ public class PopGridAdapter  extends BaseAdapter {
             {
                 holder.lotterySchedule.setText("开奖进度 1%");
             }
+            else if(0==iValue)
+            {
+                holder.lotterySchedule.setText("开奖进度 0%");
+            }
             else if(iValue>100)
             {
                 holder.lotterySchedule.setText("开奖进度 100%");

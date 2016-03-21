@@ -46,7 +46,7 @@ public class CartUtils {
                 ProductModel p = (ProductModel) entiy;
 
                 //product 转 listModel
-                listModel.setUserBuyAmount(p.getStepAmount());
+                listModel.setUserBuyAmount(p.getDefaultAmount());
                 listModel.setStepAmount(p.getStepAmount());
                 listModel.setPictureUrl(p.getPictureUrl());
                 listModel.setTitle(p.getTitle());
@@ -170,12 +170,12 @@ public class CartUtils {
                                 {
                                     CartCountModel cartCount = new CartCountModel();
                                     cartCount.setId(0l);
-                                    cartCount.setCount(p.getUserBuyAmount());
+                                    cartCount.setCount(p.getDefaultAmount());
                                     CartCountModel.save(cartCount);
                                 }
                                 else
                                 {
-                                    cartCountIt.setCount(cartCountIt.getCount()+p.getUserBuyAmount());
+                                    cartCountIt.setCount(cartCountIt.getCount()+p.getDefaultAmount());
                                     CartCountModel.save(cartCountIt);
                                 }
                                 //上传成功
