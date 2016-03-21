@@ -112,9 +112,18 @@ public class WinAdapter extends BaseAdapter {
             }
             else if(1==winners.get(position).getDeliveryStatus())
             {
-                holder.addBtn.setText("等待奖品派发");
+                holder.addBtn.setText("查看奖品派发状态");
                 holder.addBtn.setTextColor(resources.getColor(R.color.color_white));
                 SystemTools.loadBackground(holder.addBtn, resources.getDrawable(R.drawable.button_common_4));
+                holder.addBtn.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("winner", winners.get(position));
+                        ActivityUtils.getInstance().showActivity(aty, WinLogDetailActivity.class, bundle);
+                    }
+                });
             }
             else if(2==winners.get(position).getDeliveryStatus())
             {

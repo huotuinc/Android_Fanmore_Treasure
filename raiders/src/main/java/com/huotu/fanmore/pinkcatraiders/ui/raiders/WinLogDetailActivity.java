@@ -1,6 +1,8 @@
 package com.huotu.fanmore.pinkcatraiders.ui.raiders;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -281,6 +283,7 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                                 SystemTools.loadBackground(status3Icon, resources.getDrawable(R.mipmap.prize_unselect));
                                 status3Tag.setText("等待奖品派发");
                                 status3Time.setText(DateUtils.transformDataformat11(deliveryModel.getDeliveryTime()));
+                                status3Time.setTextColor(resources.getColor(R.color.text_gray));
                                 SystemTools.loadBackground(status4Icon, resources.getDrawable(R.mipmap.prize_selected));
                                 status4Tag.setText("确认收货");
                                 status4Time.setText("确认");
@@ -290,12 +293,36 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                                 status4Time.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        //确认收货接口
-                                        Message message = mHandler.obtainMessage();
-                                        message.what = Contant.WINNER_STATUS;
-                                        message.obj = deliveryModel.getPid();
-                                        message.arg1 = 1;
-                                        mHandler.sendMessage(message);
+                                        AlertDialog.Builder builder = new AlertDialog.Builder (
+                                                WinLogDetailActivity.this
+                                        );
+                                        builder.setTitle ( "确认收货" );
+                                        builder.setMessage("确认收货吗？");
+                                        builder.setPositiveButton(
+                                                "确定", new DialogInterface.OnClickListener() {
+
+                                                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                                                        //确认收货接口
+                                                        Message message = mHandler.obtainMessage();
+                                                        message.what = Contant.WINNER_STATUS;
+                                                        message.obj = deliveryModel.getPid();
+                                                        message.arg1 = 1;
+                                                        mHandler.sendMessage(message);
+                                                    }
+                                                }
+                                        );
+                                        builder.setNegativeButton (
+                                                "取消", new DialogInterface.OnClickListener ( ) {
+
+                                                    public
+                                                    void onClick ( DialogInterface dialog, int whichButton ) {
+
+                                                    }
+                                                }
+                                        );
+                                        builder.show ( );
+
                                     }
                                 });
                                 SystemTools.loadBackground(status5Icon, resources.getDrawable(R.mipmap.prize_unselect));
@@ -320,6 +347,7 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                                 SystemTools.loadBackground(status4Icon, resources.getDrawable(R.mipmap.prize_unselect));
                                 status4Tag.setText("确认收货");
                                 status4Time.setText(DateUtils.transformDataformat11(deliveryModel.getRecieveGoodsTime()));
+                                status4Time.setTextColor(resources.getColor(R.color.text_gray));
                                 SystemTools.loadBackground(status5Icon, resources.getDrawable(R.mipmap.prize_selected));
                                 status5Tag.setText("已签收");
                                 status5Time.setText("确认并晒单");

@@ -133,9 +133,8 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
     void share()
     {
         if( false == RedEnvelopesActivity.this.canConnect() ){
-
-        return;
-    }
+            return;
+        }
         String url = Contant.REQUEST_URL + Contant.SHARE_REF_PACKETS;
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), RedEnvelopesActivity.this);
         Map<String, Object> maps = new HashMap<String, Object>();
@@ -202,7 +201,7 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
                     else
                     {
 
-                        noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, shareOutput.getResultDescription());
+                        noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, "红包分享暂不可用");
                         noticePopWin.showNotice();
                         noticePopWin.showAtLocation(titleLayoutL,
                                 Gravity.CENTER, 0, 0
@@ -213,7 +212,7 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
                 {
                     //异常处理，自动切换成无数据
 
-                    noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, shareOutput.getResultDescription());
+                    noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, "红包分享暂不可用");
                     noticePopWin.showNotice();
                     noticePopWin.showAtLocation(titleLayoutL,
                             Gravity.CENTER, 0, 0
@@ -252,7 +251,8 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
         mFragmentList.add(redEnvelopesnouseFrag);
         tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), mFragmentList);
         RedViewPager.setAdapter(tabPagerAdapter);
-       RedViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        RedViewPager.setOffscreenPageLimit(2);
+        RedViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
            @Override
            public void onPageSelected(int index) {
