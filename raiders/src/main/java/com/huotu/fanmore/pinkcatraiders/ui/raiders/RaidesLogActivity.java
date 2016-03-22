@@ -26,6 +26,7 @@ import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogAllFrag;
 import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogDoneFrag;
 import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogFrag;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
+import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
@@ -282,11 +283,13 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
                 //夺宝记录追加
                 RaidersModel raider = (RaidersModel) msg.obj;
                 progress = new ProgressPopupWindow( RaidesLogActivity.this, RaidesLogActivity.this, wManager );
-                progress.showProgress ( "正在追加清单" );
-                progress.showAtLocation (titleLayoutL,
+                progress.showProgress("正在追加清单");
+                progress.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0
                 );
-                CartUtils.addCartDone(raider, String.valueOf(raider.getIssueId()), progress, application, RaidesLogActivity.this, mHandler,0);
+                ProductModel model = new ProductModel();
+                model.setDefaultAmount(raider.getAttendAmount());
+                CartUtils.addCartDone(model, String.valueOf(raider.getIssueId()), progress, application, RaidesLogActivity.this, mHandler,0);
             }
             break;
             default:
