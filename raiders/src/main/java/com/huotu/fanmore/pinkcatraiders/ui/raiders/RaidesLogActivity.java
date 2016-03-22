@@ -286,7 +286,7 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
                 progress.showAtLocation (titleLayoutL,
                         Gravity.CENTER, 0, 0
                 );
-                CartUtils.addCartDone(raider, String.valueOf(raider.getIssueId()), progress, application, RaidesLogActivity.this, mHandler);
+                CartUtils.addCartDone(raider, String.valueOf(raider.getIssueId()), progress, application, RaidesLogActivity.this, mHandler,0);
             }
             break;
             default:

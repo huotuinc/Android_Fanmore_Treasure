@@ -22,6 +22,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.product.ProductDetailActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -134,10 +135,17 @@ public class PopGridAdapter  extends BaseAdapter {
                 public
                 void onClick ( View v ) {
 
-                    Message message = mHandler.obtainMessage ();
-                    message.what = Contant.ADD_LIST;
-                    message.obj = product;
-                    mHandler.sendMessage ( message );
+                    if(0==product.getRemainAmount())
+                    {
+                        ToastUtils.showMomentToast(aty, mContext, "该期商品已售完");
+                    }
+                    else
+                    {
+                        Message message = mHandler.obtainMessage ();
+                        message.what = Contant.ADD_LIST;
+                        message.obj = product;
+                        mHandler.sendMessage ( message );
+                    }
                 }
             });
         } else

@@ -244,7 +244,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
                 progress.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0
                 );
-                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, AreaActivity.this, mHandler);
+                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, AreaActivity.this, mHandler,0);
             }
             break;
             default:

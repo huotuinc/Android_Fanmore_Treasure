@@ -137,7 +137,7 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
                 progress.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0
                 );
-                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, SearchActivity.this, mHandler);
+                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, SearchActivity.this, mHandler,0);
             }
             break;
             default:

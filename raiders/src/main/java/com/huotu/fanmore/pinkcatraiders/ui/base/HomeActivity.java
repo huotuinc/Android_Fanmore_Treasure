@@ -967,7 +967,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 progress.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0
                 );
-                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, HomeActivity.this, mHandler);
+                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, HomeActivity.this, mHandler,0);
             }
             break;
             case Contant.BILLING:
