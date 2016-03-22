@@ -732,8 +732,15 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                             )
                                     )) {
                                         productModel.setImgs(productDetailsOutput.getResultData().getData().getPictureUrl());
+                                        productModel.setStepAmount(productDetailsOutput.getResultData().getData().getStepAmount());
+                                        productModel.setPricePercentAmount(productDetailsOutput.getResultData().getData().getPricePercentAmount());
                                         productModel.setIssueId(productDetailsOutput.getResultData().getData().getIssueId());
-                                        productModel.setUserBuyAmount(productDetailsOutput.getResultData().getData().getStepAmount());
+                                        productModel.setDefaultAmount(productDetailsOutput.getResultData().getData().getDefaultAmount());
+                                        productModel.setPictureUrl(productDetailsOutput.getResultData().getData().getPictureUrl().get(0));
+                                        productModel.setAreaAmount(productDetailsOutput.getResultData().getData().getAreaAmount());
+                                        productModel.setTitle(productDetailsOutput.getResultData().getData().getTitle());
+                                        productModel.setToAmount(productDetailsOutput.getResultData().getData().getToAmount());
+                                        productModel.setRemainAmount(productDetailsOutput.getResultData().getData().getRemainAmount());
                                         Bundle bundle = new Bundle();
                                         bundle.putInt("tip", 1);
                                         bundle.putSerializable("product", productModel);
