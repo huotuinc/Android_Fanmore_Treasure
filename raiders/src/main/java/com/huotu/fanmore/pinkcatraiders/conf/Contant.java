@@ -196,7 +196,7 @@ public class Contant {
     //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
    //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
-    //public static final String REQUEST_URL = "http://192.168.1.254:10001/app/";
+    public static final String REQUEST_URL = "http://192.168.1.254:10001/app/";
     //public static final String REQUEST_URL = "http://192.168.3.86:8080/duobao/app/";
     //test url
    //获取商城地址
