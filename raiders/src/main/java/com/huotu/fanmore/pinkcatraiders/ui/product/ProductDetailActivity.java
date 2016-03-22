@@ -845,12 +845,26 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
 
                                     //加载参与历史
-                                    //getCommentLog();
+                                    getCommentLog();
                                 } else {
                                     //暂无数据提示
+                                    ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "无法获取数据，1秒后关闭界面");
+                                    mHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            closeSelf(ProductDetailActivity.this);
+                                        }
+                                    }, 1000);
                                 }
                             } else {
                                 //异常处理，自动切换成无数据
+                                ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "无法获取数据，1秒后关闭界面");
+                                mHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        closeSelf(ProductDetailActivity.this);
+                                    }
+                                }, 1000);
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -863,6 +877,13 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                 return;
                             }
                             //暂无数据提示
+                            ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "无法获取数据，1秒后关闭界面");
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    closeSelf(ProductDetailActivity.this);
+                                }
+                            }, 1000);
                         }
                     }
             );

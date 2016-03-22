@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -293,35 +294,44 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                                 status4Time.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        AlertDialog.Builder builder = new AlertDialog.Builder (
-                                                WinLogDetailActivity.this
-                                        );
-                                        builder.setTitle ( "确认收货" );
-                                        builder.setMessage("确认收货吗？");
-                                        builder.setPositiveButton(
-                                                "确定", new DialogInterface.OnClickListener() {
+                                        final AlertDialog.Builder dialog = new AlertDialog.Builder(
+                                                WinLogDetailActivity.this,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+                                        final AlertDialog alertdialog = dialog.create();
+                                        LayoutInflater inflater = LayoutInflater.from(WinLogDetailActivity.this);
+                                        View view = inflater.inflate(R.layout.activity_dialog, null);
+                                        alertdialog.setView(view, 0, 0, 0, 0);
+                                        TextView titletext = (TextView) view.findViewById(R.id.titletext);
+                                        TextView messagetext = (TextView) view.findViewById(R.id.messagetext);
+                                        Button btn_lift = (Button) view.findViewById(R.id.btn_lift);
+                                        Button btn_right = (Button) view.findViewById(R.id.btn_right);
+                                        titletext.setTextColor(getResources().getColor(R.color.text_black));
+                                        btn_lift.setTextColor(getResources().getColor(R.color.color_blue));
+                                        btn_right.setTextColor(getResources().getColor(R.color.color_blue));
+                                        titletext.setText("确认收货");
+                                        messagetext.setText("取人收货吗?");
+                                        btn_lift.setText("取消");
+                                        btn_right.setText("确定");
+                                        btn_right.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                alertdialog.dismiss();
+                                                //确认收货接口
+                                                Message message = mHandler.obtainMessage();
+                                                message.what = Contant.WINNER_STATUS;
+                                                message.obj = deliveryModel.getPid();
+                                                message.arg1 = 1;
+                                                mHandler.sendMessage(message);
 
-                                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                            }
+                                        });
+                                        btn_lift.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                alertdialog.dismiss();
+                                            }
+                                        });
 
-                                                        //确认收货接口
-                                                        Message message = mHandler.obtainMessage();
-                                                        message.what = Contant.WINNER_STATUS;
-                                                        message.obj = deliveryModel.getPid();
-                                                        message.arg1 = 1;
-                                                        mHandler.sendMessage(message);
-                                                    }
-                                                }
-                                        );
-                                        builder.setNegativeButton (
-                                                "取消", new DialogInterface.OnClickListener ( ) {
-
-                                                    public
-                                                    void onClick ( DialogInterface dialog, int whichButton ) {
-
-                                                    }
-                                                }
-                                        );
-                                        builder.show ( );
+                                        alertdialog.show();
 
                                     }
                                 });

@@ -1,7 +1,9 @@
 package com.huotu.fanmore.pinkcatraiders.widget;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +11,7 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -16,6 +19,8 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
+import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 
 import java.util.ArrayList;
@@ -80,15 +85,46 @@ public class FuncPopWin extends PopupWindow {
                 }
                 else
                 {
-                    DeleteCart deleteCart = new DeleteCart();
-                    deleteCart.setDeletesAll(deletesAll);
-                    deleteCart.setDeleteCartAmountAll(deleteCartAmountAll);
-                    //预处理删除操作
-                    Message message = mHandler.obtainMessage();
-                    message.what = Contant.LIST_DELETE;
-                    message.arg1 = 0;
-                    message.obj = deleteCart;
-                    mHandler.sendMessage(message);
+                    AlertDialog.Builder dialog = new AlertDialog.Builder (context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+                    final AlertDialog alertdialog = dialog.create();
+                    LayoutInflater inflater = LayoutInflater.from(context);
+                    View view = inflater.inflate(R.layout.activity_dialog, null);
+                    alertdialog.setView(view, 0, 0, 0, 0);
+                    TextView titletext = (TextView) view.findViewById(R.id.titletext);
+                    TextView messagetext = (TextView) view.findViewById(R.id.messagetext);
+                    Button btn_lift = (Button) view.findViewById(R.id.btn_lift);
+                    Button btn_right = (Button) view.findViewById(R.id.btn_right);
+                    titletext.setTextColor(context.getResources().getColor(R.color.text_black));
+                    btn_lift.setTextColor(context.getResources().getColor(R.color.color_blue));
+                    btn_right.setTextColor(context.getResources().getColor(R.color.color_blue));
+                    titletext.setText("删除清单");
+                    messagetext.setText("确定删除勾选的清单记录？");
+                    btn_lift.setText("取消");
+                    btn_right.setText("确定");
+                    btn_right.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertdialog.dismiss();
+                            DeleteCart deleteCart = new DeleteCart();
+                            deleteCart.setDeletesAll(deletesAll);
+                            deleteCart.setDeleteCartAmountAll(deleteCartAmountAll);
+                            //预处理删除操作
+                            Message message = mHandler.obtainMessage();
+                            message.what = Contant.LIST_DELETE;
+                            message.arg1 = 0;
+                            message.obj = deleteCart;
+                            mHandler.sendMessage(message);
+
+                        }
+                    });
+                    btn_lift.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertdialog.dismiss();
+                        }
+                    });
+
+                    alertdialog.show();
                 }
 
             }
