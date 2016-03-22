@@ -686,6 +686,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, CountResultActivity.class, bundle);
                                                 }
                                             });
+
                                         }
                                     } else {
                                         //未登陆
