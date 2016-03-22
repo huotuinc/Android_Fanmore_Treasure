@@ -264,7 +264,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                     } else if (2 == productDetail.getStatus()) {
                                         productDetailNameLabel.setText("已揭晓");
                                     }
-                                    productDetailName.setText(productDetail.getTitle());
+                                    productDetailName.setText(Html.fromHtml("<font color=\"#000000\">"+productDetail.getTitle() + "</font> " +"<font color=\"#EF6314\">"+productDetail.getCharacter()+"</font>"));
                                     //是否登录
                                     if (application.isLogin()) {
                                         //登录
@@ -594,7 +594,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                     } else if (2 == productDetail.getStatus()) {
                                         productDetailNameLabel.setText("已揭晓");
                                     }
-                                    productDetailName.setText(productDetail.getTitle());
+                                    productDetailName.setText(Html.fromHtml("<font color=\"#000000\">"+productDetail.getTitle() + "</font> " +"<font color=\"#EF6314\">"+productDetail.getCharacter()+"</font>"));
                                     //是否登录
                                     if (application.isLogin()) {
                                         //登录

@@ -267,7 +267,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         Drawable leftDraw = resources.getDrawable ( R.mipmap.title_search );
         SystemTools.loadBackground ( titleLeftImage, leftDraw );
         titleMsgAmount.setVisibility(View.VISIBLE);
-        titleMsgAmount.setText("0");
         //消息模式
         titleRightImage.setTag(0);
         Drawable rightDraw = resources.getDrawable ( R.mipmap.title_msg );
