@@ -819,6 +819,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 {
                     //结算模式 加
                     prices=0;
+                    long addCartAmount= 0;
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
                     payNum = lists.size();
@@ -827,16 +828,32 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         ListModel list = it.next();
                         double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                         double total = price*list.getUserBuyAmount();
+                        addCartAmount += list.getUserBuyAmount();
                         prices+=total;
                     }
 
                     funcPopWin1.setMsg(String.valueOf(payNum), String.valueOf(prices));
                     funcPopWin1.setData(lists);
+                    //修改购物车数量
+                    CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                    if(null==cartCountIt)
+                    {
+                        CartCountModel cartCount = new CartCountModel();
+                        cartCount.setId(0l);
+                        cartCount.setCount(addCartAmount);
+                        CartCountModel.save(cartCount);
+                    }
+                    else
+                    {
+                        cartCountIt.setCount(addCartAmount);
+                        CartCountModel.save(cartCountIt);
+                    }
                 }
                 else if(3==msg.arg1)
                 {
                     //结算模式 减
                     prices=0;
+                    long subCartAmount = 0;
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
                     payNum = lists.size();
@@ -845,11 +862,26 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         ListModel list = it.next();
                         double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                         double total = price*list.getUserBuyAmount();
+                        subCartAmount += list.getUserBuyAmount();
                         prices+=total;
                     }
 
                     funcPopWin1.setMsg(String.valueOf(payNum), String.valueOf(prices));
                     funcPopWin1.setData(lists);
+                    //修改购物车数量
+                    CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                    if(null==cartCountIt)
+                    {
+                        CartCountModel cartCount = new CartCountModel();
+                        cartCount.setId(0l);
+                        cartCount.setCount(subCartAmount);
+                        CartCountModel.save(cartCount);
+                    }
+                    else
+                    {
+                        cartCountIt.setCount(subCartAmount);
+                        CartCountModel.save(cartCountIt);
+                    }
                 }
                 else if(1==msg.arg1)
                 {

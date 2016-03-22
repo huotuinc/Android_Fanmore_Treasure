@@ -92,7 +92,7 @@ public class ProgressGridAdapter  extends BaseAdapter {
             BigDecimal decimal = new BigDecimal((product.getToAmount()-product.getRemainAmount())/(double)product.getToAmount());
             double value =  decimal.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
             double iValue = 100 * value;
-            DecimalFormat df = new DecimalFormat("#.00");
+            DecimalFormat df = new DecimalFormat("#");
             if(iValue<1&&iValue>0)
             {
                 holder.lotterySchedule.setText("开奖进度 1%");

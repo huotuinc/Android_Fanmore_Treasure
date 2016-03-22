@@ -85,14 +85,13 @@ public class NewestGridAdapter extends BaseAdapter {
             if(0!=product.getAreaAmount())
             {
                 holder.productTag.setText("专区\n商品");
-
                 SystemTools.loadBackground(holder.productTag, resources.getDrawable(R.mipmap.area_1));
             }
             holder.productName.setText(product.getTitle());
             BigDecimal decimal = new BigDecimal((product.getToAmount()-product.getRemainAmount())/(double)product.getToAmount());
             double value =  decimal.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
             double iValue = 100 * value;
-            DecimalFormat df = new DecimalFormat("#.00");
+            DecimalFormat df = new DecimalFormat("#");
             if(iValue<1&&iValue>0)
             {
                 holder.lotterySchedule.setText("开奖进度 1%");
