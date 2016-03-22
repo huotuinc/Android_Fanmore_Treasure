@@ -264,7 +264,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                     } else if (2 == productDetail.getStatus()) {
                                         productDetailNameLabel.setText("已揭晓");
                                     }
-                                    productDetailName.setText(productDetail.getTitle());
+                                    productDetailName.setText(Html.fromHtml("<font color=\"#000000\">"+productDetail.getTitle() + "</font> " +"<font color=\"#EF6314\">"+productDetail.getCharacter()+"</font>"));
                                     //是否登录
                                     if (application.isLogin()) {
                                         //登录
@@ -335,6 +335,15 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             tc = new TimeCount(productDetail.getRemainSecond()*1000, 100, countdown);
                                             tc.start();
                                             TextView calculationDetail = (TextView) countdownDetail.findViewById(R.id.calculationDetail);
+                                            TextView noLoginTip = (TextView) countdownDetail.findViewById(R.id.noLoginTip);
+                                            if(null!=productDetail.getNumbers()&&!productDetail.getNumbers().isEmpty())
+                                            {
+                                                noLoginTip.setText("您已参与了"+productDetail.getNumbers().size()+"次");
+                                            }
+                                            else
+                                            {
+                                                noLoginTip.setText("您没有参加本期夺宝哦！");
+                                            }
                                             calculationDetail.setText("计算详情");
                                             calculationDetail.setOnClickListener(new View.OnClickListener() {
                                                 @Override
@@ -370,6 +379,15 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             luckyNo.setText("幸运号："+productDetail.getLuckyNumber());
                                             TextView calculationDetail = (TextView)
                                                     announcedDetail.findViewById(R.id.calculationDetail);
+                                            TextView noLoginTip = (TextView) announcedDetail.findViewById(R.id.noLoginTip);
+                                            if(null!=productDetail.getNumbers()&&!productDetail.getNumbers().isEmpty())
+                                            {
+                                                noLoginTip.setText("您已参与了"+productDetail.getNumbers().size()+"次");
+                                            }
+                                            else
+                                            {
+                                                noLoginTip.setText("您没有参加本期夺宝哦！");
+                                            }
                                             calculationDetail.setText("计算详情");
                                             calculationDetail.setOnClickListener(new View.OnClickListener() {
                                                 @Override
@@ -594,7 +612,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                     } else if (2 == productDetail.getStatus()) {
                                         productDetailNameLabel.setText("已揭晓");
                                     }
-                                    productDetailName.setText(productDetail.getTitle());
+                                    productDetailName.setText(Html.fromHtml("<font color=\"#000000\">"+productDetail.getTitle() + "</font> " +"<font color=\"#EF6314\">"+productDetail.getCharacter()+"</font>"));
                                     //是否登录
                                     if (application.isLogin()) {
                                         //登录
@@ -652,7 +670,15 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             TextView countdown = (TextView) countdownDetail.findViewById(R.id.countdown);
                                             tc = new TimeCount(productDetail.getRemainSecond()*1000, 100, countdown);
                                             tc.start();
-
+                                            TextView noLoginTip = (TextView) countdownDetail.findViewById(R.id.noLoginTip);
+                                            if(null!=productDetail.getNumbers()&&!productDetail.getNumbers().isEmpty())
+                                            {
+                                                noLoginTip.setText("您已参与了"+productDetail.getNumbers().size()+"次");
+                                            }
+                                            else
+                                            {
+                                                noLoginTip.setText("您没有参加本期夺宝哦！");
+                                            }
                                         }
                                         else if(2 == productDetail.getStatus()) {
                                             //已揭晓
@@ -677,6 +703,15 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             luckyNo.setText("幸运号："+productDetail.getLuckyNumber());
                                             TextView calculationDetail = (TextView)
                                                     announcedDetail.findViewById(R.id.calculationDetail);
+                                            TextView noLoginTip = (TextView) announcedDetail.findViewById(R.id.noLoginTip);
+                                            if(null!=productDetail.getNumbers()&&!productDetail.getNumbers().isEmpty())
+                                            {
+                                                noLoginTip.setText("您已参与了"+productDetail.getNumbers().size()+"次");
+                                            }
+                                            else
+                                            {
+                                                noLoginTip.setText("您没有参加本期夺宝哦！");
+                                            }
                                             calculationDetail.setText("计算详情");
                                             calculationDetail.setOnClickListener(new View.OnClickListener() {
                                                 @Override
@@ -811,12 +846,26 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
 
                                     //加载参与历史
-                                    //getCommentLog();
+                                    getCommentLog();
                                 } else {
                                     //暂无数据提示
+                                    ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "无法获取数据，1秒后关闭界面");
+                                    mHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            closeSelf(ProductDetailActivity.this);
+                                        }
+                                    }, 1000);
                                 }
                             } else {
                                 //异常处理，自动切换成无数据
+                                ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "无法获取数据，1秒后关闭界面");
+                                mHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        closeSelf(ProductDetailActivity.this);
+                                    }
+                                }, 1000);
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -829,6 +878,13 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                 return;
                             }
                             //暂无数据提示
+                            ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "无法获取数据，1秒后关闭界面");
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    closeSelf(ProductDetailActivity.this);
+                                }
+                            }, 1000);
                         }
                     }
             );
@@ -996,17 +1052,30 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         bottomOtherBtnLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //立即参与
-                progress = new ProgressPopupWindow(ProductDetailActivity.this, ProductDetailActivity.this, wManager);
-                progress.showProgress("正在加入清单");
-                progress.showAtLocation(titleLayoutL,
-                        Gravity.CENTER, 0, 0
-                );
-                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler);
-                Bundle bundle = new Bundle();
-                bundle.putInt("type", 1);
-                MyBroadcastReceiver.sendBroadcast(ProductDetailActivity.this, MyBroadcastReceiver.JUMP_CART, bundle);
-                closeSelf(ProductDetailActivity.this);
+                if(0==product.getRemainAmount())
+                {
+                    ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "该期商品已售完");
+                }
+                else
+                {
+                    //立即参与
+                    progress = new ProgressPopupWindow(ProductDetailActivity.this, ProductDetailActivity.this, wManager);
+                    progress.showProgress("正在加入清单");
+                    progress.showAtLocation(titleLayoutL,
+                            Gravity.CENTER, 0, 0
+                    );
+                    if(product.getDefaultAmount()>product.getRemainAmount())
+                    {
+                        ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "该期商品仅剩" + product.getRemainAmount());
+                        product.setDefaultAmount(product.getRemainAmount());
+                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler, 1);
+                    }
+                    else
+                    {
+                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler, 1);
+                    }
+                }
+
             }
         });
         //中间
@@ -1014,13 +1083,29 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         bottomOtherBtnCenter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //加入清单
-                progress = new ProgressPopupWindow(ProductDetailActivity.this, ProductDetailActivity.this, wManager);
-                progress.showProgress("正在加入清单");
-                progress.showAtLocation(titleLayoutL,
-                        Gravity.CENTER, 0, 0
-                );
-                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler);
+                if(0==product.getRemainAmount())
+                {
+                    ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "该期商品已售完");
+                }
+                else {
+                    //加入清单
+                    progress = new ProgressPopupWindow(ProductDetailActivity.this, ProductDetailActivity.this, wManager);
+                    progress.showProgress("正在加入清单");
+                    progress.showAtLocation(titleLayoutL,
+                            Gravity.CENTER, 0, 0
+                    );
+                    if(product.getDefaultAmount()>product.getRemainAmount())
+                    {
+                        ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "该期商品仅剩"+product.getRemainAmount());
+                        product.setDefaultAmount(product.getRemainAmount());
+                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler,0);
+                    }
+                    else
+                    {
+                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler,0);
+                    }
+
+                }
 
             }
         });
@@ -1186,6 +1271,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 bottomOtherCartAmount.setText(String.valueOf(amount));
             }
             break;
+            case 0x99990001:
+            {
+                closeSelf(ProductDetailActivity.this);
+            }
+            break;
+            default:
+                break;
+
         }
         return false;
     }

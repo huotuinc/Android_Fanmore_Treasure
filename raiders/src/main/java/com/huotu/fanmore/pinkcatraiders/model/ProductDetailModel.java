@@ -1,5 +1,6 @@
 package com.huotu.fanmore.pinkcatraiders.model;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -16,6 +17,34 @@ public class ProductDetailModel extends BaseModel {
     private int status;
     private String statusName;
     private long stepAmount;
+    private long areaAmount;
+    private long	defaultAmount;
+    private BigDecimal pricePercentAmount;
+
+    public long getAreaAmount() {
+        return areaAmount;
+    }
+
+    public void setAreaAmount(long areaAmount) {
+        this.areaAmount = areaAmount;
+    }
+
+    public long getDefaultAmount() {
+        return defaultAmount;
+    }
+
+    public void setDefaultAmount(long defaultAmount) {
+        this.defaultAmount = defaultAmount;
+    }
+
+    public BigDecimal getPricePercentAmount() {
+        return pricePercentAmount;
+    }
+
+    public void setPricePercentAmount(BigDecimal pricePercentAmount) {
+        this.pricePercentAmount = pricePercentAmount;
+    }
+
     private String title;
     private long toAmount;
     private String awardingDate;

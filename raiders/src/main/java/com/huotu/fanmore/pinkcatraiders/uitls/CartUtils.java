@@ -2,6 +2,7 @@ package com.huotu.fanmore.pinkcatraiders.uitls;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
@@ -18,6 +19,7 @@ import com.huotu.fanmore.pinkcatraiders.model.ListOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.LocalCartOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ import java.util.Map;
  */
 public class CartUtils {
 
-    public static void addCartDone(final BaseModel entiy, String issueId, final ProgressPopupWindow progress, BaseApplication application, final Context context, final Handler mHandler)
+    public static void addCartDone(final BaseModel entiy, String issueId, final ProgressPopupWindow progress, BaseApplication application, final Context context, final Handler mHandler, final int type)
     {
         //判断是否登陆
         if(!application.isLogin())
@@ -46,7 +48,7 @@ public class CartUtils {
                 ProductModel p = (ProductModel) entiy;
 
                 //product 转 listModel
-                listModel.setUserBuyAmount(p.getStepAmount());
+                listModel.setUserBuyAmount(p.getDefaultAmount());
                 listModel.setStepAmount(p.getStepAmount());
                 listModel.setPictureUrl(p.getPictureUrl());
                 listModel.setTitle(p.getTitle());
@@ -145,6 +147,14 @@ public class CartUtils {
             message.what = Contant.CART_AMOUNT;
             message.obj = cartCountIt.getCount();
             mHandler.sendMessage(message);
+            if(1==type)
+            {
+                //立即参与，关闭界面，跳转
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", 1);
+                MyBroadcastReceiver.sendBroadcast(context, MyBroadcastReceiver.JUMP_CART, bundle);
+                mHandler.sendEmptyMessage(0x99990001);
+            }
         }
         else
         {
@@ -155,27 +165,22 @@ public class CartUtils {
             Map<String, Object> param = params.obtainPostParam(maps);
             BaseModel base = new BaseModel ();
             HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
-            httpUtils.doVolleyPost (
-                    base, url, param, new Response.Listener< BaseModel > ( ) {
+            httpUtils.doVolleyPost(
+                    base, url, param, new Response.Listener<BaseModel>() {
                         @Override
-                        public
-                        void onResponse ( BaseModel response ) {
-                            progress.dismissView ();
+                        public void onResponse(BaseModel response) {
+                            progress.dismissView();
                             BaseModel base = response;
-                            if(1==base.getResultCode ())
-                            {
+                            if (1 == base.getResultCode()) {
                                 ProductModel p = (ProductModel) entiy;
                                 CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
-                                if(null==cartCountIt)
-                                {
+                                if (null == cartCountIt) {
                                     CartCountModel cartCount = new CartCountModel();
                                     cartCount.setId(0l);
-                                    cartCount.setCount(p.getUserBuyAmount());
+                                    cartCount.setCount(p.getDefaultAmount());
                                     CartCountModel.save(cartCount);
-                                }
-                                else
-                                {
-                                    cartCountIt.setCount(cartCountIt.getCount()+p.getUserBuyAmount());
+                                } else {
+                                    cartCountIt.setCount(cartCountIt.getCount() + p.getDefaultAmount());
                                     CartCountModel.save(cartCountIt);
                                 }
                                 //上传成功
@@ -184,19 +189,24 @@ public class CartUtils {
                                 message.what = Contant.CART_AMOUNT;
                                 message.obj = cartCountIt.getCount();
                                 mHandler.sendMessage(message);
-                            }
-                            else
-                            {
+                                if(1==type)
+                                {
+                                    //立即参与，关闭界面，跳转
+                                    Bundle bundle = new Bundle();
+                                    bundle.putInt("type", 1);
+                                    MyBroadcastReceiver.sendBroadcast(context, MyBroadcastReceiver.JUMP_CART, bundle);
+                                    mHandler.sendEmptyMessage(0x99990001);
+                                }
+                            } else {
                                 //上传失败
                                 ToastUtils.showMomentToast((Activity) context, context, "添加清单失败");
                             }
                         }
-                    }, new Response.ErrorListener ( ) {
+                    }, new Response.ErrorListener() {
 
                         @Override
-                        public
-                        void onErrorResponse ( VolleyError error ) {
-                            progress.dismissView ( );
+                        public void onErrorResponse(VolleyError error) {
+                            progress.dismissView();
                             //系统级别错误
                             ToastUtils.showMomentToast((Activity) context, context, "添加清单失败");
                         }

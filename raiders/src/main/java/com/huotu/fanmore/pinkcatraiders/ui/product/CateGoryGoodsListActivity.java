@@ -441,7 +441,7 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                 progress.showAtLocation (titleLayoutL,
                         Gravity.CENTER, 0, 0
                 );
-                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, CateGoryGoodsListActivity.this, mHandler);
+                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, CateGoryGoodsListActivity.this, mHandler,0);
             }
             default:
                 break;

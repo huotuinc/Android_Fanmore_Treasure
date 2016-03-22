@@ -22,8 +22,10 @@ import com.huotu.fanmore.pinkcatraiders.ui.product.ProductDetailActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.Bind;
@@ -91,9 +93,14 @@ public class PopGridAdapter  extends BaseAdapter {
             BigDecimal decimal = new BigDecimal((product.getToAmount()-product.getRemainAmount())/(double)product.getToAmount());
             double value =  decimal.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
             double iValue = 100 * value;
-            if(iValue<1)
+            DecimalFormat df = new DecimalFormat("#");
+            if(iValue<1&&iValue>0)
             {
                 holder.lotterySchedule.setText("开奖进度 1%");
+            }
+            else if(0==iValue)
+            {
+                holder.lotterySchedule.setText("开奖进度 0%");
             }
             else if(iValue>100)
             {
@@ -101,7 +108,7 @@ public class PopGridAdapter  extends BaseAdapter {
             }
             else
             {
-                holder.lotterySchedule.setText("开奖进度" + iValue + "%");
+                holder.lotterySchedule.setText("开奖进度" + df.format(iValue) + "%");
             }
             holder.lotteryScheduleProgress.setMax ( ( int ) product.getToAmount ( ) );
             holder.lotteryScheduleProgress.setProgress ( ( int ) ( product.getToAmount ( ) -
@@ -128,10 +135,17 @@ public class PopGridAdapter  extends BaseAdapter {
                 public
                 void onClick ( View v ) {
 
-                    Message message = mHandler.obtainMessage ();
-                    message.what = Contant.ADD_LIST;
-                    message.obj = product;
-                    mHandler.sendMessage ( message );
+                    if(0==product.getRemainAmount())
+                    {
+                        ToastUtils.showMomentToast(aty, mContext, "该期商品已售完");
+                    }
+                    else
+                    {
+                        Message message = mHandler.obtainMessage ();
+                        message.what = Contant.ADD_LIST;
+                        message.obj = product;
+                        mHandler.sendMessage ( message );
+                    }
                 }
             });
         } else

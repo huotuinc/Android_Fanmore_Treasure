@@ -249,20 +249,6 @@ public class ListAdapter extends BaseAdapter {
                                     CartDataModel.save(cartData);
                                 }
                             }
-                            //修改购物车数量
-                            CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
-                            if(null==cartCountIt)
-                            {
-                                CartCountModel cartCount = new CartCountModel();
-                                cartCount.setId(0l);
-                                cartCount.setCount(list.getUserBuyAmount());
-                                CartCountModel.save(cartCount);
-                            }
-                            else
-                            {
-                                cartCountIt.setCount(cartCountIt.getCount()+list.getUserBuyAmount());
-                                CartCountModel.save(cartCountIt);
-                            }
                             Message message = mHandler.obtainMessage ( );
                             message.what = Contant.CART_SELECT;
                             message.arg1 = 2;
@@ -329,20 +315,6 @@ public class ListAdapter extends BaseAdapter {
 
                             }
 
-                            //修改购物车数量
-                            CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
-                            if(null==cartCountIt)
-                            {
-                                CartCountModel cartCount = new CartCountModel();
-                                cartCount.setId(0l);
-                                cartCount.setCount(list.getUserBuyAmount());
-                                CartCountModel.save(cartCount);
-                            }
-                            else
-                            {
-                                cartCountIt.setCount(cartCountIt.getCount()-list.getUserBuyAmount());
-                                CartCountModel.save(cartCountIt);
-                            }
                             Message message = mHandler.obtainMessage ( );
                             message.what = Contant.CART_SELECT;
                             message.arg1 = 3;

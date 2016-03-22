@@ -267,7 +267,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         Drawable leftDraw = resources.getDrawable ( R.mipmap.title_search );
         SystemTools.loadBackground ( titleLeftImage, leftDraw );
         titleMsgAmount.setVisibility(View.VISIBLE);
-        titleMsgAmount.setText("0");
         //消息模式
         titleRightImage.setTag(0);
         Drawable rightDraw = resources.getDrawable ( R.mipmap.title_msg );
@@ -732,8 +731,15 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                             )
                                     )) {
                                         productModel.setImgs(productDetailsOutput.getResultData().getData().getPictureUrl());
+                                        productModel.setStepAmount(productDetailsOutput.getResultData().getData().getStepAmount());
+                                        productModel.setPricePercentAmount(productDetailsOutput.getResultData().getData().getPricePercentAmount());
                                         productModel.setIssueId(productDetailsOutput.getResultData().getData().getIssueId());
-                                        productModel.setUserBuyAmount(productDetailsOutput.getResultData().getData().getStepAmount());
+                                        productModel.setDefaultAmount(productDetailsOutput.getResultData().getData().getDefaultAmount());
+                                        productModel.setPictureUrl(productDetailsOutput.getResultData().getData().getPictureUrl().get(0));
+                                        productModel.setAreaAmount(productDetailsOutput.getResultData().getData().getAreaAmount());
+                                        productModel.setTitle(productDetailsOutput.getResultData().getData().getTitle());
+                                        productModel.setToAmount(productDetailsOutput.getResultData().getData().getToAmount());
+                                        productModel.setRemainAmount(productDetailsOutput.getResultData().getData().getRemainAmount());
                                         Bundle bundle = new Bundle();
                                         bundle.putInt("tip", 1);
                                         bundle.putSerializable("product", productModel);
@@ -812,6 +818,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 {
                     //结算模式 加
                     prices=0;
+                    long addCartAmount= 0;
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
                     payNum = lists.size();
@@ -820,16 +827,32 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         ListModel list = it.next();
                         double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                         double total = price*list.getUserBuyAmount();
+                        addCartAmount += list.getUserBuyAmount();
                         prices+=total;
                     }
 
                     funcPopWin1.setMsg(String.valueOf(payNum), String.valueOf(prices));
                     funcPopWin1.setData(lists);
+                    //修改购物车数量
+                    CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                    if(null==cartCountIt)
+                    {
+                        CartCountModel cartCount = new CartCountModel();
+                        cartCount.setId(0l);
+                        cartCount.setCount(addCartAmount);
+                        CartCountModel.save(cartCount);
+                    }
+                    else
+                    {
+                        cartCountIt.setCount(addCartAmount);
+                        CartCountModel.save(cartCountIt);
+                    }
                 }
                 else if(3==msg.arg1)
                 {
                     //结算模式 减
                     prices=0;
+                    long subCartAmount = 0;
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
                     payNum = lists.size();
@@ -838,11 +861,26 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         ListModel list = it.next();
                         double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                         double total = price*list.getUserBuyAmount();
+                        subCartAmount += list.getUserBuyAmount();
                         prices+=total;
                     }
 
                     funcPopWin1.setMsg(String.valueOf(payNum), String.valueOf(prices));
                     funcPopWin1.setData(lists);
+                    //修改购物车数量
+                    CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                    if(null==cartCountIt)
+                    {
+                        CartCountModel cartCount = new CartCountModel();
+                        cartCount.setId(0l);
+                        cartCount.setCount(subCartAmount);
+                        CartCountModel.save(cartCount);
+                    }
+                    else
+                    {
+                        cartCountIt.setCount(subCartAmount);
+                        CartCountModel.save(cartCountIt);
+                    }
                 }
                 else if(1==msg.arg1)
                 {
@@ -885,15 +923,18 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
                 else if(5==msg.arg1)
                 {
+                    long deleteCartAmount= 0;
                     List<Long> deleteIds = new ArrayList<Long>();
                     //全部选
                     List<ListModel> ls = (List<ListModel>) msg.obj;
                     funcPopWin.setMsg(String.valueOf(ls.size()));
                     for(int i=0; i<ls.size(); i++)
                     {
+                        deleteCartAmount+=(ls.get(i).getUserBuyAmount()>ls.get(i).getRemainAmount()?ls.get(i).getRemainAmount():ls.get(i).getUserBuyAmount());
                         deleteIds.add(ls.get(i).getSid());
                     }
                     funcPopWin.setDeletes(deleteIds);
+                    funcPopWin.setDeleteCartAmount(deleteCartAmount);
                 }
                 else if(6==msg.arg1)
                 {
@@ -926,7 +967,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 progress.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0
                 );
-                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, HomeActivity.this, mHandler);
+                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, HomeActivity.this, mHandler,0);
             }
             break;
             case Contant.BILLING:
