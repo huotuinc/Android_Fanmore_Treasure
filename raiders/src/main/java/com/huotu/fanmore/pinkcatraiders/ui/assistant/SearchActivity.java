@@ -220,6 +220,7 @@ class SearchActivity extends BaseActivity implements Handler.Callback, View.OnCl
                                                       public
                                                       void onClick ( View v ) {
                                                           key=searchHistory.getSearchKey();
+                                                          searchL.setText(key);
                                                           doSearch (key);
                                                       }
                                                   } );
