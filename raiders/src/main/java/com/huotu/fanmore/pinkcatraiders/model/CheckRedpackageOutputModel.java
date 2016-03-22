@@ -17,6 +17,15 @@ public class CheckRedpackageOutputModel extends BaseModel {
     public class CheckRedpackageInnerModel{
         private AppRedPactketsDistributeSourceModel data;
         private long flag;
+        private String count;
+
+        public String getCount() {
+            return count;
+        }
+
+        public void setCount(String count) {
+            this.count = count;
+        }
 
         public AppRedPactketsDistributeSourceModel getData() {
             return data;

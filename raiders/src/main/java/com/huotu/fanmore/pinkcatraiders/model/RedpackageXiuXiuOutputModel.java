@@ -21,6 +21,15 @@ public class RedpackageXiuXiuOutputModel extends BaseModel {
 
         private long flag;
         private AppWinningInfoModel[] data;
+        private long sourceId;
+
+        public long getSourceId() {
+            return sourceId;
+        }
+
+        public void setSourceId(long sourceId) {
+            this.sourceId = sourceId;
+        }
 
         public long getFlag() {
             return flag;

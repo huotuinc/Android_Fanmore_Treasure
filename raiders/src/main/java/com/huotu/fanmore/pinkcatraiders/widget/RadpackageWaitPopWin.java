@@ -65,24 +65,19 @@ public class RadpackageWaitPopWin extends PopupWindow {
         {
             //无活动
             waitTimeL.setVisibility(View.GONE);
-            waitTag.setText("敬请等待下一期活动");
+            waitTag.setText("暂无活动，敬请等待下一期活动");
         }
         closeImg = (TextView) view.findViewById ( R.id.closeImg );
         int statusBarHeight = getStatusBarHeight(context);
-        view.setPadding(10, statusBarHeight+10, 10, 0);
+        view.setPadding(10, statusBarHeight + 10, 10, 0);
         SystemTools.loadBackground(closeImg, resources.getDrawable(R.mipmap.delete_btn));
-        closeImg.setOnClickListener ( new View.OnClickListener ( ) {
+        closeImg.setOnClickListener(new View.OnClickListener() {
             @Override
-            public
-            void onClick ( View v ) {
-                dismissView ();
+            public void onClick(View v) {
+                dismissView();
                 mHandler.sendEmptyMessage(ReadPackageActivity.REDPACKAGE_CLOSED);
             }
-        } );
-        hour = (TextView) view.findViewById ( R.id.hour );
-        hour.setText("12");
-        min = (TextView) view.findViewById ( R.id.min );
-        min.setText("24");
+        });
 
         // 设置SelectPicPopupWindow的View
         this.setContentView(view);

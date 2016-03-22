@@ -28,6 +28,7 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AppRedPactketsDistributeSourceModel;
+import com.huotu.fanmore.pinkcatraiders.model.AppWinningInfoModel;
 import com.huotu.fanmore.pinkcatraiders.model.CheckRedpackageOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.LoginOutputsModel;
 import com.huotu.fanmore.pinkcatraiders.model.RedpackageXiuXiuOutputModel;
@@ -47,11 +48,15 @@ import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.RadpackageWaitPopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.RedWarningPopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.RedpackageFailedPopWin;
+import com.huotu.fanmore.pinkcatraiders.widget.RedpackageSuccessPopWin;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -128,15 +133,17 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     public HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
     public RadpackageWaitPopWin redpackageWaitPopWin;
     public RedpackageFailedPopWin redpackageFailedPopWin;
+    public RedpackageSuccessPopWin redpackageSuccessPopWin;
     public RedWarningPopWin redWarningPopWin;
 
     public
     ProgressPopupWindow progress;
-
     public int powerCount=0;
+    public int xiuxiuCount=0;
+    public List<Long> localRadpackagePool = new ArrayList<Long>();
 
     @Override
-    public boolean handleMessage(Message msg) {
+    public boolean handleMessage(final Message msg) {
 
         switch (msg.what)
         {
@@ -157,7 +164,9 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
             break;
             case REDPACKAGE_WAIT:
             {
+                DateUtils.setRedpackageCount(surplus01, surplus02, surplus03, surplus04, surplus05, surplus06, 0l);
                 int tag = msg.arg1;
+                localRadpackagePool.clear();
                 if(0==tag)
                 {
                     //活动开始
@@ -188,21 +197,72 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
                 int tag = msg.arg1;
                 if(1==tag)
                 {
+
+                    redpackageFailedPopWin.showWin();
+                    redpackageFailedPopWin.showAtLocation(titleLayoutL,
+                            Gravity.CENTER, 0, 0);
+
+                }
+                else if(0==tag)
+                {
+                    int count=0;
+                    AppWinningInfoModel[] redpackages = (AppWinningInfoModel[]) msg.obj;
+                    if(null!=redpackages&&redpackages.length>0)
+                    {
+                        List<AppWinningInfoModel> winList = Arrays.asList(redpackages);
+                        for(int i=0; i<winList.size();i++)
+                        {
+                            AppWinningInfoModel winner = winList.get(i);
+                            if(localRadpackagePool.contains(winner.getRid()))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                localRadpackagePool.add(winner.getRid());
+                                count++;
+                            }
+                        }
+                        if(count>0)
+                        {
+                            redpackageSuccessPopWin.showWin();
+                            redpackageSuccessPopWin.showAtLocation(titleLayoutL,
+                                    Gravity.CENTER, 0, 0);
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    redpackageSuccessPopWin.dismissView();;
+                                }
+                            }, 1000);
+                        }
+                        else
+                        {
+                            Message message = mHandler.obtainMessage();
+                            message.what = REDPACKAGE_RESULT;
+                            message.arg1 = 1;
+                            mHandler.sendMessage(message);
+                        }
+
+
+                    } else
+                    {
+                        Message message = mHandler.obtainMessage();
+                        message.what = REDPACKAGE_RESULT;
+                        message.arg1 = 1;
+                        mHandler.sendMessage(message);
+                    }
+                }
+                else if(2==tag)
+                {
                     redpackageFailedPopWin.showWin();
                     redpackageFailedPopWin.showAtLocation(titleLayoutL,
                             Gravity.CENTER, 0, 0);
                 }
-                else if(0==tag)
-                {
-                    //ToastUtils.showShortToast(ReadPackageActivity.this, "你有机会获得红包");
-                }
-                else if(2==tag)
-                {
-                    //ToastUtils.showShortToast(ReadPackageActivity.this, "通道还没开启");
-                }
                 else if(3==tag)
                 {
-                    //ToastUtils.showShortToast(ReadPackageActivity.this, "获取红包错误");
+                    redpackageFailedPopWin.showWin();
+                    redpackageFailedPopWin.showAtLocation(titleLayoutL,
+                            Gravity.CENTER, 0, 0);
                 }
 
             }
@@ -214,12 +274,15 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
             break;
             case REDPACKAGE_BEGIN:
             {
+                localRadpackagePool.clear();
                 redpackageFailedPopWin.dismissView();
                 redpackageWaitPopWin.dismissView();
-                AppRedPactketsDistributeSourceModel redPactketsDistributeSource = (AppRedPactketsDistributeSourceModel) msg.obj;
-                doneTag.setText(DateUtils.getMin(redPactketsDistributeSource.getEndTime()));
+                redpackageSuccessPopWin.dismissView();
+                XiuxiuMode redPactketsDistributeSource = (XiuxiuMode) msg.obj;
+                doneTag.setText(DateUtils.getMin(redPactketsDistributeSource.getDataModel().getEndTime()));
+                xiuxiuCount = Integer.parseInt(redPactketsDistributeSource.getCount());
                 //设置红包数量
-                DateUtils.setRedpackageCount(surplus01, surplus02, surplus03, surplus04, surplus05, surplus06, redPactketsDistributeSource.getAmount());
+                DateUtils.setRedpackageCount(surplus01, surplus02, surplus03, surplus04, surplus05, surplus06, redPactketsDistributeSource.getDataModel().getAmount());
             }
             break;
             case POWER_COUNT:
@@ -248,6 +311,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
                                 Message message = mHandler.obtainMessage();
                                 message.what = REDPACKAGE_RESULT;
                                 message.arg1 = 0;
+                                msg.obj = redpackageXiuXiu.getResultData().getData();
                                 mHandler.sendMessageDelayed(message, 1000);
 
                             } else if (1 == redpackageXiuXiu.getResultData().getFlag()) {
@@ -314,6 +378,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         soundPool = new SoundUtil(ReadPackageActivity.this, R.raw.redclick);
         redpackageWaitPopWin= new RadpackageWaitPopWin(ReadPackageActivity.this, ReadPackageActivity.this, wManager, mHandler);
         redpackageFailedPopWin = new RedpackageFailedPopWin(ReadPackageActivity.this, ReadPackageActivity.this, wManager, mHandler);
+        redpackageSuccessPopWin = new RedpackageSuccessPopWin(ReadPackageActivity.this, ReadPackageActivity.this, wManager, mHandler);
         redWarningPopWin = new RedWarningPopWin(ReadPackageActivity.this, mHandler, ReadPackageActivity.this, wManager);
         progress = new ProgressPopupWindow ( ReadPackageActivity.this, ReadPackageActivity.this, wManager );
         initTitle();
@@ -354,6 +419,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
 
     private void initData()
     {
+        xiuxiuCount = 0;
         //判断抢红包是否开启
         if( false == ReadPackageActivity.this.canConnect ( ) ){
             return;
@@ -378,9 +444,12 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
 
                     if (0 == checkRedpackage.getResultData().getFlag()) {
                         //活动已经开始
+                        XiuxiuMode model = new XiuxiuMode();
+                        model.setDataModel(checkRedpackage.getResultData().getData());
+                        model.setCount(checkRedpackage.getResultData().getCount());
                         Message message = mHandler.obtainMessage();
                         message.what = REDPACKAGE_BEGIN;
-                        message.obj = checkRedpackage.getResultData().getData();
+                        message.obj = model;
                         mHandler.sendMessage(message);
                     } else if (1 == checkRedpackage.getResultData().getFlag()) {
                         //活动为开始
@@ -424,17 +493,11 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     void redBtn()
     {
         powerCount++;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                soundPool.shakeSound();
-            }
-        }).start();
+        soundPool.shakeSound();
         //动画
         showWaveAnimation();
         mHandler.sendEmptyMessageDelayed(CLEAN_ANIMATION, OFFSET * 3);
-        //改变能量槽
-        if(20 == powerCount)
+        if(xiuxiuCount == powerCount)
         {
             Message message = mHandler.obtainMessage();
             message.what = POWER_COUNT;
@@ -483,6 +546,29 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
             this.closeSelf(ReadPackageActivity.this);
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+
+    public class XiuxiuMode
+    {
+        private AppRedPactketsDistributeSourceModel dataModel;
+        private String count;
+
+        public AppRedPactketsDistributeSourceModel getDataModel() {
+            return dataModel;
+        }
+
+        public void setDataModel(AppRedPactketsDistributeSourceModel dataModel) {
+            this.dataModel = dataModel;
+        }
+
+        public String getCount() {
+            return count;
+        }
+
+        public void setCount(String count) {
+            this.count = count;
+        }
     }
 
 }

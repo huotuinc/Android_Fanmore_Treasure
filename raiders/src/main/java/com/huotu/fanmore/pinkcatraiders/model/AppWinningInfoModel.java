@@ -7,19 +7,27 @@ public class AppWinningInfoModel extends BaseModel {
     /**
      * 用户ID
      */
-    Long userId;
-
+    long userId;
+    long rid;
     /**
      * 红包信息
      */
     String winningInfo;
 
-    public Long getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public long getRid() {
+        return rid;
+    }
+
+    public void setRid(long rid) {
+        this.rid = rid;
     }
 
     public String getWinningInfo() {

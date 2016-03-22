@@ -216,6 +216,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(jdInnerL, normal);
         SystemTools.loadBackground(zxrsInnerL, normal);
         initSwitchImg();
+        initNotice();
         firstGetData();
     }
 
@@ -727,10 +728,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         );
     }
 
-    private void initSwitchImg()
+    private void initNotice()
     {
-
-        //滚动消息
+//滚动消息
         String url = Contant.REQUEST_URL + Contant.GET_NOTICE_LIST;
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity ());
         Map<String, Object> maps = new HashMap<String, Object> ();
@@ -769,9 +769,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                                 }
 
                                 // 设置文字in/out的动画效果
-                                homeHornText.setInAnimation(getActivity (), R.anim.push_up_in);
-                                homeHornText.setOutAnimation(getActivity (), R.anim.push_up_out);
+                                homeHornText.setInAnimation(getActivity(), R.anim.push_up_in);
+                                homeHornText.setOutAnimation(getActivity(), R.anim.push_up_out);
                                 homeHornText.startFlipping();
+
+                                mHandler.sendEmptyMessageDelayed(1, 600000);
                             }
                             else
                             {
@@ -793,6 +795,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     }
                 }
         );
+    }
+
+    private void initSwitchImg()
+    {
         adDataList = new ArrayList<CarouselModel> (  );
         //读取轮播图片实体
         Iterator<CarouselModel> iterator = CarouselModel.findAll ( CarouselModel.class );
@@ -904,6 +910,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 {
                     homeViewPager.setCurrentItem(homeViewPager.getCurrentItem()+1);
                     mHandler.sendEmptyMessageDelayed(0, 3000);
+                }
+                break;
+                case 1:
+                {
+                    initNotice();
+                    mHandler.sendEmptyMessageDelayed(1, 600000);
                 }
                 break;
                 default:
