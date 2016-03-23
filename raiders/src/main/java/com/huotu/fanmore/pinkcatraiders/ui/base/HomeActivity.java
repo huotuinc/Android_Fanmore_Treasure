@@ -179,8 +179,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     @Bind ( R.id.profileLabel )
     TextView       profileLabel;
-    @Bind(R.id.titleMsgAmount)
-    TextView titleMsgAmount;
 
     @Bind ( R.id.homeBottom )
     LinearLayout   homeBottom;
@@ -257,7 +255,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         SystemTools.loadBackground(titleLayoutL, bgDraw);
         Drawable leftDraw = resources.getDrawable ( R.mipmap.title_search );
         SystemTools.loadBackground ( titleLeftImage, leftDraw );
-        titleMsgAmount.setVisibility(View.VISIBLE);
         //消息模式
         titleRightImage.setTag(0);
         Drawable rightDraw = resources.getDrawable ( R.mipmap.title_msg );
@@ -339,7 +336,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     private void initTab()
     {
-        titleMsgAmount.setVisibility(View.VISIBLE);
         Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_press);
         SystemTools.loadBackground(oneBuy, oneBuyDraw);
         obBuyLabel.setTextColor(resources.getColor(R.color.title_bg));
@@ -371,7 +367,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         {
             case R.id.onBuyL:
             {
-                titleMsgAmount.setVisibility(View.VISIBLE);
                 //设置选中状态
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_press);
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
@@ -405,7 +400,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case R.id.newestL:
             {
-                titleMsgAmount.setVisibility(View.VISIBLE);
                 //设置选中状态
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
@@ -439,7 +433,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case R.id.listL:
             {
-                titleMsgAmount.setVisibility(View.GONE);
                 //设置选中状态
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal );
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
@@ -479,7 +472,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case R.id.mallL:
             {
-                titleMsgAmount.setVisibility(View.VISIBLE);
                 //设置选中状态
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal );
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
@@ -515,7 +507,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case R.id.profileL:
             {
-                titleMsgAmount.setVisibility(View.VISIBLE);
                 //设置选中状态
                 if (application.isLogin()==false){
                     Intent intent = new Intent();
@@ -1229,7 +1220,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             Bundle bundle = (Bundle) msg;
             int types = bundle.getInt("type");
             if(1==types) {
-                titleMsgAmount.setVisibility(View.GONE);
                 Bundle bundle1 = new Bundle();
                 bundle1.putInt("type", 0);
                 MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle1);
@@ -1270,7 +1260,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             {
                 //跳转到首页产品列表
 
-                titleMsgAmount.setVisibility(View.VISIBLE);
                 //设置选中状态
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_press);
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);

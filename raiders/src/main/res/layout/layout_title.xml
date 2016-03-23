@@ -46,20 +46,6 @@
                 android:layout_alignParentRight="true"
                 android:layout_width="@dimen/common_icon_size"
                 android:layout_height="@dimen/common_icon_size"/>
-            <TextView
-                android:layout_width="@dimen/level_size11"
-                android:layout_height="@dimen/level_size11"
-                android:id="@+id/titleMsgAmount"
-                android:layout_marginTop="1dp"
-                android:layout_marginRight="1dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:visibility="gone"
-                android:gravity="center"
-                android:background="@drawable/red_tag"
-                android:textColor="@color/color_white"
-                android:textSize="@dimen/text_size_6"
-                android:layout_marginLeft="5dp"/>
         </RelativeLayout>
     </RelativeLayout>
 </merge>

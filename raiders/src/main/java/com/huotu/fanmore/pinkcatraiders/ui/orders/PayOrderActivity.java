@@ -55,7 +55,7 @@ import butterknife.OnClick;
  * 支付订单
  */
 public
-class PayOrderActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+class PayOrderActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, MyBroadcastReceiver.BroadcastListener {
 
 
     public Handler mHandler;
@@ -122,15 +122,16 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
     void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate ( savedInstanceState );
-        setContentView ( R.layout.pay_order );
+        setContentView(R.layout.pay_order);
         ButterKnife.bind(this);
         mHandler = new Handler ( this );
         am = this.getAssets ( );
-        resources = this.getResources ( );
+        resources = this.getResources();
         application = ( BaseApplication ) this.getApplication ( );
         wManager = this.getWindowManager();
         bundle = this.getIntent().getExtras();
         balance1 = (BaseBalanceModel) bundle.getSerializable("baseBalance");
+        myBroadcastReceiver = new MyBroadcastReceiver(PayOrderActivity.this, PayOrderActivity.this, MyBroadcastReceiver.ACTION_PAY_SUCCESS);
         initTitle ( );
         initData();
     }
@@ -427,5 +428,18 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
             this.closeSelf ( PayOrderActivity.this );
         }
         return super.onKeyDown ( keyCode, event );
+    }
+
+    @Override
+    public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
+        if(type == MyBroadcastReceiver.ReceiverType.wxPaySuccess)
+        {
+            //跳转到成功界面
+            //跳转到首页
+            Bundle bundle = new Bundle();
+            bundle.putInt("type", 0);
+            MyBroadcastReceiver.sendBroadcast(PayOrderActivity.this, MyBroadcastReceiver.JUMP_CART, bundle);
+            closeSelf(PayOrderActivity.this);
+        }
     }
 }

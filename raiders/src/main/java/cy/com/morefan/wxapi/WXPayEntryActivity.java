@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
+import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
@@ -27,10 +29,11 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 public
 class WXPayEntryActivity extends Activity implements Handler.Callback, IWXAPIEventHandler {
 
-    private       Handler handler    = new Handler ( this );
+    private Handler handler;
     private IWXAPI api;
     private
     BaseApplication application;
+    TextView orderPayTag;
 
     @Override
     public
@@ -46,8 +49,6 @@ class WXPayEntryActivity extends Activity implements Handler.Callback, IWXAPIEve
             case Contant.PAY_OK:
             {
                 ToastUtils.showLongToast(this, msg.obj.toString());
-                //MyBroadcastReceiver.sendBroadcast ( this, MyBroadcastReceiver.ACTION_FLOW_ADD );
-                //MyBroadcastReceiver.sendBroadcast(this,MyBroadcastReceiver.ACTION_WX_PAY_CALLBACK);
                 this.finish();
             }
             break;
@@ -64,7 +65,9 @@ class WXPayEntryActivity extends Activity implements Handler.Callback, IWXAPIEve
     protected
     void onCreate ( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
-        setContentView ( R.layout.pay_result_sys );
+        setContentView(R.layout.pay_result_sys);
+        handler = new Handler(this);
+        orderPayTag = (TextView) WXPayEntryActivity.this.findViewById(R.id.orderPayTag);
         application = ( BaseApplication ) this.getApplication ();
         api = WXAPIFactory.createWXAPI ( this, Contant.WXPAY_ID );
         api.handleIntent ( getIntent ( ), this );
@@ -76,41 +79,51 @@ class WXPayEntryActivity extends Activity implements Handler.Callback, IWXAPIEve
 
 
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-            String msg = "";
-            if( resp.errCode== 0)
-            {
-                msg="支付成功";
-                MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.ACTION_PAY_SUCCESS);
-                this.finish();
-                ToastUtils.showLongToast ( WXPayEntryActivity.this, msg );
-                return;
-            }else if( resp.errCode== -1){
-                msg="支付失败";
-                this.finish();
-                ToastUtils.showLongToast ( WXPayEntryActivity.this, msg );
-                return;
-            }else if(resp.errCode ==-2){
-                msg="用户取消支付";
-                this.finish();
-                ToastUtils.showLongToast(WXPayEntryActivity.this, msg);
-                return;
-            }
 
             PayResp payResp = (PayResp)resp;
             if(null==payResp){
-                msg="支付失败";
-                ToastUtils.showLongToast(WXPayEntryActivity.this, msg);
-                this.finish();
+                orderPayTag.setText("订单支付失败，2秒后关闭");
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        WXPayEntryActivity.this.finish();
+                    }
+                }, 2000);
                 return;
-            }else{
-                //Log.i("wxpay>>>prepayid",payResp.prepayId);
             }
-
-            /*PayGoodBean para=new PayGoodBean ();
-            JSONUtil<PayGoodBean> jsonUtil=new JSONUtil<PayGoodBean>();
-            para = jsonUtil.toBean( payResp.extData, para);
-
-            new DeliveryGoodAsyncTask ( WXPayEntryActivity.this , handler ,  para.getOrderNo(),para.getProductType(), para.getProductId() ).execute();*/
+            else
+            {
+                if( payResp.errCode== 0)
+                {
+                    orderPayTag.setText("订单支付成功，2秒后跳转到首页");
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            WXPayEntryActivity.this.finish();
+                        }
+                    }, 2000);
+                    MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.ACTION_PAY_SUCCESS);
+                    return;
+                }else if( payResp.errCode== -1){
+                    orderPayTag.setText("订单支付失败，2秒后关闭");
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            WXPayEntryActivity.this.finish();
+                        }
+                    }, 2000);
+                    return;
+                }else if(payResp.errCode ==-2){
+                    orderPayTag.setText("订单支付失败，2秒后关闭");
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            WXPayEntryActivity.this.finish();
+                        }
+                    }, 2000);
+                    return;
+                }
+            }
         }
     }
 
@@ -119,5 +132,17 @@ class WXPayEntryActivity extends Activity implements Handler.Callback, IWXAPIEve
         super.onNewIntent(intent);
         setIntent(intent);
         api.handleIntent(intent, this);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        // 2秒以内按两次推出程序
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN)
+        {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

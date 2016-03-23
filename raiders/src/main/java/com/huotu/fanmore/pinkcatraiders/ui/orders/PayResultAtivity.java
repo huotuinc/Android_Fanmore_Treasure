@@ -121,33 +121,6 @@ class PayResultAtivity extends BaseActivity implements View.OnClickListener, Han
         ViewGroup.LayoutParams pr = showBtn.getLayoutParams();
         pr.width = (wManager.getDefaultDisplay().getWidth()*3)/7;
         showBtn.setLayoutParams(pr);
-        //结算刷新用户数据
-        //刷新用户信息
-        String url = Contant.REQUEST_URL + Contant.UPDATE_USER_INFORMATION;
-        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), PayResultAtivity.this);
-        Map<String, Object> maps = new HashMap<String, Object>();
-        String suffix = params.obtainGetParam(maps);
-        url = url + suffix;
-        HttpUtils httpUtils = new HttpUtils();
-        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                JSONUtil<UserOutputModel> jsonUtil = new JSONUtil<UserOutputModel>();
-                UserOutputModel userOutput = new UserOutputModel();
-                userOutput = jsonUtil.toBean(response.toString(), userOutput);
-
-                if (null != userOutput && null != userOutput.getResultData() && null != userOutput.getResultData().getUser() && 1 == userOutput.getResultCode()) {
-                    application.writeUserInfo(userOutput.getResultData().getUser());
-                } else {
-                    ToastUtils.showMomentToast(PayResultAtivity.this, PayResultAtivity.this, "刷新余额出现问题");
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ToastUtils.showMomentToast(PayResultAtivity.this, PayResultAtivity.this, "刷新余额出现问题");
-            }
-        });
     }
 
     private
