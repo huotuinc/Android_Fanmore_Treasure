@@ -246,16 +246,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         am = this.getAssets ( );
         //初始化title面板
         initTitle();
-        if ( null == savedInstanceState ) {
-            application.mFragManager.setCurrentFrag ( FragManager.FragType.HOME );
-
-        }
-        else {
-            application.mFragManager.setPreFragType ( FragManager.FragType.HOME );
-            FragManager.FragType curFragType = ( FragManager.FragType ) savedInstanceState
-                    .getSerializable ( "curFragType" );
-            application.mFragManager.setCurrentFrag ( FragManager.FragType.HOME );
-        }
+        application.mFragManager.setCurrentFrag ( FragManager.FragType.HOME );
         initView();
     }
 
@@ -335,7 +326,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     private void initView() {
         initTab();
-
     }
 
 
@@ -343,8 +333,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState)
     {
-        /*savedInstanceState.putSerializable("curFragType",
-                application.mFragManager.getCurrentFragType());*/
         // TODO Auto-generated method stub
         super.onSaveInstanceState(savedInstanceState);
     }

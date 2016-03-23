@@ -116,7 +116,6 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
 
     private void initList()
     {
-        areaList.setMode ( PullToRefreshBase.Mode.BOTH );
         areaList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
@@ -151,21 +150,7 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
             String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_AREA;
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
-            maps.put("categoryId", bundle.get("categoryId"));
-            if ( OperateTypeEnum.REFRESH == operateType )
-            {// 下拉
-                maps.put("lastSort", 0);
-            } else if (OperateTypeEnum.LOADMORE == operateType)
-            {// 上拉
-                if ( products != null && products.size() > 0)
-                {
-                    ProductModel product = products.get(products.size() - 1);
-                    maps.put("lastSort", product.getPid());
-                } else if (products != null && products.size() == 0)
-                {
-                    maps.put("lastSort", 0);
-                }
-            }
+            maps.put("step", 0);
             String suffix = params.obtainGetParam(maps);
             url = url + suffix;
             HttpUtils httpUtils = new HttpUtils();
@@ -185,9 +170,14 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                         //修改记录总数
                         Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, areaProductsOutputs.getResultData().getList().size());
                         mHandler.sendMessage(message);
-                        products.clear();
-                        products.addAll(areaProductsOutputs.getResultData().getList());
-                        adapter.notifyDataSetChanged();
+                        if( operateType == OperateTypeEnum.REFRESH){
+                            products.clear();
+                            products.addAll(areaProductsOutputs.getResultData().getList());
+                            adapter.notifyDataSetChanged();
+                        }else if( operateType == OperateTypeEnum.LOADMORE){
+                            products.addAll(areaProductsOutputs.getResultData().getList());
+                            adapter.notifyDataSetChanged();
+                        }
                     } else {
                         //提示获取数据失败
                         areaList.setEmptyView(emptyView);
@@ -208,21 +198,7 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
             String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_CATEGORY;
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
-            maps.put("categoryId", bundle.get("categoryId"));
-            if ( OperateTypeEnum.REFRESH == operateType )
-            {// 下拉
-                maps.put("lastSort", 0);
-            } else if (OperateTypeEnum.LOADMORE == operateType)
-            {// 上拉
-                if ( products != null && products.size() > 0)
-                {
-                    ProductModel product = products.get(products.size() - 1);
-                    maps.put("lastSort", product.getSort());
-                } else if (products != null && products.size() == 0)
-                {
-                    maps.put("lastSort", 0);
-                }
-            }
+            maps.put("categoryId", bundle.getLong("categoryId"));
             String suffix = params.obtainGetParam(maps);
             url = url + suffix;
             HttpUtils httpUtils = new HttpUtils();
@@ -242,9 +218,14 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                         //修改记录总数
                         Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, areaProductsOutputs.getResultData().getList().size());
                         mHandler.sendMessage(message);
-                        products.clear();
-                        products.addAll(areaProductsOutputs.getResultData().getList());
-                        adapter.notifyDataSetChanged();
+                        if( operateType == OperateTypeEnum.REFRESH){
+                            products.clear();
+                            products.addAll(areaProductsOutputs.getResultData().getList());
+                            adapter.notifyDataSetChanged();
+                        }else if( operateType == OperateTypeEnum.LOADMORE){
+                            products.addAll(areaProductsOutputs.getResultData().getList());
+                            adapter.notifyDataSetChanged();
+                        }
                     } else {
                         //提示获取数据失败
                         areaList.setEmptyView(emptyView);
@@ -262,10 +243,10 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
             });
         }
         else if (bundle.get("type").equals(3L)) {
+            areaList.setMode ( PullToRefreshBase.Mode.BOTH );
             String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_ALL_CATEGORY;
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
-            maps.put("lastSort", bundle.get("categoryId"));
             if ( OperateTypeEnum.REFRESH == operateType )
             {// 下拉
                 maps.put("lastSort", 0);
@@ -299,9 +280,17 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                         //修改记录总数
                         Message message = mHandler.obtainMessage(Contant.LOAD_ALL_COUNT, goodsListByOtherOutputModel.getResultData().getCount());
                         mHandler.sendMessage(message);
-                        products.clear();
-                        products.addAll(goodsListByOtherOutputModel.getResultData().getList());
-                        adapter.notifyDataSetChanged();
+
+                        if( operateType == OperateTypeEnum.REFRESH){
+                            products.clear();
+                            products.addAll(goodsListByOtherOutputModel.getResultData().getList());
+                            products.get(products.size()-1).setSort(goodsListByOtherOutputModel.getResultData().getSort());
+                            adapter.notifyDataSetChanged();
+                        }else if( operateType == OperateTypeEnum.LOADMORE){
+                            products.addAll(goodsListByOtherOutputModel.getResultData().getList());
+                            products.get(products.size()-1).setSort(goodsListByOtherOutputModel.getResultData().getSort());
+                            adapter.notifyDataSetChanged();
+                        }
                     } else {
                         //提示获取数据失败
                         areaList.setEmptyView(emptyView);
@@ -318,10 +307,10 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                 }
             });
         }else if (bundle.get("type").equals(2L)) {
+            areaList.setMode ( PullToRefreshBase.Mode.BOTH );
             String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_OTHER_CATEGORY;
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
-            maps.put("lastSort", bundle.get("categoryId"));
             if ( OperateTypeEnum.REFRESH == operateType )
             {// 下拉
                 maps.put("lastSort", 0);
@@ -355,9 +344,16 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                         //修改记录总数
                         Message message = mHandler.obtainMessage(Contant.LOAD_ALL_COUNT, goodsListByOtherOutputModel.getResultData().getCount());
                         mHandler.sendMessage(message);
-                        products.clear();
-                        products.addAll(goodsListByOtherOutputModel.getResultData().getList());
-                        adapter.notifyDataSetChanged();
+                        if( operateType == OperateTypeEnum.REFRESH){
+                            products.clear();
+                            products.addAll(goodsListByOtherOutputModel.getResultData().getList());
+                            products.get(products.size()-1).setSort(goodsListByOtherOutputModel.getResultData().getSort());
+                            adapter.notifyDataSetChanged();
+                        }else if( operateType == OperateTypeEnum.LOADMORE){
+                            products.addAll(goodsListByOtherOutputModel.getResultData().getList());
+                            products.get(products.size()-1).setSort(goodsListByOtherOutputModel.getResultData().getSort());
+                            adapter.notifyDataSetChanged();
+                        }
                     } else {
                         //提示获取数据失败
                         areaList.setEmptyView(emptyView);
