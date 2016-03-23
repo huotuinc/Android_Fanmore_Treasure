@@ -1098,11 +1098,11 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                     {
                         ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "该期商品仅剩"+product.getRemainAmount());
                         product.setDefaultAmount(product.getRemainAmount());
-                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler,0);
+                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler,2);
                     }
                     else
                     {
-                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler,0);
+                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler,2);
                     }
 
                 }

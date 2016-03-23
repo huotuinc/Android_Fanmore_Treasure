@@ -332,4 +332,6 @@ public class Contant {
     public static final String CONFIRM_RECEIPT = "confirmReceipt";
     //上传晒单图片
     public static final String ADD_SHARE_ORDER_IMG = "addShareOrderImg";
+    //Volley请求Tag
+    public static final String VOLLEY_TAG = "MT_REQUEST";
 }
