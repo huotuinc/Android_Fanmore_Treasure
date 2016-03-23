@@ -88,6 +88,10 @@ public class PopGridAdapter  extends BaseAdapter {
                 holder.productTag.setText("专区\n商品");
                 SystemTools.loadBackground(holder.productTag, resources.getDrawable(R.mipmap.area_1));
             }
+            else
+            {
+                holder.productTag.setVisibility(View.GONE);
+            }
 
             holder.productName.setText(product.getTitle());
             BigDecimal decimal = new BigDecimal((product.getToAmount()-product.getRemainAmount())/(double)product.getToAmount());

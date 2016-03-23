@@ -24,6 +24,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.Bind;
@@ -86,11 +87,32 @@ public class SearchGridAdapter  extends BaseAdapter {
                 holder.productTag.setText("专区\n商品");
                 SystemTools.loadBackground(holder.productTag, resources.getDrawable(R.mipmap.area_1));
             }
+            else
+            {
+                holder.productTag.setVisibility(View.GONE);
+            }
 
             holder.productName.setText(product.getTitle());
             BigDecimal decimal = new BigDecimal((product.getToAmount()-product.getRemainAmount())/(double)product.getToAmount());
             double value =  decimal.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
-            holder.lotterySchedule.setText("开奖进度" + (value > 1 ? 100 : (int)(100 * value)) + "%");
+            double iValue = 100 * value;
+            DecimalFormat df = new DecimalFormat("#");
+            if(iValue<1&&iValue>0)
+            {
+                holder.lotterySchedule.setText("开奖进度 1%");
+            }
+            else if(0==iValue)
+            {
+                holder.lotterySchedule.setText("开奖进度 0%");
+            }
+            else if(iValue>100)
+            {
+                holder.lotterySchedule.setText("开奖进度 100%");
+            }
+            else
+            {
+                holder.lotterySchedule.setText("开奖进度" + df.format(iValue) + "%");
+            }
             holder.lotteryScheduleProgress.setMax ( ( int ) product.getToAmount ( ) );
             holder.lotteryScheduleProgress.setProgress ( ( int ) ( product.getToAmount ( ) -
                     product.getRemainAmount ( ) ) );
