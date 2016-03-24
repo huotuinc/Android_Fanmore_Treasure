@@ -69,7 +69,7 @@ public class ScanRedpackagePopWin extends PopupWindow{
                 dismissView();
             }
         });
-        this.setAnimationStyle(R.style.AnimationBootom);
+        this.setAnimationStyle(R.style.AnimationPop);
         // 设置SelectPicPopupWindow的View
         this.setContentView(view);
         // 设置SelectPicPopupWindow弹出窗体的宽

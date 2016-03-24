@@ -176,7 +176,10 @@ public class FuncPopWin extends PopupWindow {
     }
     public void setMsg(String num)
     {
-        msg.setText("共选择" + num + "件商品");
+        if(null!=msg)
+        {
+            msg.setText("共选择" + num + "件商品");
+        }
     }
 
     public void setDeletes(List<Long> deletes)

@@ -8,6 +8,7 @@ public class MallUrlModel extends BaseModel {
     String bottomNavUrl;
     String orderRequestUrl;
 
+
     public String getLoginUrl() {
         return loginUrl;
     }

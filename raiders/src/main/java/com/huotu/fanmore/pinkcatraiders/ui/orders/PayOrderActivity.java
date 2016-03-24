@@ -265,7 +265,7 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                                 //关闭支付订单界面
                                 Bundle bundle = new Bundle();
                                 bundle.putInt("type", 0);
-                                MyBroadcastReceiver.sendBroadcast(PayOrderActivity.this, MyBroadcastReceiver.SHOP_CART, bundle);
+                                MyBroadcastReceiver.sendBroadcast(PayOrderActivity.this, MyBroadcastReceiver.JUMP_CART, bundle);
                                 closeSelf(PayOrderActivity.this);
                             }
                         }, 1000);
