@@ -39,10 +39,10 @@
         android:layout_height="@dimen/common_icon_size_1"/>
     <TextView
         android:layout_marginRight="10dp"
-        android:layout_width="@dimen/level_size"
-        android:layout_height="@dimen/level_size"
+        android:layout_width="@dimen/level_size15"
+        android:layout_height="@dimen/level_size15"
         android:id="@+id/bottomOtherCartAmount"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:text="0"
@@ -51,5 +51,5 @@
         android:background="@drawable/design_red_point"
         android:textColor="@color/color_white"
         android:textSize="@dimen/text_size_8"
-        android:layout_marginLeft="5dp"/>
+        android:layout_marginLeft="3dp"/>
 </RelativeLayout>
