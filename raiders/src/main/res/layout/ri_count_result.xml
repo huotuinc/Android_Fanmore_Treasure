@@ -80,20 +80,22 @@
                 android:layout_height="wrap_content"
                 android:text=""/>
                 <TextView
-                    android:id="@+id/open"
+                    android:id="@+id/openBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="展开"
                     android:textColor="@color/color_blue"
-                    android:layout_margin="10dp"
-                    />
-
+                    android:layout_margin="10dp" />
             </LinearLayout>
         </LinearLayout>
-        <ListView
+        <!--动态加载计算结果数据-->
+        <LinearLayout
             android:id="@+id/list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"></ListView>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/account_bg">
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

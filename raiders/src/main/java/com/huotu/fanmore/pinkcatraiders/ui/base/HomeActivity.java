@@ -29,6 +29,7 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
 
+import com.huotu.fanmore.pinkcatraiders.model.AddressOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.AppBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BalanceOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseBalanceModel;
@@ -38,6 +39,7 @@ import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 
+import com.huotu.fanmore.pinkcatraiders.model.MyAddressListModel;
 import com.huotu.fanmore.pinkcatraiders.model.OutputUrlModel;
 
 import com.huotu.fanmore.pinkcatraiders.model.LocalCartOutputModel;
@@ -67,6 +69,7 @@ import com.huotu.fanmore.pinkcatraiders.widget.FuncPopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.MorePopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
+import com.huotu.fanmore.pinkcatraiders.widget.ScanRedpackagePopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.SharePopupWindow;
 
 import org.json.JSONObject;
@@ -77,6 +80,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.BrokenBarrierException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -109,6 +113,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     public MorePopWin          morePopWin;
 
     public ProgressPopupWindow progress;
+
+    public ScanRedpackagePopWin scanRedpackagePopWin;
 
     public
     NoticePopWindow noticePop;
@@ -246,6 +252,54 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         initTitle();
         application.mFragManager.setCurrentFrag ( FragManager.FragType.HOME );
         initView();
+        //开机检查红包
+        scanRedpackage();
+    }
+
+
+    private void scanRedpackage()
+    {
+        if( false == HomeActivity.this.canConnect ( ) ){
+            return;
+        }
+        String url = Contant.REQUEST_URL + Contant.GET_REMIND_REDPACKAGE;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+        final Map<String, Object> maps = new HashMap<String, Object> ();
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject >() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if(HomeActivity.this.isFinishing ( ))
+                {
+                    return;
+                }
+                JSONUtil<ScanRedpackageModel> jsonUtil = new JSONUtil<ScanRedpackageModel>();
+                ScanRedpackageModel scanRedpackage = new ScanRedpackageModel();
+                scanRedpackage = jsonUtil.toBean(response.toString(), scanRedpackage);
+                if(null != scanRedpackage && null != scanRedpackage.getResultData() && (1==scanRedpackage.getResultCode())&&null!=scanRedpackage.getResultData().getRedpackets())
+                {
+                    if(0==scanRedpackage.getResultData().getRedpackets().size())
+                    {
+                    }
+                    else
+                    {
+                        Message message = mHandler.obtainMessage();
+                        message.what = Contant.SCAN_REDPACKAGE;
+                        message.obj = scanRedpackage.getResultData().getRedpackets();
+                        mHandler.sendMessage(message);
+                    }
+                }
+                else
+                {
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
     }
 
     private
@@ -254,7 +308,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         Drawable bgDraw = resources.getDrawable ( R.color.title_bg );
         SystemTools.loadBackground(titleLayoutL, bgDraw);
         Drawable leftDraw = resources.getDrawable ( R.mipmap.title_search );
-        SystemTools.loadBackground ( titleLeftImage, leftDraw );
+        SystemTools.loadBackground(titleLeftImage, leftDraw );
         //消息模式
         titleRightImage.setTag(0);
         Drawable rightDraw = resources.getDrawable ( R.mipmap.title_msg );
@@ -1203,6 +1257,15 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
             }
             break;
+            case Contant.SCAN_REDPACKAGE:
+            {
+                List<Double> redpackages = (List<Double>) msg.obj;
+                scanRedpackagePopWin = new ScanRedpackagePopWin(HomeActivity.this, HomeActivity.this, wManager, mHandler);
+                scanRedpackagePopWin.addData(redpackages);
+                scanRedpackagePopWin.showWin();
+                scanRedpackagePopWin.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
+            }
+            break;
             default:
                 break;
         }
@@ -1326,6 +1389,32 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
         public void setShoppingCartId(long shoppingCartId) {
             this.shoppingCartId = shoppingCartId;
+        }
+    }
+
+    public class ScanRedpackageModel extends BaseModel
+    {
+        private ScanRedpackageInnerModel resultData;
+
+        public ScanRedpackageInnerModel getResultData() {
+            return resultData;
+        }
+
+        public void setResultData(ScanRedpackageInnerModel resultData) {
+            this.resultData = resultData;
+        }
+
+        public class ScanRedpackageInnerModel
+        {
+            private List<Double> redpackets;
+
+            public List<Double> getRedpackets() {
+                return redpackets;
+            }
+
+            public void setRedpackets(List<Double> redpackets) {
+                this.redpackets = redpackets;
+            }
         }
     }
 }

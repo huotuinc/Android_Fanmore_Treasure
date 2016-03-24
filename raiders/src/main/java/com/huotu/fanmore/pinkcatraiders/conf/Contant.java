@@ -110,6 +110,7 @@ public class Contant {
 
     public static final int ADDRESS_SELECT = 0x00000071;
     public static final int CART_AMOUNT = 0x00000072;
+    public static final int SCAN_REDPACKAGE = 0x00007772;
     /**
      * 菜单标记1
      */
@@ -334,4 +335,6 @@ public class Contant {
     public static final String ADD_SHARE_ORDER_IMG = "addShareOrderImg";
     //Volley请求Tag
     public static final String VOLLEY_TAG = "MT_REQUEST";
+    //开机检查红包
+    public static final String GET_REMIND_REDPACKAGE = "getRemindRedPackets";
 }

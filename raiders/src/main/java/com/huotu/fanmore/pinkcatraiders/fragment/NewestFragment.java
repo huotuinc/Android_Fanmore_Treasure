@@ -114,12 +114,22 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
         newestGrid.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<GridView> pullToRefreshBase) {
+                if(null!=tc)
+                {
+                    //重置
+                    tc.cancel();
+                }
                 operateType = OperateTypeEnum.REFRESH;
                 initProducts();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<GridView> pullToRefreshBase) {
+                if(null!=tc)
+                {
+                    //重置
+                    tc.cancel();
+                }
                 operateType = OperateTypeEnum.LOADMORE;
                 initProducts();
             }

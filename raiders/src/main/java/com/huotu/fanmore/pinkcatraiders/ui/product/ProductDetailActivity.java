@@ -348,9 +348,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             calculationDetail.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    Bundle bundle=new Bundle();
-                                                    bundle.putLong("issueId",productDetail.getIssueId());
-                                                    ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, CountResultActivity.class, bundle);
+                                                    ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "倒计时中不能计算结果");
                                                 }
                                             });
                                         }
@@ -459,9 +457,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             calculationDetail.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    Bundle bundle = new Bundle();
-                                                    bundle.putLong("issueId", productDetail.getIssueId());
-                                                    ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, CountResultActivity.class, bundle);
+                                                    ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "倒计时中不能计算结果");
                                                 }
                                             });
                                             //
@@ -679,6 +675,13 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             {
                                                 noLoginTip.setText("您没有参加本期夺宝哦！");
                                             }
+                                            TextView calculationDetail = (TextView) countdownDetail.findViewById(R.id.calculationDetail);
+                                            calculationDetail.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "倒计时中不能计算结果");
+                                                }
+                                            });
                                         }
                                         else if(2 == productDetail.getStatus()) {
                                             //已揭晓
@@ -781,9 +784,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             calculationDetail.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    Bundle bundle=new Bundle();
-                                                    bundle.putLong("issueId",productDetail.getIssueId());
-                                                    ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, CountResultActivity.class, bundle);
+                                                    ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "倒计时中不能计算结果");
                                                 }
                                             });
                                             //

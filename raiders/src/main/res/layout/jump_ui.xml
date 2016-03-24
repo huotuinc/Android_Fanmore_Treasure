@@ -11,7 +11,7 @@
         android:layout_width="fill_parent"
         android:textColor="@color/text_black"
         android:textSize="@dimen/text_size_16"
-        android:text="选择地址"
+        android:text="选择新增地址"
         android:background="@drawable/account_bg_bottom"/>
     <LinearLayout
         android:id="@+id/allAddressL"

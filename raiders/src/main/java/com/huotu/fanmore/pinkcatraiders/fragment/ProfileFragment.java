@@ -12,6 +12,8 @@ import android.view.WindowManager;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.huotu.fanmore.pinkcatraiders.R;
@@ -19,6 +21,7 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
+import com.huotu.fanmore.pinkcatraiders.model.UserOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.RechargeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.RechargeLogActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
@@ -31,10 +34,20 @@ import com.huotu.fanmore.pinkcatraiders.ui.raiders.ShareOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.WinLogActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
+import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.CircleImageView;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -120,14 +133,42 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
 
     private void loadData()
     {
-        profilePullRefresh.onRefreshComplete();
-        mallPoints.setText(String.valueOf(application.readMallPoints())+"积分");
-        String imgurl= PreferenceHelper.readString (getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_UDERHEAD);
-        BitmapLoader.create().loadRoundImage ( getActivity ( ), userimg, imgurl, R.mipmap.error );
-        TVUserName.setText ( PreferenceHelper.readString ( getActivity ( ), Contant
-                .LOGIN_USER_INFO, Contant.LOGIN_AUTH_REALNAME ) );
-        String balance = PreferenceHelper.readString(getActivity(), Contant.LOGIN_USER_INFO, Contant.LOGIN_AUTH_MONEY);
-        money.setText((null!=balance&&!balance.isEmpty ()&&!"null".equals ( balance ))?balance+"元":0+"元");
+        //刷新用户信息
+        String url = Contant.REQUEST_URL + Contant.UPDATE_USER_INFORMATION;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
+        Map<String, Object> maps = new HashMap<String, Object>();
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                profilePullRefresh.onRefreshComplete();
+                JSONUtil<UserOutputModel> jsonUtil = new JSONUtil<UserOutputModel>();
+                UserOutputModel userOutput = new UserOutputModel();
+                userOutput = jsonUtil.toBean(response.toString(), userOutput);
+
+                if (null != userOutput && null != userOutput.getResultData() && null != userOutput.getResultData().getUser() && 1 == userOutput.getResultCode()) {
+                    application.writeUserInfo(userOutput.getResultData().getUser());
+                    SystemTools.loadBackground(mallPoints, resources.getDrawable(R.drawable.mall_points_draw));
+                    mallPoints.setText(String.valueOf(null==userOutput.getResultData().getUser().getIntegral()?0:userOutput.getResultData().getUser().getIntegral()) + "积分");
+                    String imgurl = userOutput.getResultData().getUser().getUserHead();
+                    BitmapLoader.create().loadRoundImage(getActivity(), userimg, imgurl, R.mipmap.error);
+                    TVUserName.setText(userOutput.getResultData().getUser().getUsername());
+                    String balance = String.valueOf(userOutput.getResultData().getUser().getMoney());
+                    money.setText((null != balance && !balance.isEmpty() && !"null".equals(balance)) ? balance + "元" : 0 + "元");
+
+                } else {
+                    ToastUtils.showMomentToast(getActivity(), getActivity(), "刷新用户数据出现问题");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                profilePullRefresh.onRefreshComplete();
+                ToastUtils.showMomentToast(getActivity(), getActivity(), "刷新用户数据出现问题");
+            }
+        });
     }
 
     @OnClick(R.id.settingL)
@@ -202,5 +243,23 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    protected
+    void firstGetData ( ) {
+
+        rootAty.mHandler.postDelayed(
+                new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        if (getActivity().isFinishing()) {
+                            return;
+                        }
+                        profilePullRefresh.setRefreshing(true);
+                    }
+                }, 1000
+        );
     }
 }

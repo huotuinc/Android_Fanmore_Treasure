@@ -31,6 +31,7 @@
     <dimen name="icon_size_40">40dp</dimen>
     <dimen name="icon_size_30">30dp</dimen>
     <dimen name="icon_size_20">20dp</dimen>
+    <dimen name="icon_size_10">10dp</dimen>
     <dimen name="text_size_20">20sp</dimen>
     <dimen name="icon_size_50">50dp</dimen>
     <dimen name="icon_size_2">12dp</dimen>
@@ -87,8 +88,10 @@
     <dimen name="package_top">240dp</dimen>
     <dimen name="package_bottom">60dp</dimen>
     <dimen name="radpackage_msg_bg_size">220dp</dimen>
+    <dimen name="radpackage_scan_bg_size">250dp</dimen>
     <dimen name="redpackage_msg_top">50dp</dimen>
     <dimen name="shareorder_title_height">30dp</dimen>
     <dimen name="shareorder_con_height">150dp</dimen>
     <dimen name="showOrderImageSize">50dp</dimen>
+    <dimen name="scanTag">70dp</dimen>
 </resources>
