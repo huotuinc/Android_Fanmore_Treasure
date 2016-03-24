@@ -643,7 +643,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                         String loginUrl = getmallurl.getResultData().getLoginUrl();
                                         String bottomUrl = getmallurl.getResultData().getBottomNavUrl();
                                         String orderUrl = getmallurl.getResultData().getOrderRequestUrl();
-
                                         Bundle bundle = new Bundle();
                                         bundle.putString("url", loginUrl);
                                         bundle.putString("bottomurl", bottomUrl);
@@ -673,7 +672,10 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                progress.dismissView();
+                                if(null!=progress)
+                                {
+                                    progress.dismissView();
+                                }
                                 //初始化失败
                                 //异常处理，自动切换成无数据
                                 noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "登录失败");
@@ -1484,6 +1486,40 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     public void onErrorResponse(VolleyError error) {
                     }
                 });
+            }
+            else if(2==types)
+            {
+                //跳转到首页产品列表
+
+                //设置选中状态
+                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_press);
+                SystemTools.loadBackground(oneBuy, oneBuyDraw);
+                obBuyLabel.setTextColor(resources.getColor(R.color.title_bg));
+                //标题栏右图标
+                //消息模式
+                titleRightImage.setTag(0);
+                Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
+                SystemTools.loadBackground(titleRightImage, rightDraw);
+                //重置其他
+                Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
+                SystemTools.loadBackground(newest, newestDraw);
+                newestLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_normal);
+                SystemTools.loadBackground(list, listDraw);
+                listLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
+                SystemTools.loadBackground(profile, profileDraw);
+                Drawable mallDraw = resources.getDrawable(R.mipmap.mall_icon_common);
+                SystemTools.loadBackground(mall, mallDraw);
+                mallLabel.setTextColor(resources.getColor(R.color.text_black));
+                profileLabel.setTextColor(resources.getColor(R.color.text_black));
+                funcPopWin1.dismissView();
+                funcPopWin.dismissView();
+                //切换内容
+                String tag = Contant.TAG_1;
+                //加载具体的页面
+                Message message = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
+                mHandler.sendMessage(message );
             }
         }
     }

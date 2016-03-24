@@ -29,7 +29,9 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.model.MallPayModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.orders.PayOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.UrlFilterUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
@@ -88,7 +90,7 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
             {
                 MallPayModel payModel = ( MallPayModel ) msg.obj;
                 //调用JS
-                viewPage.loadUrl ( "javascript:utils.Go2Payment("+payModel.getCustomId ()+","+ payModel.getTradeNo ()+","+ payModel.getPaymentType ()+", "
+                viewPage.loadUrl ( "javascript:utils.Go2Payment("+payModel.getCustomId()+","+ payModel.getTradeNo ()+","+ payModel.getPaymentType ()+", "
                         + "false);\n" );
             }
                 break;
@@ -288,6 +290,10 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
         super.onDestroy();
         VolleyUtil.cancelAllRequest();
         ButterKnife.unbind(this);
+        //显示首页
+        Bundle bundle = new Bundle();
+        bundle.putInt("type", 2);
+        MyBroadcastReceiver.sendBroadcast(MallHomeActivity.this, MyBroadcastReceiver.JUMP_CART, bundle);
     }
     @OnClick(R.id.titleLeftImage)
     void doBack()

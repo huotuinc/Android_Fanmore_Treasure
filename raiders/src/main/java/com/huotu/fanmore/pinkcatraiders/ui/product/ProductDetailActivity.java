@@ -1250,9 +1250,16 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     @OnClick(R.id.historys)
    void tohistorys (){
-        Bundle bundle = new Bundle ( );
-        bundle.putLong("goodsId",  productDetail.getPid());
-        ActivityUtils.getInstance ().showActivity ( ProductDetailActivity.this, HistorysActivity.class,bundle);
+        try
+        {
+            Bundle bundle = new Bundle ( );
+            bundle.putLong("goodsId",  productDetail.getPid());
+            ActivityUtils.getInstance ().showActivity ( ProductDetailActivity.this, HistorysActivity.class,bundle);
+        }
+        catch (NullPointerException e)
+        {
+
+        }
 
 
     }
