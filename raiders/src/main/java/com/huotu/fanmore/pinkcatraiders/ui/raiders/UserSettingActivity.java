@@ -451,7 +451,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                 );
             }
         }else {
-            setPasswordPop.showProgress();
+            setPasswordPop.showProgress("通过旧密码方式", "通过手机验证码");
             setPasswordPop.showAtLocation(titleLayoutL, Gravity.BOTTOM, 0, 0);
         }
     }

@@ -27,6 +27,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshWebView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.model.MallPayModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
@@ -67,6 +68,7 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
     ImageView titleLeftImage;
     @Bind(R.id.underwebView)
     WebView underwebView;
+    private TextView titleText;
     @Bind(R.id.stubTitleText)
     ViewStub stubTitleText;
     @Bind(R.id.webPage)
@@ -82,6 +84,14 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
     public boolean handleMessage(Message msg) {
         switch (msg.what)
         {
+            case 0x12131422:
+            {
+                MallPayModel payModel = ( MallPayModel ) msg.obj;
+                //调用JS
+                viewPage.loadUrl ( "javascript:utils.Go2Payment("+payModel.getCustomId ()+","+ payModel.getTradeNo ()+","+ payModel.getPaymentType ()+", "
+                        + "false);\n" );
+            }
+                break;
             default:
                 break;
         }
@@ -155,7 +165,7 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
         Drawable leftDraw = resources.getDrawable(R.mipmap.back_gray);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
         stubTitleText.inflate();
-        TextView titleText = (TextView) this.findViewById(R.id.titleText);
+        titleText = (TextView) this.findViewById(R.id.titleText);
         titleText.setText("商城");
     }
 
@@ -201,9 +211,11 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
                         UrlFilterUtils filter = new UrlFilterUtils(
                                 MallHomeActivity.this,
                                 MallHomeActivity.this,
+                                titleText,
                                 mHandler,
                                 application,
-                                wManager
+                                wManager,
+                                bundle.getString("orderurl")
                         );
                         return filter.shouldOverrideUrlBySFriend(viewPage, url);
                     }

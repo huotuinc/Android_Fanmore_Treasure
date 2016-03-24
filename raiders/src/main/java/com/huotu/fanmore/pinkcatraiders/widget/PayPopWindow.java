@@ -15,6 +15,7 @@ import android.widget.PopupWindow;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
+import com.huotu.fanmore.pinkcatraiders.model.MallPayModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.AliPayUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.PayFunc;
@@ -39,10 +40,11 @@ class PayPopWindow extends PopupWindow {
     private PayModel payModel;
     private Context context;
     public ProgressPopupWindow progress;
+    public MallPayModel mallPay;
 
 
     public
-    PayPopWindow ( final Activity aty, final Context context, final Handler mHandler, final BaseApplication application, final PayModel payModel ) {
+    PayPopWindow ( final Activity aty, final Context context, final Handler mHandler, final BaseApplication application, final PayModel payModel, String tag1, String tag2 ) {
         super ( );
         this.aty = aty;
         this.mHandler = mHandler;
@@ -51,10 +53,12 @@ class PayPopWindow extends PopupWindow {
         this.context = context;
         progress = new ProgressPopupWindow ( context, aty, aty.getWindowManager () );
         LayoutInflater inflater = ( LayoutInflater ) aty.getSystemService ( Context.LAYOUT_INFLATER_SERVICE );
-
+        mallPay = (MallPayModel)payModel;
         payView = inflater.inflate ( R.layout.pop_pay_ui, null );
         wxPayBtn = ( Button ) payView.findViewById ( R.id.wxPayBtn );
+        wxPayBtn.setText(tag1);
         alipayBtn = ( Button ) payView.findViewById ( R.id.alipayBtn );
+        alipayBtn.setText(tag2);
         cancelBtn = ( Button ) payView.findViewById ( R.id.cancelBtn );
 
         wxPayBtn.setOnClickListener (
@@ -62,12 +66,12 @@ class PayPopWindow extends PopupWindow {
                     @Override
                     public
                     void onClick ( View v ) {
-                        dismissView ( );
-                        progress.showProgress ( "等待微信支付跳转" );
-                        progress.showAtLocation (
-                                aty.findViewById ( R.id.titleText ),
+                        dismissView();
+                        progress.showProgress("等待微信支付跳转");
+                        progress.showAtLocation(
+                                aty.findViewById(R.id.titleText),
                                 Gravity.CENTER, 0, 0
-                                                );
+                        );
                         payModel.setAttach ( payModel.getOrderNo ( ) + "_0" );
                         //添加微信回调路径
                         PayFunc payFunc = new PayFunc ( context, payModel, application, mHandler, aty, progress );
@@ -78,14 +82,12 @@ class PayPopWindow extends PopupWindow {
                                            @Override
                                            public
                                            void onClick ( View v ) {
-                                               dismissView();
-                                               progress.showProgress("等待支付宝支付跳转");
-                                               progress.showAtLocation(
-                                                       aty.findViewById(R.id.titleText),
-                                                       Gravity.CENTER, 0, 0
-                                               );
-                                               PayFunc payFunc = new PayFunc ( context, payModel, application, mHandler, aty, progress );
-                                               payFunc.aliPay();
+                                               Message msg = new Message();
+                                               msg.what = 0x12131422;
+                                               mallPay.setPaymentType ( "1" );
+                                               msg.obj = mallPay;
+                                               mHandler.sendMessage ( msg );
+                                               dismissView ( );
                                            }
                                        } );
         cancelBtn.setOnClickListener ( new View.OnClickListener ( ) {
