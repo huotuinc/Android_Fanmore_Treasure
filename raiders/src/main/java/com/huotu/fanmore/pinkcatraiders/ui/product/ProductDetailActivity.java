@@ -255,7 +255,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             .getResultData().getData();
                                     issueId = productDetail.getIssueId();
                                     pid=productDetail.getPid();
-                                    allLogText.setText("("+DateUtils.transformDataformat6(productDetail.getFirstBuyTime())+"开始");
+                                    allLogText.setText("("+DateUtils.transformDataformat16(productDetail.getFirstBuyTime())+"开始");
                                     detailUrl = productDetail.getLink();
                                     if (0 == productDetail.getStatus()) {
                                         productDetailNameLabel.setText("进行中");

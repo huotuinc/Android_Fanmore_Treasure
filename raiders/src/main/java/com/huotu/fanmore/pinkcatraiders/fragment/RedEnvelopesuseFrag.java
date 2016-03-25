@@ -209,12 +209,12 @@ public class RedEnvelopesuseFrag extends BaseFragment implements Handler.Callbac
     @Override
     public void onDestroy() {
         super.onDestroy();
-        VolleyUtil.cancelAllRequest ( );
-        ButterKnife.unbind ( this );
     }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        VolleyUtil.cancelAllRequest ( );
+        ButterKnife.unbind(this);
     }
 
     @Override

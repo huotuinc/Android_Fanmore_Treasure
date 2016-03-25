@@ -886,6 +886,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
         ButterKnife.unbind(getActivity());
         VolleyUtil.cancelAllRequest();
         if(null!= mHandler)
@@ -893,11 +898,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             mHandler.removeMessages(0);
             mHandler.removeMessages(1);
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     @Override

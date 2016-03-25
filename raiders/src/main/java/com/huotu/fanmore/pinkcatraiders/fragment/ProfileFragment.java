@@ -237,12 +237,13 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(getActivity());
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.unbind(getActivity());
+        VolleyUtil.cancelAllRequest();
     }
 
     protected

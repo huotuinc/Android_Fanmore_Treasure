@@ -84,6 +84,32 @@ public class DateUtils {
     }
 
     /**
+     * 转换成 2015-12-12 10:00:00格式
+     * @param timeStamp
+     * @return
+     */
+    public static String transformDataformat16(String timeStamp)
+    {
+        if("".equals(timeStamp) || null == timeStamp)
+        {
+            timeStamp = String.valueOf(System.currentTimeMillis());
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return format.format(new Date(Long.parseLong(timeStamp)));
+        }
+        else if("0".equals(timeStamp))
+        {
+            timeStamp = String.valueOf(System.currentTimeMillis());
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return format.format(new Date(Long.parseLong(timeStamp)));
+        }
+        else
+        {
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return format.format(new Date(Long.parseLong(timeStamp)));
+        }
+    }
+
+    /**
      * 转换成 2015/12/12 10:00:00格式
      * @param date
      * @return

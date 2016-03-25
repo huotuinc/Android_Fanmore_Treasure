@@ -30,6 +30,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.raiders.RedEnvelopesActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
 import org.json.JSONObject;
 
@@ -211,6 +212,8 @@ public class RedEnvelopesnouseFrag extends BaseFragment implements Handler.Callb
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.unbind(this);
+        VolleyUtil.cancelAllRequest();
     }
 
     @Override
