@@ -20,7 +20,7 @@ public class RedpackageXiuXiuOutputModel extends BaseModel {
     public class RedpackageXiuXiuInnerModel {
 
         private long flag;
-        private AppWinningInfoModel[] data;
+        private List<AppWinningInfoModel> list;
         private long sourceId;
 
         public long getSourceId() {
@@ -39,12 +39,12 @@ public class RedpackageXiuXiuOutputModel extends BaseModel {
             this.flag = flag;
         }
 
-        public AppWinningInfoModel[] getData() {
-            return data;
+        public List<AppWinningInfoModel> getList() {
+            return list;
         }
 
-        public void setData(AppWinningInfoModel[] data) {
-            this.data = data;
+        public void setList(List<AppWinningInfoModel> list) {
+            this.list = list;
         }
     }
 }

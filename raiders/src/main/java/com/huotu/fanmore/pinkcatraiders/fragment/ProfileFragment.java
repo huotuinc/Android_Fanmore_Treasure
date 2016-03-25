@@ -154,7 +154,7 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
                     mallPoints.setText(String.valueOf(null==userOutput.getResultData().getUser().getIntegral()?0:userOutput.getResultData().getUser().getIntegral()) + "积分");
                     String imgurl = userOutput.getResultData().getUser().getUserHead();
                     BitmapLoader.create().loadRoundImage(getActivity(), userimg, imgurl, R.mipmap.error);
-                    TVUserName.setText(userOutput.getResultData().getUser().getUsername());
+                    TVUserName.setText(userOutput.getResultData().getUser().getRealName());
                     String balance = String.valueOf(userOutput.getResultData().getUser().getMoney());
                     money.setText((null != balance && !balance.isEmpty() && !"null".equals(balance)) ? balance + "元" : 0 + "元");
 
