@@ -113,7 +113,7 @@ class WXPayEntryActivity extends Activity implements Handler.Callback, IWXAPIEve
                     }, 2000);
                     return;
                 }else if(payResp.errCode ==-2){
-                    orderPayTag.setText("订单支付失败，2秒后关闭");
+                    orderPayTag.setText("订单支付被取消，2秒后关闭");
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
