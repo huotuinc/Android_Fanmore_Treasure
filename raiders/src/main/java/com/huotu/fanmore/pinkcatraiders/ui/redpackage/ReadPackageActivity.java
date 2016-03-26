@@ -158,6 +158,14 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
             break;
             case REDPACKAGE_WAIT:
             {
+                if(null!=redpackageSuccessPopWin)
+                {
+                    redpackageSuccessPopWin.dismissView();
+                }
+                if(null!=redpackageFailedPopWin)
+                {
+                    redpackageFailedPopWin.dismissView();
+                }
                 DateUtils.setRedpackageCount(surplus01, surplus02, surplus03, surplus04, surplus05, surplus06, 0l);
                 doneTag.setVisibility(View.GONE);
                 int tag = msg.arg1;
@@ -271,10 +279,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
             case REDPACKAGE_BEGIN:
             {
                 doneTag.setVisibility(View.VISIBLE);
-                localRadpackagePool.clear();
-                redpackageFailedPopWin.dismissView();
                 redpackageWaitPopWin.dismissView();
-                redpackageSuccessPopWin.dismissView();
                 XiuxiuMode redPactketsDistributeSource = (XiuxiuMode) msg.obj;
                 doneTag.setText(DateUtils.getMin(redPactketsDistributeSource.getDataModel().getEndTime()));
                 xiuxiuCount = Integer.parseInt(redPactketsDistributeSource.getCount());

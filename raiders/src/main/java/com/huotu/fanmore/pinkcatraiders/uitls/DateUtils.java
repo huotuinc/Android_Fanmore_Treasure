@@ -265,10 +265,10 @@ public class DateUtils {
         }
         else
         {
-            int min = (int) (sec/(int)60);
-            if(min<60)
+            String min = new DecimalFormat("0").format(Math.ceil((double) sec / 60));
+            if(Integer.parseInt(min)<60)
             {
-                if(min<10)
+                if(Integer.parseInt(min)<10)
                 {
                     return "距离结束还有 00:0"+min+" 分钟";
                 }
