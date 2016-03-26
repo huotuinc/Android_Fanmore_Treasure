@@ -165,7 +165,7 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                     JSONUtil<AreaProductsOutputModel> jsonUtil = new JSONUtil<AreaProductsOutputModel>();
                     AreaProductsOutputModel areaProductsOutputs = new AreaProductsOutputModel();
                     areaProductsOutputs = jsonUtil.toBean(response.toString(), areaProductsOutputs);
-                    if (null != areaProductsOutputs && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList()) {
+                    if (null != areaProductsOutputs && 1==areaProductsOutputs.getResultCode() && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList() && !areaProductsOutputs.getResultData().getList().isEmpty()) {
 
                         //修改记录总数
                         Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, areaProductsOutputs.getResultData().getList().size());
@@ -213,7 +213,7 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                     JSONUtil<AreaProductsOutputModel> jsonUtil = new JSONUtil<AreaProductsOutputModel>();
                     AreaProductsOutputModel areaProductsOutputs = new AreaProductsOutputModel();
                     areaProductsOutputs = jsonUtil.toBean(response.toString(), areaProductsOutputs);
-                    if (null != areaProductsOutputs && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList()) {
+                    if (null != areaProductsOutputs && 1==areaProductsOutputs.getResultCode() && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList() && !areaProductsOutputs.getResultData().getList().isEmpty()) {
 
                         //修改记录总数
                         Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, areaProductsOutputs.getResultData().getList().size());
@@ -339,7 +339,7 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                     JSONUtil<GoodsListByOtherOutputModel> jsonUtil = new JSONUtil<GoodsListByOtherOutputModel>();
                     GoodsListByOtherOutputModel goodsListByOtherOutputModel = new GoodsListByOtherOutputModel();
                     goodsListByOtherOutputModel = jsonUtil.toBean(response.toString(), goodsListByOtherOutputModel);
-                    if (null != goodsListByOtherOutputModel && null != goodsListByOtherOutputModel.getResultData() && null != goodsListByOtherOutputModel.getResultData().getList()) {
+                    if (null != goodsListByOtherOutputModel && null != goodsListByOtherOutputModel.getResultData() && null != goodsListByOtherOutputModel.getResultData().getList() && !goodsListByOtherOutputModel.getResultData().getList().isEmpty() && 1==goodsListByOtherOutputModel.getResultCode()) {
 
                         //修改记录总数
                         Message message = mHandler.obtainMessage(Contant.LOAD_ALL_COUNT, goodsListByOtherOutputModel.getResultData().getCount());

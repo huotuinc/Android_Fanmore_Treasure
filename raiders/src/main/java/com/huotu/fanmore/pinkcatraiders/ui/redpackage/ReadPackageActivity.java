@@ -201,12 +201,13 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
                 else if(0==tag)
                 {
                     int count=0;
+                    AppWinningInfoModel winner = null;
                     List<AppWinningInfoModel> redpackages = (List<AppWinningInfoModel>) msg.obj;
                     if(null!=redpackages&&!redpackages.isEmpty())
                     {
                         for(int i=0; i<redpackages.size();i++)
                         {
-                            AppWinningInfoModel winner = redpackages.get(i);
+                            winner = redpackages.get(i);
                             if(localRadpackagePool.contains(winner.getRid()))
                             {
                                 continue;
@@ -220,6 +221,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
                         if(count>0)
                         {
                             redpackageSuccessPopWin.showWin();
+                            redpackageSuccessPopWin.setDesc(winner.getWinningInfo());
                             redpackageSuccessPopWin.showAtLocation(titleLayoutL,
                                     Gravity.CENTER, 0, 0);
                             mHandler.postDelayed(new Runnable() {
@@ -306,7 +308,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
                                 Message message = mHandler.obtainMessage();
                                 message.what = REDPACKAGE_RESULT;
                                 message.arg1 = 0;
-                                msg.obj = redpackageXiuXiu.getResultData().getList();
+                                message.obj = redpackageXiuXiu.getResultData().getList();
                                 mHandler.sendMessageDelayed(message, 1000);
 
                             } else if (1 == redpackageXiuXiu.getResultData().getFlag()) {

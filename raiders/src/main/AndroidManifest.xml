@@ -234,7 +234,7 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- 微信分享回调 -->
         <activity
-            android:name="cy.com.morefan.wxapi.WXEntryActivity"
+            android:name="com.huotu.fanmore.raiders.wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
@@ -242,7 +242,7 @@
         <!-- shareSDK分享 -->
         <!-- 微信支付 -->
         <activity
-            android:name="cy.com.morefan.wxapi.WXPayEntryActivity"
+            android:name="com.huotu.fanmore.raiders.wxapi.WXPayEntryActivity"
             android:exported="true"
             android:launchMode="singleTop" />
 

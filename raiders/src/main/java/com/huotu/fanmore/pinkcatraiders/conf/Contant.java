@@ -23,7 +23,7 @@ public class Contant {
 
     public static final String SYS_INFO         = "sysInfo";
 
-    public static final String SYS_PACKAGE      = "cy.com.morefan";
+    public static final String SYS_PACKAGE      = "com.huotu.fanmore.raiders";
 
     public static final String FIRST_OPEN       = "firstOpen";
 
@@ -38,10 +38,10 @@ public class Contant {
 
     //支付环节------------------------------------------
     //微信支付ID
-    public static final String WXPAY_ID    = "wxaeda2d5603b12302";
-    public static final String WXPAY_SECRT = "8ad99de44bd96a323eb40dc161e7d8e8";
-    public static final String WXPAY_KEY = "0db0d4908a6ae6a09b0a7727878f0ca6";
-    public static final String WXPAY_PARTNER = "1251040401";
+    public static final String WXPAY_ID    = "wx7f47df3d33fd57f7";
+    public static final String WXPAY_SECRT = "21b7468d09e647ecae5580a2f458e68e";
+    public static final String WXPAY_KEY = "21b7468d09e647ecae5580a2f458e68e";
+    public static final String WXPAY_PARTNER = "1323237601";
     //支付宝支付
     //商户ID
     public static final String ALIPAY_PARTNER = "2088211251545121";
@@ -195,6 +195,7 @@ public class Contant {
     //public static final String REQUEST_URL = "http://192.168.3.30:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
     public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
+    //public static final String REQUEST_URL = "http://duobao.huobanplus.com/app/";
    //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.1.254:10001/app/";
     //public static final String REQUEST_URL = "http://192.168.3.86:8080/duobao/app/";

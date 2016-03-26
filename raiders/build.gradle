@@ -67,7 +67,7 @@ android {
     productFlavors {
 
         raides{
-            applicationId 'cy.com.morefan'
+            applicationId 'com.huotu.fanmore.raiders'
         }
     }
 }

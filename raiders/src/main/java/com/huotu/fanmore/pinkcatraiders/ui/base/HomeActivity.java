@@ -1036,7 +1036,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                             bundle.putSerializable("baseBalance", baseBalance);
                                             ActivityUtils.getInstance().showActivity(HomeActivity.this, PayOrderActivity.class, bundle);
                                         } else {
-                                            progress.dismissView();
+                                            if(null!=progress)
+                                            {
+                                                progress.dismissView();
+                                            }
+
                                             VolleyUtil.cancelAllRequest();
                                             //上传失败
                                             noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "结算失败");
