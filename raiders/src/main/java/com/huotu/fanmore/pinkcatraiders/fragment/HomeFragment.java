@@ -41,9 +41,11 @@ import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.ScanRedpackageModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.ShowOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.product.AreaActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.product.CateGoryActivity;
@@ -236,8 +238,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @OnClick(R.id.redPackageL)
     void showRadPackageUi() {
 
-        Bundle bundle = new Bundle();
-        ActivityUtils.getInstance().showActivity(getActivity(), ReadPackageActivity.class, bundle);
+        if(!application.isLogin())
+        {
+            ActivityUtils.getInstance().showActivity(getActivity(), LoginActivity.class);
+        }
+        else
+        {
+            Bundle bundle = new Bundle();
+            ActivityUtils.getInstance().showActivity(getActivity(), ReadPackageActivity.class, bundle);
+        }
+
     }
 
     @OnClick(R.id.sdL)
@@ -876,13 +886,18 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(getActivity());
-        VolleyUtil.cancelAllRequest();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.unbind(getActivity());
+        VolleyUtil.cancelAllRequest();
+        if(null!= mHandler)
+        {
+            mHandler.removeMessages(0);
+            mHandler.removeMessages(1);
+        }
     }
 
     @Override

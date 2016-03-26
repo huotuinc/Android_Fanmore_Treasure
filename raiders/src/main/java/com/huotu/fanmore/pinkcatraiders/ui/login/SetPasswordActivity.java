@@ -6,6 +6,8 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewStub;
@@ -85,6 +87,8 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
         application = ( BaseApplication ) this.getApplication ();
         btn_commitpsd.setOnClickListener(this);
         btnshow.setOnClickListener(this);
+        btnshow.setText("显示密码");
+        btnshow.setTag(0);
         wManager = this.getWindowManager();
         progress = new ProgressPopupWindow ( SetPasswordActivity.this, SetPasswordActivity.this, wManager );
         bundle = this.getIntent().getExtras();
@@ -112,7 +116,19 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btnshow:{
-
+                if(0==btnshow.getTag())
+                {
+                    //显示密码
+                    btnshow.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    btnshow.setText("隐藏密码");
+                    btnshow.setTag(1);
+                }
+                else if(1==btnshow.getTag())
+                {
+                    btnshow.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    btnshow.setText("显示密码");
+                    btnshow.setTag(0);
+                }
             }
             break;
             case R.id.btn_commitpsd:{

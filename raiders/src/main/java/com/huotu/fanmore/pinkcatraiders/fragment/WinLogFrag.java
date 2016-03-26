@@ -29,6 +29,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.raiders.WinLogActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
 import org.json.JSONObject;
 
@@ -203,5 +204,17 @@ public class WinLogFrag extends BaseFragment implements Handler.Callback {
     @Override
     public boolean handleMessage(Message msg) {
         return false;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        VolleyUtil.cancelAllRequest();
+        ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

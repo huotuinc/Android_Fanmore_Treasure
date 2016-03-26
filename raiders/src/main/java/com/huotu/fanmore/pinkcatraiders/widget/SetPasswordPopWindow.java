@@ -58,13 +58,14 @@ class SetPasswordPopWindow extends PopupWindow {
     }
 
     public
-    void showProgress (   ) {
+    void showProgress ( String tag1, String tag2  ) {
         progress = new ProgressPopupWindow ( context, aty, aty.getWindowManager () );
         LayoutInflater inflater = ( LayoutInflater ) aty.getSystemService ( Context.LAYOUT_INFLATER_SERVICE );
-
         payView = inflater.inflate ( R.layout.pop_pay_ui, null );
         wxPayBtn = ( Button ) payView.findViewById ( R.id.wxPayBtn );
+        wxPayBtn.setText(tag1);
         alipayBtn = ( Button ) payView.findViewById ( R.id.alipayBtn );
+        alipayBtn.setText(tag2);
         cancelBtn = ( Button ) payView.findViewById ( R.id.cancelBtn );
 
         wxPayBtn.setOnClickListener (

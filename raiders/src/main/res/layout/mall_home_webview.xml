@@ -34,122 +34,14 @@
             android:progress="0"
             android:progressDrawable="@drawable/progress_mall_draw"/>
     </RelativeLayout>
-    <LinearLayout
-        android:id="@+id/layAll"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="10dp"
-        android:orientation="vertical"
-        android:padding="10dp" >
-
-
-
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/share_pop_bg"
-            android:orientation="horizontal" >
-
-            <LinearLayout
-                android:id="@+id/layWeiXin"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:gravity="center"
-                android:onClick="onClick"
-                android:orientation="vertical" >
-
-                <ImageView
-                    android:id="@+id/imgWeiXin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@mipmap/ic_launcher" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="朋友圈"
-                    android:textColor="@color/text_gray"
-                    android:textSize="16dp" />
-            </LinearLayout>
-
-            <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:layout_marginTop="5dp"-->
-            <!--android:background="@drawable/line_gray_bg_h" />-->
-
-            <LinearLayout
-                android:id="@+id/layXinLang"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:gravity="center"
-                android:onClick="onClick"
-                android:orientation="vertical" >
-
-                <ImageView
-                    android:id="@+id/imgSina"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@mipmap/ic_launcher" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="新浪微博"
-                    android:textColor="@color/text_gray"
-                    android:textSize="16dp" />
-            </LinearLayout>
-
-            <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:layout_marginTop="7dp"-->
-            <!--android:background="@drawable/line_gray_bg_h" />-->
-
-            <LinearLayout
-                android:id="@+id/layQQ"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:gravity="center"
-                android:onClick="onClick"
-                android:orientation="vertical" >
-
-                <ImageView
-                    android:id="@+id/imgQzone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@mipmap/ic_launcher" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="QQ空间"
-                    android:textColor="@color/text_gray"
-                    android:textSize="16dp" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
     <FrameLayout
         android:id="@+id/ff3"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="50dp" >
-
         <WebView
             android:id="@+id/underwebView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            />
-
+            android:layout_height="match_parent"/>
     </FrameLayout>
 </RelativeLayout>

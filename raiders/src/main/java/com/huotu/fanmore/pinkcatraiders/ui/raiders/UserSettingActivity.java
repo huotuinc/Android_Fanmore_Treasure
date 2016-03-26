@@ -451,7 +451,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                 );
             }
         }else {
-            setPasswordPop.showProgress();
+            setPasswordPop.showProgress("通过旧密码方式", "通过手机验证码");
             setPasswordPop.showAtLocation(titleLayoutL, Gravity.BOTTOM, 0, 0);
         }
     }
@@ -518,8 +518,6 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                 titleLayoutL.setClickable(true);
                 //提示取消授权
                 successProgress.dismissView();
-
-
                 ToastUtils.showMomentToast(UserSettingActivity.this, this, "授权操作已取消");
 
 
@@ -529,7 +527,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
             {
                 successProgress.dismissView();
 
-                ToastUtils.showMomentToast(UserSettingActivity.this, this, "已经获取用户信息");
+                //ToastUtils.showMomentToast(UserSettingActivity.this, this, "已经获取用户信息");
 
 
 
@@ -891,7 +889,16 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                         ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "未请求到数据");
                     }
 
-                } else {
+                }
+                else if(52013 == userUnwrapOutput.getResultCode()) {
+                    //未获取该用户信息
+                    noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "不能解绑最后一个账号");
+                    noticePop.showNotice();
+                    noticePop.showAtLocation(titleLayoutL,
+                            Gravity.CENTER, 0, 0
+                    );
+                }
+                else {
                     //未获取该用户信息
                     noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "解绑失败");
                     noticePop.showNotice();
@@ -906,7 +913,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                 progress.dismissView();
                 //初始化失败
                 //异常处理，自动切换成无数据
-                noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "解绑失败");
+                noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "服务器请求失败");
                 noticePop.showNotice();
                 noticePop.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0

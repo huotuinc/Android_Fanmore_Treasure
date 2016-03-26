@@ -142,11 +142,14 @@ public class CartUtils {
                     ToastUtils.showMomentToast((Activity) context, context, "添加清单成功");
                 }
             }
-            CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
-            Message message = mHandler.obtainMessage();
-            message.what = Contant.CART_AMOUNT;
-            message.obj = cartCountIt.getCount();
-            mHandler.sendMessage(message);
+            if(2==type)
+            {
+                CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                Message message = mHandler.obtainMessage();
+                message.what = Contant.CART_AMOUNT;
+                message.obj = cartCountIt.getCount();
+                mHandler.sendMessage(message);
+            }
             if(1==type)
             {
                 //立即参与，关闭界面，跳转
@@ -185,10 +188,14 @@ public class CartUtils {
                                 }
                                 //上传成功
                                 ToastUtils.showMomentToast((Activity) context, context, "添加清单成功");
-                                Message message = mHandler.obtainMessage();
-                                message.what = Contant.CART_AMOUNT;
-                                message.obj = cartCountIt.getCount();
-                                mHandler.sendMessage(message);
+                                if(2==type)
+                                {
+                                    CartCountModel cartCountIt1 = CartCountModel.findById(CartCountModel.class, 0l);
+                                    Message message = mHandler.obtainMessage();
+                                    message.what = Contant.CART_AMOUNT;
+                                    message.obj = cartCountIt1.getCount();
+                                    mHandler.sendMessage(message);
+                                }
                                 if(1==type)
                                 {
                                     //立即参与，关闭界面，跳转

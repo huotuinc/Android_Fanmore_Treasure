@@ -55,7 +55,7 @@ import butterknife.OnClick;
  * 支付订单
  */
 public
-class PayOrderActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+class PayOrderActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, MyBroadcastReceiver.BroadcastListener {
 
 
     public Handler mHandler;
@@ -122,15 +122,16 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
     void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate ( savedInstanceState );
-        setContentView ( R.layout.pay_order );
+        setContentView(R.layout.pay_order);
         ButterKnife.bind(this);
         mHandler = new Handler ( this );
         am = this.getAssets ( );
-        resources = this.getResources ( );
+        resources = this.getResources();
         application = ( BaseApplication ) this.getApplication ( );
         wManager = this.getWindowManager();
         bundle = this.getIntent().getExtras();
         balance1 = (BaseBalanceModel) bundle.getSerializable("baseBalance");
+        myBroadcastReceiver = new MyBroadcastReceiver(PayOrderActivity.this, PayOrderActivity.this, MyBroadcastReceiver.ACTION_PAY_SUCCESS);
         initTitle ( );
         initData();
     }
@@ -246,53 +247,26 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                         mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
+                                //修改购物车数量
+                                CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                                if(null==cartCountIt)
+                                {
+                                    CartCountModel cartCount = new CartCountModel();
+                                    cartCount.setId(0l);
+                                    cartCount.setCount(0);
+                                    CartCountModel.save(cartCount);
+                                }
+                                else
+                                {
 
-                                //刷新用户信息
-                                String url = Contant.REQUEST_URL + Contant.UPDATE_USER_INFORMATION;
-                                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), PayOrderActivity.this);
-                                Map<String, Object> maps = new HashMap<String, Object>();
-                                String suffix = params.obtainGetParam(maps);
-                                url = url + suffix;
-                                HttpUtils httpUtils = new HttpUtils();
-                                httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
-                                    @Override
-                                    public void onResponse(JSONObject response) {
-                                        JSONUtil<UserOutputModel> jsonUtil = new JSONUtil<UserOutputModel>();
-                                        UserOutputModel userOutput = new UserOutputModel();
-                                        userOutput = jsonUtil.toBean(response.toString(), userOutput);
-
-                                        if (null != userOutput && null != userOutput.getResultData() && null != userOutput.getResultData().getUser() && 1 == userOutput.getResultCode()) {
-                                            application.writeUserInfo(userOutput.getResultData().getUser());
-                                            //修改购物车数量
-                                            CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
-                                            if(null==cartCountIt)
-                                            {
-                                                CartCountModel cartCount = new CartCountModel();
-                                                cartCount.setId(0l);
-                                                cartCount.setCount(0);
-                                                CartCountModel.save(cartCount);
-                                            }
-                                            else
-                                            {
-
-                                                cartCountIt.setCount(0);
-                                                CartCountModel.save(cartCountIt);
-                                            }
-                                            //关闭支付订单界面
-                                            Bundle bundle = new Bundle();
-                                            bundle.putInt("type", 0);
-                                            MyBroadcastReceiver.sendBroadcast(PayOrderActivity.this, MyBroadcastReceiver.SHOP_CART, bundle);
-                                            closeSelf(PayOrderActivity.this);
-                                        } else {
-                                            ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "刷新余额出现问题");
-                                        }
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "刷新余额出现问题");
-                                    }
-                                });
+                                    cartCountIt.setCount(0);
+                                    CartCountModel.save(cartCountIt);
+                                }
+                                //关闭支付订单界面
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("type", 0);
+                                MyBroadcastReceiver.sendBroadcast(PayOrderActivity.this, MyBroadcastReceiver.JUMP_CART, bundle);
+                                closeSelf(PayOrderActivity.this);
                             }
                         }, 1000);
                     }
@@ -427,5 +401,18 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
             this.closeSelf ( PayOrderActivity.this );
         }
         return super.onKeyDown ( keyCode, event );
+    }
+
+    @Override
+    public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
+        if(type == MyBroadcastReceiver.ReceiverType.wxPaySuccess)
+        {
+            //跳转到成功界面
+            //跳转到首页
+            Bundle bundle = new Bundle();
+            bundle.putInt("type", 0);
+            MyBroadcastReceiver.sendBroadcast(PayOrderActivity.this, MyBroadcastReceiver.JUMP_CART, bundle);
+            closeSelf(PayOrderActivity.this);
+        }
     }
 }

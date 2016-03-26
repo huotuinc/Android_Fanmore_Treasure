@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/redpackage_wait"
+    android:background="@android:color/transparent"
     android:padding="10dp">
     <RelativeLayout
         android:id="@+id/redpackageResultMsgL"
         android:layout_width="@dimen/radpackage_msg_bg_size"
         android:layout_height="@dimen/radpackage_msg_bg_size"
         android:layout_centerInParent="true"
-        android:background="@mipmap/redpackage_result_logo">
+        android:background="@mipmap/redpackage_success_logo">
         <RelativeLayout
             android:layout_marginTop="@dimen/redpackage_msg_top"
             android:layout_centerInParent="true"
@@ -20,7 +20,8 @@
             <TextView
                 android:id="@+id/successTag"
                 android:textColor="@color/deep_red"
-                android:textSize="@dimen/text_size_14"
+                android:gravity="center"
+                android:textSize="@dimen/text_size_12"
                 android:layout_centerHorizontal="true"
                 android:text="恭喜你获得1个红包\n可免费获得一次0.5元购买"
                 android:layout_width="wrap_content"
@@ -31,8 +32,8 @@
                 android:layout_below="@+id/successTag"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
-                android:layout_width="@dimen/icon_size_40"
-                android:layout_height="@dimen/icon_size_50"
+                android:layout_width="@dimen/icon_size_20"
+                android:layout_height="@dimen/icon_size_30"
                 android:background="@mipmap/red_success_tag"/>
         </RelativeLayout>
     </RelativeLayout>

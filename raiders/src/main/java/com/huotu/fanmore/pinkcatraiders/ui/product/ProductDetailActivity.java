@@ -255,7 +255,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             .getResultData().getData();
                                     issueId = productDetail.getIssueId();
                                     pid=productDetail.getPid();
-                                    allLogText.setText("("+DateUtils.transformDataformat6(productDetail.getFirstBuyTime())+"开始");
+                                    allLogText.setText("("+DateUtils.transformDataformat16(productDetail.getFirstBuyTime())+"开始");
                                     detailUrl = productDetail.getLink();
                                     if (0 == productDetail.getStatus()) {
                                         productDetailNameLabel.setText("进行中");
@@ -348,9 +348,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             calculationDetail.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    Bundle bundle=new Bundle();
-                                                    bundle.putLong("issueId",productDetail.getIssueId());
-                                                    ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, CountResultActivity.class, bundle);
+                                                    ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "倒计时中不能计算结果");
                                                 }
                                             });
                                         }
@@ -459,9 +457,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             calculationDetail.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    Bundle bundle = new Bundle();
-                                                    bundle.putLong("issueId", productDetail.getIssueId());
-                                                    ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, CountResultActivity.class, bundle);
+                                                    ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "倒计时中不能计算结果");
                                                 }
                                             });
                                             //
@@ -679,6 +675,13 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             {
                                                 noLoginTip.setText("您没有参加本期夺宝哦！");
                                             }
+                                            TextView calculationDetail = (TextView) countdownDetail.findViewById(R.id.calculationDetail);
+                                            calculationDetail.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "倒计时中不能计算结果");
+                                                }
+                                            });
                                         }
                                         else if(2 == productDetail.getStatus()) {
                                             //已揭晓
@@ -781,9 +784,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             calculationDetail.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    Bundle bundle=new Bundle();
-                                                    bundle.putLong("issueId",productDetail.getIssueId());
-                                                    ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, CountResultActivity.class, bundle);
+                                                    ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "倒计时中不能计算结果");
                                                 }
                                             });
                                             //
@@ -1098,11 +1099,11 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                     {
                         ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "该期商品仅剩"+product.getRemainAmount());
                         product.setDefaultAmount(product.getRemainAmount());
-                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler,0);
+                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler,2);
                     }
                     else
                     {
-                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler,0);
+                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler,2);
                     }
 
                 }
@@ -1249,9 +1250,16 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     @OnClick(R.id.historys)
    void tohistorys (){
-        Bundle bundle = new Bundle ( );
-        bundle.putLong("goodsId",  productDetail.getPid());
-        ActivityUtils.getInstance ().showActivity ( ProductDetailActivity.this, HistorysActivity.class,bundle);
+        try
+        {
+            Bundle bundle = new Bundle ( );
+            bundle.putLong("goodsId",  productDetail.getPid());
+            ActivityUtils.getInstance ().showActivity ( ProductDetailActivity.this, HistorysActivity.class,bundle);
+        }
+        catch (NullPointerException e)
+        {
+
+        }
 
 
     }

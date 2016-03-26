@@ -577,7 +577,7 @@ public class LoginActivity extends BaseActivity
     {
         if(TextUtils.isEmpty(edtUserName.getText()))
         {
-            ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "请输入邮箱或者手机号");
+            ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "请输入手机号");
             return;
         }
         else if(TextUtils.isEmpty(edtPwd.getText()))

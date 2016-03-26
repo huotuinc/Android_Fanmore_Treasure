@@ -189,7 +189,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
     void checkAuthCode () {
 
         if ( TextUtils.isEmpty ( edtPhone.getText ( ) ) ) {
-            ToastUtils.showMomentToast(MobileRegActivity.this, MobileRegActivity.this, "请输入邮箱或者手机号");
+            ToastUtils.showMomentToast(MobileRegActivity.this, MobileRegActivity.this, "请输入手机号");
             return;
         }
         else if ( TextUtils.isEmpty ( edtCode.getText ( ) ) ) {
@@ -437,6 +437,15 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                                 Gravity.CENTER, 0, 0
                         );
                     }
+                }
+                else if(55001==getCode.getResultCode())
+                {
+                    //异常处理，自动切换成无数据
+                    noticePop = new NoticePopWindow ( MobileRegActivity.this, MobileRegActivity.this, wManager, "短信通道不稳定，请重试");
+                    noticePop.showNotice ( );
+                    noticePop.showAtLocation(btn_commit,
+                            Gravity.CENTER, 0, 0
+                    );
                 }
 
                 else

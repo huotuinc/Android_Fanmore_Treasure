@@ -18,6 +18,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
+import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,21 +31,15 @@ import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AppRedPactketsDistributeSourceModel;
 import com.huotu.fanmore.pinkcatraiders.model.AppWinningInfoModel;
 import com.huotu.fanmore.pinkcatraiders.model.CheckRedpackageOutputModel;
-import com.huotu.fanmore.pinkcatraiders.model.LoginOutputsModel;
 import com.huotu.fanmore.pinkcatraiders.model.RedpackageXiuXiuOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
-import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
-import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SoundUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
-import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
-import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
-import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.RadpackageWaitPopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.RedWarningPopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.RedpackageFailedPopWin;
@@ -136,8 +131,6 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
     public RedpackageSuccessPopWin redpackageSuccessPopWin;
     public RedWarningPopWin redWarningPopWin;
 
-    public
-    ProgressPopupWindow progress;
     public int powerCount=0;
     public int xiuxiuCount=0;
     public List<Long> localRadpackagePool = new ArrayList<Long>();
@@ -158,13 +151,15 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
                 break;
             case REDPACKAGE_FLUSH:
             {
+                redpackageWaitPopWin.dismissView();
                 initData();
-                mHandler.sendEmptyMessageDelayed(REDPACKAGE_FLUSH, 20000);
+                mHandler.sendEmptyMessageDelayed(REDPACKAGE_FLUSH, 30000);
             }
             break;
             case REDPACKAGE_WAIT:
             {
                 DateUtils.setRedpackageCount(surplus01, surplus02, surplus03, surplus04, surplus05, surplus06, 0l);
+                doneTag.setVisibility(View.GONE);
                 int tag = msg.arg1;
                 localRadpackagePool.clear();
                 if(0==tag)
@@ -206,13 +201,12 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
                 else if(0==tag)
                 {
                     int count=0;
-                    AppWinningInfoModel[] redpackages = (AppWinningInfoModel[]) msg.obj;
-                    if(null!=redpackages&&redpackages.length>0)
+                    List<AppWinningInfoModel> redpackages = (List<AppWinningInfoModel>) msg.obj;
+                    if(null!=redpackages&&!redpackages.isEmpty())
                     {
-                        List<AppWinningInfoModel> winList = Arrays.asList(redpackages);
-                        for(int i=0; i<winList.size();i++)
+                        for(int i=0; i<redpackages.size();i++)
                         {
-                            AppWinningInfoModel winner = winList.get(i);
+                            AppWinningInfoModel winner = redpackages.get(i);
                             if(localRadpackagePool.contains(winner.getRid()))
                             {
                                 continue;
@@ -233,7 +227,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
                                 public void run() {
                                     redpackageSuccessPopWin.dismissView();;
                                 }
-                            }, 1000);
+                            }, 2000);
                         }
                         else
                         {
@@ -274,6 +268,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
             break;
             case REDPACKAGE_BEGIN:
             {
+                doneTag.setVisibility(View.VISIBLE);
                 localRadpackagePool.clear();
                 redpackageFailedPopWin.dismissView();
                 redpackageWaitPopWin.dismissView();
@@ -311,7 +306,7 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
                                 Message message = mHandler.obtainMessage();
                                 message.what = REDPACKAGE_RESULT;
                                 message.arg1 = 0;
-                                msg.obj = redpackageXiuXiu.getResultData().getData();
+                                msg.obj = redpackageXiuXiu.getResultData().getList();
                                 mHandler.sendMessageDelayed(message, 1000);
 
                             } else if (1 == redpackageXiuXiu.getResultData().getFlag()) {
@@ -340,7 +335,6 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        progress.dismissView();
                         //异常处理，自动切换成无数据
                         //活动获取失败
                         Message message = mHandler.obtainMessage();
@@ -380,13 +374,12 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         redpackageFailedPopWin = new RedpackageFailedPopWin(ReadPackageActivity.this, ReadPackageActivity.this, wManager, mHandler);
         redpackageSuccessPopWin = new RedpackageSuccessPopWin(ReadPackageActivity.this, ReadPackageActivity.this, wManager, mHandler);
         redWarningPopWin = new RedWarningPopWin(ReadPackageActivity.this, mHandler, ReadPackageActivity.this, wManager);
-        progress = new ProgressPopupWindow ( ReadPackageActivity.this, ReadPackageActivity.this, wManager );
         initTitle();
         mAnimationSet1 = initAnimationSet();
         mAnimationSet2 = initAnimationSet();
         mAnimationSet3 = initAnimationSet();
         initData();
-        mHandler.sendEmptyMessageDelayed(REDPACKAGE_FLUSH, 20000);
+        mHandler.sendEmptyMessageDelayed(REDPACKAGE_FLUSH, 30000);
     }
 
     private AnimationSet initAnimationSet()
@@ -433,7 +426,6 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                progress.dismissView();
                 if (ReadPackageActivity.this.isFinishing()) {
                     return;
                 }
@@ -478,7 +470,6 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                progress.dismissView();
                 //异常处理，自动切换成无数据
                 //活动获取失败
                 Message message = mHandler.obtainMessage();
@@ -516,10 +507,16 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
         super.onDestroy();
         redpackageWaitPopWin.dismissView();
         redpackageFailedPopWin.dismissView();
+        redpackageSuccessPopWin.dismissView();
         VolleyUtil.cancelAllRequest();
         ButterKnife.unbind(this);
         if( soundPool !=null){
             soundPool.release();
+        }
+        if(null != mHandler)
+        {
+            mHandler.removeMessages(REDPACKAGE_FLUSH);
+            mHandler.removeMessages(REDPACKAGE_RESULT);
         }
 
     }

@@ -29,6 +29,8 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
 
+import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
+import com.huotu.fanmore.pinkcatraiders.model.AddressOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.AppBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BalanceOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseBalanceModel;
@@ -38,11 +40,15 @@ import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 
+import com.huotu.fanmore.pinkcatraiders.model.MyAddressListModel;
 import com.huotu.fanmore.pinkcatraiders.model.OutputUrlModel;
 
 import com.huotu.fanmore.pinkcatraiders.model.LocalCartOutputModel;
 
 import com.huotu.fanmore.pinkcatraiders.model.ProductDetailsOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.ScanRedpackageModel;
+import com.huotu.fanmore.pinkcatraiders.model.ShareModel;
+import com.huotu.fanmore.pinkcatraiders.model.ShareOutputModel;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.MsgActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.SearchActivity;
@@ -67,6 +73,7 @@ import com.huotu.fanmore.pinkcatraiders.widget.FuncPopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.MorePopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
+import com.huotu.fanmore.pinkcatraiders.widget.ScanRedpackagePopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.SharePopupWindow;
 
 import org.json.JSONObject;
@@ -77,10 +84,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.BrokenBarrierException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
 
 /**
  * 首页
@@ -109,6 +119,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     public MorePopWin          morePopWin;
 
     public ProgressPopupWindow progress;
+
+    public ScanRedpackagePopWin scanRedpackagePopWin;
 
     public
     NoticePopWindow noticePop;
@@ -179,8 +191,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     @Bind ( R.id.profileLabel )
     TextView       profileLabel;
-    @Bind(R.id.titleMsgAmount)
-    TextView titleMsgAmount;
 
     @Bind ( R.id.homeBottom )
     LinearLayout   homeBottom;
@@ -205,6 +215,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     public TotalGridAdapter totalAdapter;
 
     public List< ProductModel > totalProducts;
+
+    public NoticePopWindow noticePopWin;
+    public SharePopupWindow sharePopupWindow;
 
     public int label = 0;
     //清单选中删除的数量
@@ -238,24 +251,17 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         resources = this.getResources();
         mHandler = new Handler ( this );
         myBroadcastReceiver = new MyBroadcastReceiver(HomeActivity.this, this, MyBroadcastReceiver.JUMP_CART);
+        sharePopupWindow= new SharePopupWindow(HomeActivity.this,HomeActivity.this,application);
         //设置沉浸模式
         setImmerseLayout(this.findViewById(R.id.titleLayoutL));
         wManager = this.getWindowManager ( );
         funcPopWin = new FuncPopWin ( HomeActivity.this, HomeActivity.this, wManager, mHandler  );
         funcPopWin1 = new FunPopWin1 ( HomeActivity.this, HomeActivity.this, wManager, mHandler );
         am = this.getAssets ( );
+        mHandler.sendEmptyMessage(0x11112222);
         //初始化title面板
         initTitle();
-        if ( null == savedInstanceState ) {
-            application.mFragManager.setCurrentFrag ( FragManager.FragType.HOME );
-
-        }
-        else {
-            application.mFragManager.setPreFragType ( FragManager.FragType.HOME );
-            FragManager.FragType curFragType = ( FragManager.FragType ) savedInstanceState
-                    .getSerializable ( "curFragType" );
-            application.mFragManager.setCurrentFrag ( FragManager.FragType.HOME );
-        }
+        application.mFragManager.setCurrentFrag ( FragManager.FragType.HOME );
         initView();
     }
 
@@ -265,8 +271,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         Drawable bgDraw = resources.getDrawable ( R.color.title_bg );
         SystemTools.loadBackground(titleLayoutL, bgDraw);
         Drawable leftDraw = resources.getDrawable ( R.mipmap.title_search );
-        SystemTools.loadBackground ( titleLeftImage, leftDraw );
-        titleMsgAmount.setVisibility(View.VISIBLE);
+        SystemTools.loadBackground(titleLeftImage, leftDraw );
         //消息模式
         titleRightImage.setTag(0);
         Drawable rightDraw = resources.getDrawable ( R.mipmap.title_msg );
@@ -335,7 +340,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     private void initView() {
         initTab();
-
     }
 
 
@@ -343,15 +347,12 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState)
     {
-        /*savedInstanceState.putSerializable("curFragType",
-                application.mFragManager.getCurrentFragType());*/
         // TODO Auto-generated method stub
         super.onSaveInstanceState(savedInstanceState);
     }
 
     private void initTab()
     {
-        titleMsgAmount.setVisibility(View.VISIBLE);
         Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_press);
         SystemTools.loadBackground(oneBuy, oneBuyDraw);
         obBuyLabel.setTextColor(resources.getColor(R.color.title_bg));
@@ -383,7 +384,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         {
             case R.id.onBuyL:
             {
-                titleMsgAmount.setVisibility(View.VISIBLE);
                 //设置选中状态
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_press);
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
@@ -417,7 +417,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case R.id.newestL:
             {
-                titleMsgAmount.setVisibility(View.VISIBLE);
                 //设置选中状态
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
@@ -451,7 +450,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case R.id.listL:
             {
-                titleMsgAmount.setVisibility(View.GONE);
                 //设置选中状态
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal );
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
@@ -491,7 +489,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case R.id.mallL:
             {
-                titleMsgAmount.setVisibility(View.VISIBLE);
                 //设置选中状态
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal );
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
@@ -527,7 +524,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             break;
             case R.id.profileL:
             {
-                titleMsgAmount.setVisibility(View.VISIBLE);
                 //设置选中状态
                 if (application.isLogin()==false){
                     Intent intent = new Intent();
@@ -647,7 +643,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                         String loginUrl = getmallurl.getResultData().getLoginUrl();
                                         String bottomUrl = getmallurl.getResultData().getBottomNavUrl();
                                         String orderUrl = getmallurl.getResultData().getOrderRequestUrl();
-
                                         Bundle bundle = new Bundle();
                                         bundle.putString("url", loginUrl);
                                         bundle.putString("bottomurl", bottomUrl);
@@ -677,7 +672,10 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                progress.dismissView();
+                                if(null!=progress)
+                                {
+                                    progress.dismissView();
+                                }
                                 //初始化失败
                                 //异常处理，自动切换成无数据
                                 noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "登录失败");
@@ -1224,6 +1222,151 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
             }
             break;
+            case 0x11112222:
+            {
+                String url = Contant.REQUEST_URL + Contant.GET_REMIND_REDPACKAGE;
+                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                final Map<String, Object> maps = new HashMap<String, Object> ();
+                String suffix = params.obtainGetParam(maps);
+                url = url + suffix;
+                HttpUtils httpUtils = new HttpUtils();
+                httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (HomeActivity.this.isFinishing()) {
+                            return;
+                        }
+                        JSONUtil<ScanRedpackageModel> jsonUtil = new JSONUtil<ScanRedpackageModel>();
+                        ScanRedpackageModel scanRedpackage = new ScanRedpackageModel();
+                        scanRedpackage = jsonUtil.toBean(response.toString(), scanRedpackage);
+                        if (null != scanRedpackage && null != scanRedpackage.getResultData() && (1 == scanRedpackage.getResultCode()) && null != scanRedpackage.getResultData().getRedpackets()) {
+                            if (0 == scanRedpackage.getResultData().getRedpackets().size()) {
+                            } else {
+                                Message message = mHandler.obtainMessage();
+                                message.what = Contant.SCAN_REDPACKAGE;
+                                message.obj = scanRedpackage.getResultData().getRedpackets();
+                                mHandler.sendMessage(message);
+                            }
+                        } else {
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                });
+            }
+            break;
+            case 0x11112223:
+            {
+                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "购买成功获得一次分享红包的机会");
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String url = Contant.REQUEST_URL + Contant.SHARE_REF_PACKETS;
+                        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                        Map<String, Object> maps = new HashMap<String, Object>();
+                        String suffix = params.obtainGetParam(maps);
+                        url = url + suffix;
+                        HttpUtils httpUtils = new HttpUtils();
+                        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                if (HomeActivity.this.isFinishing()) {
+                                    return;
+                                }
+                                JSONUtil<ShareOutputModel> jsonUtil = new JSONUtil<ShareOutputModel>();
+                                ShareOutputModel shareOutput = new ShareOutputModel();
+                                shareOutput = jsonUtil.toBean(response.toString(), shareOutput);
+                                if (null != shareOutput && null != shareOutput.getResultData() && (1 == shareOutput.getResultCode())) {
+                                    if (null != shareOutput.getResultData().getShare() && null != shareOutput.getResultData()) {
+                                        //application.writeShareinfo(shareOutput.getResultData().getShare());
+                                        ShareModel msgModel = new ShareModel();
+                                        msgModel.setImageUrl(shareOutput.getResultData().getShare().getImageUrl());
+                                        msgModel.setText(shareOutput.getResultData().getShare().getText());
+                                        msgModel.setTitle(shareOutput.getResultData().getShare().getTitle());
+                                        msgModel.setUrl(shareOutput.getResultData().getShare().getUrl());
+                                        sharePopupWindow.initShareParams(msgModel);
+                                        sharePopupWindow.showShareWindow();
+                                        sharePopupWindow.showAtLocation(titleLayoutL,
+                                                Gravity.BOTTOM, 0, 0);
+                                        sharePopupWindow.setPlatformActionListener(
+                                                new PlatformActionListener() {
+                                                    @Override
+                                                    public void onComplete(
+                                                            Platform platform, int i, HashMap<String, Object> hashMap
+                                                    ) {
+                                                        Message msg = Message.obtain();
+                                                        msg.obj = platform;
+                                                        mHandler.sendMessage(msg);
+                                                        successshare();
+                                                    }
+
+                                                    @Override
+                                                    public void onError(Platform platform, int i, Throwable throwable) {
+                                                        Message msg = Message.obtain();
+                                                        msg.obj = platform;
+                                                        mHandler.sendMessage(msg);
+                                                    }
+
+                                                    @Override
+                                                    public void onCancel(Platform platform, int i) {
+                                                        Message msg = Message.obtain();
+                                                        msg.obj = platform;
+                                                        mHandler.sendMessage(msg);
+                                                    }
+                                                }
+                                        );
+
+                                        sharePopupWindow.setOnDismissListener(new PoponDismissListener(HomeActivity.this));
+
+
+                                    } else {
+                                        noticePopWin = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "红包分享暂不可用");
+                                        noticePopWin.showNotice();
+                                        noticePopWin.showAtLocation(titleLayoutL,
+                                                Gravity.CENTER, 0, 0
+                                        );
+                                    }
+                                } else {
+                                    //异常处理，自动切换成无数据
+
+                                    noticePopWin = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "红包分享暂不可用");
+                                    noticePopWin.showNotice();
+                                    noticePopWin.showAtLocation(titleLayoutL,
+                                            Gravity.CENTER, 0, 0
+                                    );
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                                if (HomeActivity.this.isFinishing()) {
+                                    return;
+                                }
+                                noticePopWin = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "数据请求失败");
+                                noticePopWin.showNotice();
+                                noticePopWin.showAtLocation(titleLayoutL,
+                                        Gravity.CENTER, 0, 0
+                                );
+
+                            }
+                        });
+                    }
+                }, 1000);
+
+            }
+            break;
+            case Contant.SCAN_REDPACKAGE:
+            {
+                List<Double> redpackages = (List<Double>) msg.obj;
+                scanRedpackagePopWin = new ScanRedpackagePopWin(HomeActivity.this, HomeActivity.this, wManager, mHandler);
+                scanRedpackagePopWin.addData(redpackages);
+                scanRedpackagePopWin.showWin();
+                scanRedpackagePopWin.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
+            }
+            break;
             default:
                 break;
         }
@@ -1241,7 +1384,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             Bundle bundle = (Bundle) msg;
             int types = bundle.getInt("type");
             if(1==types) {
-                titleMsgAmount.setVisibility(View.GONE);
                 Bundle bundle1 = new Bundle();
                 bundle1.putInt("type", 0);
                 MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle1);
@@ -1282,7 +1424,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             {
                 //跳转到首页产品列表
 
-                titleMsgAmount.setVisibility(View.VISIBLE);
                 //设置选中状态
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_press);
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
@@ -1313,8 +1454,114 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 Message message = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
                 mHandler.sendMessage(message );
 
+                //调用是否有权限发红包
+                String url = Contant.REQUEST_URL + Contant.JUDGE_IF_CAN_SHARE_REDPACKAGE;
+                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                final Map<String, Object> maps = new HashMap<String, Object> ();
+                String suffix = params.obtainGetParam(maps);
+                url = url + suffix;
+                HttpUtils httpUtils = new HttpUtils();
+                httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (HomeActivity.this.isFinishing()) {
+                            return;
+                        }
+                        JSONUtil<CanShareModel> jsonUtil = new JSONUtil<CanShareModel>();
+                        CanShareModel canShare = new CanShareModel();
+                        canShare = jsonUtil.toBean(response.toString(), canShare);
+                        if (null != canShare && null != canShare.getResultData() && (1 == canShare.getResultCode())) {
+                            if (0 == canShare.getResultData().getCanShare()) {
+                            } else {
+                                Message message = mHandler.obtainMessage();
+                                message.what = 0x11112223;
+                                message.obj = canShare.getResultData().getCanShare();
+                                mHandler.sendMessage(message);
+                            }
+                        } else {
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                });
+            }
+            else if(2==types)
+            {
+                //跳转到首页产品列表
+
+                //设置选中状态
+                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_press);
+                SystemTools.loadBackground(oneBuy, oneBuyDraw);
+                obBuyLabel.setTextColor(resources.getColor(R.color.title_bg));
+                //标题栏右图标
+                //消息模式
+                titleRightImage.setTag(0);
+                Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
+                SystemTools.loadBackground(titleRightImage, rightDraw);
+                //重置其他
+                Drawable newestDraw = resources.getDrawable(R.mipmap.bottom_newest_normal);
+                SystemTools.loadBackground(newest, newestDraw);
+                newestLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable listDraw = resources.getDrawable(R.mipmap.bottom_list_normal);
+                SystemTools.loadBackground(list, listDraw);
+                listLabel.setTextColor(resources.getColor(R.color.text_black));
+                Drawable profileDraw = resources.getDrawable(R.mipmap.bottom_profile_normal);
+                SystemTools.loadBackground(profile, profileDraw);
+                Drawable mallDraw = resources.getDrawable(R.mipmap.mall_icon_common);
+                SystemTools.loadBackground(mall, mallDraw);
+                mallLabel.setTextColor(resources.getColor(R.color.text_black));
+                profileLabel.setTextColor(resources.getColor(R.color.text_black));
+                funcPopWin1.dismissView();
+                funcPopWin.dismissView();
+                //切换内容
+                String tag = Contant.TAG_1;
+                //加载具体的页面
+                Message message = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
+                mHandler.sendMessage(message );
             }
         }
+    }
+
+
+    private void successshare(){
+        String url = Contant.REQUEST_URL + Contant.SUCCESS_SHARE_REDPACKETS;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+        Map<String, Object> maps = new HashMap<String, Object>();
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if (HomeActivity.this.isFinishing()) {
+                    return;
+                }
+                JSONUtil<BaseModel> jsonUtil = new JSONUtil<BaseModel>();
+                BaseModel baseModel = new BaseModel();
+                baseModel = jsonUtil.toBean(response.toString(), baseModel);
+                if (null != baseModel && null != baseModel.getResultDescription() && (1 == baseModel.getResultCode())) {
+
+                }
+                else {
+                    noticePopWin = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, baseModel.getResultDescription());
+                    noticePopWin.showNotice();
+                    noticePopWin.showAtLocation(titleLayoutL,
+                            Gravity.CENTER, 0, 0);
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                if (HomeActivity.this.isFinishing()) {
+                    return;
+                }
+
+            }
+        });
     }
 
     public class CartBalanceModel
@@ -1351,4 +1598,31 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             this.shoppingCartId = shoppingCartId;
         }
     }
+
+    public class CanShareModel extends BaseModel
+    {
+        private CanShareInnerModel resultData;
+
+        public CanShareInnerModel getResultData() {
+            return resultData;
+        }
+
+        public void setResultData(CanShareInnerModel resultData) {
+            this.resultData = resultData;
+        }
+
+        public class CanShareInnerModel
+        {
+            private int canShare;
+
+            public int getCanShare() {
+                return canShare;
+            }
+
+            public void setCanShare(int canShare) {
+                this.canShare = canShare;
+            }
+        }
+    }
+
 }

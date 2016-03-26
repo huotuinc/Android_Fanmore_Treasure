@@ -288,13 +288,13 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(getActivity());
-        VolleyUtil.cancelAllRequest();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.unbind(getActivity());
+        VolleyUtil.cancelAllRequest();
     }
 
     @Override

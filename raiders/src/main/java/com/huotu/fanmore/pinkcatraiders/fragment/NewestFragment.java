@@ -236,14 +236,14 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(getActivity());
-        if ( null != tc ) {
-            tc.Stop ( );
-        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.unbind(getActivity());
+        if ( null != tc ) {
+            tc.Stop ( );
+        }
     }
 }

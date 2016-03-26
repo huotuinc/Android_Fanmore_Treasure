@@ -31,6 +31,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
 import org.json.JSONObject;
 
@@ -222,6 +223,8 @@ public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.unbind(this);
+        VolleyUtil.cancelAllRequest();
     }
 
     @Override

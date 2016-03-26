@@ -20,7 +20,7 @@
             <TextView
                 android:id="@+id/tag01"
                 android:textColor="@color/deep_red"
-                android:textSize="@dimen/text_size_14"
+                android:textSize="@dimen/text_size_12"
                 android:layout_centerHorizontal="true"
                 android:text="您还没有咻到红包"
                 android:layout_width="wrap_content"
@@ -29,7 +29,7 @@
             <TextView
                 android:id="@+id/tag02"
                 android:textColor="@color/deep_red"
-                android:textSize="@dimen/text_size_14"
+                android:textSize="@dimen/text_size_12"
                 android:layout_below="@+id/tag01"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"

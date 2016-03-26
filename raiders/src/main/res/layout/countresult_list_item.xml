@@ -2,22 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:padding="5dp">
 <TextView
     android:id="@+id/buyTime"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="2012-12-12 14:12:44"/>
+    android:text=""
+    android:textSize="@dimen/text_size_12"/>
     <TextView
         android:id="@+id/number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="→6565656565"
-        android:textColor="@color/title_bg"/>
+        android:text=""
+        android:textColor="@color/title_bg"
+        android:textSize="@dimen/text_size_12"/>
     <TextView
         android:id="@+id/nickName"
         android:layout_marginLeft="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="发发发"/>
+        android:text=""
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textSize="@dimen/text_size_12"/>
 </LinearLayout>

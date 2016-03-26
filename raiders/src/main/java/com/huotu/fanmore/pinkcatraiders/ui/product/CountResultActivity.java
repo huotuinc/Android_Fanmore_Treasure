@@ -7,10 +7,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -27,13 +30,17 @@ import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.CountResultModel;
 import com.huotu.fanmore.pinkcatraiders.model.CountResultOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
+import com.huotu.fanmore.pinkcatraiders.model.PartnerHistorysModel;
 import com.huotu.fanmore.pinkcatraiders.model.UserNumberModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
+import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
+import com.huotu.fanmore.pinkcatraiders.widget.CircleImageView;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 
@@ -77,13 +84,14 @@ public class CountResultActivity extends BaseActivity implements View.OnClickLis
     TextView issueNo;
     @Bind(R.id.luckNumber)
     TextView luckNumber;
+    @Bind(R.id.openBtn)
+    TextView openBtn;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public Bundle bundle;
     public Handler mHandler;
     public List<UserNumberModel> numlist;
-    public CountResultListAdapter  countResultList;
     @Bind(R.id.list)
-    ListView list;
+    LinearLayout list;
     @Bind(R.id.productDetailPullRefresh)
     PullToRefreshScrollView productDetailPullRefresh;
     public CountResultModel CountResult;
@@ -98,10 +106,29 @@ public class CountResultActivity extends BaseActivity implements View.OnClickLis
         wManager = this.getWindowManager();
         bundle = this.getIntent().getExtras();
         mHandler = new Handler(this);
-        list.setEnabled(false);
+        openBtn.setText("收起");
+        openBtn.setTag(0);
         initTitle();
         initView();
     }
+
+    @OnClick(R.id.openBtn)
+    void openClick()
+    {
+        if(0==openBtn.getTag())
+        {
+            openBtn.setText("展开");
+            openBtn.setTag(1);
+            list.setVisibility(View.GONE);
+        }
+        else if(1==openBtn.getTag())
+        {
+            openBtn.setText("收起");
+            openBtn.setTag(0);
+            list.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void initTitle()
     {
         //背景色
@@ -125,10 +152,6 @@ public class CountResultActivity extends BaseActivity implements View.OnClickLis
                     }
                 }
         );
-        numlist = new ArrayList<UserNumberModel>();
-        countResultList = new CountResultListAdapter(numlist, CountResultActivity.this,mHandler);
-        list.setAdapter(countResultList);
-        firstGetData();
         productDetailPullRefresh.getRefreshableView().smoothScrollTo(0, 0);
     }
     protected void firstGetData(){
@@ -144,6 +167,7 @@ public class CountResultActivity extends BaseActivity implements View.OnClickLis
         }, 1000);
     }
     private void getDetailData() {
+
         //获取产品详情
         if (false == CountResultActivity.this.canConnect()) {
             mHandler.post(new Runnable() {
@@ -166,6 +190,10 @@ public class CountResultActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onResponse(JSONObject response) {
                         productDetailPullRefresh.onRefreshComplete();
+                        list.removeAllViews();
+                        openBtn.setText("收起");
+                        openBtn.setTag(0);
+                        list.setVisibility(View.VISIBLE);
                         if (CountResultActivity.this.isFinishing()) {
                             return;
                         }
@@ -189,9 +217,25 @@ public class CountResultActivity extends BaseActivity implements View.OnClickLis
                                 numberA.setText(String.valueOf(CountResult.getNumberA()));
                                 numberB.setText(String.valueOf(CountResult.getNumberB()));
                                 issueNo.setText(CountResult.getIssueNo());
-                                numlist.clear();
+                                numlist = new ArrayList<UserNumberModel>();
                                 numlist.addAll(CountResult.getUserNumbers());
-                                countResultList.notifyDataSetChanged();
+                                int size = numlist.size();
+                                for (int i = 0; i < size; i++) {
+
+                                    UserNumberModel userNumber = numlist.get(i);
+                                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup
+                                            .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                    LinearLayout parntersLayout = (LinearLayout) LayoutInflater.from(CountResultActivity.this).inflate(R.layout.countresult_list_item, null);
+                                    TextView buyTime = (TextView) parntersLayout.findViewById(R.id.buyTime);
+                                    buyTime.setText(userNumber.getBuyTime());
+                                    TextView number = (TextView) parntersLayout.findViewById(R.id.number);
+                                    number.setText("→"+userNumber.getNumber());
+                                    TextView nickName = (TextView) parntersLayout.findViewById(R.id.nickName);
+                                    nickName.setText(userNumber.getNickName());
+                                    lp.setMargins(0, 0, 0, 0);
+                                    parntersLayout.setLayoutParams(lp);
+                                    list.addView(parntersLayout);
+                                }
 
                             } else {
                                 //暂无数据提示
@@ -206,6 +250,10 @@ public class CountResultActivity extends BaseActivity implements View.OnClickLis
                     public void onErrorResponse(VolleyError error) {
 
                         productDetailPullRefresh.onRefreshComplete();
+                        list.removeAllViews();
+                        openBtn.setText("收起");
+                        openBtn.setTag(0);
+                        list.setVisibility(View.VISIBLE);
                         if (CountResultActivity.this.isFinishing()) {
                             return;
                         }

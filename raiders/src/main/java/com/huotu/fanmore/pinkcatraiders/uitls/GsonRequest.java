@@ -20,6 +20,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AppWXLoginModel;
 import com.huotu.fanmore.pinkcatraiders.model.GetCode;
 import com.huotu.fanmore.pinkcatraiders.ui.login.MobileRegActivity;
@@ -38,7 +39,7 @@ import java.util.Map;
  */
 public class GsonRequest<T> extends Request<T> {
 
-	public static final String TAG="MT_REQUEST";
+	public static final String TAG = Contant.VOLLEY_TAG;
 
 	/**
 	 * Gson parser 
@@ -150,7 +151,7 @@ public class GsonRequest<T> extends Request<T> {
 		this.mParams = paras;
 		this.mTypeToken=null;
 
-		this.setRetryPolicy( new DefaultRetryPolicy(15000,1,1.0f));
+		this.setRetryPolicy( new DefaultRetryPolicy(15000,0,1.0f));
 		this.setTag( TAG );
 	}
 

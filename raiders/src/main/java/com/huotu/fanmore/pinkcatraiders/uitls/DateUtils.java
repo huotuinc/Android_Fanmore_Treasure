@@ -84,6 +84,32 @@ public class DateUtils {
     }
 
     /**
+     * 转换成 2015-12-12 10:00:00格式
+     * @param timeStamp
+     * @return
+     */
+    public static String transformDataformat16(String timeStamp)
+    {
+        if("".equals(timeStamp) || null == timeStamp)
+        {
+            timeStamp = String.valueOf(System.currentTimeMillis());
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return format.format(new Date(Long.parseLong(timeStamp)));
+        }
+        else if("0".equals(timeStamp))
+        {
+            timeStamp = String.valueOf(System.currentTimeMillis());
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return format.format(new Date(Long.parseLong(timeStamp)));
+        }
+        else
+        {
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return format.format(new Date(Long.parseLong(timeStamp)));
+        }
+    }
+
+    /**
      * 转换成 2015/12/12 10:00:00格式
      * @param date
      * @return
@@ -285,87 +311,99 @@ public class DateUtils {
     public static void setRedpackageCount(TextView v1, TextView v2, TextView v3, TextView v4, TextView v5, TextView v6, long count)
     {
         String str = String.valueOf(count);
-        char[] chars = str.toCharArray();
-        switch (chars.length)
+        if(null==str || TextUtils.isEmpty(str))
         {
-            case 0:
+            v1.setText("0");
+            v2.setText("0");
+            v3.setText("0");
+            v4.setText("0");
+            v5.setText("0");
+            v6.setText("0");
+        }
+        else
+        {
+            char[] chars = str.toCharArray();
+            switch (chars.length)
             {
-                v1.setText("0");
-                v2.setText("0");
-                v3.setText("0");
-                v4.setText("0");
-                v5.setText("0");
-                v6.setText("0");
-            }
-            break;
-            case 1:
-            {
-                v1.setText("0");
-                v2.setText("0");
-                v3.setText("0");
-                v4.setText("0");
-                v5.setText("0");
-                v6.setText(String.valueOf(chars[0]));
-            }
-            break;
-            case 2:
-            {
-                v1.setText("0");
-                v2.setText("0");
-                v3.setText("0");
-                v4.setText("0");
-                v5.setText(String.valueOf(chars[0]));
-                v6.setText(String.valueOf(chars[1]));
-            }
-            break;
-            case 3:
-            {
-                v1.setText("0");
-                v2.setText("0");
-                v3.setText("0");
-                v4.setText(String.valueOf(chars[0]));
-                v5.setText(String.valueOf(chars[1]));
-                v6.setText(String.valueOf(chars[2]));
-            }
-            break;
-            case 4:
-            {
-                v1.setText("0");
-                v2.setText("0");
-                v3.setText(String.valueOf(chars[0]));
-                v4.setText(String.valueOf(chars[1]));
-                v5.setText(String.valueOf(chars[2]));
-                v6.setText(String.valueOf(chars[3]));
-            }
-            break;
-            case 5:
-            {
-                v1.setText("0");
-                v2.setText(String.valueOf(chars[0]));
-                v3.setText(String.valueOf(chars[1]));
-                v4.setText(String.valueOf(chars[2]));
-                v5.setText(String.valueOf(chars[3]));
-                v6.setText(String.valueOf(chars[4]));
-            }
-            break;
-            case 6:
-            {
-                v1.setText(String.valueOf(chars[0]));
-                v2.setText(String.valueOf(chars[1]));
-                v3.setText(String.valueOf(chars[2]));
-                v4.setText(String.valueOf(chars[3]));
-                v5.setText(String.valueOf(chars[4]));
-                v6.setText(String.valueOf(chars[5]));
-            }
-            break;
-            default:
+                case 0:
+                {
+                    v1.setText("0");
+                    v2.setText("0");
+                    v3.setText("0");
+                    v4.setText("0");
+                    v5.setText("0");
+                    v6.setText("0");
+                }
                 break;
+                case 1:
+                {
+                    v1.setText("0");
+                    v2.setText("0");
+                    v3.setText("0");
+                    v4.setText("0");
+                    v5.setText("0");
+                    v6.setText(String.valueOf(chars[0]));
+                }
+                break;
+                case 2:
+                {
+                    v1.setText("0");
+                    v2.setText("0");
+                    v3.setText("0");
+                    v4.setText("0");
+                    v5.setText(String.valueOf(chars[0]));
+                    v6.setText(String.valueOf(chars[1]));
+                }
+                break;
+                case 3:
+                {
+                    v1.setText("0");
+                    v2.setText("0");
+                    v3.setText("0");
+                    v4.setText(String.valueOf(chars[0]));
+                    v5.setText(String.valueOf(chars[1]));
+                    v6.setText(String.valueOf(chars[2]));
+                }
+                break;
+                case 4:
+                {
+                    v1.setText("0");
+                    v2.setText("0");
+                    v3.setText(String.valueOf(chars[0]));
+                    v4.setText(String.valueOf(chars[1]));
+                    v5.setText(String.valueOf(chars[2]));
+                    v6.setText(String.valueOf(chars[3]));
+                }
+                break;
+                case 5:
+                {
+                    v1.setText("0");
+                    v2.setText(String.valueOf(chars[0]));
+                    v3.setText(String.valueOf(chars[1]));
+                    v4.setText(String.valueOf(chars[2]));
+                    v5.setText(String.valueOf(chars[3]));
+                    v6.setText(String.valueOf(chars[4]));
+                }
+                break;
+                case 6:
+                {
+                    v1.setText(String.valueOf(chars[0]));
+                    v2.setText(String.valueOf(chars[1]));
+                    v3.setText(String.valueOf(chars[2]));
+                    v4.setText(String.valueOf(chars[3]));
+                    v5.setText(String.valueOf(chars[4]));
+                    v6.setText(String.valueOf(chars[5]));
+                }
+                break;
+                default:
+                    break;
+        }
         }
     }
 
     public static void getTime(TextView v1, TextView v2, Object o)
     {
-        long time = Long.valueOf(0);
+        long time = (long) o;
         if(time<=60)
         {
             v1.setText("00");

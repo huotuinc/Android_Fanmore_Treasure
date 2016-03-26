@@ -28,6 +28,7 @@ import com.huotu.fanmore.pinkcatraiders.model.PayModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RechargeOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.UserOutputModel;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.PayResultAtivity;
@@ -363,8 +364,12 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
     public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
         if(type == MyBroadcastReceiver.ReceiverType.wxPaySuccess)
         {
-            //跳转到成功界面
-            ActivityUtils.getInstance().showActivity(RechargeActivity.this, PayResultAtivity.class);
+            //结算刷新用户数据
+            //跳转到首页
+            Bundle bundle = new Bundle();
+            bundle.putInt("type", 0);
+            MyBroadcastReceiver.sendBroadcast(RechargeActivity.this, MyBroadcastReceiver.JUMP_CART, bundle);
+            closeSelf(RechargeActivity.this);
         }
     }
 }
