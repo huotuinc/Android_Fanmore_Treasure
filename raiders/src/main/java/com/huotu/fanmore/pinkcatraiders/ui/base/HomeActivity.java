@@ -376,6 +376,10 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         super.onDestroy();
         ButterKnife.unbind(this);
         VolleyUtil.cancelAllRequest();
+        if( null != myBroadcastReceiver)
+        {
+            myBroadcastReceiver.unregisterReceiver();
+        }
     }
 
     public void onTabClicked(View view)

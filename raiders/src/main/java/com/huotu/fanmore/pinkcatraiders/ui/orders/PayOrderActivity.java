@@ -98,7 +98,7 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
     public
     ProgressPopupWindow progress;
     public List<Long> moneys;
-    public long moneyTag = -1;
+    public double moneyTag = -1;
     public int payType = -1;
     private MyBroadcastReceiver myBroadcastReceiver;
 
@@ -193,6 +193,10 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
         super.onDestroy ( );
         VolleyUtil.cancelAllRequest ( );
         ButterKnife.unbind ( this );
+        if( null != myBroadcastReceiver)
+        {
+            myBroadcastReceiver.unregisterReceiver();
+        }
     }
 
     @OnClick(R.id.titleLeftImage)
@@ -204,7 +208,7 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
     @OnClick(R.id.rechargeBtn)
     void doPay()
     {
-        moneyTag = balance1.getMoney().longValue();
+        moneyTag = balance1.getMoney().doubleValue();
         if(-1 == moneyTag || 0==moneyTag)
         {
             ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "购买金额为空");
@@ -269,6 +273,10 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                                 closeSelf(PayOrderActivity.this);
                             }
                         }, 1000);
+                    }
+                    else if(52004==payOutput.getResultCode())
+                    {
+                        ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "余额不足");
                     }
                     else
                     {
@@ -366,6 +374,10 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                                     //无效支付
                                     ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "无效支付信息");
                                 }
+                            }
+                            else if(1111==payOutput.getResultCode ( ))
+                            {
+                                ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "订单已失效，请重新选购商品");
                             }
                             else {
                                 //异常处理，自动切换成无数据

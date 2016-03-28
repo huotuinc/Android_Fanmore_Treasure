@@ -288,6 +288,10 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if( null != myBroadcastReceiver)
+        {
+            myBroadcastReceiver.unregisterReceiver();
+        }
     }
 
     @Override
