@@ -9,7 +9,7 @@ public class ShareModel extends BaseModel {
     private String title;
     private String text;
     private String url;
-    private String imageUrl;
+    private String imgUrl;
 
     public String getTitle() {
         return title;
@@ -35,11 +35,11 @@ public class ShareModel extends BaseModel {
         this.url = url;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

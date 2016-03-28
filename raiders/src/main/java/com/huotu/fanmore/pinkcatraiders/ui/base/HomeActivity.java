@@ -1,5 +1,6 @@
 package com.huotu.fanmore.pinkcatraiders.ui.base;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -585,14 +586,18 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 // layDrag.openDrawer(Gravity.LEFT);
             } else
             {
-                try
-                {
-                    // 默认登出
-                    HomeActivity.this.finish();
-                    Runtime.getRuntime().exit(0);
-                } catch (Exception e)
-                {
-                    Runtime.getRuntime().exit(-1);
+                closeSelf(HomeActivity.this);
+                int currentVersion = android.os.Build.VERSION.SDK_INT;
+                if (currentVersion > android.os.Build.VERSION_CODES.ECLAIR_MR1) {
+                    Intent startMain = new Intent(Intent.ACTION_MAIN);
+                    startMain.addCategory(Intent.CATEGORY_HOME);
+                    startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(startMain);
+                    System.exit(0);
+                } else {
+                    // android2.1
+                    ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+                    am.restartPackage(getPackageName());
                 }
             }
 
@@ -1290,7 +1295,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                     if (null != shareOutput.getResultData().getShare() && null != shareOutput.getResultData()) {
                                         //application.writeShareinfo(shareOutput.getResultData().getShare());
                                         ShareModel msgModel = new ShareModel();
-                                        msgModel.setImageUrl(shareOutput.getResultData().getShare().getImageUrl());
+                                        msgModel.setImgUrl(shareOutput.getResultData().getShare().getImgUrl());
                                         msgModel.setText(shareOutput.getResultData().getShare().getText());
                                         msgModel.setTitle(shareOutput.getResultData().getShare().getTitle());
                                         msgModel.setUrl(shareOutput.getResultData().getShare().getUrl());

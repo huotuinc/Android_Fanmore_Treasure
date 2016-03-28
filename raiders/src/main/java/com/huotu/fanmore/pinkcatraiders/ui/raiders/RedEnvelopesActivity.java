@@ -157,7 +157,7 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
                     {
                         //application.writeShareinfo(shareOutput.getResultData().getShare());
                         ShareModel msgModel = new ShareModel ();
-                        msgModel.setImageUrl(shareOutput.getResultData().getShare().getImageUrl());
+                        msgModel.setImgUrl(shareOutput.getResultData().getShare().getImgUrl());
                         msgModel.setText(shareOutput.getResultData().getShare().getText());
                         msgModel.setTitle(shareOutput.getResultData().getShare().getTitle());
                         msgModel.setUrl(shareOutput.getResultData().getShare().getUrl());
@@ -207,6 +207,22 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
                                 Gravity.CENTER, 0, 0
                         );
                     }
+                }
+                else if(52008==shareOutput.getResultCode())
+                {
+                    noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, "你暂无分享红包权限");
+                    noticePopWin.showNotice();
+                    noticePopWin.showAtLocation(titleLayoutL,
+                            Gravity.CENTER, 0, 0
+                    );
+                }
+                else if(52009==shareOutput.getResultCode())
+                {
+                    noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, "你已经分享过红包");
+                    noticePopWin.showNotice();
+                    noticePopWin.showAtLocation(titleLayoutL,
+                            Gravity.CENTER, 0, 0
+                    );
                 }
                 else
                 {

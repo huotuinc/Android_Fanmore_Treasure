@@ -198,10 +198,10 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         if (shareModel != null) {
             Platform.ShareParams sp = new Platform.ShareParams ();
             sp.setShareType(Platform.SHARE_WEBPAGE);
-            sp.setTitle(shareModel.getText());
+            sp.setTitle(shareModel.getTitle());
             sp.setText(shareModel.getText());
             sp.setUrl(shareModel.getUrl());
-            sp.setImageUrl(shareModel.getImageUrl());
+            sp.setImageUrl(shareModel.getImgUrl());
             shareParams = sp;
         }
     }

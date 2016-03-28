@@ -123,7 +123,7 @@ public class BaseApplication extends Application {
     }
 
     public void writeShareinfo(ShareModel share){
-        PreferenceHelper.writeString(getApplicationContext(),Contant.SHARE_INFO,Contant.SHARE_INFO_IMGURL,share.getImageUrl());
+        PreferenceHelper.writeString(getApplicationContext(),Contant.SHARE_INFO,Contant.SHARE_INFO_IMGURL,share.getImgUrl());
         PreferenceHelper.writeString(getApplicationContext(),Contant.SHARE_INFO,Contant.SHARE_INFO_TEXT,share.getText());
         PreferenceHelper.writeString(getApplicationContext(),Contant.SHARE_INFO,Contant.SHARE_INFO_TITLE,share.getTitle());
         PreferenceHelper.writeString(getApplicationContext(),Contant.SHARE_INFO,Contant.SHARE_INFO_URL,share.getUrl());

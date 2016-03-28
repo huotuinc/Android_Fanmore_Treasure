@@ -588,6 +588,7 @@ public class LoginActivity extends BaseActivity
         }
         else
         {
+            btn_login.setEnabled(false);
             progress.showProgress("正在登录");
             progress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
             //登录接口
@@ -602,6 +603,7 @@ public class LoginActivity extends BaseActivity
             httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    btn_login.setEnabled(true);
                     progress.dismissView();
                     if(LoginActivity.this.isFinishing())
                     {
@@ -668,10 +670,11 @@ public class LoginActivity extends BaseActivity
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    btn_login.setEnabled(true);
                     progress.dismissView();
                     //初始化失败
                     //异常处理，自动切换成无数据
-                    noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "登录失败");
+                    noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "服务器未响应");
                     noticePop.showNotice ( );
                     noticePop.showAtLocation(titleLayoutL,
                             Gravity.CENTER, 0, 0
