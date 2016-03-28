@@ -5,6 +5,8 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -45,11 +47,12 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SetPasswordActivity extends BaseActivity implements View.OnClickListener {
+public class SetPasswordActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
 
     public
     Resources resources;
@@ -73,6 +76,7 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
     ProgressPopupWindow progress;
     public
     NoticePopWindow noticePop;
+    public Handler mHandler;
     //windows类
     WindowManager wManager;
     public Bundle bundle;
@@ -86,6 +90,7 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
         resources = this.getResources ();
         application = ( BaseApplication ) this.getApplication ();
         btn_commitpsd.setOnClickListener(this);
+        mHandler = new Handler(this);
         btnshow.setOnClickListener(this);
         btnshow.setText("显示密码");
         btnshow.setTag(0);
@@ -119,13 +124,13 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
                 if(0==btnshow.getTag())
                 {
                     //显示密码
-                    btnshow.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    edtpsd.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                     btnshow.setText("隐藏密码");
                     btnshow.setTag(1);
                 }
                 else if(1==btnshow.getTag())
                 {
-                    btnshow.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    edtpsd.setTransformationMethod(PasswordTransformationMethod.getInstance());
                     btnshow.setText("显示密码");
                     btnshow.setTag(0);
                 }
@@ -142,6 +147,7 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
                     if(0==bundle.getInt("type"))
                     {
                         progress.showProgress("注册中......");
+                        progress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
                         String url = Contant.REQUEST_URL + Contant.REG;
                         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), SetPasswordActivity.this);
                         Map<String, Object> maps = new HashMap<String, Object>();
@@ -166,7 +172,13 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
                                             //加载用户信息
                                             application.writeUserInfo(regOutputsModel.getResultData().getUser());
                                             //跳转到首页
-                                            ActivityUtils.getInstance().skipActivity(SetPasswordActivity.this, LoginActivity.class);
+                                            ToastUtils.showMomentToast(SetPasswordActivity.this, SetPasswordActivity.this, "注册成功，2秒后跳转到首页");
+                                            mHandler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    ActivityUtils.getInstance().skipActivity(SetPasswordActivity.this, HomeActivity.class);
+                                                }
+                                            }, 1500);
 
                                         } catch (Exception e) {
                                             //未获取该用户信息
@@ -264,5 +276,10 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
                 break;
         }
 
+    }
+
+    @Override
+    public boolean handleMessage(Message msg) {
+        return false;
     }
 }

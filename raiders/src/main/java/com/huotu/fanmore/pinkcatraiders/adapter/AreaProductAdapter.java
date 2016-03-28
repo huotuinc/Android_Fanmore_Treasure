@@ -70,7 +70,7 @@ public class AreaProductAdapter extends BaseAdapter {
         if(null!=products&&!products.isEmpty()&&null!=products.get(position))
         {
             final ProductModel product = products.get(position);
-            BitmapLoader.create().displayUrl(mContext, holder.icon, product.getPictureUrl(), R.mipmap.error);
+            BitmapLoader.create().displayUrl(mContext, holder.icon, product.getPictureUrl(), R.mipmap.defluat_logo);
             if(0!=product.getAreaAmount())
             {
                 holder.productTag.setText("专区\n商品");

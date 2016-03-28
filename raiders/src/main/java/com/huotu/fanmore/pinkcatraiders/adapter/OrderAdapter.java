@@ -73,7 +73,7 @@ public class OrderAdapter extends BaseAdapter {
         if(null!=orders&&!orders.isEmpty()&&null!=orders.get(position))
         {
             OrderModel order = orders.get(position);
-            BitmapLoader.create().loadRoundImage(context, holder.shareUserLogo, order.getPictureUrl (), R.mipmap.error);
+            BitmapLoader.create().loadRoundImage(context, holder.shareUserLogo, order.getPictureUrl (), R.mipmap.defluat_logo);
             holder.shareUserName.setText(order.getNickName());
             holder.orderTime.setText(DateUtils.transformDataformat3(order.getTime()));
             holder.showTitle.setText(order.getShareOrderTitle());
@@ -94,7 +94,7 @@ public class OrderAdapter extends BaseAdapter {
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams((pl.height*2)/3, (pl.height*2)/3);
                     ImageView orderImg = (ImageView) LayoutInflater.from(context).inflate ( R.layout.order_img, null );
                     BitmapLoader.create().displayUrl(context, orderImg,
-                            order.getPictureUrls().get(i), R.mipmap.error);
+                            order.getPictureUrls().get(i), R.mipmap.defluat_logo);
                     orderImg.setLayoutParams(lp);
                     holder.orderImgs.addView(orderImg);
                 }

@@ -153,7 +153,7 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
                     SystemTools.loadBackground(mallPoints, resources.getDrawable(R.drawable.mall_points_draw));
                     mallPoints.setText(String.valueOf(null==userOutput.getResultData().getUser().getIntegral()?0:userOutput.getResultData().getUser().getIntegral()) + "积分");
                     String imgurl = userOutput.getResultData().getUser().getUserHead();
-                    BitmapLoader.create().loadRoundImage(getActivity(), userimg, imgurl, R.mipmap.error);
+                    BitmapLoader.create().loadRoundImage(getActivity(), userimg, imgurl, R.mipmap.defluat_logo);
                     TVUserName.setText(userOutput.getResultData().getUser().getRealName());
                     String balance = String.valueOf(userOutput.getResultData().getUser().getMoney());
                     money.setText((null != balance && !balance.isEmpty() && !"null".equals(balance)) ? balance + "元" : 0 + "元");

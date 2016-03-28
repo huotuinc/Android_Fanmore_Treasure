@@ -88,7 +88,7 @@ public class WinAdapter extends BaseAdapter {
         {
             BitmapLoader.create().displayUrl(
                     mContext, holder.pictureUrl, winners.get(position)
-                            .getDefaultPictureUrl(), R.mipmap.error
+                            .getDefaultPictureUrl(), R.mipmap.defluat_logo
             );
             holder.title.setText(winners.get(position).getTitle());
             holder.issueId.setText("参与期号：" + winners.get(position).getIssueId());

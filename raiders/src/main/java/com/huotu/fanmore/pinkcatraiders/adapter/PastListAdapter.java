@@ -81,7 +81,7 @@ public class PastListAdapter extends BaseAdapter {
             {
                 holder.LL1.setVisibility(View.VISIBLE);
                 holder.issueId.setText("期号" + product.getIssueId() + "(揭晓时间:" + DateUtils.transformDataformat2(product.getDate()) + ")");
-                BitmapLoader.create().displayUrl(mContext, holder.userlogo, product.getUserHeadUrl(), R.mipmap.error);
+                BitmapLoader.create().displayUrl(mContext, holder.userlogo, product.getUserHeadUrl(), R.mipmap.defluat_logo);
                 holder.nickName.setText(product.getNickName());
                 holder.ip.setText("(" + product.getIp() + ")");
                 holder.userId.setText("用户ID:" + product.getUserId());

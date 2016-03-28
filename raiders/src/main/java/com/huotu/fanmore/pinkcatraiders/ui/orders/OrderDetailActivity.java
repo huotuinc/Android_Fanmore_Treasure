@@ -178,7 +178,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, 100);
                             ImageView orderImg = (ImageView) LayoutInflater.from(OrderDetailActivity.this).inflate ( R.layout.order_img, null );
                             BitmapLoader.create().displayUrl(OrderDetailActivity.this, orderImg,
-                                    order.getPictureUrls().get(i), R.mipmap.error);
+                                    order.getPictureUrls().get(i), R.mipmap.defluat_logo);
                             orderImg.setLayoutParams(lp);
                             orderImgs.addView(orderImg);
                         }

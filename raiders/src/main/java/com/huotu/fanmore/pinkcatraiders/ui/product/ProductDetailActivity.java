@@ -361,7 +361,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     announcedDetail.findViewById(R.id.accountLogo);
                                             BitmapLoader.create().loadRoundImage(
                                                     ProductDetailActivity.this, accountLogo,
-                                                    productDetail.getAwardingUserHead(), R.mipmap.error
+                                                    productDetail.getAwardingUserHead(), R.mipmap.defluat_logo
                                             );
                                             TextView winnerName = (TextView) announcedDetail.findViewById(R.id.winnerName);
                                             winnerName.setText("中奖者："+productDetail.getAwardingUserName());
@@ -482,7 +482,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     announcedDetail.findViewById(R.id.accountLogo);
                                             BitmapLoader.create().loadRoundImage(
                                                     ProductDetailActivity.this, accountLogo,
-                                                    productDetail.getAwardingUserHead(), R.mipmap.error
+                                                    productDetail.getAwardingUserHead(), R.mipmap.defluat_logo
                                             );
                                             TextView winnerName = (TextView) announcedDetail.findViewById(R.id.winnerName);
                                             winnerName.setText("中奖者："+productDetail.getAwardingUserName());
@@ -690,7 +690,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     announcedDetail.findViewById(R.id.accountLogo);
                                             BitmapLoader.create().loadRoundImage(
                                                     ProductDetailActivity.this, accountLogo,
-                                                    productDetail.getAwardingUserHead(), R.mipmap.error
+                                                    productDetail.getAwardingUserHead(), R.mipmap.defluat_logo
                                             );
                                             TextView winnerName = (TextView) announcedDetail.findViewById(R.id.winnerName);
                                             winnerName.setText("中奖者："+productDetail.getAwardingUserName());
@@ -807,7 +807,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     announcedDetail.findViewById(R.id.accountLogo);
                                             BitmapLoader.create().loadRoundImage(
                                                     ProductDetailActivity.this, accountLogo,
-                                                    productDetail.getAwardingUserHead(), R.mipmap.error
+                                                    productDetail.getAwardingUserHead(), R.mipmap.defluat_logo
                                             );
                                             TextView winnerName = (TextView) announcedDetail.findViewById(R.id.winnerName);
                                             winnerName.setText("中奖者："+productDetail.getAwardingUserName());
@@ -982,7 +982,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                             TextView bgLine = (TextView) parntersLayout.findViewById(R.id.bgLine);
                             bgLine.setMinimumHeight(200);
                             CircleImageView partnerLogo = (CircleImageView) parntersLayout.findViewById(R.id.partnerLogo);
-                            BitmapLoader.create().loadRoundImage(ProductDetailActivity.this, partnerLogo, partnerLog.getUserHeadUrl(), R.mipmap.ic_launcher);
+                            BitmapLoader.create().loadRoundImage(ProductDetailActivity.this, partnerLogo, partnerLog.getUserHeadUrl(), R.mipmap.defluat_logo);
                             TextView partnerName = (TextView) parntersLayout.findViewById(R.id.partnerName);
                             partnerName.setText(partnerLog.getNickName());
                             TextView partnerIp = (TextView) parntersLayout.findViewById(R.id.partnerIp);

@@ -81,7 +81,7 @@ public class TotalGridAdapter  extends BaseAdapter {
         if(null!=productModels&&!productModels.isEmpty()&&null!=productModels.get(position))
         {
             final ProductModel product = productModels.get(position);
-            BitmapLoader.create().displayUrlProductGride(mContext, holder.productIcon, product.getPictureUrl(), R.mipmap.error);
+            BitmapLoader.create().displayUrlProductGride(mContext, holder.productIcon, product.getPictureUrl(), R.mipmap.defluat_logo);
             if(0!=product.getAreaAmount())
             {
                 holder.productTag.setText("专区\n商品");

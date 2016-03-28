@@ -492,28 +492,28 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
                                         if(0==addImgBtn1.getTag())
                                         {
                                             addImgBtn1.setTag(null);
-                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn1, updateProfile.getResultData().getMiniUrl(), R.mipmap.error);
+                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn1, updateProfile.getResultData().getMiniUrl(), R.mipmap.defluat_logo);
                                             addImgBtn1.setEnabled(false);
                                             addImgBtn1.setClickable(false);
                                         }
                                         else if(0==addImgBtn2.getTag())
                                         {
                                             addImgBtn2.setTag(null);
-                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn2, updateProfile.getResultData().getMiniUrl(), R.mipmap.error);
+                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn2, updateProfile.getResultData().getMiniUrl(), R.mipmap.defluat_logo);
                                             addImgBtn2.setEnabled(false);
                                             addImgBtn2.setClickable(false);
                                         }
                                         else if(0==addImgBtn3.getTag())
                                         {
                                             addImgBtn3.setTag(null);
-                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn3, updateProfile.getResultData().getMiniUrl(), R.mipmap.error);
+                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn3, updateProfile.getResultData().getMiniUrl(), R.mipmap.defluat_logo);
                                             addImgBtn3.setEnabled(false);
                                             addImgBtn3.setClickable(false);
                                         }
                                         else if(0==addImgBtn4.getTag())
                                         {
                                             addImgBtn4.setTag(null);
-                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn4, updateProfile.getResultData().getMiniUrl(), R.mipmap.error);
+                                            BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn4, updateProfile.getResultData().getMiniUrl(), R.mipmap.defluat_logo);
                                             addImgBtn4.setEnabled(false);
                                             addImgBtn4.setClickable(false);
                                         }

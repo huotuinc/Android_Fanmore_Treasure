@@ -241,19 +241,19 @@ public class ReadPackageActivity extends BaseActivity implements View.OnClickLis
                         }
                         else
                         {
-                            Message message = mHandler.obtainMessage();
+                            /*Message message = mHandler.obtainMessage();
                             message.what = REDPACKAGE_RESULT;
                             message.arg1 = 1;
-                            mHandler.sendMessage(message);
+                            mHandler.sendMessage(message);*/
                         }
 
 
                     } else
                     {
-                        Message message = mHandler.obtainMessage();
+                        /*Message message = mHandler.obtainMessage();
                         message.what = REDPACKAGE_RESULT;
                         message.arg1 = 1;
-                        mHandler.sendMessage(message);
+                        mHandler.sendMessage(message);*/
                     }
                 }
                 else if(2==tag)

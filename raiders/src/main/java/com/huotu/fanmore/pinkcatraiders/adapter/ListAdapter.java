@@ -110,7 +110,7 @@ public class ListAdapter extends BaseAdapter {
             final ListModel list = lists.get(position);
             //禁止手动输入
             holder.num.setInputType(InputType.TYPE_NULL);
-            BitmapLoader.create().displayUrl(context, holder.listProductIcon, list.getPictureUrl(), R.mipmap.error);
+            BitmapLoader.create().displayUrl(context, holder.listProductIcon, list.getPictureUrl(), R.mipmap.defluat_logo);
             if(0!=list.getAreaAmount())
             {
                 holder.productTag.setText("专区\n商品");

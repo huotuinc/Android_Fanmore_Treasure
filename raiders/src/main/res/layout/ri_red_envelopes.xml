@@ -80,7 +80,7 @@
                         android:id="@+id/nouseLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="已使用/过期"
+                        android:text="已过期"
                         android:layout_marginBottom="5dp"
                         android:textColor="@color/text_black"
                         android:textSize="@dimen/text_size_14"/>

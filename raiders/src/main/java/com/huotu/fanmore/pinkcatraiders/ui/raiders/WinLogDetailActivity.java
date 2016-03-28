@@ -416,7 +416,7 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                                 address.setText(deliveryModel.getDetails());
                             }
                             //加载奖品信息
-                            BitmapLoader.create().displayUrl(WinLogDetailActivity.this, pictureUrl, winner.getDefaultPictureUrl(), R.mipmap.error);
+                            BitmapLoader.create().displayUrl(WinLogDetailActivity.this, pictureUrl, winner.getDefaultPictureUrl(), R.mipmap.defluat_logo);
                             title.setText(winner.getTitle());
                             issueId.setText("参与期号：" + winner.getIssueId());
                             toAmount.setText("总需：" + winner.getToAmount());

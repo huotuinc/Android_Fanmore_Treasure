@@ -257,6 +257,15 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                         }
 
                     }
+                    else if(53007==getCode.getResultCode())
+                    {
+                        //异常处理，自动切换成无数据
+                        noticePop = new NoticePopWindow ( MobileRegActivity.this, MobileRegActivity.this, wManager, "验证码错误");
+                        noticePop.showNotice ( );
+                        noticePop.showAtLocation(btn_commit,
+                                Gravity.CENTER, 0, 0
+                        );
+                    }
                     else
                     {
                         //异常处理，自动切换成无数据
@@ -600,7 +609,17 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                             countDownBtn = new CountDownTimerButton(btn_code, "%d秒重发",
                                     "获取验证码", 60000, new CountDownFinish());
                             countDownBtn.start();
-                        } else {
+                        }
+                        else if(52010==base.getResultCode())
+                        {
+                            //异常处理，自动切换成无数据
+                            noticePop = new NoticePopWindow(MobileRegActivity.this, MobileRegActivity.this, wManager, "该手机已被注册");
+                            noticePop.showNotice();
+                            noticePop.showAtLocation(btn_commit,
+                                    Gravity.CENTER, 0, 0
+                            );
+                        }
+                        else {
                             //异常处理，自动切换成无数据
                             noticePop = new NoticePopWindow(MobileRegActivity.this, MobileRegActivity.this, wManager, "验证错误");
                             noticePop.showNotice();
@@ -615,7 +634,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                         progress.dismissView();
                         //初始化失败
                         //异常处理，自动切换成无数据
-                        noticePop = new NoticePopWindow(MobileRegActivity.this, MobileRegActivity.this, wManager, "验证错误");
+                        noticePop = new NoticePopWindow(MobileRegActivity.this, MobileRegActivity.this, wManager, "验证服务未连接");
                         noticePop.showNotice();
                         noticePop.showAtLocation(btn_commit,
                                 Gravity.CENTER, 0, 0
