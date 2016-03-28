@@ -102,8 +102,6 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
 
     public
     WindowManager wManager;
-    public
-    ProgressPopupWindow successProgress;
 
     @Bind ( R.id.titleLayoutL )
     RelativeLayout titleLayoutL;
@@ -163,8 +161,6 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
         wManager = this.getWindowManager();
         bundle=new Bundle();
         progress = new ProgressPopupWindow ( UserSettingActivity.this, UserSettingActivity.this, wManager );
-        successProgress = new ProgressPopupWindow ( UserSettingActivity.this, UserSettingActivity.this, wManager );
-        successProgress.showAtLocation(titleLayoutL,Gravity.CENTER,0,0);
         setPasswordPop=new SetPasswordPopWindow(UserSettingActivity.this,UserSettingActivity.this,mHandler,application,null,wManager);
         initTitle();
         initSroll();
@@ -192,7 +188,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
 
         userSettingPullRefresh.onRefreshComplete ( );
         BitmapLoader.create ( ).loadRoundImage(
-                this, userimg, application.readUerHead(), R.mipmap.error
+                this, userimg, application.readUerHead(), R.mipmap.defluat_logo
         );
         bindQq.setText(
                 (1 != application.readQqBanded()) ? "未绑定" : "已绑定"
@@ -287,9 +283,10 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                 @Override
                 public void onClick(View v) {
                     alertdialog.dismiss();
-                    successProgress.showProgress("正在授权");
+                    progress.showProgress("正在授权");
+                    progress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
                     ShareSDK.getPlatform(UserSettingActivity.this, QQ.NAME);
-                    login = new AutnLogin(UserSettingActivity.this, mHandler, titleLayoutL, application);
+                    login = new AutnLogin(UserSettingActivity.this, mHandler, application);
                     login.authorize(new QQ(UserSettingActivity.this));
                     titleLayoutL.setClickable(false);
                 }
@@ -354,9 +351,10 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                 @Override
                 public void onClick(View v) {
                     alertdialog.dismiss();
-                    successProgress.showProgress("正在授权");
+                    progress.showProgress("正在授权");
+                    progress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
                     ShareSDK.getPlatform(UserSettingActivity.this, Wechat.NAME);
-                    login = new AutnLogin(UserSettingActivity.this, mHandler, titleLayoutL, application);
+                    login = new AutnLogin(UserSettingActivity.this, mHandler, application);
                     login.authorize(new Wechat(UserSettingActivity.this));
                     titleLayoutL.setClickable(false);
                 }
@@ -485,16 +483,13 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
             //授权登录
             case Contant.LOGIN_AUTH_ERROR:
             {
-                titleLayoutL.setClickable(true);
-                successProgress.dismissView();
+                progress.dismissView();
                 ToastUtils.showMomentToast(UserSettingActivity.this, this, "授权失败");
             }
             break;
             case Contant.MSG_AUTH_ERROR:
             {
-                titleLayoutL.setClickable ( true );
-                successProgress.dismissView();
-
+                progress.dismissView();
                 Throwable throwable = ( Throwable ) msg.obj;
                 if("cn.sharesdk.wechat.utils.WechatClientNotExistException".equals ( throwable.toString () ))
                 {
@@ -504,8 +499,6 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                 }
                 else
                 {
-                    titleLayoutL.setClickable ( true );
-                    successProgress.dismissView();
 //                    //提示授权失败
                     ToastUtils.showMomentToast(UserSettingActivity.this, this, "授权操作遇到错误");
 
@@ -517,7 +510,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
             {
                 titleLayoutL.setClickable(true);
                 //提示取消授权
-                successProgress.dismissView();
+                progress.dismissView();
                 ToastUtils.showMomentToast(UserSettingActivity.this, this, "授权操作已取消");
 
 
@@ -525,22 +518,19 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
             break;
             case Contant.MSG_USERID_FOUND:
             {
-                successProgress.dismissView();
-
-                //ToastUtils.showMomentToast(UserSettingActivity.this, this, "已经获取用户信息");
-
-
-
+                progress.dismissView();
             }
             break;
             case Contant.MSG_LOGIN: {
-                successProgress.dismissView();
+                progress.dismissView();
                 if (msg.arg1 ==1) {
+                    progress.showProgress("正在绑定QQ");
+                    progress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
                     LoginQQModel qqModel = (LoginQQModel) msg.obj;
                     String url = Contant.REQUEST_URL + Contant.BINDQQ;
                     AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), UserSettingActivity.this);
                     Map<String, Object> maps = new HashMap<String, Object>();
-                    maps.put("unionid", qqModel.getOpenid());
+                    maps.put("unionId", qqModel.getOpenid());
                     String suffix = params.obtainGetParam(maps);
                     url = url + suffix;
                     HttpUtils httpUtils = new HttpUtils();
@@ -567,6 +557,9 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                             }else if (52011==bindoutput.getResultCode()){
                                 ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "该QQ号已经被绑定");
                             }
+                            else if (52014==bindoutput.getResultCode()){
+                                ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "错误的认证账号");
+                            }
                             else {
                                 //异常处理，自动切换成无数据
                                 progress.dismissView();
@@ -592,6 +585,8 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                     });
 
                 }else if (msg.arg1 == 2){
+                    progress.showProgress("正在绑定微信");
+                    progress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
                     LoginWXModel loginWXModel = (LoginWXModel) msg.obj;
                     String url = Contant.REQUEST_URL + Contant.BINGWEIXIN;
                     AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), UserSettingActivity.this);
@@ -620,7 +615,12 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                                 {
                                     ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "未请求到数据");
                                 }
-                            } else {
+                            }
+                            else if(52012==bindoutput.getResultCode())
+                            {
+                                ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "该微信号已经被绑定");
+                            }
+                            else {
                                 //异常处理，自动切换成无数据
                                 progress.dismissView();
                                 noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "绑定失败");
@@ -651,7 +651,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
 
             case Contant.MSG_USERID_NO_FOUND:
             {
-                successProgress.dismissView();
+                progress.dismissView();
                 //提示授权成功
                 ToastUtils.showMomentToast(UserSettingActivity.this, this, "获取用户信息失败");
 
@@ -659,7 +659,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
             break;
             case Contant.INIT_MENU_ERROR:
             {
-                successProgress.dismissView();
+                progress.dismissView();
                 ToastUtils.showMomentToast(UserSettingActivity.this, this, "获取用户信息失败");
 
             }

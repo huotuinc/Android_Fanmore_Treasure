@@ -155,14 +155,16 @@ public class LoginActivity extends BaseActivity
             //授权登录
             case Contant.LOGIN_AUTH_ERROR:
             {
-                btn_wx.setClickable(true);
+                btn_wx.setEnabled(true);
+                btn_qq.setEnabled(true);
                 progress.dismissView();
                 ToastUtils.showMomentToast(LoginActivity.this, this, "登录失败");
             }
             break;
             case Contant.MSG_AUTH_ERROR:
             {
-                loginL.setClickable ( true );
+                btn_wx.setEnabled(true);
+                btn_qq.setEnabled(true);
                 progress.dismissView();
 
                 Throwable throwable = ( Throwable ) msg.obj;
@@ -174,8 +176,6 @@ public class LoginActivity extends BaseActivity
                 }
                 else
                 {
-                    loginL.setClickable ( true );
-                    progress.dismissView();
 //                    //提示授权失败
                     ToastUtils.showMomentToast(LoginActivity.this, this, "授权操作遇到错误");
 
@@ -185,7 +185,8 @@ public class LoginActivity extends BaseActivity
             break;
             case Contant.MSG_AUTH_CANCEL:
             {
-                loginL.setClickable ( true );
+                btn_wx.setEnabled(true);
+                btn_qq.setEnabled(true);
                 //提示取消授权
                 progress.dismissView();
                 ToastUtils.showMomentToast(LoginActivity.this, this, "授权操作已取消");
@@ -195,19 +196,16 @@ public class LoginActivity extends BaseActivity
             break;
             case Contant.MSG_USERID_FOUND:
             {
-
-                ToastUtils.showMomentToast(LoginActivity.this, this, "已经获取用户信息");
-
-
+                progress.dismissView();
             }
             break;
             case Contant.MSG_LOGIN:
             {
-
-               // ToastUtils.showShortToast(this,"登陆成功");
-
+                progress.showProgress("正在登录");
+                progress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
+                btn_wx.setEnabled(true);
+                btn_qq.setEnabled(true);
                 if( msg.arg1 == 1 ) {
-                    progress.showProgress("正在登录");
                     LoginQQModel qqModel = (LoginQQModel) msg.obj;
                     String url = Contant.REQUEST_URL + Contant.AUTHLOGIN;
                     AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), LoginActivity.this);
@@ -309,7 +307,6 @@ public class LoginActivity extends BaseActivity
 
                 }
                 else if( msg.arg1 == 2 ) {
-                    progress.showProgress("正在登录");
                     LoginWXModel loginWXModel = (LoginWXModel) msg.obj;
                     AuthParamUtils paramUtils = new AuthParamUtils( application, System.currentTimeMillis (),  LoginActivity.this );
                     //中文字符特殊处理
@@ -345,6 +342,8 @@ public class LoginActivity extends BaseActivity
 
             case Contant.MSG_USERID_NO_FOUND:
             {
+                btn_wx.setEnabled(true);
+                btn_qq.setEnabled(true);
                 progress.dismissView();
                 //提示授权成功
                 ToastUtils.showMomentToast(LoginActivity.this, this, "获取用户信息失败");
@@ -353,6 +352,8 @@ public class LoginActivity extends BaseActivity
             break;
             case Contant.INIT_MENU_ERROR:
             {
+                btn_wx.setEnabled(true);
+                btn_qq.setEnabled(true);
                 progress.dismissView();
                 ToastUtils.showMomentToast(LoginActivity.this, this, "获取用户信息失败");
 
@@ -707,19 +708,21 @@ public class LoginActivity extends BaseActivity
         switch (v.getId()){
             case R.id.tv_wx:
             case R.id.btn_wx:{
-//               ShareSDK.getPlatform(LoginActivity.this, Wechat.NAME);
-               login = new AutnLogin(LoginActivity.this, mHandler, loginL, application);
+                progress.showProgress("正在授权");
+                progress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
+               login = new AutnLogin(LoginActivity.this, mHandler, application);
                login.authorize(new Wechat(LoginActivity.this));
-               loginL.setClickable(false);
+                btn_wx.setEnabled(false);
 
             }
            break;
             case R.id.tv_qq:
             case R.id.btn_qq:{
-//                Platform platform=ShareSDK.getPlatform(LoginActivity.this, QQ.NAME);
-                login = new AutnLogin(LoginActivity.this, mHandler, loginL, application);
+                progress.showProgress("正在授权");
+                progress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
+                login = new AutnLogin(LoginActivity.this, mHandler, application);
                 login.authorize(new QQ(LoginActivity.this));
-                loginL.setClickable(false);
+                btn_qq.setEnabled(false);
             }
             break;
             case R.id.tv_forgetpsd:
@@ -738,6 +741,7 @@ public class LoginActivity extends BaseActivity
      Response.ErrorListener errorListener =new Response.ErrorListener() {
          @Override
          public void onErrorResponse(VolleyError error) {
+             progress.dismissView();
              noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "登录失败");
              noticePop.showNotice();
              noticePop.showAtLocation(titleLayoutL,
@@ -750,7 +754,7 @@ public class LoginActivity extends BaseActivity
         @Override
         public void onResponse(AppWXLoginModel appWXLoginModel) {
             //LoginActivity.this.closeProgressDialog();
-
+            progress.dismissView();
             if( null == appWXLoginModel ){
 
                 return;

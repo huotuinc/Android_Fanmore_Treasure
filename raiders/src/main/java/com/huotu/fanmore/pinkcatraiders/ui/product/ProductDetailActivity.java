@@ -916,11 +916,18 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     @OnClick(R.id.sdL)
     void doShareOrder()
     {
-        Bundle bundle = new Bundle (  );
-        //产品晒单
-        bundle.putInt("type", 2);
-        bundle.putLong("goodsId", productDetail.getPid());
-        ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, ShowOrderActivity.class, bundle);
+        if(null==productDetail)
+        {
+            ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "产品数据出错，请重试");
+        }
+        else
+        {
+            Bundle bundle = new Bundle (  );
+            //产品晒单
+            bundle.putInt("type", 2);
+            bundle.putLong("goodsId", productDetail.getPid());
+            ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, ShowOrderActivity.class, bundle);
+        }
     }
 
     private void getCommentLog()
