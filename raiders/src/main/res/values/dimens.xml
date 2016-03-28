@@ -54,6 +54,7 @@
     <dimen name="common_icon_size_1">25dp</dimen>
     <dimen name="common_icon_size_2">100dp</dimen>
     <dimen name="level_size">20dp</dimen>
+    <dimen name="level_size15">15dp</dimen>
     <dimen name="level_size1">10dp</dimen>
     <dimen name="level_size11">6dp</dimen>
     <dimen name="text_size_8">8sp</dimen>
