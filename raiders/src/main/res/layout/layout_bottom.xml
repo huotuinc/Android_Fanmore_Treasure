@@ -142,7 +142,7 @@
                     android:layout_below="@id/mall"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="2dp"
-                    android:text="兑换商城"
+                    android:text="积分兑换"
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_12" />
             </RelativeLayout>

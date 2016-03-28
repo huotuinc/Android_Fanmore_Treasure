@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -263,10 +265,10 @@ public class DateUtils {
         }
         else
         {
-            int min = (int) (sec/(int)60);
-            if(min<60)
+            String min = new DecimalFormat("0").format(Math.ceil((double) sec / 60));
+            if(Integer.parseInt(min)<60)
             {
-                if(min<10)
+                if(Integer.parseInt(min)<10)
                 {
                     return "距离结束还有 00:0"+min+" 分钟";
                 }
@@ -413,10 +415,10 @@ public class DateUtils {
         {
             int hour = (int) (time/(60*60));
             long sec = time%(60*60);
-            int min = (int) (sec/60);
+            String min = new DecimalFormat("0").format(Math.ceil((double) sec / 60));
 
             v1.setText(String.valueOf(hour));
-            v2.setText(String.valueOf(min));
+            v2.setText(min);
         }
     }
 }

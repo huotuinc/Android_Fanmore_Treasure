@@ -22,6 +22,7 @@ import com.huotu.fanmore.pinkcatraiders.R;
 
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
@@ -72,7 +73,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     TextView data;
     @Bind(R.id.version)
     TextView version;
-    File file =new File("/data/data/cy.com.morefan/cache");
+    File file =new File("/data/data/"+ Contant.SYS_PACKAGE+"/cache");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,8 +120,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
     @OnClick( R.id.cleanL)
     void clean(){
-        DataCleanManager.cleanCustomCache("/data/data/cy.com.morefan/cache");
-        DataCleanManager.cleanCustomCache("/data/data/cy.com.morefan/cache/volley");
+        DataCleanManager.cleanCustomCache("/data/data/"+ Contant.SYS_PACKAGE+"/cache");
+        DataCleanManager.cleanCustomCache("/data/data/"+ Contant.SYS_PACKAGE+"/cache/volley");
         try {
             inintData();
         } catch (Exception e) {

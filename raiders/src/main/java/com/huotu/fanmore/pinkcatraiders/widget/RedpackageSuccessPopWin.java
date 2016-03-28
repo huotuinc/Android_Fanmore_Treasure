@@ -57,6 +57,11 @@ public class RedpackageSuccessPopWin extends PopupWindow {
         this.setFocusable(false);
     }
 
+    public void setDesc(String desc)
+    {
+        successTag.setText("恭喜你获得1个红包\n"+desc);
+    }
+
     public void dismissView()
     {
         setOnDismissListener (new PoponDismissListener(aty));
