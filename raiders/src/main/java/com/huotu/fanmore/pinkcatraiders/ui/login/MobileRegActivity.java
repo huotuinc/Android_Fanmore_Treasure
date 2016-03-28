@@ -456,7 +456,15 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                             Gravity.CENTER, 0, 0
                     );
                 }
-
+                else if(53014==getCode.getResultCode())
+                {
+                    //异常处理，自动切换成无数据
+                    noticePop = new NoticePopWindow ( MobileRegActivity.this, MobileRegActivity.this, wManager, "验证码已发，60之后再试");
+                    noticePop.showNotice ( );
+                    noticePop.showAtLocation(btn_commit,
+                            Gravity.CENTER, 0, 0
+                    );
+                }
                 else
                 {
                     //异常处理，自动切换成无数据
