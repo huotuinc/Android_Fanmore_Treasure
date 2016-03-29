@@ -132,25 +132,12 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
     public
     boolean handleMessage ( Message msg ) {
 
-        String addressName = ( String ) msg.obj;
-        int    type        = msg.arg1;
         switch ( msg.what ) {
             case Contant.SELECT_ADDRESS: {
-                if ( 0 == type ) {
-                    //设置省份信息
-                    province.setText ( addressName );
-                }
-                else if ( 1 == type ) {
-                    //设置城市信息
-                    city.setText ( addressName );
-                }
-                else if ( 2 == type ) {
-                    //设置城市信息
-                    area.setText ( addressName );
-                }
-                else {
-
-                }
+                List<String> address = (List<String>) msg.obj;
+                    province.setText ( address.get(0) );
+                    city.setText ( address.get(1)  );
+                    area.setText ( address.get(2)  );
             }
             break;
             default:
@@ -303,153 +290,28 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
     @OnClick ( R.id.provinceL )
     void selectProvince()
     {
-        //选择省份
-        List<LocalAddressModel.ProvinceInner> provinceData = data.getList();
-        if(null==provinceData||provinceData.isEmpty())
-        {
-            ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "省份选择数据出错");
-        }
-        else
-        {
-            Iterator<LocalAddressModel.ProvinceInner> it = provinceData.iterator();
-            addresses = new ArrayList<AddressModel> (  );
-            while (it.hasNext())
-            {
-                AddressModel address = new AddressModel ();
-                LocalAddressModel.ProvinceInner province = it.next();
-                address.setAddressName(province.getName());
-                addresses.add(address);
-            }
-            addressPopWin = new AddressPopWin ( mHandler, application, AddAddressActivity.this, addresses, 0, wManager, AddAddressActivity.this );
-            addressPopWin.initView();
-            addressPopWin.showAtLocation (titleLeftImage, Gravity.CENTER, 0, 0);
-            addressPopWin.setOnDismissListener(new PoponDismissListener (AddAddressActivity.this));
-        }
-
+        addressPopWin = new AddressPopWin ( mHandler, application, AddAddressActivity.this, application.localAddress, 0, wManager, AddAddressActivity.this );
+        addressPopWin.initView();
+        addressPopWin.showAtLocation (titleLeftImage, Gravity.BOTTOM, 0, 0);
+        addressPopWin.setOnDismissListener(new PoponDismissListener (AddAddressActivity.this));
     }
 
     @OnClick ( R.id.cityL )
     void selectCity()
     {
-        //判断是否选择省份
-        if(TextUtils.isEmpty(province.getText()))
-        {
-            ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "请选择省份");
-        }
-        else
-        {
-            String provinceText = province.getText().toString();
-            List<LocalAddressModel.CityInner> cityInners = null;
-            //选择城市
-            List<LocalAddressModel.ProvinceInner> provinceData = data.getList();
-            Iterator<LocalAddressModel.ProvinceInner> it = provinceData.iterator();
-            while (it.hasNext())
-            {
-                LocalAddressModel.ProvinceInner provinceInner = it.next();
-                if(provinceText.equals(provinceInner.getName()))
-                {
-                    cityInners = provinceInner.getCity();
-                    break;
-                }
-                else
-                {
-                    continue;
-                }
-            }
-            if(null==cityInners||cityInners.isEmpty())
-            {
-                //城市数据不存在
-                ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "城市选择数据出错");
-            }
-            else
-            {
-                addresses = new ArrayList<AddressModel> (  );
-                for(int i=0; i<cityInners.size(); i++)
-                {
-                    AddressModel address = new AddressModel ();
-                    LocalAddressModel.CityInner city = cityInners.get(i);
-                    address.setAddressName(city.getName());
-                    addresses.add(address);
-                }
-                addressPopWin = new AddressPopWin ( mHandler, application, AddAddressActivity.this, addresses, 1, wManager, AddAddressActivity.this );
-                addressPopWin.initView();
-                addressPopWin.showAtLocation(titleLeftImage, Gravity.CENTER, 0, 0);
-                addressPopWin.setOnDismissListener(new PoponDismissListener(AddAddressActivity.this));
-            }
-        }
+        addressPopWin = new AddressPopWin ( mHandler, application, AddAddressActivity.this, application.localAddress, 0, wManager, AddAddressActivity.this );
+        addressPopWin.initView();
+        addressPopWin.showAtLocation (titleLeftImage, Gravity.BOTTOM, 0, 0);
+        addressPopWin.setOnDismissListener(new PoponDismissListener (AddAddressActivity.this));
     }
 
     @OnClick ( R.id.areaL )
     void selectArea()
     {
-        List<LocalAddressModel.CityInner> cityInners = null;
-        List<LocalAddressModel.AreaInner> areaInner = null;
-        //判断是否选择省份
-        if(TextUtils.isEmpty(city.getText()))
-        {
-            ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "请选择城市");
-        }
-        else {
-
-            //省
-            String provinceText = province.getText().toString();
-            //城市
-            String cityText = city.getText().toString();
-
-            List<LocalAddressModel.ProvinceInner> provinceData = data.getList();
-            for(int i=0; i<provinceData.size(); i++)
-            {
-                if(provinceText.equals(provinceData.get(i).getName()))
-                {
-                    cityInners = provinceData.get(i).getCity();
-                    break;
-                }
-                else
-                {
-                    continue;
-                }
-            }
-            if(null==cityInners||cityInners.isEmpty())
-            {
-                ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "城市数据选择异常");
-            }
-            else
-            {
-                for(int i=0; i<cityInners.size(); i++)
-                {
-                    if(cityText.equals(cityInners.get(i).getName()))
-                    {
-                        areaInner = cityInners.get(i).getArea();
-                        break;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-                if(null==areaInner||areaInner.isEmpty())
-                {
-                    //城市数据不存在
-                    ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "区域选择数据出错");
-                }
-                else
-                {
-                    addresses = new ArrayList<AddressModel> (  );
-                    for(int i=0; i<areaInner.size(); i++)
-                    {
-                        AddressModel address = new AddressModel ();
-                        LocalAddressModel.AreaInner area = areaInner.get(i);
-                        address.setAddressName(area.getName());
-                        addresses.add(address);
-                    }
-                    addressPopWin = new AddressPopWin(mHandler, application, AddAddressActivity.this, addresses, 2, wManager, AddAddressActivity.this);
-                    addressPopWin.initView();
-                    addressPopWin.showAtLocation(titleLeftImage, Gravity.CENTER, 0, 0);
-                    addressPopWin.setOnDismissListener(new PoponDismissListener(AddAddressActivity.this));
-                }
-
-            }
-        }
+        addressPopWin = new AddressPopWin ( mHandler, application, AddAddressActivity.this, application.localAddress, 0, wManager, AddAddressActivity.this );
+        addressPopWin.initView();
+        addressPopWin.showAtLocation (titleLeftImage, Gravity.BOTTOM, 0, 0);
+        addressPopWin.setOnDismissListener(new PoponDismissListener (AddAddressActivity.this));
     }
 
     @OnClick(R.id.titleLeftImage)
