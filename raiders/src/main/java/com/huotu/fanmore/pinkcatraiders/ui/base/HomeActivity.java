@@ -624,10 +624,10 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
 
                     //判断是否登陆
-                    if(!application.isLogin())
-                    {
-                        ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class);
-                    } else {
+//                    if(!application.isLogin())
+//                    {
+//                        ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class);
+//                    } else {
 
                         String url = Contant.REQUEST_URL + Contant.GETMALLURL;
                         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
@@ -698,7 +698,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
                     }
 
-                    }
+
 
             }
             break;
