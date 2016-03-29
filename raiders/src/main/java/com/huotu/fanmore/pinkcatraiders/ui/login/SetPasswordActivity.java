@@ -242,9 +242,14 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
                                 BaseModel base = new BaseModel();
                                 base = jsonUtil.toBean(response.toString(), base);
                                 if (null != base && (1 == base.getResultCode())) {
+                                    if (application.isLogin()){
+                                        ToastUtils.showMomentToast(SetPasswordActivity.this, SetPasswordActivity.this, "修改密码成功");
+                                        finish();
+                                    }else {
 
-                                    ToastUtils.showMomentToast(SetPasswordActivity.this, SetPasswordActivity.this, "修改密码成功");
-                                    ActivityUtils.getInstance().skipActivity(SetPasswordActivity.this, LoginActivity.class);
+                                        ToastUtils.showMomentToast(SetPasswordActivity.this, SetPasswordActivity.this, "修改密码成功");
+                                        ActivityUtils.getInstance().skipActivity(SetPasswordActivity.this, LoginActivity.class);
+                                    }
                                 } else if (54001 == base.getResultCode()) {
                                     //异常处理，自动切换成无数据
                                     noticePop = new NoticePopWindow(SetPasswordActivity.this, SetPasswordActivity.this, wManager, base.getResultDescription());

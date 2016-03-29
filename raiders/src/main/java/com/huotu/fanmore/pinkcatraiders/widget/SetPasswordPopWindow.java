@@ -74,7 +74,7 @@ class SetPasswordPopWindow extends PopupWindow {
                     public
                     void onClick ( View v ) {
                         dismissView ( );
-                        ActivityUtils.getInstance().showActivity(aty, ChangePasswordActivity.class);
+                        ActivityUtils.getInstance().skipActivity(aty, ChangePasswordActivity.class);
                     }
                 } );
         alipayBtn.setOnClickListener ( new View.OnClickListener ( ) {
@@ -84,7 +84,7 @@ class SetPasswordPopWindow extends PopupWindow {
                 dismissView();
                 Bundle bundle=new Bundle();
                 bundle.putInt("type",2);
-                ActivityUtils.getInstance().showActivity(aty, MobileRegActivity.class,bundle);
+                ActivityUtils.getInstance().skipActivity(aty, MobileRegActivity.class,bundle);
             }
         } );
         cancelBtn.setOnClickListener ( new View.OnClickListener ( ) {
