@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:padding="5dp">
+    <TextView
+        android:layout_width="@dimen/common_icon_size_5"
+        android:layout_height="@dimen/common_icon_size_5"
+        android:id="@+id/funBtn"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/allSelect"
+        android:text="全选"
+        android:textSize="@dimen/text_size_14"
+        android:textColor="@color/text_black"
+        android:layout_toRightOf="@+id/funBtn"
+        android:layout_marginLeft="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/totalSelect"
+        android:text="共选择0件商品"
+        android:textSize="@dimen/text_size_12"
+        android:textColor="@color/text_gray"
+        android:layout_below="@+id/allSelect"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@+id/funBtn"
+        android:layout_marginLeft="10dp"/>
+    <TextView
+        android:id="@+id/funOpBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="删除"
+        android:textColor="@color/title_bg"
+        android:textSize="@dimen/text_size_16"
+        android:background="@drawable/button_common_2"/>
+</RelativeLayout>

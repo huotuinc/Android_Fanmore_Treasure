@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:padding="5dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/allSelect"
+        android:text="共0件奖品，总计：0元"
+        android:textSize="@dimen/text_size_14"
+        android:textColor="@color/text_black"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/totalSelect"
+        android:text="夺宝有风险，参与需谨慎"
+        android:textSize="@dimen/text_size_12"
+        android:textColor="@color/text_gray"
+        android:layout_below="@+id/allSelect"
+        android:layout_marginTop="1dp"/>
+    <TextView
+        android:id="@+id/funOpBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="结算"
+        android:textColor="@color/title_bg"
+        android:textSize="@dimen/text_size_16"
+        android:background="@drawable/button_common_2"/>
+</RelativeLayout>

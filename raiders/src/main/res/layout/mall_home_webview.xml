@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/titleLayoutL"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <include
+            layout="@layout/layout_title"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/webL"
+        android:layout_below="@+id/titleLayoutL"
+        android:layout_above="@+id/ff3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/account_bg">
+        <com.handmark.pulltorefresh.library.PullToRefreshWebView
+            android:id="@+id/webPage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:scrollbars="none"/>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="3px"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/progress_mall_draw"/>
+    </RelativeLayout>
+    <FrameLayout
+        android:id="@+id/ff3"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" >
+        <WebView
+            android:id="@+id/underwebView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
+</RelativeLayout>

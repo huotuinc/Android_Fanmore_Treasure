@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="drawable_array">
+        <item>@mipmap/logo_wechat</item>
+        <item>@mipmap/logo_sinaweibo</item>
+        <item>@mipmap/logo_wechat</item>
+        <item>@mipmap/logo_qzone</item>
+    </array>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/account_bg">
+    <RelativeLayout
+        android:id="@+id/titleLayoutL"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+            <include layout="@layout/layout_title"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_below="@+id/titleLayoutL">
+            <com.huotu.android.library.libedittext.EditText
+                android:id="@+id/modityTextInput"
+                style="@style/CyEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:imeOptions="actionDone"/>
+        </RelativeLayout>
+</RelativeLayout>

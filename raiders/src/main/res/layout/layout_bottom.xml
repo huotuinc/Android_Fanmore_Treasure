@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/homeBottom"
+    android:layout_alignParentBottom="true"
+    android:orientation="vertical">
+    <!-- 普通底部导航 -->
+    <LinearLayout
+        android:id="@+id/main_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_height"
+        android:background="@drawable/account_bg_draw_top"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/onBuyL"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="onTabClicked"
+            android:padding="3dp" >
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/oneBuy"
+                    android:layout_width="@dimen/common_icon_size"
+                    android:layout_height="@dimen/common_icon_size"
+                    android:layout_centerHorizontal="true"
+                    android:background="@mipmap/bottom_onebuy_normal"
+                    android:focusable="false"
+                    android:scaleType="centerInside" />
+
+                <TextView
+                    android:id="@+id/obBuyLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/oneBuy"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="2dp"
+                    android:text="首页"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_12" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/newestL"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="onTabClicked"
+            android:padding="3dp" >
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/newest"
+                    android:layout_width="@dimen/common_icon_size"
+                    android:layout_height="@dimen/common_icon_size"
+                    android:layout_centerHorizontal="true"
+                    android:background="@mipmap/bottom_newest_normal"
+                    android:focusable="false"
+                    android:scaleType="centerInside"/>
+
+                <TextView
+                    android:id="@+id/newestLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/newest"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="2dp"
+                    android:text="最新揭晓"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_12" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/listL"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="onTabClicked"
+            android:padding="3dp" >
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/list"
+                    android:layout_width="@dimen/common_icon_size"
+                    android:layout_height="@dimen/common_icon_size"
+                    android:layout_centerHorizontal="true"
+                    android:background="@mipmap/bottom_list_normal"
+                    android:focusable="false"
+                    android:scaleType="centerInside" />
+                <TextView
+                    android:id="@+id/listLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/list"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="2dp"
+                    android:text="清单"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_12" />
+            </RelativeLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/mallL"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="onTabClicked"
+            android:padding="3dp" >
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/mall"
+                    android:layout_width="@dimen/common_icon_size"
+                    android:layout_height="@dimen/common_icon_size"
+                    android:layout_centerHorizontal="true"
+                    android:background="@mipmap/mall_icon_common"
+                    android:focusable="false"
+                    android:scaleType="centerInside" />
+
+                <TextView
+                    android:id="@+id/mallLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/mall"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="2dp"
+                    android:text="积分兑换"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_12" />
+            </RelativeLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/profileL"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="onTabClicked"
+            android:padding="3dp" >
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/profile"
+                android:layout_width="@dimen/common_icon_size"
+                android:layout_height="@dimen/common_icon_size"
+                android:layout_centerHorizontal="true"
+                android:background="@mipmap/bottom_profile_normal"
+                android:focusable="false"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:id="@+id/profileLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                android:text="我的"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_12" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

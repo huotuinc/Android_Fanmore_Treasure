@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/loginL"
+    xmlns:cy="http://schemas.android.com/apk/res-auto"
+    android:background="@color/color_white">
+    <RelativeLayout
+        android:id="@+id/titleLayoutL"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <include
+            layout="@layout/layout_title"/>
+
+    </RelativeLayout>
+
+<LinearLayout
+    android:layout_below="@+id/titleLayoutL"
+    android:id="@+id/loginLay"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <ImageView
+            android:id="@+id/imgUser1"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/btn_user"/>
+        <com.huotu.android.library.libedittext.EditText
+            android:layout_margin="10dp"
+            android:id="@+id/edtUserName"
+            style="@style/CyEditTextStyle"
+            cy:style="transparent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_username2"
+            android:imeOptions="actionNext"
+            android:inputType="textUri"
+            android:maxLength="20"
+            android:textColor="@color/text_black" />
+    </LinearLayout>
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:background="@color/color_gray"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <ImageView
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/btn_psw"/>
+        <com.huotu.android.library.libedittext.EditText
+            android:id="@+id/edtPwd"
+            android:layout_margin="10dp"
+            style="@style/CyEditTextStyle"
+            cy:style="transparent"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_pwd2"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:maxLength="12"
+            android:text=""
+            android:textColor="@color/text_black" />
+        <TextView
+            android:id="@+id/tv_forgetpsd"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="忘记密码？"
+            android:gravity="end"
+            android:textColor="@color/text_black"/>
+    </LinearLayout>
+    <TextView
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_gray"/>
+
+
+
+</LinearLayout>
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_margin="20dp"
+        android:layout_below="@+id/loginLay"
+        android:background="@drawable/btn_login"
+        android:text="登录"
+        android:textSize="15sp"
+        android:textColor="@color/color_white"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+    <Button
+        android:id="@+id/btn_phonereg"
+        android:layout_below="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:background="@drawable/btn_phonereg"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/title_bg"
+        android:text="通过手机号注册"
+        android:textSize="15sp"/>
+    <FrameLayout
+        android:id="@+id/FL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/otherlogin"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+    <TextView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_gray"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_gravity="center"
+       />
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="或用以下方式登录"
+        android:background="@color/color_white"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textSize="15sp"/>
+    </FrameLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/otherlogin"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+<ImageView
+    android:id="@+id/btn_wx"
+
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@mipmap/wechat"/>
+        <TextView
+            android:id="@+id/tv_wx"
+            android:textSize="14sp"
+            android:layout_below="@+id/btn_wx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="微信登录"/>
+    <ImageView
+        android:id="@+id/btn_qq"
+        android:layout_marginLeft="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/qq"
+        android:layout_toRightOf="@+id/btn_wx"/>
+    </RelativeLayout>
+
+    <TextView
+        android:textSize="14sp"
+        android:id="@+id/tv_qq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="QQ登录"
+        android:layout_alignBottom="@+id/otherlogin"
+        android:layout_alignRight="@+id/otherlogin"
+         />
+
+</RelativeLayout>

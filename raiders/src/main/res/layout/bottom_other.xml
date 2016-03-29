@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white">
+
+    <TextView
+        android:layout_marginLeft="10dp"
+        android:id="@+id/bottomOtherBtnLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/common_btn_height_1"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:text="立即参与"
+        android:gravity="center"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/text_size_16"
+        android:background="@drawable/button_common_1"/>
+    <TextView
+        android:id="@+id/bottomOtherBtnCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/common_btn_height_1"
+        android:layout_toRightOf="@+id/bottomOtherBtnLeft"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:text="加入清单"
+        android:gravity="center"
+        android:textColor="@color/title_bg"
+        android:textSize="@dimen/text_size_16"
+        android:background="@drawable/button_common_2"/>
+    <ImageView
+        android:id="@+id/bottomOtherCart"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:background="@mipmap/bottom_cart"
+        android:layout_width="@dimen/common_icon_size_1"
+        android:layout_height="@dimen/common_icon_size_1"/>
+    <TextView
+        android:layout_marginRight="10dp"
+        android:layout_width="@dimen/level_size15"
+        android:layout_height="@dimen/level_size15"
+        android:id="@+id/bottomOtherCartAmount"
+        android:layout_marginTop="3dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="0"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:background="@drawable/design_red_point"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/text_size_8"
+        android:layout_marginLeft="3dp"/>
+</RelativeLayout>

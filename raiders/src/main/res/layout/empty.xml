@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/account_bg">
+    <ImageView
+        android:id="@+id/emptyIcon"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="@dimen/common_icon_size_2"
+        android:layout_height="@dimen/common_icon_size_2"
+        android:background="@mipmap/empty"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/emptyTag"
+        android:text="你还没有夺宝记录"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/text_size_16"
+        android:layout_below="@+id/emptyIcon"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:id="@+id/emptyBtn"
+        android:layout_width="@dimen/common_btn_width_3"
+        android:layout_height="@dimen/common_btn_height_2"
+        android:layout_below="@+id/emptyTag"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/text_size_16"
+        android:background="@drawable/button_common_1"
+        android:text="立即夺宝"
+        android:gravity="center"/>
+</RelativeLayout>

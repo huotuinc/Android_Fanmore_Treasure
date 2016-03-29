@@ -1,0 +1,24 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/titleLayoutL"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <include
+            layout="@layout/layout_title"/>
+    </RelativeLayout>
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        xmlns:ptr= "http://schemas.android.com/apk/res-auto"
+        android:id="@+id/historysPullRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        ptr:ptrAnimationStyle= "flip"
+        android:divider="@null"
+        android:dividerHeight="0px"
+        ptr:ptrMode= "both">
+        </com.handmark.pulltorefresh.library.PullToRefreshListView>
+    </LinearLayout>

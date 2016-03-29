@@ -1,0 +1,169 @@
+package com.huotu.fanmore.pinkcatraiders.fragment;
+
+import android.content.res.Resources;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ListView;
+
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.adapter.BuyItemAdapter;
+import com.huotu.fanmore.pinkcatraiders.adapter.RaidersAdapter;
+import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
+import com.huotu.fanmore.pinkcatraiders.model.BuyItemModel;
+import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
+import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.BuyLogActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+/**
+ * 购买记录（全部）
+ */
+public class BuyAllFrag extends BaseFragment implements Handler.Callback {
+
+    View rootView;
+    public Resources resources;
+    public BaseApplication application;
+    public BuyLogActivity rootAty;
+    public WindowManager wManager;
+    @Bind(R.id.buyLogList)
+    PullToRefreshListView buyLogList;
+    public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
+    public List<BuyItemModel> items;
+    public BuyItemAdapter adapter;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        resources = getActivity().getResources();
+        rootView = inflater.inflate(R.layout.buy_log_frag, container, false);
+        application = (BaseApplication) getActivity().getApplication();
+        rootAty = (BuyLogActivity) getActivity();
+        ButterKnife.bind(this, rootView);
+        wManager = getActivity().getWindowManager();
+        initList();
+        return rootView;
+    }
+
+    private void initList()
+    {
+        buyLogList.setMode(PullToRefreshBase.Mode.BOTH);
+        buyLogList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+                operateType = OperateTypeEnum.REFRESH;
+                loadData();
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+                operateType = OperateTypeEnum.LOADMORE;
+                loadData();
+
+            }
+        });
+        items = new ArrayList<BuyItemModel>();
+        adapter = new BuyItemAdapter(items, getActivity());
+        buyLogList.setAdapter(adapter);
+        firstGetData();
+    }
+
+    private void loadData()
+    {
+        BuyItemModel item1 = new BuyItemModel();
+        item1.setTitle("迷你小飞机");
+        item1.setToAmount(20);
+        item1.setAmount(1);
+        item1.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
+        item1.setStatus(0);
+        item1.setTotalMoney(200);
+        item1.setPrice(200);
+        items.add(item1);
+        BuyItemModel item2 = new BuyItemModel();
+        item2.setTitle("迷你小飞机");
+        item2.setToAmount(20);
+        item2.setAmount(1);
+        item2.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
+        item2.setStatus(1);
+        item2.setTotalMoney(200);
+        item2.setPrice(200);
+        items.add(item2);
+        BuyItemModel item3 = new BuyItemModel();
+        item3.setTitle("迷你小飞机");
+        item3.setToAmount(20);
+        item3.setAmount(1);
+        item3.setPictureUrl("http://img2.imgtn.bdimg.com/it/u=818166525,3164247683&fm=206&gp=0.jpg");
+        item3.setStatus(2);
+        item3.setTotalMoney(200);
+        item3.setPrice(200);
+        items.add(item3);
+        buyLogList.onRefreshComplete();
+    }
+
+    protected void firstGetData(){
+        rootAty.mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (rootAty.isFinishing()) {
+                    return;
+                }
+                operateType = OperateTypeEnum.REFRESH;
+                buyLogList.setRefreshing(true);
+            }
+        }, 1000);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onReshow() {
+
+    }
+
+    @Override
+    public void onFragPasue() {
+
+    }
+
+    @Override
+    public void onClick(View view) {
+
+    }
+
+    @Override
+    public boolean handleMessage(Message msg) {
+        return false;
+    }
+}
