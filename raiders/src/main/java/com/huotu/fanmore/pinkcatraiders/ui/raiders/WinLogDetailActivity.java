@@ -26,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.huotu.fanmore.pinkcatraiders.R;
+import com.huotu.fanmore.pinkcatraiders.adapter.ListAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.WinAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
@@ -39,6 +40,7 @@ import com.huotu.fanmore.pinkcatraiders.model.MyAddressListModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.WinExesptionModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.AddAddressActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -70,7 +72,7 @@ import butterknife.OnClick;
 /**
  * 中奖详情界面
  */
-public class WinLogDetailActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+public class WinLogDetailActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, MyBroadcastReceiver.BroadcastListener {
 
     public
     Resources resources;
@@ -146,6 +148,7 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
     TextView status5Time;
     public
     ProgressPopupWindow progress;
+    private MyBroadcastReceiver myBroadcastReceiver;
     //引导图片资源
     //地址列表
     public List< MyAddressListModel > lists = new ArrayList<MyAddressListModel>();
@@ -162,6 +165,7 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
         mHandler = new Handler ( this );
         bundle = this.getIntent().getExtras();
         winner = (AppUserBuyFlowModel) bundle.getSerializable("winner");
+        myBroadcastReceiver = new MyBroadcastReceiver(WinLogDetailActivity.this, this, MyBroadcastReceiver.SHOW_ORDER);
         initTitle();
         initScroll();
     }
@@ -396,19 +400,10 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                                 status4Time.setText(DateUtils.transformDataformat11(deliveryModel.getRecieveGoodsTime()));
                                 SystemTools.loadBackground(status5Icon, resources.getDrawable(R.mipmap.prize_unselect));
                                 status5Tag.setText("已签收");
-                                status5Tag.setText("再次晒单");
-                                status5Tag.setTextColor(resources.getColor(R.color.color_white));
-                                status5Tag.setPadding(5, 5, 5, 5);
-                                status5Tag.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        //确认收货接口
-                                        Message message = mHandler.obtainMessage();
-                                        message.what = Contant.WINNER_STATUS;
-                                        message.arg1 = 2;
-                                        mHandler.sendMessage(message);
-                                    }
-                                });
+                                status5Time.setText("已晒单");
+                                SystemTools.loadBackground(status5Time, resources.getDrawable(R.drawable.button_common_4));
+                                status5Time.setPadding(5, 5, 5, 5);
+                                status5Time.setEnabled(false);
                                 addressL.setVisibility(View.VISIBLE);
                                 //加载地址信息
                                 userName.setText(deliveryModel.getReceiver());
@@ -559,6 +554,7 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                     //确认并晒单
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("winner", winner);
+                    bundle.putInt("type",1);
                     ActivityUtils.getInstance().showActivity(WinLogDetailActivity.this, ShareOrderActivity.class, bundle);
                 }
             }
@@ -662,5 +658,20 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                     }
                 }, 1000
         );
+    }
+
+    @Override
+    public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
+        if(type == MyBroadcastReceiver.ReceiverType.showOrder)
+        {
+            //清单结算模式
+            Bundle bundle = (Bundle) msg;
+            int types = bundle.getInt("type");
+            if(1==types)
+            {
+                //刷新详情
+                firstGetData();
+            }
+        }
     }
 }

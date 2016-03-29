@@ -9,18 +9,23 @@ public class MyAddressListModel {
     String details;
     String mobile;
     String receiver;
+    private String cityName;
     private long addressId;
 
-    public
-    long getAddressId ( ) {
-
+    public long getAddressId() {
         return addressId;
     }
 
-    public
-    void setAddressId ( long addressId ) {
-
+    public void setAddressId(long addressId) {
         this.addressId = addressId;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public int getCityId() {

@@ -181,10 +181,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         if(platform!=null) {
             platform.removeAccount();
         }
-
-
-
-
+        //清除地址信息
+        application.localAddress = null;
     }
     @OnClick(R.id.problemL)
     void showweb()

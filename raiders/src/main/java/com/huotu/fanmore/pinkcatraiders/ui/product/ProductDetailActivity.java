@@ -175,8 +175,6 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
         initTitle();
         if (1==bundle.getInt("tip")) {
-
-
             initBottomOther();
         }else if(2==bundle.getInt("tip")) {
             initBottomAnnounced();

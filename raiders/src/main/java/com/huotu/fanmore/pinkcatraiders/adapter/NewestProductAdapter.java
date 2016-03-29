@@ -100,6 +100,10 @@ public class NewestProductAdapter extends BaseAdapter {
 
             }
             if (1==product.getStatus()) {
+                /*if(null!=tc)
+                {
+                    tc.cancel();
+                }*/
                 holder.Rl1.setVisibility(View.VISIBLE);
                 holder.Rl2.setVisibility(View.GONE);
                 holder.announcedTag.setText("即将揭晓");

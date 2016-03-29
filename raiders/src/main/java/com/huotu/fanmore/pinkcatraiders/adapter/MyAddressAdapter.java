@@ -120,6 +120,7 @@ public class MyAddressAdapter extends BaseAdapter {
                                                      bundle.putString ( "receiver",  MyAddressList.getReceiver ());
                                                      bundle.putString ( "mobile", MyAddressList.getMobile ( ) );
                                                      bundle.putString ( "details", MyAddressList.getDetails ( ) );
+                                                     bundle.putString("cityName", MyAddressList.getCityName());
                                                      bundle.putLong ( "addressId", MyAddressList.getAddressId () );
                                                      bundle.putInt ( "defaultAddress",
                                                                      MyAddressList
