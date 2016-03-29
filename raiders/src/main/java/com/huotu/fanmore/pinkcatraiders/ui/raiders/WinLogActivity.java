@@ -31,6 +31,7 @@ import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.WinnerOutputModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -54,7 +55,7 @@ import butterknife.OnClick;
 /**
  * 中奖记录
  */
-public class WinLogActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+public class WinLogActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, MyBroadcastReceiver.BroadcastListener {
 
     public
     Resources resources;
@@ -87,19 +88,21 @@ public class WinLogActivity extends BaseActivity implements View.OnClickListener
     public
     WinAdapter adapter;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
+    private MyBroadcastReceiver myBroadcastReceiver;
 
     @Override
     protected
     void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate ( savedInstanceState );
-        setContentView ( R.layout.ri_win_log );
-        ButterKnife.bind ( this );
+        setContentView(R.layout.ri_win_log);
+        ButterKnife.bind(this);
         application = ( BaseApplication ) this.getApplication ( );
         resources = this.getResources ( );
         mHandler = new Handler ( this );
         inflate = LayoutInflater.from ( WinLogActivity.this );
-        wManager = this.getWindowManager ( );
+        wManager = this.getWindowManager();
+        myBroadcastReceiver = new MyBroadcastReceiver(WinLogActivity.this, this, MyBroadcastReceiver.SHOW_ORDER);
         emptyView = inflate.inflate ( R.layout.empty, null );
         TextView emptyTag = ( TextView ) emptyView.findViewById ( R.id.emptyTag );
         emptyTag.setText ( "暂无中奖记录信息" );
@@ -290,5 +293,20 @@ public class WinLogActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
 
+    }
+
+    @Override
+    public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
+        if(type == MyBroadcastReceiver.ReceiverType.showOrder)
+        {
+            //清单结算模式
+            Bundle bundle = (Bundle) msg;
+            int types = bundle.getInt("type");
+            if(0==types)
+            {
+                //刷新列表
+                firstGetData();
+            }
+        }
     }
 }

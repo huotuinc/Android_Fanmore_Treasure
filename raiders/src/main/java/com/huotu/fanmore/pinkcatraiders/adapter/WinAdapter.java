@@ -147,6 +147,7 @@ public class WinAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("winner", winners.get(position));
+                        bundle.putInt("type",0);
                         ActivityUtils.getInstance().showActivity(aty, ShareOrderActivity.class, bundle);
                     }
                 });
@@ -154,6 +155,7 @@ public class WinAdapter extends BaseAdapter {
             else if(6==winners.get(position).getDeliveryStatus())
             {
                 holder.addBtn.setText("已晒单");
+                holder.addBtn.setEnabled(false);
                 holder.addBtn.setTextColor(resources.getColor(R.color.color_white));
                 SystemTools.loadBackground(holder.addBtn, resources.getDrawable(R.drawable.button_common_4));
             }

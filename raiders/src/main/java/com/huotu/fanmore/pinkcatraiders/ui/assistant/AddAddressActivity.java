@@ -376,6 +376,7 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
 
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), AddAddressActivity.this);
             Map<String, Object> maps = new HashMap<String, Object> ();
+            //1 拼装参数
             if(null==bundle)
             {
                 maps.put("cityId", "0");
