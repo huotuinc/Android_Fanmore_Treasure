@@ -25,13 +25,16 @@ import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
 import com.huotu.fanmore.pinkcatraiders.model.CarouselModel;
 import com.huotu.fanmore.pinkcatraiders.model.CateGoryOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.InitOutputsModel;
+import com.huotu.fanmore.pinkcatraiders.model.LocalAddressModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
+import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideListModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideListOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.guide.GuideActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.AssetsUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
@@ -86,6 +89,22 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
         setImmerseLayout(splashL);
         resources = this.getResources();
         progress = new ProgressPopupWindow ( SplashActivity.this, SplashActivity.this, wManager );
+        //如果本地存在地址数据则不加载
+        if(null==application.localAddress)
+        {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    AssetsUtils assetsUtils = new AssetsUtils(SplashActivity.this);
+                    String json = assetsUtils.readAddress("addressData.json");
+                    //json转Adress类
+                    JSONUtil<LocalAddressModel> jsonUtil = new JSONUtil<LocalAddressModel>();
+                    LocalAddressModel localAddress = new LocalAddressModel();
+                    localAddress = jsonUtil.toBean(json, localAddress);
+                    application.localAddress = localAddress;
+                }
+            });
+        }
         initView();
     }
 

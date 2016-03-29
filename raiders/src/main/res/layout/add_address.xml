@@ -124,7 +124,7 @@
                     android:layout_weight="1"
                     android:gravity="left|center_vertical"
                     android:maxLength="18"
-                    android:text="请选择"
+                    android:hint="请选择"
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_16"/>
                 <ImageView
@@ -160,7 +160,7 @@
                     android:layout_weight="1"
                     android:gravity="left|center_vertical"
                     android:maxLength="18"
-                    android:text="请选择"
+                    android:hint="请选择"
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_16"/>
                 <ImageView
@@ -196,7 +196,7 @@
                     android:layout_weight="1"
                     android:gravity="left|center_vertical"
                     android:maxLength="18"
-                    android:text="请选择"
+                    android:hint="请选择"
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_16"/>
                 <ImageView

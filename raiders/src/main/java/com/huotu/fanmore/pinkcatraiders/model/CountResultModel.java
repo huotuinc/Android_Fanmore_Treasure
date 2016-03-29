@@ -8,8 +8,8 @@ import java.util.List;
 public class CountResultModel extends BaseModel {
     String issueNo;
     long 	luckNumber;
-    long numberA;
-    long numberB;
+    String numberA;
+    String numberB;
     List<UserNumberModel> userNumbers;
 
     public String getIssueNo() {
@@ -28,19 +28,19 @@ public class CountResultModel extends BaseModel {
         this.luckNumber = luckNumber;
     }
 
-    public long getNumberA() {
+    public String getNumberA() {
         return numberA;
     }
 
-    public void setNumberA(long numberA) {
+    public void setNumberA(String numberA) {
         this.numberA = numberA;
     }
 
-    public long getNumberB() {
+    public String getNumberB() {
         return numberB;
     }
 
-    public void setNumberB(long numberB) {
+    public void setNumberB(String numberB) {
         this.numberB = numberB;
     }
 
