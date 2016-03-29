@@ -185,8 +185,11 @@ public class LoginActivity extends BaseActivity
             break;
             case Contant.MSG_AUTH_CANCEL:
             {
-                btn_wx.setEnabled(true);
-                btn_qq.setEnabled(true);
+                if(null!=btn_wx&&null!=btn_qq)
+                {
+                    btn_wx.setEnabled(true);
+                    btn_qq.setEnabled(true);
+                }
                 //提示取消授权
                 progress.dismissView();
                 ToastUtils.showMomentToast(LoginActivity.this, this, "授权操作已取消");
