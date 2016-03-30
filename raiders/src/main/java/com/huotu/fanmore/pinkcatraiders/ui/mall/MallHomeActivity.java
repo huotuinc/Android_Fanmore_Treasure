@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewStub;
@@ -131,6 +132,16 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
 
         underwebView.getSettings().setJavaScriptEnabled(true);
         underwebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        String userAgent = underwebView.getSettings().getUserAgentString();
+        if(null==userAgent|| TextUtils.isEmpty(userAgent))
+        {
+            userAgent = ";mobile;qibing";
+        }
+        else
+        {
+            userAgent += ";mobile;qibing";
+        }
+        underwebView.getSettings().setUserAgentString(userAgent);
 
         //首页默认为商户站点 + index
         underwebView.loadUrl(bundle.getString("bottomurl"));
@@ -204,6 +215,18 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
         viewPage.getSettings().setLoadsImagesAutomatically(true);
         viewPage.getSettings().setDomStorageEnabled(true);
         viewPage.loadUrl(bundle.getString("url"));
+
+        //设置angent
+        String userAgent = viewPage.getSettings().getUserAgentString();
+        if(null==userAgent|| TextUtils.isEmpty(userAgent))
+        {
+            userAgent = ";mobile;qibing";
+        }
+        else
+        {
+            userAgent += ";mobile;qibing";
+        }
+        viewPage.getSettings().setUserAgentString(userAgent);
 
         viewPage.setWebViewClient(
                 new WebViewClient() {

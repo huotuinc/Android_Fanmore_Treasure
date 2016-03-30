@@ -171,6 +171,6 @@ public class BitmapLoader
             public void onErrorResponse(VolleyError volleyError) {
                 imageView.setBackgroundResource(errorImg);
             }
-        }, 0, 0 , ImageView.ScaleType.FIT_XY);
+        }, 0, 0 , ImageView.ScaleType.CENTER_CROP);
     }
 }

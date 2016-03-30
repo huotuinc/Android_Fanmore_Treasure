@@ -109,7 +109,7 @@ public class MyAddressAdapter extends BaseAdapter {
         }
         holder.receiver.setText(MyAddressList.getReceiver());
         holder.mobile.setText(MyAddressList.getMobile ( ));
-        holder.details.setText(MyAddressList.getDetails ( ));
+        holder.details.setText(obtainDetails(MyAddressList.getDetails(), MyAddressList.getCityName()));
         holder.editIcon.setOnClickListener ( new View.OnClickListener ( ) {
 
                                                  @Override
@@ -149,5 +149,24 @@ public class MyAddressAdapter extends BaseAdapter {
         TextView editIcon;
         @Bind ( R.id.isDefault )
         TextView isDefault;
+    }
+
+    private String obtainDetails(String detail, String suffix)
+    {
+        String[] suffixs = suffix.split("|");
+        if(null == suffix)
+        {
+            return detail;
+        }
+        else
+        {
+            StringBuilder builder = new StringBuilder();
+            for(int i=0; i<suffixs.length;i++)
+            {
+                builder.append(suffixs[i]);
+            }
+            return detail+builder.toString();
+        }
+
     }
 }

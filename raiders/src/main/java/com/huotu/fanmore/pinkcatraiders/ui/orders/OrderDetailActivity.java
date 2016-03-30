@@ -177,6 +177,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                             int width = wManager.getDefaultDisplay().getWidth() - BitmapUtils.dip2px(OrderDetailActivity.this, 10);
                             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
                             ImageView orderImg = (ImageView) LayoutInflater.from(OrderDetailActivity.this).inflate ( R.layout.order_img, null );
+                            SystemTools.loadBackground(orderImg, resources.getDrawable(R.drawable.order_img_bg));
                             BitmapLoader.create().displayOrderUrl(OrderDetailActivity.this, orderImg,
                                     order.getPictureUrls().get(i), R.mipmap.defluat_logo);
                             orderImg.setLayoutParams(lp);
