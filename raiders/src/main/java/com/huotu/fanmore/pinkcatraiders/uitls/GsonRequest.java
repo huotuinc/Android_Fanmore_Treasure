@@ -99,7 +99,7 @@ public class GsonRequest<T> extends Request<T> {
 		}
 		mTypeToken=null;
 		mParams=null;
-		this.setRetryPolicy( new DefaultRetryPolicy(15000,1,1.0f));
+		this.setRetryPolicy( new DefaultRetryPolicy(15000,0,1.0f));
 
 		this.setTag( TAG );
 	}
