@@ -122,10 +122,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
         anima.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                progress.showProgress ( "正在初始化数据" );
-                progress.showAtLocation(splashL,
-                        Gravity.CENTER, 0, 0
-                );
+
                 //检测网络
                 isConnection = application.checkNet ( SplashActivity.this );
                 if ( ! isConnection ) {
