@@ -17,11 +17,11 @@
         android:xlargeScreens="true" />
 
     <permission
-        android:name="cy.com.morefan.permission.JPUSH_MESSAGE"
+        android:name="com.huotu.fanmore.raiders.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
 
     <!-- Required  一些系统要求的权限，如访问网络等 -->
-    <uses-permission android:name="cy.com.morefan.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="com.huotu.fanmore.raiders.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -288,7 +288,7 @@
                 <action android:name="cn.jpush.android.ui.PushActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="cy.com.morefan" />
+                <category android:name="com.huotu.fanmore.raiders" />
             </intent-filter>
         </activity>
         <!-- Required  SDK核心功能 -->
@@ -320,7 +320,7 @@
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.DaemonService" />
 
-                <category android:name="cy.com.morefan" />
+                <category android:name="com.huotu.fanmore.raiders" />
             </intent-filter>
         </service>
 
@@ -332,7 +332,7 @@
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
                 <!-- Required  显示通知栏 -->
-                <category android:name="cy.com.morefan" />
+                <category android:name="com.huotu.fanmore.raiders" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -371,7 +371,7 @@
                 <!-- Optional 用户接受Rich Push Javascript 回调函数的intent -->
                 <action android:name="cn.jpush.android.intent.CONNECTION" />
                 <!-- 接收网络变化 连接/断开 since 1.6.3 -->
-                <category android:name="cy.com.morefan" />
+                <category android:name="com.huotu.fanmore.raiders" />
             </intent-filter>
         </receiver>
 
@@ -381,7 +381,7 @@
             android:value="developer-default" />
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="a36e00d3397bf5e69049ed41" />
+            android:value="062a81a6270b11327642e91c" />
         <!-- </>值来自开发者平台取得的AppKey -->
         <!-- 激光推送 -->
         <activity android:name=".ui.raiders.WinLogDetailActivity" />
