@@ -54,7 +54,8 @@ public class GsonRequest<T> extends Request<T> {
 	/**
 	 *
 	 */
-	private final TypeToken<T> mTypeToken;//提供和解析自定义的复杂JSON数据支持,这点与Jackson使用TypeReference不同，但原理是大同小异的
+	private final TypeToken<T> mTypeToken;
+	//提供和解析自定义的复杂JSON数据支持,这点与Jackson使用TypeReference不同，但原理是大同小异的
 	
 	
 	/**

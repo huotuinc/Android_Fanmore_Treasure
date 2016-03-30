@@ -512,8 +512,6 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                 //提示取消授权
                 progress.dismissView();
                 ToastUtils.showMomentToast(UserSettingActivity.this, this, "授权操作已取消");
-
-
             }
             break;
             case Contant.MSG_USERID_FOUND:
