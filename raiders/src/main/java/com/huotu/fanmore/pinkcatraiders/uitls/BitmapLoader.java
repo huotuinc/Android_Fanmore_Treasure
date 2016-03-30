@@ -1,6 +1,7 @@
 package com.huotu.fanmore.pinkcatraiders.uitls;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.widget.ImageView;
 
@@ -55,7 +56,7 @@ public class BitmapLoader
     public void displayUrl(Context context, NetworkImageView imageView,
             String imageUrl)
     {
-        displayUrl(context, imageView, imageUrl , R.mipmap.error, R.mipmap.error);
+        displayUrl(context, imageView, imageUrl , R.mipmap.defluat_logo, R.mipmap.defluat_logo);
     }
 
     //加载圆形图片
@@ -163,7 +164,7 @@ public class BitmapLoader
             @Override
             public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
                 if (imageContainer != null && imageContainer.getBitmap() != null) {
-                    imageView.setImageBitmap(imageContainer.getBitmap());
+                    SystemTools.loadBackground(imageView, new BitmapDrawable(imageContainer.getBitmap()));
                 }
             }
 
@@ -171,6 +172,6 @@ public class BitmapLoader
             public void onErrorResponse(VolleyError volleyError) {
                 imageView.setBackgroundResource(errorImg);
             }
-        }, 0, 0 , ImageView.ScaleType.CENTER_CROP);
+        }, 0, 0 , ImageView.ScaleType.FIT_XY);
     }
 }
