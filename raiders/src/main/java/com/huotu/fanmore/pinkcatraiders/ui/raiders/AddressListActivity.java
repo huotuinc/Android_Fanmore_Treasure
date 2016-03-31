@@ -287,7 +287,7 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
                     void onErrorResponse ( VolleyError error ) {
                         progress.dismissView ( );
                         //系统级别错误
-                        ToastUtils.showMomentToast(AddressListActivity.this, AddressListActivity.this, "地址删除失败");
+                        ToastUtils.showMomentToast(AddressListActivity.this, AddressListActivity.this, "服务器未响应");
                     }
                 }
                                );

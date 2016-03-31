@@ -141,7 +141,7 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
         rootAty.mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (getActivity().isFinishing()) {
+                if (rootAty.isFinishing()) {
                     return;
                 }
                 menuList.setRefreshing(true);

@@ -243,7 +243,7 @@ public class RedEnvelopesActivity extends BaseActivity implements View.OnClickLi
                 {
                     return;
                 }
-                noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, "数据请求失败");
+                noticePopWin = new NoticePopWindow(RedEnvelopesActivity.this, RedEnvelopesActivity.this, wManager, "服务器未响应");
                 noticePopWin.showNotice();
                 noticePopWin.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0

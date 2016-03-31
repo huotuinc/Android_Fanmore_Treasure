@@ -255,7 +255,7 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
                     @Override
                     public void run() {
 
-                        if (getActivity().isFinishing()) {
+                        if (rootAty.isFinishing()) {
                             return;
                         }
                         profilePullRefresh.setRefreshing(true);

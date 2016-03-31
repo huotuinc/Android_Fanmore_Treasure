@@ -195,7 +195,7 @@ public class RedEnvelopesnouseFrag extends BaseFragment implements Handler.Callb
         rootAty.mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (getActivity().isFinishing()) {
+                if (rootAty.isFinishing()) {
                     return;
                 }
                 operateType = OperateTypeEnum.REFRESH;

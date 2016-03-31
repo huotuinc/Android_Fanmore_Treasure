@@ -419,7 +419,7 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
                 //数据为空
                 progress.dismissView();
                 //上传失败
-                noticePop = new NoticePopWindow(ShareOrderActivity.this, ShareOrderActivity.this, wManager, "晒单添加失败");
+                noticePop = new NoticePopWindow(ShareOrderActivity.this, ShareOrderActivity.this, wManager, "服务器未响应");
                 noticePop.showNotice();
                 noticePop.showAtLocation(
                         findViewById(R.id.titleLayout),
@@ -546,7 +546,7 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
                                 void onErrorResponse ( VolleyError error ) {
                                     progress.dismissView();
                                     //系统级别错误
-                                    ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "上传晒单图片失败");
+                                    ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "服务器未响应");
                                 }
                             }
                     );
