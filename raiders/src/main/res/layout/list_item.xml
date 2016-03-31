@@ -86,13 +86,13 @@
                 android:orientation="horizontal"
                 android:background="@drawable/l_bg_01">
                 <TextView
-                    android:id="@+id/addBtn"
+                    android:id="@+id/subBtn"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/add_sub_height1"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:layout_gravity="center"
-                    android:text="+"
+                    android:text="-"
                     android:background="@drawable/l_bg_right"
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_18"/>
@@ -107,14 +107,14 @@
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_10"/>
                 <TextView
-                    android:id="@+id/subBtn"
+                    android:id="@+id/addBtn"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/add_sub_height1"
                     android:layout_weight="1"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:background="@drawable/l_bg_left"
-                    android:text="-"
+                    android:text="+"
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_18"/>
                 </LinearLayout>

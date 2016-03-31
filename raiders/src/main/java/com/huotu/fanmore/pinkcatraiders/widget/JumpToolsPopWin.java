@@ -74,7 +74,7 @@ public class JumpToolsPopWin extends PopupWindow {
                 TextView addressName = (TextView) addressL.findViewById(R.id.addressName);
                 addressName.setText(address.getReceiver());
                 TextView details = (TextView) addressL.findViewById(R.id.details);
-                details.setText(address.getDetails());
+                details.setText(obtainDetails(address.getDetails(), address.getCityName()));
                 lp.setMargins(0, 0, 0, 0);
                 addressL.setLayoutParams(lp);
                 allAddressL.addView(addressL);
@@ -109,5 +109,24 @@ public class JumpToolsPopWin extends PopupWindow {
     {
         setOnDismissListener ( new PoponDismissListener( aty ) );
         dismiss ();
+    }
+
+    private String obtainDetails(String detail, String suffix)
+    {
+        String[] suffixs = suffix.split("&");
+        if(null == suffix)
+        {
+            return detail;
+        }
+        else
+        {
+            StringBuilder builder = new StringBuilder();
+            for(int i=0; i<suffixs.length;i++)
+            {
+                builder.append(suffixs[i]);
+            }
+            return builder.toString()+detail;
+        }
+
     }
 }

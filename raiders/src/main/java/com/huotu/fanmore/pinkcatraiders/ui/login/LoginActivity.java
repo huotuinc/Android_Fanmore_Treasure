@@ -300,7 +300,7 @@ public class LoginActivity extends BaseActivity
                             progress.dismissView();
                             //初始化失败
                             //异常处理，自动切换成无数据
-                            noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "登录失败");
+                            noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "服务器未响应");
                             noticePop.showNotice ( );
                             noticePop.showAtLocation(titleLayoutL,
                                     Gravity.CENTER, 0, 0
@@ -491,7 +491,7 @@ public class LoginActivity extends BaseActivity
                                                 progress.dismissView();
                                                 VolleyUtil.cancelAllRequest();
                                                 //系统级别错误
-                                                noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "结算失败");
+                                                noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "服务器未响应");
                                                 noticePop.showNotice();
                                                 noticePop.showAtLocation(
                                                         findViewById(R.id.titleLayout),
@@ -748,7 +748,7 @@ public class LoginActivity extends BaseActivity
          @Override
          public void onErrorResponse(VolleyError error) {
              progress.dismissView();
-             noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "登录失败");
+             noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "服务器未响应");
              noticePop.showNotice();
              noticePop.showAtLocation(titleLayoutL,
                      Gravity.CENTER, 0, 0);

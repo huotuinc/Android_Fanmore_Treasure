@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -693,7 +694,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                 }
                                 //初始化失败
                                 //异常处理，自动切换成无数据
-                                noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "登录失败");
+                                noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "服务器未响应");
                                 noticePop.showNotice();
                                 noticePop.showAtLocation(titleLayoutL,
                                         Gravity.CENTER, 0, 0
@@ -767,7 +768,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "无效商品无法打开");
+                                    ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "服务器未响应");
                                     //暂无数据提示
 
                                 }
@@ -1073,7 +1074,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                         progress.dismissView();
                                         VolleyUtil.cancelAllRequest();
                                         //系统级别错误
-                                        noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "结算失败");
+                                        noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "服务器未响应");
                                         noticePop.showNotice();
                                         noticePop.showAtLocation(
                                                 findViewById(R.id.titleLayout),
@@ -1227,7 +1228,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                             funcPopWin.setUNSelectAll();
                                             VolleyUtil.cancelAllRequest();
                                             //系统级别错误
-                                            ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除失败");
+                                            ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "服务器未响应");
                                         }
                                     }
                         );
@@ -1276,111 +1277,114 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 });
             }
             break;
-            case 0x11112223:
+            case 0x33110090:
             {
-                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "购买成功获得一次分享红包的机会");
-                mHandler.postDelayed(new Runnable() {
+
+                String url = Contant.REQUEST_URL + Contant.SHARE_REF_PACKETS;
+                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                Map<String, Object> maps = new HashMap<String, Object>();
+                String suffix = params.obtainGetParam(maps);
+                url = url + suffix;
+                HttpUtils httpUtils = new HttpUtils();
+                httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
                     @Override
-                    public void run() {
-                        String url = Contant.REQUEST_URL + Contant.SHARE_REF_PACKETS;
-                        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
-                        Map<String, Object> maps = new HashMap<String, Object>();
-                        String suffix = params.obtainGetParam(maps);
-                        url = url + suffix;
-                        HttpUtils httpUtils = new HttpUtils();
-                        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                if (HomeActivity.this.isFinishing()) {
-                                    return;
-                                }
-                                JSONUtil<ShareOutputModel> jsonUtil = new JSONUtil<ShareOutputModel>();
-                                ShareOutputModel shareOutput = new ShareOutputModel();
-                                shareOutput = jsonUtil.toBean(response.toString(), shareOutput);
-                                if (null != shareOutput && null != shareOutput.getResultData() && (1 == shareOutput.getResultCode())) {
-                                    if (null != shareOutput.getResultData().getShare() && null != shareOutput.getResultData()) {
-                                        //application.writeShareinfo(shareOutput.getResultData().getShare());
-                                        ShareModel msgModel = new ShareModel();
-                                        msgModel.setImgUrl(shareOutput.getResultData().getShare().getImgUrl());
-                                        msgModel.setText(shareOutput.getResultData().getShare().getText());
-                                        msgModel.setTitle(shareOutput.getResultData().getShare().getTitle());
-                                        msgModel.setUrl(shareOutput.getResultData().getShare().getUrl());
-                                        sharePopupWindow.initShareParams(msgModel);
-                                        sharePopupWindow.showShareWindow();
-                                        sharePopupWindow.showAtLocation(titleLayoutL,
-                                                Gravity.BOTTOM, 0, 0);
-                                        sharePopupWindow.setPlatformActionListener(
-                                                new PlatformActionListener() {
-                                                    @Override
-                                                    public void onComplete(
-                                                            Platform platform, int i, HashMap<String, Object> hashMap
-                                                    ) {
-                                                        Message msg = Message.obtain();
-                                                        msg.obj = platform;
-                                                        mHandler.sendMessage(msg);
-                                                        successshare();
-                                                    }
+                    public void onResponse(JSONObject response) {
+                        if (HomeActivity.this.isFinishing()) {
+                            return;
+                        }
+                        JSONUtil<ShareOutputModel> jsonUtil = new JSONUtil<ShareOutputModel>();
+                        ShareOutputModel shareOutput = new ShareOutputModel();
+                        shareOutput = jsonUtil.toBean(response.toString(), shareOutput);
+                        if (null != shareOutput && null != shareOutput.getResultData() && (1 == shareOutput.getResultCode())) {
+                            if (null != shareOutput.getResultData().getShare() && null != shareOutput.getResultData()) {
+                                //application.writeShareinfo(shareOutput.getResultData().getShare());
+                                ShareModel msgModel = new ShareModel();
+                                msgModel.setImgUrl(shareOutput.getResultData().getShare().getImgUrl());
+                                msgModel.setText(shareOutput.getResultData().getShare().getText());
+                                msgModel.setTitle(shareOutput.getResultData().getShare().getTitle());
+                                msgModel.setUrl(shareOutput.getResultData().getShare().getUrl());
+                                sharePopupWindow.initShareParams(msgModel);
+                                sharePopupWindow.showShareWindow();
+                                sharePopupWindow.showAtLocation(titleLayoutL,
+                                        Gravity.BOTTOM, 0, 0);
+                                sharePopupWindow.setPlatformActionListener(
+                                        new PlatformActionListener() {
+                                            @Override
+                                            public void onComplete(
+                                                    Platform platform, int i, HashMap<String, Object> hashMap
+                                            ) {
+                                                Message msg = Message.obtain();
+                                                msg.obj = platform;
+                                                mHandler.sendMessage(msg);
+                                                successshare();
+                                            }
 
-                                                    @Override
-                                                    public void onError(Platform platform, int i, Throwable throwable) {
-                                                        Message msg = Message.obtain();
-                                                        msg.obj = platform;
-                                                        mHandler.sendMessage(msg);
-                                                    }
+                                            @Override
+                                            public void onError(Platform platform, int i, Throwable throwable) {
+                                                Message msg = Message.obtain();
+                                                msg.obj = platform;
+                                                mHandler.sendMessage(msg);
+                                            }
 
-                                                    @Override
-                                                    public void onCancel(Platform platform, int i) {
-                                                        Message msg = Message.obtain();
-                                                        msg.obj = platform;
-                                                        mHandler.sendMessage(msg);
-                                                    }
-                                                }
-                                        );
+                                            @Override
+                                            public void onCancel(Platform platform, int i) {
+                                                Message msg = Message.obtain();
+                                                msg.obj = platform;
+                                                mHandler.sendMessage(msg);
+                                            }
+                                        }
+                                );
 
-                                        sharePopupWindow.setOnDismissListener(new PoponDismissListener(HomeActivity.this));
+                                sharePopupWindow.setOnDismissListener(new PoponDismissListener(HomeActivity.this));
 
 
-                                    } else {
-                                        noticePopWin = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "红包分享暂不可用");
-                                        noticePopWin.showNotice();
-                                        noticePopWin.showAtLocation(titleLayoutL,
-                                                Gravity.CENTER, 0, 0
-                                        );
-                                    }
-                                } else {
-                                    //异常处理，自动切换成无数据
-
-                                    noticePopWin = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "红包分享暂不可用");
-                                    noticePopWin.showNotice();
-                                    noticePopWin.showAtLocation(titleLayoutL,
-                                            Gravity.CENTER, 0, 0
-                                    );
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-
-                                if (HomeActivity.this.isFinishing()) {
-                                    return;
-                                }
-                                noticePopWin = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "数据请求失败");
+                            } else {
+                                noticePopWin = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "红包分享暂不可用");
                                 noticePopWin.showNotice();
                                 noticePopWin.showAtLocation(titleLayoutL,
                                         Gravity.CENTER, 0, 0
                                 );
-
                             }
-                        });
-                    }
-                }, 1000);
+                        } else {
+                            //异常处理，自动切换成无数据
 
+                            noticePopWin = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "红包分享暂不可用");
+                            noticePopWin.showNotice();
+                            noticePopWin.showAtLocation(titleLayoutL,
+                                    Gravity.CENTER, 0, 0
+                            );
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        if (HomeActivity.this.isFinishing()) {
+                            return;
+                        }
+                        noticePopWin = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "服务器未响应");
+                        noticePopWin.showNotice();
+                        noticePopWin.showAtLocation(titleLayoutL,
+                                Gravity.CENTER, 0, 0
+                        );
+
+                    }
+                });
+            }
+            break;
+            case 0x11112223:
+            {
+                String message = (String) msg.obj;
+                scanRedpackagePopWin = new ScanRedpackagePopWin(HomeActivity.this, HomeActivity.this, wManager, mHandler, 1, message);
+                scanRedpackagePopWin.addData(null);
+                scanRedpackagePopWin.showWin();
+                scanRedpackagePopWin.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
             }
             break;
             case Contant.SCAN_REDPACKAGE:
             {
                 List<Double> redpackages = (List<Double>) msg.obj;
-                scanRedpackagePopWin = new ScanRedpackagePopWin(HomeActivity.this, HomeActivity.this, wManager, mHandler);
+                scanRedpackagePopWin = new ScanRedpackagePopWin(HomeActivity.this, HomeActivity.this, wManager, mHandler, 0, null);
                 scanRedpackagePopWin.addData(redpackages);
                 scanRedpackagePopWin.showWin();
                 scanRedpackagePopWin.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
@@ -1494,7 +1498,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                             } else {
                                 Message message = mHandler.obtainMessage();
                                 message.what = 0x11112223;
-                                message.obj = canShare.getResultData().getCanShare();
+                                message.obj = (null==canShare.getResultData().getRedShareInfo()|| TextUtils.isEmpty(canShare.getResultData().getRedShareInfo())?"你获取一次发红包的机会\n邀请好友参与即可获得金币奖励":canShare.getResultData().getRedShareInfo());
                                 mHandler.sendMessage(message);
                             }
                         } else {
@@ -1633,6 +1637,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         public class CanShareInnerModel
         {
             private int canShare;
+            private String redShareInfo;
 
             public int getCanShare() {
                 return canShare;
@@ -1640,6 +1645,14 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
             public void setCanShare(int canShare) {
                 this.canShare = canShare;
+            }
+
+            public String getRedShareInfo() {
+                return redShareInfo;
+            }
+
+            public void setRedShareInfo(String redShareInfo) {
+                this.redShareInfo = redShareInfo;
             }
         }
     }

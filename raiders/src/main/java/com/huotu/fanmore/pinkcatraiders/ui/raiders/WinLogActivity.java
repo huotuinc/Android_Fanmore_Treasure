@@ -200,7 +200,7 @@ public class WinLogActivity extends BaseActivity implements View.OnClickListener
                                       winnerOutput = jsonUtil.toBean(response.toString(), winnerOutput);
                                       if(null != winnerOutput && null != winnerOutput.getResultData() && (1==winnerOutput.getResultCode()))
                                       {
-                                          if(null != winnerOutput.getResultData().getList() && !winnerOutput.getResultData().getList().isEmpty())
+                                          if(null != winnerOutput.getResultData().getList() && !winnerOutput.getResultData().getList().isEmpty()&&null!=winnerOutput.getResultData().getList().get(0))
                                           {
                                               if( operateType == OperateTypeEnum.REFRESH){
                                                   winners.clear();

@@ -243,7 +243,7 @@ public class HttpUtils<T> {
             @Override
             public void onErrorResponse(VolleyError error) {
                 payProgress.dismissView ( );
-                NoticePopWindow noticePop = new NoticePopWindow ( context, aty, wManager, "支付服务不可用");
+                NoticePopWindow noticePop = new NoticePopWindow ( context, aty, wManager, "服务器未响应");
                 noticePop.showNotice ( );
                 noticePop.showAtLocation(
                         titleView,

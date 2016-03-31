@@ -282,7 +282,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                     progress.dismissView();
                     //初始化失败
                     //异常处理，自动切换成无数据
-                    noticePop = new NoticePopWindow ( MobileRegActivity.this, MobileRegActivity.this, wManager, "验证失败");
+                    noticePop = new NoticePopWindow ( MobileRegActivity.this, MobileRegActivity.this, wManager, "服务器未响应");
                     noticePop.showNotice ( );
                     noticePop.showAtLocation(btn_commit,
                             Gravity.CENTER, 0, 0
@@ -364,7 +364,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                         progress.dismissView();
                         //初始化失败
                         //异常处理，自动切换成无数据
-                        noticePop = new NoticePopWindow ( MobileRegActivity.this, MobileRegActivity.this, wManager, "绑定失败");
+                        noticePop = new NoticePopWindow ( MobileRegActivity.this, MobileRegActivity.this, wManager, "服务器未响应");
                         noticePop.showNotice ( );
                         noticePop.showAtLocation(btn_commit,
                                 Gravity.CENTER, 0, 0
@@ -481,7 +481,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                 progress.dismissView();
                 //初始化失败
                 //异常处理，自动切换成无数据
-                noticePop = new NoticePopWindow ( MobileRegActivity.this, MobileRegActivity.this, wManager, "验证失败");
+                noticePop = new NoticePopWindow ( MobileRegActivity.this, MobileRegActivity.this, wManager, "服务器未响应");
                 noticePop.showNotice ( );
                 noticePop.showAtLocation(btn_commit,
                         Gravity.CENTER, 0, 0
@@ -642,7 +642,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
                         progress.dismissView();
                         //初始化失败
                         //异常处理，自动切换成无数据
-                        noticePop = new NoticePopWindow(MobileRegActivity.this, MobileRegActivity.this, wManager, "验证服务未连接");
+                        noticePop = new NoticePopWindow(MobileRegActivity.this, MobileRegActivity.this, wManager, "服务器未响应");
                         noticePop.showNotice();
                         noticePop.showAtLocation(btn_commit,
                                 Gravity.CENTER, 0, 0
