@@ -226,7 +226,7 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
         rootAty.mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (getActivity().isFinishing()) return;
+                if (rootAty.isFinishing()) return;
                 operateType = OperateTypeEnum.REFRESH;
                 newestGrid.setRefreshing(true);
             }

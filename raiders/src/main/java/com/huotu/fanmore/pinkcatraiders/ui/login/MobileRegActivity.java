@@ -387,7 +387,7 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
      */
     private void getCode()
     {
-        progress.showProgress("正在提交验证码");
+        progress.showProgress("正在获取验证码");
         progress.showAtLocation(btn_commit, Gravity.CENTER, 0, 0);
         //登录接口
         String url = Contant.REQUEST_URL + "sendSMS";

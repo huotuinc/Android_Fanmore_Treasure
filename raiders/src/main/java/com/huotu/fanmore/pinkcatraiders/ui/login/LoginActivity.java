@@ -699,7 +699,7 @@ public class LoginActivity extends BaseActivity
         //注册
         Bundle bundle = new Bundle();
         bundle.putInt("type", 1);
-        ActivityUtils.getInstance().skipActivity(LoginActivity.this, MobileRegActivity.class, bundle);
+        ActivityUtils.getInstance().showActivity(LoginActivity.this, MobileRegActivity.class, bundle);
     }
 
     @Override
@@ -736,7 +736,7 @@ public class LoginActivity extends BaseActivity
                 //修改密码
                 Bundle bundle = new Bundle();
                 bundle.putInt("type", 2);
-                ActivityUtils.getInstance().skipActivity(LoginActivity.this, MobileRegActivity.class, bundle);
+                ActivityUtils.getInstance().showActivity(LoginActivity.this, MobileRegActivity.class, bundle);
             }
            default:
                break;
