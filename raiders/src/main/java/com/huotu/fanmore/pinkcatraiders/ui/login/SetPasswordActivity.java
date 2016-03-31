@@ -211,7 +211,7 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
                                 progress.dismissView();
                                 //初始化失败
                                 //异常处理，自动切换成无数据
-                                noticePop = new NoticePopWindow(SetPasswordActivity.this, SetPasswordActivity.this, wManager, "注册失败");
+                                noticePop = new NoticePopWindow(SetPasswordActivity.this, SetPasswordActivity.this, wManager, "服务器未响应");
                                 noticePop.showNotice();
                                 noticePop.showAtLocation(edtpsd,
                                         Gravity.CENTER, 0, 0
@@ -265,7 +265,7 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
                                 progress.dismissView();
                                 //初始化失败
                                 //异常处理，自动切换成无数据
-                                noticePop = new NoticePopWindow(SetPasswordActivity.this, SetPasswordActivity.this, wManager, "提交失败");
+                                noticePop = new NoticePopWindow(SetPasswordActivity.this, SetPasswordActivity.this, wManager, "服务器未响应");
                                 noticePop.showNotice();
                                 noticePop.showAtLocation(edtpsd,
                                         Gravity.CENTER, 0, 0

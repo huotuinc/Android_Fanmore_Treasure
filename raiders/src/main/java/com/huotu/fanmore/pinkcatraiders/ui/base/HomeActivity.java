@@ -688,7 +688,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                 }
                                 //初始化失败
                                 //异常处理，自动切换成无数据
-                                noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "登录失败");
+                                noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "服务器未响应");
                                 noticePop.showNotice();
                                 noticePop.showAtLocation(titleLayoutL,
                                         Gravity.CENTER, 0, 0
@@ -762,7 +762,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "无效商品无法打开");
+                                    ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "服务器未响应");
                                     //暂无数据提示
 
                                 }
@@ -1068,7 +1068,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                         progress.dismissView();
                                         VolleyUtil.cancelAllRequest();
                                         //系统级别错误
-                                        noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "结算失败");
+                                        noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "服务器未响应");
                                         noticePop.showNotice();
                                         noticePop.showAtLocation(
                                                 findViewById(R.id.titleLayout),
@@ -1222,7 +1222,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                             funcPopWin.setUNSelectAll();
                                             VolleyUtil.cancelAllRequest();
                                             //系统级别错误
-                                            ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除失败");
+                                            ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "服务器未响应");
                                         }
                                     }
                         );
@@ -1356,7 +1356,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         if (HomeActivity.this.isFinishing()) {
                             return;
                         }
-                        noticePopWin = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "数据请求失败");
+                        noticePopWin = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "服务器未响应");
                         noticePopWin.showNotice();
                         noticePopWin.showAtLocation(titleLayoutL,
                                 Gravity.CENTER, 0, 0

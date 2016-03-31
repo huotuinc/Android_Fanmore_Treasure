@@ -192,7 +192,7 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
                 String cityName = bundle.getString("cityName");
                 if(null!=cityName)
                 {
-                    String[] address = cityName.split("|");
+                    String[] address = cityName.split("&");
                     if(3!=address.length)
                     {
                         ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "获取城市信息失败");
@@ -383,7 +383,7 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
             {
                 maps.put("addressId", String.valueOf ( bundle.getLong ( "addressId" ) ));
             }
-            maps.put("cityName", province.getText ().toString()+"|"+city.getText ().toString()+"|"+area.getText ().toString());
+            maps.put("cityName", province.getText ().toString()+"&"+city.getText ().toString()+"&"+area.getText ().toString());
             maps.put ( "receiver",  receiverName.getText ().toString ( ));
             maps.put ( "mobile",  receiverPhone.getText ().toString ( ));
             maps.put("details", detail.getText ().toString ( ));
@@ -399,20 +399,39 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
                             BaseModel base = response;
                             if (1 == base.getResultCode()) {
                                 //上传成功
-                                noticePop = new NoticePopWindow(AddAddressActivity.this, AddAddressActivity.this, wManager, "地址添加成功");
-                                noticePop.showNotice();
-                                noticePop.showAtLocation(
-                                        findViewById(R.id.titleLayout),
-                                        Gravity.CENTER, 0, 0
-                                );
+                                if(null==bundle)
+                                {
+                                    ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "地址添加成功");
+                                }
+                                else
+                                {
+                                    ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "地址修改成功");
+                                }
+                                mHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        closeSelf(AddAddressActivity.this);
+                                    }
+                                }, 1500);
                             } else {
                                 //上传失败
-                                noticePop = new NoticePopWindow(AddAddressActivity.this, AddAddressActivity.this, wManager, "地址添加失败");
-                                noticePop.showNotice();
-                                noticePop.showAtLocation(
-                                        findViewById(R.id.titleLayout),
-                                        Gravity.CENTER, 0, 0
-                                );
+                                if(null==bundle) {
+                                    noticePop = new NoticePopWindow(AddAddressActivity.this, AddAddressActivity.this, wManager, "地址添加失败");
+                                    noticePop.showNotice();
+                                    noticePop.showAtLocation(
+                                            findViewById(R.id.titleLayout),
+                                            Gravity.CENTER, 0, 0
+                                    );
+                                }
+                                else
+                                {
+                                    noticePop = new NoticePopWindow(AddAddressActivity.this, AddAddressActivity.this, wManager, "地址修改失败");
+                                    noticePop.showNotice();
+                                    noticePop.showAtLocation(
+                                            findViewById(R.id.titleLayout),
+                                            Gravity.CENTER, 0, 0
+                                    );
+                                }
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -421,12 +440,23 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
                         public void onErrorResponse(VolleyError error) {
                             progress.dismissView();
                             //系统级别错误
-                            noticePop = new NoticePopWindow(AddAddressActivity.this, AddAddressActivity.this, wManager, "地址添加失败");
-                            noticePop.showNotice();
-                            noticePop.showAtLocation(
-                                    findViewById(R.id.titleLayout),
-                                    Gravity.CENTER, 0, 0
-                            );
+                            if(null==bundle) {
+                                noticePop = new NoticePopWindow(AddAddressActivity.this, AddAddressActivity.this, wManager, "服务器未响应");
+                                noticePop.showNotice();
+                                noticePop.showAtLocation(
+                                        findViewById(R.id.titleLayout),
+                                        Gravity.CENTER, 0, 0
+                                );
+                            }
+                            else
+                            {
+                                noticePop = new NoticePopWindow(AddAddressActivity.this, AddAddressActivity.this, wManager, "服务器未响应");
+                                noticePop.showNotice();
+                                noticePop.showAtLocation(
+                                        findViewById(R.id.titleLayout),
+                                        Gravity.CENTER, 0, 0
+                                );
+                            }
                         }
                     }
             );

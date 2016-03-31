@@ -574,7 +574,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                             progress.dismissView();
                             //初始化失败
                             //异常处理，自动切换成无数据
-                            noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "绑定失败");
+                            noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "服务器未响应");
                             noticePop.showNotice();
                             noticePop.showAtLocation(titleLayoutL,
                                     Gravity.CENTER, 0, 0
@@ -634,7 +634,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                             progress.dismissView();
                             //初始化失败
                             //异常处理，自动切换成无数据
-                            noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "绑定失败");
+                            noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "服务器未响应");
                             noticePop.showNotice();
                             noticePop.showAtLocation(titleLayoutL,
                                     Gravity.CENTER, 0, 0
@@ -844,7 +844,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                         void onErrorResponse ( VolleyError error ) {
                             progress.dismissView ();
                             //系统级别错误
-                            noticePop = new NoticePopWindow ( UserSettingActivity.this, UserSettingActivity.this, wManager, "服务器拒绝本次修改");
+                            noticePop = new NoticePopWindow ( UserSettingActivity.this, UserSettingActivity.this, wManager, "服务器未响应");
                             noticePop.showNotice ( );
                             noticePop.showAtLocation (
                                     findViewById ( R.id.titleLayout ),
@@ -911,7 +911,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                 progress.dismissView();
                 //初始化失败
                 //异常处理，自动切换成无数据
-                noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "服务器请求失败");
+                noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "服务器未响应");
                 noticePop.showNotice();
                 noticePop.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0

@@ -294,7 +294,7 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                     if ( PayOrderActivity.this.isFinishing ( ) ) {
                         return;
                     }
-                    ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "余额支付失败");
+                    ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "服务器未响应");
                 }
             });
         }
@@ -394,7 +394,7 @@ class PayOrderActivity extends BaseActivity implements View.OnClickListener, Han
                             if ( PayOrderActivity.this.isFinishing ( ) ) {
                                 return;
                             }
-                            ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "提交支付信息失败");
+                            ToastUtils.showMomentToast(PayOrderActivity.this, PayOrderActivity.this, "服务器未响应");
                         }
                     }
             );

@@ -153,7 +153,7 @@ public class MyAddressAdapter extends BaseAdapter {
 
     private String obtainDetails(String detail, String suffix)
     {
-        String[] suffixs = suffix.split("|");
+        String[] suffixs = suffix.split("&");
         if(null == suffix)
         {
             return detail;
@@ -165,7 +165,7 @@ public class MyAddressAdapter extends BaseAdapter {
             {
                 builder.append(suffixs[i]);
             }
-            return detail+builder.toString();
+            return builder.toString()+detail;
         }
 
     }

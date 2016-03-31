@@ -545,7 +545,7 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            ToastUtils.showMomentToast(WinLogDetailActivity.this, WinLogDetailActivity.this, "确认收货失败");
+                            ToastUtils.showMomentToast(WinLogDetailActivity.this, WinLogDetailActivity.this, "服务器未响应");
                         }
                     });
                 }
@@ -602,7 +602,7 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        ToastUtils.showMomentToast(WinLogDetailActivity.this, WinLogDetailActivity.this, "添加地址失败");
+                        ToastUtils.showMomentToast(WinLogDetailActivity.this, WinLogDetailActivity.this, "服务器未响应");
                     }
                 });
             }
