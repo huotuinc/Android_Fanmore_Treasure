@@ -101,6 +101,7 @@ public class MyAddressAdapter extends BaseAdapter {
         final MyAddressListModel MyAddressList = lists.get(position);
         if(1==MyAddressList.getDefaultAddress ())
         {
+            holder.isDefault.setVisibility(View.VISIBLE);
             holder.isDefault.setText ( "[默认]" );
         }
         else

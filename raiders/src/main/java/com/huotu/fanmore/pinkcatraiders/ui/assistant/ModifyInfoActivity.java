@@ -302,7 +302,7 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
                             {
                                 AppUserModel user=useroutput.getResultData().getUser();
                                 application.writeUserInfo(user);
-                                ActivityUtils.getInstance().skipActivity(ModifyInfoActivity.this, UserSettingActivity.class);
+                                finish();
                             }
                             else
                             {
