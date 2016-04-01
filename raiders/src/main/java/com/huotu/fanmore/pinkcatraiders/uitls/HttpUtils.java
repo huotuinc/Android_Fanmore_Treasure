@@ -11,6 +11,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshWebView;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.model.MallOrderModel;
 import com.huotu.fanmore.pinkcatraiders.model.MallPayModel;
@@ -160,7 +162,6 @@ public class HttpUtils<T> {
 
             @Override
             public void onResponse(JSONObject response) {
-
                 JSONUtil<MallOrderModel> jsonUtil = new JSONUtil<MallOrderModel>();
                 MallOrderModel orderInfo = new MallOrderModel();
                 orderInfo = jsonUtil.toBean(response.toString (), orderInfo);
@@ -243,7 +244,7 @@ public class HttpUtils<T> {
             @Override
             public void onErrorResponse(VolleyError error) {
                 payProgress.dismissView ( );
-                NoticePopWindow noticePop = new NoticePopWindow ( context, aty, wManager, "支付服务不可用");
+                NoticePopWindow noticePop = new NoticePopWindow ( context, aty, wManager, "服务器未响应");
                 noticePop.showNotice ( );
                 noticePop.showAtLocation(
                         titleView,

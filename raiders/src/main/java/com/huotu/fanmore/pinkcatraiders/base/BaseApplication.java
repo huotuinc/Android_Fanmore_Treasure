@@ -15,6 +15,7 @@ import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
 import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
 import com.huotu.fanmore.pinkcatraiders.model.InitOutputsModel;
+import com.huotu.fanmore.pinkcatraiders.model.LocalAddressModel;
 import com.huotu.fanmore.pinkcatraiders.model.ShareModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
@@ -33,6 +34,7 @@ public class BaseApplication extends Application {
     public Platform plat;
     public FragManager mFragManager;
     public FragManager proFragManager;
+    public LocalAddressModel localAddress;
     public static synchronized BaseApplication getInstance() {
         if (app == null) {
             app = new BaseApplication();
@@ -288,5 +290,6 @@ public class BaseApplication extends Application {
     public void ClearUser() {
 
         PreferenceHelper.clean(getApplicationContext(),Contant.LOGIN_USER_INFO);
+
     }
 }

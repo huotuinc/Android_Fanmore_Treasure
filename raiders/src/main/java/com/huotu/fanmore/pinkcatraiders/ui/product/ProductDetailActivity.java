@@ -175,8 +175,6 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
         initTitle();
         if (1==bundle.getInt("tip")) {
-
-
             initBottomOther();
         }else if(2==bundle.getInt("tip")) {
             initBottomAnnounced();
@@ -554,7 +552,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                 return;
                             }
                             //暂无数据提示
-                            ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "请求数据出错，1秒后退出");
+                            ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "服务器未响应，1秒后退出");
                             mHandler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -879,7 +877,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                 return;
                             }
                             //暂无数据提示
-                            ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "无法获取数据，1秒后关闭界面");
+                            ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "服务器未响应，1秒后关闭界面");
                             mHandler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {

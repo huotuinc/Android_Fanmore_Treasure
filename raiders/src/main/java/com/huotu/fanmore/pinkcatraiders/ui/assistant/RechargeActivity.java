@@ -204,7 +204,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                         if ( RechargeActivity.this.isFinishing ( ) ) {
                             return;
                         }
-                        ToastUtils.showMomentToast(RechargeActivity.this, RechargeActivity.this, "加载默认金额失败");
+                        ToastUtils.showMomentToast(RechargeActivity.this, RechargeActivity.this, "服务器未响应");
                     }
                 }
                               );
@@ -351,7 +351,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                             if ( RechargeActivity.this.isFinishing ( ) ) {
                                 return;
                             }
-                            ToastUtils.showMomentToast(RechargeActivity.this, RechargeActivity.this, "提交支付信息失败");
+                            ToastUtils.showMomentToast(RechargeActivity.this, RechargeActivity.this, "服务器未响应");
                         }
                     }
                                   );

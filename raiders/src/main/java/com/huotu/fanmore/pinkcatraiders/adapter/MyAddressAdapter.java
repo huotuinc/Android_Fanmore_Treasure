@@ -101,6 +101,7 @@ public class MyAddressAdapter extends BaseAdapter {
         final MyAddressListModel MyAddressList = lists.get(position);
         if(1==MyAddressList.getDefaultAddress ())
         {
+            holder.isDefault.setVisibility(View.VISIBLE);
             holder.isDefault.setText ( "[默认]" );
         }
         else
@@ -109,7 +110,7 @@ public class MyAddressAdapter extends BaseAdapter {
         }
         holder.receiver.setText(MyAddressList.getReceiver());
         holder.mobile.setText(MyAddressList.getMobile ( ));
-        holder.details.setText(MyAddressList.getDetails ( ));
+        holder.details.setText(obtainDetails(MyAddressList.getDetails(), MyAddressList.getCityName()));
         holder.editIcon.setOnClickListener ( new View.OnClickListener ( ) {
 
                                                  @Override
@@ -120,6 +121,7 @@ public class MyAddressAdapter extends BaseAdapter {
                                                      bundle.putString ( "receiver",  MyAddressList.getReceiver ());
                                                      bundle.putString ( "mobile", MyAddressList.getMobile ( ) );
                                                      bundle.putString ( "details", MyAddressList.getDetails ( ) );
+                                                     bundle.putString("cityName", MyAddressList.getCityName());
                                                      bundle.putLong ( "addressId", MyAddressList.getAddressId () );
                                                      bundle.putInt ( "defaultAddress",
                                                                      MyAddressList
@@ -148,5 +150,24 @@ public class MyAddressAdapter extends BaseAdapter {
         TextView editIcon;
         @Bind ( R.id.isDefault )
         TextView isDefault;
+    }
+
+    private String obtainDetails(String detail, String suffix)
+    {
+        String[] suffixs = suffix.split("&");
+        if(null == suffix)
+        {
+            return detail;
+        }
+        else
+        {
+            StringBuilder builder = new StringBuilder();
+            for(int i=0; i<suffixs.length;i++)
+            {
+                builder.append(suffixs[i]);
+            }
+            return builder.toString()+detail;
+        }
+
     }
 }

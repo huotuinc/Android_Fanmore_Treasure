@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshWebView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
@@ -75,7 +77,7 @@ class PayPopWindow extends PopupWindow {
                         payModel.setAttach ( payModel.getOrderNo ( ) + "_0" );
                         //添加微信回调路径
                         PayFunc payFunc = new PayFunc ( context, payModel, application, mHandler, aty, progress );
-                        payFunc.wxPay ( );
+                        payFunc.wxPay();
                     }
                 } );
         alipayBtn.setOnClickListener ( new View.OnClickListener ( ) {
@@ -86,15 +88,15 @@ class PayPopWindow extends PopupWindow {
                                                msg.what = 0x12131422;
                                                mallPay.setPaymentType ( "1" );
                                                msg.obj = mallPay;
-                                               mHandler.sendMessage ( msg );
-                                               dismissView ( );
+                                               mHandler.sendMessage(msg);
+                                               dismissView();
                                            }
                                        } );
         cancelBtn.setOnClickListener ( new View.OnClickListener ( ) {
                                            @Override
                                            public
                                            void onClick ( View v ) {
-                                               dismissView ( );
+                                               dismissView();
                                            }
                                        } );
 

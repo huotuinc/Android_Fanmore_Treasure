@@ -158,7 +158,7 @@ public class RaidersNumberActivity extends BaseActivity implements View.OnClickL
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                ToastUtils.showMomentToast(RaidersNumberActivity.this, RaidersNumberActivity.this, "数据加载失败，即将关闭界面");
+                ToastUtils.showMomentToast(RaidersNumberActivity.this, RaidersNumberActivity.this, "服务器未响应，即将关闭界面");
             }
         });
     }

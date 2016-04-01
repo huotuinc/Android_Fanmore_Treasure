@@ -204,7 +204,13 @@ public class CartUtils {
                                     MyBroadcastReceiver.sendBroadcast(context, MyBroadcastReceiver.JUMP_CART, bundle);
                                     mHandler.sendEmptyMessage(0x99990001);
                                 }
-                            } else {
+                            }
+                            else if(52015 == base.getResultCode())
+                            {
+                                //上传失败
+                                ToastUtils.showMomentToast((Activity) context, context, "该期号已经卖完");
+                            }
+                            else {
                                 //上传失败
                                 ToastUtils.showMomentToast((Activity) context, context, "添加清单失败");
                             }
@@ -215,7 +221,7 @@ public class CartUtils {
                         public void onErrorResponse(VolleyError error) {
                             progress.dismissView();
                             //系统级别错误
-                            ToastUtils.showMomentToast((Activity) context, context, "添加清单失败");
+                            ToastUtils.showMomentToast((Activity) context, context, "服务器未响应");
                         }
                     }
             );

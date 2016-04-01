@@ -43,6 +43,7 @@ import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.PartnerHistorysModel;
 import com.huotu.fanmore.pinkcatraiders.model.PartnerHistorysOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.UpdateProfileModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
@@ -273,25 +274,25 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
             //上传封面
             List< BottomModel > bottoms = new ArrayList< BottomModel > ( );
             BottomModel bottom1 = new BottomModel ( );
-            bottom1.setBottomTag ( "camera" );
-            bottom1.setBottomName ( "拍照" );
-            bottoms.add ( bottom1 );
+            bottom1.setBottomTag("camera");
+            bottom1.setBottomName("拍照");
+            bottoms.add(bottom1);
             BottomModel bottom2 = new BottomModel ( );
             bottom2.setBottomTag ( "fromSD" );
-            bottom2.setBottomName ( "从手机相册选择" );
+            bottom2.setBottomName("从手机相册选择");
             bottoms.add ( bottom2 );
             BottomModel bottom3 = new BottomModel ( );
-            bottom3.setBottomTag ( "cancel" );
-            bottom3.setBottomName ( "取消" );
-            bottoms.add ( bottom3 );
+            bottom3.setBottomTag("cancel");
+            bottom3.setBottomName("取消");
+            bottoms.add(bottom3);
             //回复点击事件
             CommonPopWin commonPopWin = new CommonPopWin ( ShareOrderActivity.this, bottoms,
                     application, wManager, mHandler,
                     titleLeftImage, param );
             commonPopWin.initView ( );
             commonPopWin.showAtLocation ( titleLeftImage, Gravity.BOTTOM, 0, 0 );
-            commonPopWin.setOnDismissListener ( new PoponDismissListener ( ShareOrderActivity
-                    .this ) );
+            commonPopWin.setOnDismissListener(new PoponDismissListener(ShareOrderActivity
+                    .this));
     }
 
     @OnClick ( R.id.addImgBtn4 )
@@ -308,7 +309,7 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
             //上传封面
             List< BottomModel > bottoms = new ArrayList< BottomModel > ( );
             BottomModel bottom1 = new BottomModel ( );
-            bottom1.setBottomTag ( "camera" );
+            bottom1.setBottomTag("camera");
             bottom1.setBottomName("拍照");
             bottoms.add(bottom1);
             BottomModel bottom2 = new BottomModel ( );
@@ -351,66 +352,81 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ShareOrderActivity.this);
         //1 拼装参数
         Map<String, Object> maps = new HashMap<String, Object> ();
-        maps.put ( "issueId", String.valueOf(winner.getIssueId()) );
-        maps.put ( "title", orderTitle.getText ().toString() );
-        maps.put ( "content", orderMsg.getText ().toString() );
+        maps.put("issueId", String.valueOf(winner.getIssueId()));
+        maps.put("title", orderTitle.getText().toString());
+        maps.put("content", orderMsg.getText().toString());
         String profileData = creatProfileData(imgs);
-        maps.put ( "filenames", profileData);
+        maps.put("filenames", profileData);
         String miniProfileData = creatProfileData(miniImgs);
-        maps.put ( "miniFilenames", miniProfileData);
+        maps.put("miniFilenames", miniProfileData);
         maps = params.obtainAllParamUTF8 ( maps );
         //获取sign
         String signStr = params.obtainSignUTF8 ( maps );
-        maps.put ( "title", URLEncoder.encode ( orderTitle.getText ().toString ( )) );
-        maps.put ( "content", URLEncoder.encode ( orderMsg.getText ( ).toString ( )) );
-        maps.put ( "sign", signStr);
+        maps.put("title", URLEncoder.encode(orderTitle.getText().toString()));
+        maps.put("content", URLEncoder.encode(orderMsg.getText().toString()));
+        maps.put("sign", signStr);
         //拼装URL
         String suffix = params.obtainGetParamUTF8 (maps);
 
         url = url + suffix;
         HttpUtils httpUtils = new HttpUtils();
 
-        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject >() {
-                                  @Override
-                                  public void onResponse(JSONObject response) {
-                                      progress.dismissView ();
-                                      if (ShareOrderActivity.this.isFinishing()) {
-                                          return;
-                                      }
-                                      JSONUtil<BaseModel> jsonUtil = new JSONUtil<BaseModel>();
-                                      BaseModel base = new BaseModel();
-                                      base = jsonUtil.toBean(response.toString(), base);
-                                      if (null != base && (1 == base.getResultCode())) {
-                                          noticePop = new NoticePopWindow ( ShareOrderActivity.this, ShareOrderActivity.this, wManager, "晒单添加成功");
-                                          noticePop.showNotice ( );
-                                          noticePop.showAtLocation (
-                                                  findViewById ( R.id.titleLayout ),
-                                                  Gravity.CENTER, 0, 0
-                                                                   );
-                                      } else {
-                                          //异常处理，自动切换成无数据
-                                          noticePop = new NoticePopWindow ( ShareOrderActivity.this, ShareOrderActivity.this, wManager, "晒单添加失败");
-                                          noticePop.showNotice ( );
-                                          noticePop.showAtLocation (
-                                                  findViewById ( R.id.titleLayout ),
-                                                  Gravity.CENTER, 0, 0
-                                                                   );
-                                      }
-                                  }
-                              }, new Response.ErrorListener() {
-                                  @Override
-                                  public void onErrorResponse(VolleyError error) {
-                                      //数据为空
-                                      progress.dismissView ();
-                                      //上传失败
-                                      noticePop = new NoticePopWindow ( ShareOrderActivity.this, ShareOrderActivity.this, wManager, "晒单添加失败");
-                                      noticePop.showNotice ( );
-                                      noticePop.showAtLocation (
-                                              findViewById ( R.id.titleLayout ),
-                                              Gravity.CENTER, 0, 0
-                                                               );
-                                  }
-                              });
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                progress.dismissView();
+                if (ShareOrderActivity.this.isFinishing()) {
+                    return;
+                }
+                JSONUtil<BaseModel> jsonUtil = new JSONUtil<BaseModel>();
+                BaseModel base = new BaseModel();
+                base = jsonUtil.toBean(response.toString(), base);
+                if (null != base && (1 == base.getResultCode())) {
+                    ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "晒单成功，2秒后关闭晒单界面");
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            int type = bundle.getInt("type");
+                            if (0 == type) {
+                                //刷新中奖列表
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("type", 0);
+                                MyBroadcastReceiver.sendBroadcast(ShareOrderActivity.this, MyBroadcastReceiver.SHOW_ORDER, bundle);
+
+                            } else if (1 == type) {
+                                //刷新中奖详情
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("type", 1);
+                                MyBroadcastReceiver.sendBroadcast(ShareOrderActivity.this, MyBroadcastReceiver.SHOW_ORDER, bundle);
+                            }
+                            closeSelf(ShareOrderActivity.this);
+                        }
+                    }, 1500);
+
+                } else {
+                    //异常处理，自动切换成无数据
+                    noticePop = new NoticePopWindow(ShareOrderActivity.this, ShareOrderActivity.this, wManager, "晒单添加失败");
+                    noticePop.showNotice();
+                    noticePop.showAtLocation(
+                            findViewById(R.id.titleLayout),
+                            Gravity.CENTER, 0, 0
+                    );
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //数据为空
+                progress.dismissView();
+                //上传失败
+                noticePop = new NoticePopWindow(ShareOrderActivity.this, ShareOrderActivity.this, wManager, "服务器未响应");
+                noticePop.showNotice();
+                noticePop.showAtLocation(
+                        findViewById(R.id.titleLayout),
+                        Gravity.CENTER, 0, 0
+                );
+            }
+        });
     }
 
     @Override
@@ -530,7 +546,7 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
                                 void onErrorResponse ( VolleyError error ) {
                                     progress.dismissView();
                                     //系统级别错误
-                                    ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "上传晒单图片失败");
+                                    ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "服务器未响应");
                                 }
                             }
                     );

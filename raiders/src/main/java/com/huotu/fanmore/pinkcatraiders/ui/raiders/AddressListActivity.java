@@ -37,6 +37,7 @@ import com.huotu.fanmore.pinkcatraiders.model.MyAddressListModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.AddAddressActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -63,7 +64,7 @@ import butterknife.OnClick;
  * 添加地址
  */
 
-public class AddressListActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+public class AddressListActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, MyBroadcastReceiver.BroadcastListener {
 
     public
     Resources resources;
@@ -102,6 +103,7 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
 
     public
     ProgressPopupWindow progress;
+    private MyBroadcastReceiver myBroadcastReceiver;
 
     @Override
     public
@@ -129,15 +131,16 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate ( savedInstanceState );
-        setContentView ( R.layout.ri_address_list );
-        ButterKnife.bind ( this );
+        setContentView(R.layout.ri_address_list);
+        ButterKnife.bind(this);
         application = ( BaseApplication ) this.getApplication ( );
         resources = this.getResources ( );
         mHandler = new Handler ( this );
         inflate = LayoutInflater.from ( AddressListActivity.this );
-        wManager = this.getWindowManager ( );
-        emptyView = inflate.inflate ( R.layout.empty, null );
+        wManager = this.getWindowManager();
+        emptyView = inflate.inflate(R.layout.empty, null);
         progress = new ProgressPopupWindow ( AddressListActivity.this, AddressListActivity.this, wManager );
+        myBroadcastReceiver = new MyBroadcastReceiver(AddressListActivity.this, this, MyBroadcastReceiver.TO_ADDRESSLIST);
         TextView emptyTag = ( TextView ) emptyView.findViewById ( R.id.emptyTag );
         emptyTag.setText ( "暂无收货地址信息" );
         TextView emptyBtn = ( TextView ) emptyView.findViewById ( R.id.emptyBtn );
@@ -272,7 +275,8 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
                         if(1==base.getResultCode ())
                         {
                             //删除成功
-                            addressList.setRefreshing ( true );
+                            lists.clear();
+                            firstGetData();
                         }
                         else
                         {
@@ -287,7 +291,7 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
                     void onErrorResponse ( VolleyError error ) {
                         progress.dismissView ( );
                         //系统级别错误
-                        ToastUtils.showMomentToast(AddressListActivity.this, AddressListActivity.this, "地址删除失败");
+                        ToastUtils.showMomentToast(AddressListActivity.this, AddressListActivity.this, "服务器未响应");
                     }
                 }
                                );
@@ -297,7 +301,7 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     void addAddress()
     {
 
-        ActivityUtils.getInstance ().skipActivity ( AddressListActivity.this, AddAddressActivity.class );
+        ActivityUtils.getInstance ().showActivity(AddressListActivity.this, AddAddressActivity.class);
     }
 
     private void loadData()
@@ -377,5 +381,13 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
 
+    }
+
+    @Override
+    public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
+        if (type==MyBroadcastReceiver.ReceiverType.toaddresslist){
+            firstGetData();
+
+        }
     }
 }

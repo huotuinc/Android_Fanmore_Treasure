@@ -429,6 +429,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
     {
         //设置昵称
         Bundle bundle = new Bundle ();
+        bundle.putInt("moblieband", 1);
         bundle.putString("profile", "昵称");
         bundle.putString("content", userNickName.getText().toString());
         ActivityUtils
@@ -506,14 +507,18 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
 
             }
             break;
+            case Contant.MSG_UN_LOGIN:
+            {
+                //处理微信未登录
+                progress.dismissView();
+            }
+            break;
             case Contant.MSG_AUTH_CANCEL:
             {
                 titleLayoutL.setClickable(true);
                 //提示取消授权
                 progress.dismissView();
                 ToastUtils.showMomentToast(UserSettingActivity.this, this, "授权操作已取消");
-
-
             }
             break;
             case Contant.MSG_USERID_FOUND:
@@ -576,7 +581,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                             progress.dismissView();
                             //初始化失败
                             //异常处理，自动切换成无数据
-                            noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "绑定失败");
+                            noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "服务器未响应");
                             noticePop.showNotice();
                             noticePop.showAtLocation(titleLayoutL,
                                     Gravity.CENTER, 0, 0
@@ -636,7 +641,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                             progress.dismissView();
                             //初始化失败
                             //异常处理，自动切换成无数据
-                            noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "绑定失败");
+                            noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "服务器未响应");
                             noticePop.showNotice();
                             noticePop.showAtLocation(titleLayoutL,
                                     Gravity.CENTER, 0, 0
@@ -846,7 +851,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                         void onErrorResponse ( VolleyError error ) {
                             progress.dismissView ();
                             //系统级别错误
-                            noticePop = new NoticePopWindow ( UserSettingActivity.this, UserSettingActivity.this, wManager, "服务器拒绝本次修改");
+                            noticePop = new NoticePopWindow ( UserSettingActivity.this, UserSettingActivity.this, wManager, "服务器未响应");
                             noticePop.showNotice ( );
                             noticePop.showAtLocation (
                                     findViewById ( R.id.titleLayout ),
@@ -913,7 +918,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                 progress.dismissView();
                 //初始化失败
                 //异常处理，自动切换成无数据
-                noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "服务器请求失败");
+                noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "服务器未响应");
                 noticePop.showNotice();
                 noticePop.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0

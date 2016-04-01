@@ -197,7 +197,7 @@ public class RedEnvelopesuseFrag extends BaseFragment implements Handler.Callbac
         rootAty.mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (getActivity().isFinishing()) {
+                if (rootAty.isFinishing()) {
                     return;
                 }
                 operateType = OperateTypeEnum.REFRESH;

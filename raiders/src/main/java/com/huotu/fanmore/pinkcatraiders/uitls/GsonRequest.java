@@ -54,7 +54,8 @@ public class GsonRequest<T> extends Request<T> {
 	/**
 	 *
 	 */
-	private final TypeToken<T> mTypeToken;//提供和解析自定义的复杂JSON数据支持,这点与Jackson使用TypeReference不同，但原理是大同小异的
+	private final TypeToken<T> mTypeToken;
+	//提供和解析自定义的复杂JSON数据支持,这点与Jackson使用TypeReference不同，但原理是大同小异的
 	
 	
 	/**
@@ -99,7 +100,7 @@ public class GsonRequest<T> extends Request<T> {
 		}
 		mTypeToken=null;
 		mParams=null;
-		this.setRetryPolicy( new DefaultRetryPolicy(15000,1,1.0f));
+		this.setRetryPolicy( new DefaultRetryPolicy(50000,0,1.0f));
 
 		this.setTag( TAG );
 	}
@@ -124,7 +125,7 @@ public class GsonRequest<T> extends Request<T> {
 		}
 		this.mClass=null;
 		this.mParams=null;
-		this.setRetryPolicy( new DefaultRetryPolicy(15000,0,1.0f));
+		this.setRetryPolicy( new DefaultRetryPolicy(50000,0,1.0f));
 		this.setTag(TAG);
 	}
 
@@ -151,7 +152,7 @@ public class GsonRequest<T> extends Request<T> {
 		this.mParams = paras;
 		this.mTypeToken=null;
 
-		this.setRetryPolicy( new DefaultRetryPolicy(15000,0,1.0f));
+		this.setRetryPolicy( new DefaultRetryPolicy(50000,0,1.0f));
 		this.setTag( TAG );
 	}
 

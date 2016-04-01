@@ -200,7 +200,7 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
                             public void onErrorResponse(VolleyError error) {
                                 progress.dismissView();
                                 //系统级别错误
-                                noticePop = new NoticePopWindow(ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "服务器拒绝本次修改");
+                                noticePop = new NoticePopWindow(ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "服务器未响应");
                                 noticePop.showNotice();
                                 noticePop.showAtLocation(
                                         findViewById(R.id.titleLayout),
@@ -257,7 +257,7 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
                                 progress.dismissView();
                                 //初始化失败
                                 //异常处理，自动切换成无数据
-                                noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "设置密码失败");
+                                noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "服务器未响应");
                                 noticePop.showNotice ( );
                                 noticePop.showAtLocation(titleLayoutL,
                                         Gravity.CENTER, 0, 0
@@ -302,7 +302,7 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
                             {
                                 AppUserModel user=useroutput.getResultData().getUser();
                                 application.writeUserInfo(user);
-                                ActivityUtils.getInstance().skipActivity(ModifyInfoActivity.this, UserSettingActivity.class);
+                                finish();
                             }
                             else
                             {
@@ -320,7 +320,7 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
                             progress.dismissView();
                             //初始化失败
                             //异常处理，自动切换成无数据
-                            noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "更新基本信息失败");
+                            noticePop = new NoticePopWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "服务器未响应");
                             noticePop.showNotice ( );
                             noticePop.showAtLocation(titleLayoutL,
                                     Gravity.CENTER, 0, 0

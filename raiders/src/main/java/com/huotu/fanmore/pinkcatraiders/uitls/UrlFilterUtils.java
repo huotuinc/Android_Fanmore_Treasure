@@ -8,10 +8,14 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.TextView;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshWebView;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.MallPayModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayModel;
+import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.mall.MallHomeActivity;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 
 import java.util.HashMap;
@@ -63,8 +67,6 @@ public class UrlFilterUtils {
 
         if(url.contains ("/Mall/AppAlipay.aspx") )
         {
-
-
             //支付进度
             payProgress.showProgress ( "正在加载支付信息" );
             payProgress.showAtLocation (
@@ -114,6 +116,11 @@ public class UrlFilterUtils {
             String payUrl = param.obtainUrlOrder ( );
             HttpUtils httpUtils = new HttpUtils();
             httpUtils.doMallPay(aty, context, mHandler, application, payUrl, payModel, payProgress, titleView, wManager, orderUrl );
+            return true;
+        }
+        else if(url.contains ("/UserCenter/Login.aspx") ){
+            ToastUtils.showLongToast(aty,"请先登录账号");
+            ActivityUtils.getInstance().showActivity(aty, LoginActivity.class);
             return true;
         }
         else

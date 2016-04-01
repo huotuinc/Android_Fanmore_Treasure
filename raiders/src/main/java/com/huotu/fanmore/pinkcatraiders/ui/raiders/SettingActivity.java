@@ -174,16 +174,15 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
        application.ClearUser();
         //清除微信授权信息
+        ShareSDK.isRemoveCookieOnAuthorize();
         ShareSDK.getPlatform(Wechat.NAME).removeAccount();
 
         Platform platform = new QQ(SettingActivity.this);
         if(platform!=null) {
             platform.removeAccount();
         }
-
-
-
-
+        //清除地址信息
+        application.localAddress = null;
     }
     @OnClick(R.id.problemL)
     void showweb()

@@ -165,7 +165,7 @@ public class ChangePasswordActivity extends BaseActivity implements Handler.Call
                     progress.dismissView();
                     //初始化失败
                     //异常处理，自动切换成无数据
-                    noticePop = new NoticePopWindow(ChangePasswordActivity.this, ChangePasswordActivity.this, wManager, "修改密码失败");
+                    noticePop = new NoticePopWindow(ChangePasswordActivity.this, ChangePasswordActivity.this, wManager, "服务器未响应");
                     noticePop.showNotice();
                     noticePop.showAtLocation(titleLayoutL,
                             Gravity.CENTER, 0, 0

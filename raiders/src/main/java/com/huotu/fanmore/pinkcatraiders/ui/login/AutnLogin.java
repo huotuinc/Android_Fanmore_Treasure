@@ -55,6 +55,10 @@ class AutnLogin {
                 return;
             }
         }
+        else
+        {
+            mHandler.sendEmptyMessage ( Contant.MSG_UN_LOGIN );
+        }
         plat.setPlatformActionListener ( new PlatformActionListener ( ) {
                                              @Override
                                              public

@@ -730,7 +730,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void run() {
 
-                        if (getActivity().isFinishing()) return;
+                        if (rootAty.isFinishing()) return;
                         operateType = OperateTypeEnum.REFRESH;
                         homePullRefresh.setRefreshing(true);
                     }

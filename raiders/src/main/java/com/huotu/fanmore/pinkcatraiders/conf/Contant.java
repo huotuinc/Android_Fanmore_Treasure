@@ -53,6 +53,8 @@ public class Contant {
 
     //微信登录:用户存在
     public static final int    MSG_USERID_FOUND = 0x00000001;
+    //微信登录:微信未登录
+    public static final int    MSG_UN_LOGIN = 0x90201111;
 
     //微信登录：用户不存在
     public static final int MSG_USERID_NO_FOUND = 0x00000002;
@@ -194,9 +196,9 @@ public class Contant {
     //接口请求地址Activity has been destroyed
     //public static final String REQUEST_URL = "http://192.168.3.30:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
-    public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
-    //public static final String REQUEST_URL = "http://duobao.huobanplus.com/app/";
-   //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
+    //public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
+    public static final String REQUEST_URL = "http://duobao.huobanplus.com/app/";
+    //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.1.254:10001/app/";
     //public static final String REQUEST_URL = "http://192.168.3.86:8080/duobao/app/";
    //获取商城地址
@@ -256,7 +258,7 @@ public class Contant {
     //更新地址
     public static final String UPDATE_ADDRESS = "updateAddress";
     //删除地址
-    public static final String DELETE_ADDRESS = " deleteAddress";
+    public static final String DELETE_ADDRESS = "deleteAddress";
     //获取默认充值金额数据
     public static final String GET_DEFAULT_PUT_MONEY_LIST = "getDefaultPutMoneyList";
     //获取充值记录

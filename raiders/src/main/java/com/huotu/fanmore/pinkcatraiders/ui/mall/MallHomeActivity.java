@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewStub;
@@ -31,8 +32,11 @@ import com.huotu.fanmore.pinkcatraiders.model.MallPayModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayModel;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.PayOrderActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
+import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.UrlFilterUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
@@ -116,6 +120,7 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
         wManager = this.getWindowManager();
         bundle = this.getIntent().getExtras();
         viewPage = webPage.getRefreshableView();
+        webPage.setMode(PullToRefreshBase.Mode.MANUAL_REFRESH_ONLY);
         progressBar.setMax(100);
         initTitle();
         loadMainMenu();
@@ -128,6 +133,16 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
 
         underwebView.getSettings().setJavaScriptEnabled(true);
         underwebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        String userAgent = underwebView.getSettings().getUserAgentString();
+        if(null==userAgent|| TextUtils.isEmpty(userAgent))
+        {
+            userAgent = ";mobile;qibing";
+        }
+        else
+        {
+            userAgent += ";mobile;qibing";
+        }
+        underwebView.getSettings().setUserAgentString(userAgent);
 
         //首页默认为商户站点 + index
         underwebView.loadUrl(bundle.getString("bottomurl"));
@@ -201,6 +216,18 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
         viewPage.getSettings().setLoadsImagesAutomatically(true);
         viewPage.getSettings().setDomStorageEnabled(true);
         viewPage.loadUrl(bundle.getString("url"));
+
+        //设置angent
+        String userAgent = viewPage.getSettings().getUserAgentString();
+        if(null==userAgent|| TextUtils.isEmpty(userAgent))
+        {
+            userAgent = ";mobile;qibing";
+        }
+        else
+        {
+            userAgent += ";mobile;qibing";
+        }
+        viewPage.getSettings().setUserAgentString(userAgent);
 
         viewPage.setWebViewClient(
                 new WebViewClient() {

@@ -183,10 +183,19 @@ public class LoginActivity extends BaseActivity
 
             }
             break;
+            case Contant.MSG_UN_LOGIN:
+            {
+                //处理微信未登录
+                progress.dismissView();
+            }
+            break;
             case Contant.MSG_AUTH_CANCEL:
             {
-                btn_wx.setEnabled(true);
-                btn_qq.setEnabled(true);
+                if(null!=btn_wx&&null!=btn_qq)
+                {
+                    btn_wx.setEnabled(true);
+                    btn_qq.setEnabled(true);
+                }
                 //提示取消授权
                 progress.dismissView();
                 ToastUtils.showMomentToast(LoginActivity.this, this, "授权操作已取消");
@@ -297,7 +306,7 @@ public class LoginActivity extends BaseActivity
                             progress.dismissView();
                             //初始化失败
                             //异常处理，自动切换成无数据
-                            noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "登录失败");
+                            noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "服务器未响应");
                             noticePop.showNotice ( );
                             noticePop.showAtLocation(titleLayoutL,
                                     Gravity.CENTER, 0, 0
@@ -488,7 +497,7 @@ public class LoginActivity extends BaseActivity
                                                 progress.dismissView();
                                                 VolleyUtil.cancelAllRequest();
                                                 //系统级别错误
-                                                noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "结算失败");
+                                                noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "服务器未响应");
                                                 noticePop.showNotice();
                                                 noticePop.showAtLocation(
                                                         findViewById(R.id.titleLayout),
@@ -696,7 +705,7 @@ public class LoginActivity extends BaseActivity
         //注册
         Bundle bundle = new Bundle();
         bundle.putInt("type", 1);
-        ActivityUtils.getInstance().skipActivity(LoginActivity.this, MobileRegActivity.class, bundle);
+        ActivityUtils.getInstance().showActivity(LoginActivity.this, MobileRegActivity.class, bundle);
     }
 
     @Override
@@ -733,7 +742,7 @@ public class LoginActivity extends BaseActivity
                 //修改密码
                 Bundle bundle = new Bundle();
                 bundle.putInt("type", 2);
-                ActivityUtils.getInstance().skipActivity(LoginActivity.this, MobileRegActivity.class, bundle);
+                ActivityUtils.getInstance().showActivity(LoginActivity.this, MobileRegActivity.class, bundle);
             }
            default:
                break;
@@ -745,7 +754,7 @@ public class LoginActivity extends BaseActivity
          @Override
          public void onErrorResponse(VolleyError error) {
              progress.dismissView();
-             noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "登录失败");
+             noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "服务器未响应");
              noticePop.showNotice();
              noticePop.showAtLocation(titleLayoutL,
                      Gravity.CENTER, 0, 0);
@@ -760,45 +769,45 @@ public class LoginActivity extends BaseActivity
             progress.dismissView();
             if( null == appWXLoginModel ){
 
-                return;
+                ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "服务器登录处理失败");
             }
-            else if( appWXLoginModel.getSystemResultCode() != 1){
+            else if( appWXLoginModel.getResultData() ==null ){
 
-                return;
-            }else if( appWXLoginModel.getResultCode() !=1){
-
-                return;
+                ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "服务器登录处理失败");
             }
-            if( appWXLoginModel.getResultData() ==null ){
-
-                return;
-            }
-            AppUserModel user = appWXLoginModel.getResultData().getUser();
-            if(null != user)
+            else if(0==appWXLoginModel.getResultCode()&&500==appWXLoginModel.getSystemResultCode())
             {
-                //记录token
-                BaseApplication.getInstance().writeUserInfo(user);
-
-                if(null!=bundle&&null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
-
+                ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "服务器登录处理失败");
+            }
+            else if(null!=appWXLoginModel.getResultData()&&1==appWXLoginModel.getResultCode())
+            {
+                AppUserModel user = appWXLoginModel.getResultData().getUser();
+                if(null != user)
                 {
-                    ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "登陆成功，1秒后开始自动结算");
-                    mHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            uploadCartData();
-                        }
-                    }, 1000);
+                    //记录token
+                    BaseApplication.getInstance().writeUserInfo(user);
+
+                    if(null!=bundle&&null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
+
+                    {
+                        ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "登陆成功，1秒后开始自动结算");
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                uploadCartData();
+                            }
+                        }, 1000);
+                    }
+                    else
+                    {
+                        //跳转到首页
+                        ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                    }
                 }
                 else
                 {
-                    //跳转到首页
-                    ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                    ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "未请求到数据");
                 }
-            }
-            else
-            {
-                ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "未请求到数据");
             }
         }};
 
