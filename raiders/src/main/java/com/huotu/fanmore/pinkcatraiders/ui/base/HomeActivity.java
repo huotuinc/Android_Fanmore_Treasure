@@ -622,6 +622,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 } else if (tag.equals(Contant.TAG_4)) {
                     application.mFragManager.setCurrentFrag(FragManager.FragType.PROFILE);
                 } else if (tag.equals(Contant.TAG_5)) {
+                    progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
+                    progress.showProgress ( "正在获取商城数据" );
+                    progress.showAtLocation(titleLayoutL,
+                            Gravity.CENTER, 0, 0
+                    );
 
 
                     //判断是否登陆
@@ -641,6 +646,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
+                                progress.dismissView();
                                 if (HomeActivity.this.isFinishing()) {
                                     return;
                                 }
