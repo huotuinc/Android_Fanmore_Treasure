@@ -120,6 +120,7 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
         wManager = this.getWindowManager();
         bundle = this.getIntent().getExtras();
         viewPage = webPage.getRefreshableView();
+        webPage.setMode(PullToRefreshBase.Mode.MANUAL_REFRESH_ONLY);
         progressBar.setMax(100);
         initTitle();
         loadMainMenu();

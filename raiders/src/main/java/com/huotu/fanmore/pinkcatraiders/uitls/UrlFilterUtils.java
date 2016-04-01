@@ -8,6 +8,8 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.TextView;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshWebView;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.MallPayModel;
@@ -65,8 +67,6 @@ public class UrlFilterUtils {
 
         if(url.contains ("/Mall/AppAlipay.aspx") )
         {
-
-
             //支付进度
             payProgress.showProgress ( "正在加载支付信息" );
             payProgress.showAtLocation (

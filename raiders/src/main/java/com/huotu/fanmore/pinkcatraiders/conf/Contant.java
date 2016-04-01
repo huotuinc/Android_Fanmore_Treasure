@@ -53,6 +53,8 @@ public class Contant {
 
     //微信登录:用户存在
     public static final int    MSG_USERID_FOUND = 0x00000001;
+    //微信登录:微信未登录
+    public static final int    MSG_UN_LOGIN = 0x90201111;
 
     //微信登录：用户不存在
     public static final int MSG_USERID_NO_FOUND = 0x00000002;
