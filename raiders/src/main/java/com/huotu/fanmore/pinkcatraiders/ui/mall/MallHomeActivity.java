@@ -120,7 +120,7 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
         wManager = this.getWindowManager();
         bundle = this.getIntent().getExtras();
         viewPage = webPage.getRefreshableView();
-        webPage.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        webPage.setMode(PullToRefreshBase.Mode.MANUAL_REFRESH_ONLY);
         progressBar.setMax(100);
         initTitle();
         loadMainMenu();
@@ -246,7 +246,7 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
                                 wManager,
                                 bundle.getString("orderurl")
                         );
-                        return filter.shouldOverrideUrlBySFriend(viewPage, url, webPage);
+                        return filter.shouldOverrideUrlBySFriend(viewPage, url);
                     }
 
                     @Override

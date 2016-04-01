@@ -63,15 +63,10 @@ public class UrlFilterUtils {
      * @return
      */
     public
-    boolean shouldOverrideUrlBySFriend ( WebView view, String url, PullToRefreshWebView webPage ) {
+    boolean shouldOverrideUrlBySFriend ( WebView view, String url ) {
 
         if(url.contains ("/Mall/AppAlipay.aspx") )
         {
-            //禁止页面下拉
-            if(null!=webPage)
-            {
-                webPage.setMode(PullToRefreshBase.Mode.MANUAL_REFRESH_ONLY);
-            }
             //支付进度
             payProgress.showProgress ( "正在加载支付信息" );
             payProgress.showAtLocation (
@@ -120,7 +115,7 @@ public class UrlFilterUtils {
             AuthMallParamUtils param = new AuthMallParamUtils ( application, System.currentTimeMillis (), builder.toString (), context );
             String payUrl = param.obtainUrlOrder ( );
             HttpUtils httpUtils = new HttpUtils();
-            httpUtils.doMallPay(aty, context, mHandler, application, payUrl, payModel, payProgress, titleView, wManager, orderUrl, webPage );
+            httpUtils.doMallPay(aty, context, mHandler, application, payUrl, payModel, payProgress, titleView, wManager, orderUrl );
             return true;
         }
         else if(url.contains ("/UserCenter/Login.aspx") ){
