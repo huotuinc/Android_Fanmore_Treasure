@@ -258,7 +258,7 @@ public class Contant {
     //更新地址
     public static final String UPDATE_ADDRESS = "updateAddress";
     //删除地址
-    public static final String DELETE_ADDRESS = " deleteAddress";
+    public static final String DELETE_ADDRESS = "deleteAddress";
     //获取默认充值金额数据
     public static final String GET_DEFAULT_PUT_MONEY_LIST = "getDefaultPutMoneyList";
     //获取充值记录

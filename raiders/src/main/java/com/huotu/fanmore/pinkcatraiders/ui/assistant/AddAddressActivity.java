@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,6 +28,7 @@ import com.huotu.fanmore.pinkcatraiders.model.AddressModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.LocalAddressModel;
 import com.huotu.fanmore.pinkcatraiders.model.UpdateProfileModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
@@ -51,7 +53,7 @@ import butterknife.OnClick;
  * 添加收货地址
  */
 public
-class AddAddressActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+class AddAddressActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, MyBroadcastReceiver.BroadcastListener {
 
     public
     Resources resources;
@@ -126,6 +128,8 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
     public
     NoticePopWindow noticePop;
     public LocalAddressModel data;
+    private MyBroadcastReceiver myBroadcastReceiver;
+    public InputMethodManager imm;
 
 
     @Override
@@ -158,13 +162,15 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_address);
-        ButterKnife.bind ( this );
+        ButterKnife.bind(this);
         application = ( BaseApplication ) this.getApplication ( );
+        imm = ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE));
         bundle = this.getIntent ().getExtras();
-        resources = this.getResources ( );
+        resources = this.getResources();
         mHandler = new Handler ( this );
         wManager = this.getWindowManager ( );
         progress = new ProgressPopupWindow ( AddAddressActivity.this, AddAddressActivity.this, wManager );
+        myBroadcastReceiver = new MyBroadcastReceiver(AddAddressActivity.this, this, MyBroadcastReceiver.TO_ADDRESSLIST);
         data = application.localAddress;
         initTitle ( );
         initData ( );
@@ -290,6 +296,7 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
     @OnClick ( R.id.provinceL )
     void selectProvince()
     {
+        imm.hideSoftInputFromWindow(provinceL.getWindowToken(), 0);
         addressPopWin = new AddressPopWin ( mHandler, application, AddAddressActivity.this, application.localAddress, 0, wManager, AddAddressActivity.this );
         addressPopWin.initView();
         addressPopWin.showAtLocation (titleLeftImage, Gravity.BOTTOM, 0, 0);
@@ -299,6 +306,7 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
     @OnClick ( R.id.cityL )
     void selectCity()
     {
+        imm.hideSoftInputFromWindow(cityL.getWindowToken(), 0);
         addressPopWin = new AddressPopWin ( mHandler, application, AddAddressActivity.this, application.localAddress, 0, wManager, AddAddressActivity.this );
         addressPopWin.initView();
         addressPopWin.showAtLocation (titleLeftImage, Gravity.BOTTOM, 0, 0);
@@ -308,6 +316,7 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
     @OnClick ( R.id.areaL )
     void selectArea()
     {
+        imm.hideSoftInputFromWindow(areaL.getWindowToken(), 0);
         addressPopWin = new AddressPopWin ( mHandler, application, AddAddressActivity.this, application.localAddress, 0, wManager, AddAddressActivity.this );
         addressPopWin.initView();
         addressPopWin.showAtLocation (titleLeftImage, Gravity.BOTTOM, 0, 0);
@@ -402,10 +411,12 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
                                 if(null==bundle)
                                 {
                                     ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "地址添加成功");
+                                    MyBroadcastReceiver.sendBroadcast(AddAddressActivity.this, MyBroadcastReceiver.TO_ADDRESSLIST);
                                 }
                                 else
                                 {
                                     ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "地址修改成功");
+                                    MyBroadcastReceiver.sendBroadcast(AddAddressActivity.this, MyBroadcastReceiver.TO_ADDRESSLIST);
                                 }
                                 mHandler.postDelayed(new Runnable() {
                                     @Override
@@ -471,6 +482,10 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
         super.onDestroy ( );
         VolleyUtil.cancelAllRequest ( );
         ButterKnife.unbind ( this );
+        if( null != myBroadcastReceiver)
+        {
+            myBroadcastReceiver.unregisterReceiver();
+        }
     }
 
     @Override
@@ -486,4 +501,9 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
     }
 
 
+    @Override
+    public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
+
+
+    }
 }
