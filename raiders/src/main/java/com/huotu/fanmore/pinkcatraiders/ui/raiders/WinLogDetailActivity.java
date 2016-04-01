@@ -593,6 +593,10 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
                             //刷新列表
                             firstGetData();
                         }
+                        else if(53003==base.getResultCode())
+                        {
+                            ToastUtils.showMomentToast(WinLogDetailActivity.this, WinLogDetailActivity.this, "收货人手机不合法");
+                        }
                         else
                         {
                             ToastUtils.showMomentToast(WinLogDetailActivity.this, WinLogDetailActivity.this, "添加地址失败");
@@ -618,8 +622,7 @@ public class WinLogDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     @OnClick(R.id.titleLeftImage)
-    void doBack()
-    {
+    void doBack() {
         closeSelf(WinLogDetailActivity.this);
     }
 

@@ -107,4 +107,12 @@ public class ActivityUtils
         i.putExtras(bundle);
         aty.startActivity(i);
     }
+
+    public void showActivityPush(Activity aty, Class clazz, Bundle bundle)
+    {
+        Intent i = new Intent(aty, clazz);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS |Intent.FLAG_ACTIVITY_CLEAR_TOP );
+        i.putExtras(bundle);
+        aty.startActivity(i);
+    }
 }

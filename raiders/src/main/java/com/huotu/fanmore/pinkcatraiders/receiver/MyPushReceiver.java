@@ -1,5 +1,6 @@
 package com.huotu.fanmore.pinkcatraiders.receiver;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +12,15 @@ import com.android.volley.VolleyError;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
+import com.huotu.fanmore.pinkcatraiders.model.AppUserBuyFlowModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
+import com.huotu.fanmore.pinkcatraiders.model.JModel;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.WinLogActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.raiders.WinLogDetailActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 
@@ -105,7 +112,6 @@ class MyPushReceiver extends BroadcastReceiver
             String title = bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE);
             String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
 
-
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent
                                                                             .getAction()))
         {
@@ -113,6 +119,26 @@ class MyPushReceiver extends BroadcastReceiver
             String title = bundle
                     .getString(JPushInterface.EXTRA_NOTIFICATION_TITLE);
             String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
+            // json封装成bean
+            /*JModel bean = new JModel();
+            JSONUtil<JModel> jsonUtil = new JSONUtil<JModel>();
+            bean = jsonUtil.toBean(extra, bean);
+            bean.setTitle(title);
+            if(6==Integer.parseInt(bean.getType()))
+            {
+                AppUserBuyFlowModel winner = new AppUserBuyFlowModel();
+                winner.setDefaultPictureUrl(bean.getGoodsUrl());
+                winner.setTitle(bean.getTitle());
+                winner.setIssueId(String.valueOf(bean.getIssueId()));
+                winner.setToAmount(bean.getNeedNumber());
+                winner.setLuckyNumber(bean.getLuckyNumber());
+                winner.setAmount(bean.getJoinNumber());
+                winner.setAwardingDate(bean.getAnnounceTime());
+                bundle.putSerializable("winner", winner);
+                //中奖，跳转到中奖列表
+                ActivityUtils.getInstance().showActivityPush((Activity) context, WinLogDetailActivity.class, bundle);
+            }*/
+
 
 
         } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent
