@@ -11,6 +11,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshWebView;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.model.MallOrderModel;
 import com.huotu.fanmore.pinkcatraiders.model.MallPayModel;
@@ -154,13 +156,13 @@ public class HttpUtils<T> {
         return jsonStr;
     }
 
-    public void doMallPay(final Activity aty, final Context context, final Handler mHandler, final BaseApplication application, String url, final MallPayModel mallPayModel, final ProgressPopupWindow payProgress, final TextView titleView, final WindowManager wManager, final String  notifyurl){
+    public void doMallPay(final Activity aty, final Context context, final Handler mHandler, final BaseApplication application, String url, final MallPayModel mallPayModel, final ProgressPopupWindow payProgress, final TextView titleView, final WindowManager wManager, final String  notifyurl, final PullToRefreshWebView webPage){
         final KJJsonObjectRequest re = new KJJsonObjectRequest (Request.Method.GET, url, null, new Response.Listener<JSONObject >(){
 
 
             @Override
             public void onResponse(JSONObject response) {
-
+                webPage.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
                 JSONUtil<MallOrderModel> jsonUtil = new JSONUtil<MallOrderModel>();
                 MallOrderModel orderInfo = new MallOrderModel();
                 orderInfo = jsonUtil.toBean(response.toString (), orderInfo);
@@ -242,6 +244,7 @@ public class HttpUtils<T> {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                webPage.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
                 payProgress.dismissView ( );
                 NoticePopWindow noticePop = new NoticePopWindow ( context, aty, wManager, "服务器未响应");
                 noticePop.showNotice ( );

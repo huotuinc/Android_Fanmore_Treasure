@@ -8,6 +8,8 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.TextView;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshWebView;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.MallPayModel;
@@ -61,12 +63,15 @@ public class UrlFilterUtils {
      * @return
      */
     public
-    boolean shouldOverrideUrlBySFriend ( WebView view, String url ) {
+    boolean shouldOverrideUrlBySFriend ( WebView view, String url, PullToRefreshWebView webPage ) {
 
         if(url.contains ("/Mall/AppAlipay.aspx") )
         {
-
-
+            //禁止页面下拉
+            if(null!=webPage)
+            {
+                webPage.setMode(PullToRefreshBase.Mode.MANUAL_REFRESH_ONLY);
+            }
             //支付进度
             payProgress.showProgress ( "正在加载支付信息" );
             payProgress.showAtLocation (
@@ -115,7 +120,7 @@ public class UrlFilterUtils {
             AuthMallParamUtils param = new AuthMallParamUtils ( application, System.currentTimeMillis (), builder.toString (), context );
             String payUrl = param.obtainUrlOrder ( );
             HttpUtils httpUtils = new HttpUtils();
-            httpUtils.doMallPay(aty, context, mHandler, application, payUrl, payModel, payProgress, titleView, wManager, orderUrl );
+            httpUtils.doMallPay(aty, context, mHandler, application, payUrl, payModel, payProgress, titleView, wManager, orderUrl, webPage );
             return true;
         }
         else if(url.contains ("/UserCenter/Login.aspx") ){

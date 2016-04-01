@@ -183,6 +183,12 @@ public class LoginActivity extends BaseActivity
 
             }
             break;
+            case Contant.MSG_UN_LOGIN:
+            {
+                //处理微信未登录
+                progress.dismissView();
+            }
+            break;
             case Contant.MSG_AUTH_CANCEL:
             {
                 if(null!=btn_wx&&null!=btn_qq)

@@ -506,6 +506,12 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
 
             }
             break;
+            case Contant.MSG_UN_LOGIN:
+            {
+                //处理微信未登录
+                progress.dismissView();
+            }
+            break;
             case Contant.MSG_AUTH_CANCEL:
             {
                 titleLayoutL.setClickable(true);
