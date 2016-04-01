@@ -429,6 +429,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
     {
         //设置昵称
         Bundle bundle = new Bundle ();
+        bundle.putInt("moblieband", 1);
         bundle.putString("profile", "昵称");
         bundle.putString("content", userNickName.getText().toString());
         ActivityUtils
