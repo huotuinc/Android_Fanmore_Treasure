@@ -1010,6 +1010,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     }
                     else
                     {
+                        progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
+                        progress.showProgress ( "正在结算" );
+                        progress.showAtLocation(titleLayoutL,
+                                Gravity.CENTER, 0, 0
+                        );
                         Iterator<ListModel> it = datas.iterator();
                         while (it.hasNext())
                         {
@@ -1033,6 +1038,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                 base, url, param, new Response.Listener<BalanceOutputModel>() {
                                     @Override
                                     public void onResponse(BalanceOutputModel response) {
+                                        progress.dismissView();
                                         BalanceOutputModel base = response;
                                         if (1 == base.getResultCode() && null != base.getResultData() && null != base.getResultData().getData()) {
                                             AppBalanceModel balance = base.getResultData().getData();
@@ -1052,11 +1058,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                             bundle.putSerializable("baseBalance", baseBalance);
                                             ActivityUtils.getInstance().showActivity(HomeActivity.this, PayOrderActivity.class, bundle);
                                         } else {
-                                            if(null!=progress)
-                                            {
-                                                progress.dismissView();
-                                            }
-
                                             VolleyUtil.cancelAllRequest();
                                             //上传失败
                                             noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "结算失败");
