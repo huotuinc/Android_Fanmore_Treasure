@@ -808,7 +808,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         ListModel list = it.next();
                         cartAmount+=(list.getUserBuyAmount()>list.getRemainAmount()?list.getRemainAmount():list.getUserBuyAmount());
                         double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        double total = price*list.getUserBuyAmount();
+                        double total = price*(list.getUserBuyAmount()>list.getRemainAmount()?list.getRemainAmount():list.getUserBuyAmount());
                         prices+=total;
                     }
 
