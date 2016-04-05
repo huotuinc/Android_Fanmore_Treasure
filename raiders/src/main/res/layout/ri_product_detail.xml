@@ -326,7 +326,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:maxLength="30"
+                        android:maxLength="40"
                         android:text=""
                         android:textSize="@dimen/text_size_14"
                         android:textColor="@color/text_gray"/>

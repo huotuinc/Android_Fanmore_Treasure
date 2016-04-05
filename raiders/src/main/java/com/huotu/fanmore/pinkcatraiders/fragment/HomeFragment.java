@@ -218,7 +218,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(jdInnerL, normal);
         SystemTools.loadBackground(zxrsInnerL, normal);
         initSwitchImg();
-        initNotice();
+        mHandler.sendEmptyMessage(0x22113344);
         firstGetData();
     }
 
@@ -740,7 +740,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     private void initNotice()
     {
-//滚动消息
+        //滚动消息
         String url = Contant.REQUEST_URL + Contant.GET_NOTICE_LIST;
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity ());
         Map<String, Object> maps = new HashMap<String, Object> ();
@@ -801,7 +801,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public
                     void onErrorResponse ( VolleyError error ) {
-
+                        error.getMessage();
                     }
                 }
         );
@@ -927,10 +927,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     mHandler.sendEmptyMessageDelayed(0, 3000);
                 }
                 break;
-                case 1:
+                case 0x22113344:
                 {
                     initNotice();
-                    mHandler.sendEmptyMessageDelayed(1, 600000);
+                    mHandler.sendEmptyMessageDelayed(0x22113344, 600000);
                 }
                 break;
                 default:
