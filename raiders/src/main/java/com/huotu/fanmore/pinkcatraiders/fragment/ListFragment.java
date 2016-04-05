@@ -313,12 +313,26 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                 //编辑模式
                 adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 1, application, 12);
                 menuList.setAdapter(adapter);
-                firstGetData();
+                //firstGetData();
             }
             else if(0==types)
             {
                 //结算模式
                 adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 0, application, 0);
+                menuList.setAdapter(adapter);
+                //firstGetData();
+            }
+            else if(3==types)
+            {
+                //结算模式
+                adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 0, application, 0);
+                menuList.setAdapter(adapter);
+                firstGetData();
+            }
+            else if(2==types)
+            {
+                //编辑模式
+                adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 1, application, 12);
                 menuList.setAdapter(adapter);
                 firstGetData();
             }
@@ -327,14 +341,14 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                 //全选
                 adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 1, application, types);
                 menuList.setAdapter(adapter);
-                firstGetData();
+                //firstGetData();
             }
             else if(12==types)
             {
                 //全部选
                 adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 1, application, types);
                 menuList.setAdapter(adapter);
-                firstGetData();
+                //firstGetData();
             }
 
         }

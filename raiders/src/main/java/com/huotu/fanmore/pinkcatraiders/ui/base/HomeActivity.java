@@ -489,7 +489,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 mHandler.sendMessage(msg);
                 //广播确认每次都是结算界面，并且下拉刷新
                 Bundle bundle = new Bundle();
-                bundle.putInt("type", 0);
+                bundle.putInt("type", 3);
                 MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
             }
             break;
@@ -1152,7 +1152,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         cartData.setCartData(str);
                         CartDataModel.save(cartData);
                         Bundle bundle = new Bundle();
-                        bundle.putInt("type", 1);
+                        bundle.putInt("type", 2);
                         MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
                     }
                     else
@@ -1236,7 +1236,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
                         progress.dismissView();
                         Bundle bundle = new Bundle();
-                        bundle.putInt("type", 1);
+                        bundle.putInt("type", 2);
                         MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
                     }
 
@@ -1409,7 +1409,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             int types = bundle.getInt("type");
             if(1==types) {
                 Bundle bundle1 = new Bundle();
-                bundle1.putInt("type", 0);
+                bundle1.putInt("type", 3);
                 MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle1);
                 //显示清单列表
                 //设置选中状态
