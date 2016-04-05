@@ -26,6 +26,7 @@ import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.UpdateProfileModel;
 import com.huotu.fanmore.pinkcatraiders.model.UserOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.UserUnwrapOutput;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -52,7 +53,7 @@ import butterknife.OnClick;
  * 修改用户信息界面
  */
 public
-class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, MyBroadcastReceiver.BroadcastListener {
 
     public
     Resources resources;
@@ -86,6 +87,7 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
 
     public
     NoticePopWindow noticePop;
+    public MyBroadcastReceiver myBroadcastReceiver;
 
     @Override
     public
@@ -105,13 +107,14 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
     void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate ( savedInstanceState );
-        setContentView ( R.layout.user_modify );
-        ButterKnife.bind ( this );
+        setContentView(R.layout.user_modify);
+        ButterKnife.bind(this);
         application = ( BaseApplication ) this.getApplication ( );
         resources = this.getResources ( );
         mHandler = new Handler ( this );
         bundle = this.getIntent ( ).getExtras ( );
-        wManager = this.getWindowManager ( );
+        wManager = this.getWindowManager();
+        myBroadcastReceiver = new MyBroadcastReceiver(ModifyInfoActivity.this, this, MyBroadcastReceiver.REFRESH_USERLIST);
         progress = new ProgressPopupWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager );
         initTitle ( );
         initData ( );
@@ -158,9 +161,9 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
                 String url = Contant.REQUEST_URL + Contant.UPDATE_PROFILE;
                 AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ModifyInfoActivity.this);
                 Map<String, Object> maps = new HashMap<String, Object>();
-                if (bundle.get("profile") == "昵称") {
+                if (bundle.get("profile").equals("昵称")) {
                     maps.put("profileType", "1");
-                } else if (bundle.get("profile") == "手机") {
+                } else if (bundle.get("profile").equals("手机")) {
                     maps.put("profileType", "2");
                 }
                 maps.put("profileData", modityTextInput.getText().toString());
@@ -174,16 +177,8 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
                                 progress.dismissView();
                                 UpdateProfileModel updateProfile = response;
                                 if (1 == updateProfile.getResultCode()) {
-                                    //上传成功
-                                    noticePop = new NoticePopWindow(ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户" + bundle.get("profile") + "修改成功");
-                                    noticePop.showNotice();
-                                    noticePop.showAtLocation(
-                                            findViewById(R.id.titleLayout),
-                                            Gravity.CENTER, 0, 0
-                                    );
                                     //更新本地用户信息
-                                    application
-                                            .writeUserInfo(updateProfile.getResultData().getUser());
+                                    updateUserInformation();
                                 } else {
                                     //上传失败
                                     noticePop = new NoticePopWindow(ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户" + bundle.get("profile") + "修改失败");
@@ -302,6 +297,7 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
                             {
                                 AppUserModel user=useroutput.getResultData().getUser();
                                 application.writeUserInfo(user);
+                                MyBroadcastReceiver.sendBroadcast(ModifyInfoActivity.this, MyBroadcastReceiver.REFRESH_USERLIST);
                                 finish();
                             }
                             else
@@ -341,6 +337,10 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
         super.onDestroy ( );
         VolleyUtil.cancelAllRequest ( );
         ButterKnife.unbind ( this );
+        if( null != myBroadcastReceiver)
+        {
+            myBroadcastReceiver.unregisterReceiver();
+        }
     }
 
     @Override
@@ -354,5 +354,10 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
             this.closeSelf(ModifyInfoActivity.this);
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
+
     }
 }

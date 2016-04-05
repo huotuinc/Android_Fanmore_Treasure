@@ -39,6 +39,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
     //其他界面跳转到购物车
     public static String JUMP_CART="cy.com.morefan.JUMP_CART";
     public static String TO_ADDRESSLIST="cy.com.morefan.TO_ADDRESSLIST";
+    public static String REFRESH_USERLIST="cy.com.morefan.REFRESH_USERLIST";
     //晒单成功
 
     public static String SHOW_ORDER="cy.com.morefan.SHOW_ORDER";
@@ -48,7 +49,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
     public enum ReceiverType{
         WXNotBack,AlarmUp, RefreshTaskList,UserMainDataUpdate, Sms, Login, Logout, ShareToWeixinSuccess,
         ShareToSinaSuccess, ShareToQzoneSuccess, BackgroundBackToUpdate, FlowAdd,Register,RefreshTaskDetail,
-        WX_Pay_Callback,requestFlow,sendFlow,wxPaySuccess,shopCart,jumpCart,toaddresslist,titleMsgTag,showOrder
+        WX_Pay_Callback,requestFlow,sendFlow,wxPaySuccess,shopCart,jumpCart,toaddresslist,RefreshUserlist,titleMsgTag,showOrder
     }
     public interface BroadcastListener{
         void onFinishReceiver(ReceiverType type, Object msg);
@@ -168,6 +169,10 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         else if(intent.getAction().equals(TO_ADDRESSLIST))
         {
             listener.onFinishReceiver(ReceiverType.toaddresslist,intent.getExtras());
+        }
+        else if(intent.getAction().equals(REFRESH_USERLIST))
+        {
+            listener.onFinishReceiver(ReceiverType.RefreshUserlist,intent.getExtras());
         }
         else if(intent.getAction().equals(TITLE_MSG_TAG))
         {

@@ -169,7 +169,6 @@ public class WinLogActivity extends BaseActivity implements View.OnClickListener
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), WinLogActivity.this);
         Map<String, Object> maps = new HashMap<String, Object> ();
         //全部
-        maps.put("userId", String.valueOf ( application.readUerId () ));
         if ( OperateTypeEnum.REFRESH == operateType )
         {// 下拉
             maps.put("lastTime", 0);

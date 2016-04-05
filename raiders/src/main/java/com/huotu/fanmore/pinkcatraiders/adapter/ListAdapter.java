@@ -325,7 +325,7 @@ public class ListAdapter extends BaseAdapter {
                 }
             });
 
-            if(1==list.getStepAmount())
+            if(0==list.getAreaAmount())
             {
                 holder.stepTag.setVisibility(View.GONE);
             }
