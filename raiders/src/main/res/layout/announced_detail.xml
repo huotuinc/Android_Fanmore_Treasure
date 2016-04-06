@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/color_white"
     android:padding="5dp">
     <RelativeLayout
@@ -107,6 +107,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="@dimen/partner_area_height"
+        android:id="@+id/bottomOperatorL"
         android:paddingLeft="25dp"
         android:layout_below="@+id/announcedPeopleDetail"
         android:paddingRight="25dp"

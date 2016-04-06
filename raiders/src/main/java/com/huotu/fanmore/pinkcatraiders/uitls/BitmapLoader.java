@@ -1,6 +1,7 @@
 package com.huotu.fanmore.pinkcatraiders.uitls;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.widget.ImageView;
 
@@ -55,7 +56,7 @@ public class BitmapLoader
     public void displayUrl(Context context, NetworkImageView imageView,
             String imageUrl)
     {
-        displayUrl(context, imageView, imageUrl , R.mipmap.ic_launcher, R.mipmap.error);
+        displayUrl(context, imageView, imageUrl , R.mipmap.defluat_logo, R.mipmap.defluat_logo);
     }
 
     //加载圆形图片
@@ -93,6 +94,57 @@ public class BitmapLoader
         }, 0, 0 , ImageView.ScaleType.FIT_XY);
     }
 
+    public void displayUrlNewest(Context context, final ImageView imageView, String logoUrl, final int errorImg)
+    {
+        VolleyUtil.getImageLoader(context).get(logoUrl, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
+                if (imageContainer != null && imageContainer.getBitmap() != null) {
+                    imageView.setImageBitmap(imageContainer.getBitmap());
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                imageView.setBackgroundResource(errorImg);
+            }
+        }, 0, 0 , ImageView.ScaleType.CENTER_INSIDE);
+    }
+
+    public void displayUrlProductGride(Context context, final ImageView imageView, String logoUrl, final int errorImg)
+    {
+        VolleyUtil.getImageLoader(context).get(logoUrl, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
+                if (imageContainer != null && imageContainer.getBitmap() != null) {
+                    imageView.setImageBitmap(imageContainer.getBitmap());
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                imageView.setBackgroundResource(errorImg);
+            }
+        }, 0, 0 , ImageView.ScaleType.CENTER_INSIDE);
+    }
+
+    public void displayUrlBanner(Context context, final ImageView imageView, String logoUrl, final int errorImg)
+    {
+        VolleyUtil.getImageLoader(context).get(logoUrl, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
+                if (imageContainer != null && imageContainer.getBitmap() != null) {
+                    imageView.setImageBitmap(imageContainer.getBitmap());
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                imageView.setBackgroundResource(errorImg);
+            }
+        }, 0, 0 , ImageView.ScaleType.CENTER_INSIDE);
+    }
+
     /**
      * 
      * @方法描述：采用volly加载网络图片
@@ -121,5 +173,22 @@ public class BitmapLoader
         ImageLoader imageLoader = VolleyUtil.getImageLoader(context);
         imageView.setErrorImageResId(errorImg);
         imageView.setImageUrl(imageUrl, imageLoader);
+    }
+
+    public void displayOrderUrl(Context context, final ImageView imageView, String logoUrl, final int errorImg)
+    {
+        VolleyUtil.getImageLoader(context).get(logoUrl, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
+                if (imageContainer != null && imageContainer.getBitmap() != null) {
+                    SystemTools.loadBackground(imageView, new BitmapDrawable(imageContainer.getBitmap()));
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                imageView.setBackgroundResource(errorImg);
+            }
+        }, 0, 0 , ImageView.ScaleType.FIT_XY);
     }
 }

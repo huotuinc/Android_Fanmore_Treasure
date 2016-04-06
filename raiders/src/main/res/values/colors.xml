@@ -10,12 +10,15 @@
     <color name="home_item_line">#ffd6c29a</color>
     <color name="text_gray">#ff8e8e8e</color>
     <color name="list_separationline_layout">#ffd9d9d9</color>
+    <color name="light_gray">#fff8f8f8</color>
     <color name="title_bg">#FFEF6314</color>
     <color name="gray_bg">#f5f5f5</color>
     <color name="account_bg">#FFF4F4F6</color>
     <color name="deep_red">#FFFF1A17</color>
     <color name="progress_bg">#ffeaeaea</color>
     <color name="progress">#ffffb256</color>
+    <color name="progress_mall">#ffad1f20</color>
+    <color name="redpackage_tag">#ffeeb817</color>
     <color name="color_light_gray">#FFF5F5F5</color>
     <color name="color_light_yellow">#FFFFFAEE</color>
     <color name="color_blue">#FF509BFF</color>
@@ -23,4 +26,11 @@
     <color name="transparent">#FFFFFFFF</color>
     <color name="bg_1">#FFE7E7E7</color>
     <color name="gray_backg">#e7e7e7</color>
+    <color name="redpackage">#ffff3f26</color>
+    <color name="prow_bg">#ffeee517</color>
+    <color name="redpackage_color01">#ff4e4c8d</color>
+    <color name="redpackage_wait">#98000000</color>
+    <color name="redpackage_warn">#ff3f8a3d</color>
+    <color name="space_color">#ffe2e5e9</color>
+    <color name="province_line_border">#FFC7C7C7</color>
 </resources>

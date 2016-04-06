@@ -88,7 +88,29 @@
                         android:layout_below="@+id/zqIcon"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="5dp"
-                        android:text="十元专区"
+                        android:text="专区商品"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_size_14"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/redPackageL"
+                    android:padding="5dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <ImageView
+                        android:id="@+id/redPackageIcon"
+                        android:background="@mipmap/home_catagory_redpackage"
+                        android:layout_centerHorizontal="true"
+                        android:layout_width="@dimen/home_catagory_size"
+                        android:layout_height="@dimen/home_catagory_size"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/redPackageIcon"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:text="红包专区"
                         android:textColor="@color/text_black"
                         android:textSize="@dimen/text_size_14"/>
                 </RelativeLayout>
@@ -174,7 +196,7 @@
                 android:paddingTop="5dp"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                android:background="@drawable/account_bg_bottom">
+                android:background="@drawable/home_switch_normal">
                 <RelativeLayout
                     android:id="@+id/rqL"
                     android:paddingLeft="5dp"

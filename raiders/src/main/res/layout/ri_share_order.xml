@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="发布"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_16"
             android:textColor="@color/color_blue"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
@@ -27,25 +27,64 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <com.huotu.android.library.libedittext.EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/shareorder_title_height"
+        android:layout_centerVertical="true"
         android:id="@+id/orderTitle"
-        android:hint="晒单主题，不少于6个字"/>
-        <com.huotu.android.library.libedittext.EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        android:background="@drawable/search_order_bg"
+        android:gravity="left|center_vertical"
+        android:textColorHint="@color/text_gray"
+        android:hint="晒单主题，不少于6个字"
+        android:maxLength="13"
+        android:paddingLeft="5dp"
+        android:layout_margin="10dp"
+        android:singleLine="true"
+        android:textSize="@dimen/text_size_16"/>
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/shareorder_con_height"
             android:id="@+id/orderMsg"
+            android:layout_margin="10dp"
+            android:gravity="left"
             android:hint="获奖感言，不少于30个字"
-            android:textSize="15dp"/>
-        <ImageView
-            android:layout_width="wrap_content"
+            android:textColorHint="@color/text_gray"
+            android:padding="3dp"
+            android:minLines="10"
+            android:textSize="@dimen/text_size_16"
+            android:textColor="@color/text_black"
+            android:background="@drawable/search_order_bg"/>
+        <LinearLayout
+            android:id="@+id/preImgL"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:id="@+id/addImgBtn"
-            android:layout_marginTop="50dp"
-            android:background="@mipmap/shoreorder"/>
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+            <ImageView
+                android:layout_width="@dimen/showOrderImageSize"
+                android:layout_height="@dimen/showOrderImageSize"
+                android:layout_margin="5dp"
+                android:id="@+id/addImgBtn1"
+                android:background="@mipmap/shoreorder"/>
+            <ImageView
+                android:layout_width="@dimen/showOrderImageSize"
+                android:layout_height="@dimen/showOrderImageSize"
+                android:layout_margin="5dp"
+                android:id="@+id/addImgBtn2"
+                android:background="@mipmap/shoreorder"/>
+            <ImageView
+                android:layout_width="@dimen/showOrderImageSize"
+                android:layout_height="@dimen/showOrderImageSize"
+                android:layout_margin="5dp"
+                android:id="@+id/addImgBtn3"
+                android:background="@mipmap/shoreorder"/>
+            <ImageView
+                android:layout_width="@dimen/showOrderImageSize"
+                android:layout_height="@dimen/showOrderImageSize"
+                android:layout_margin="5dp"
+                android:id="@+id/addImgBtn4"
+                android:background="@mipmap/shoreorder"/>
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,19 +98,21 @@
     android:orientation="horizontal">
             <TextView
                 android:padding="5dp"
+                android:id="@+id/shareOrderTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="获奖商品:百草味 2袋祝贺大撒旦撒10个/袋"/>
+                android:text=""/>
 </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
+                android:id="@+id/shareOrderIusse"
                 android:padding="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="参与期号:565656"/>
+                android:text=""/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,6 +124,7 @@
                 android:layout_height="wrap_content"
                 android:text="本期参与:"/>
             <TextView
+                android:id="@+id/parentCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3"
@@ -102,9 +144,10 @@
                 android:layout_height="wrap_content"
                 android:text="幸运号码:"/>
             <TextView
+                android:id="@+id/luckyNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="646465465456"
+                android:text=""
                 android:textColor="@color/title_bg"/>
         </LinearLayout>
         <LinearLayout
@@ -117,9 +160,10 @@
                 android:layout_height="wrap_content"
                 android:text="揭晓时间:"/>
             <TextView
+                android:id="@+id/time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="2016-01-05 10:40:11"/>
+                android:text=""/>
         </LinearLayout>
 
     </LinearLayout>

@@ -53,74 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/gray_bg"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/user_setting_item_height"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:id="@+id/userIdL"
-        android:background="@color/color_white">
-        <TextView
-            android:layout_weight="1"
-            android:layout_marginLeft="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ID"
-            android:textSize="@dimen/text_size_18"
-            android:textColor="@color/text_gray"
-            android:layout_gravity="center"/>
-       <TextView
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:textSize="@dimen/text_size_16"
-           android:id="@+id/userId"
-           android:layout_marginRight="5dp"
-           android:text="1241234123123123@qq.com"/>
-        <ImageView
-            android:layout_marginRight="5dp"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/jinru"/>
-    </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/gray_bg"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/user_setting_item_height"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:id="@+id/userAccountL"
-        android:background="@color/color_white">
-        <TextView
-            android:layout_weight="1"
-            android:layout_marginLeft="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="账号"
-            android:textSize="@dimen/text_size_18"
-            android:textColor="@color/text_gray"
-            android:layout_gravity="center"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_16"
-            android:id="@+id/userAccount"
-            android:layout_marginRight="5dp"
-            android:text="1241234123123123@qq.com"/>
-        <ImageView
-            android:layout_marginRight="5dp"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/jinru"/>
-    </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/gray_bg"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/user_setting_item_height"
@@ -143,7 +76,7 @@
             android:textSize="@dimen/text_size_16"
             android:id="@+id/userNickName"
             android:layout_marginRight="5dp"
-            android:text="反对法"/>
+            android:text=""/>
         <ImageView
             android:layout_marginRight="5dp"
             android:layout_gravity="center"
@@ -177,7 +110,7 @@
             android:textSize="@dimen/text_size_16"
             android:id="@+id/userPhone"
             android:layout_marginRight="5dp"
-            android:text="12412341231231"/>
+            android:text=""/>
         <ImageView
             android:layout_marginRight="5dp"
             android:layout_gravity="center"
@@ -189,6 +122,74 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/gray_bg"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/user_setting_item_height"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:id="@+id/bingWeixinL"
+            android:background="@color/color_white">
+            <TextView
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="微信"
+                android:textSize="@dimen/text_size_18"
+                android:textColor="@color/text_gray"
+                android:layout_gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_16"
+                android:id="@+id/bingWeixin"
+                android:layout_marginRight="5dp"
+                android:text=""/>
+            <ImageView
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/jinru"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_bg"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/user_setting_item_height"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:id="@+id/bindQqL"
+            android:background="@color/color_white">
+            <TextView
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                    android:text="QQ"
+                android:textSize="@dimen/text_size_18"
+                android:textColor="@color/text_gray"
+                android:layout_gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_16"
+                android:id="@+id/bindQq"
+                android:layout_marginRight="5dp"
+                android:text=""/>
+            <ImageView
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/jinru"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_bg"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/user_setting_item_height"
@@ -213,6 +214,35 @@
             android:layout_height="wrap_content"
             android:background="@mipmap/jinru"/>
     </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_bg"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/user_setting_item_height"
+            android:orientation="horizontal"
+            android:id="@+id/passwordL"
+            android:padding="10dp"
+            android:background="@color/color_white">
+            <TextView
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="设置密码"
+                android:textSize="@dimen/text_size_18"
+                android:id="@+id/password"
+                android:textColor="@color/text_gray"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/jinru"/>
+        </LinearLayout>
     </LinearLayout>
     </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 

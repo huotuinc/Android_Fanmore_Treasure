@@ -18,7 +18,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.AreaProductAdapter;
-import com.huotu.fanmore.pinkcatraiders.adapter.MyGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.NewestProductAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
@@ -31,6 +30,8 @@ import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+import com.huotu.fanmore.pinkcatraiders.uitls.TimeCount;
+import com.huotu.fanmore.pinkcatraiders.widget.CountDownTimerButton;
 
 import org.json.JSONObject;
 
@@ -58,7 +59,7 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public List<NewOpenListModel> newestProducts;
     public NewestProductAdapter adapter;
-
+    private TimeCount tc;
     @Override
     public void onReshow() {
 
@@ -92,6 +93,7 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         resources = getActivity().getResources();
         rootView = inflater.inflate(R.layout.newest_frag, container, false);
         application = (BaseApplication) getActivity().getApplication();
@@ -109,7 +111,6 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
 
     private void initGrid()
     {
-
         newestGrid.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<GridView> pullToRefreshBase) {
@@ -123,15 +124,14 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
                 initProducts();
             }
         });
-
+        newestProducts = new ArrayList<NewOpenListModel>();
+        adapter = new NewestProductAdapter(newestGrid.getRefreshableView(), newestProducts,getActivity(),getActivity(),  tc);
+        newestGrid.setAdapter(adapter);
        firstGetData();
     }
 
     private void initProducts()
     {
-        newestProducts = new ArrayList<NewOpenListModel>();
-        adapter = new NewestProductAdapter(newestProducts,getActivity());
-        newestGrid.setAdapter(adapter);
         if( false == rootAty.canConnect() ) {
             rootAty.mHandler.post(new Runnable() {
                 @Override
@@ -150,15 +150,18 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
             if ( OperateTypeEnum.REFRESH == operateType )
             {// 下拉
                 maps.put("lastId", 0);
+                maps.put("curType", 0);
             } else if (OperateTypeEnum.LOADMORE == operateType)
             {// 上拉
                 if ( newestProducts != null &&newestProducts.size() > 0)
                 {
-                    NewOpenListModel product = newestProducts.get(newestProducts.size() - 1);
-                    maps.put("lastId",1);
-                } else if (newestProducts != null && newestProducts.size() == 0)
+                    NewOpenListModel product = newestProducts.get(0);
+                    maps.put("lastId",product.getSort());
+                    maps.put("curType", product.getType());
+                } else
                 {
-                    maps.put("lastId",1);
+                    maps.put("lastId", 0);
+                    maps.put("curType", 0);
                 }
             }
             String suffix = params.obtainGetParam(maps);
@@ -185,12 +188,19 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
                                 newestProducts.addAll(productsOutputs.getResultData().getList());
                                 adapter.notifyDataSetChanged();
                             }
+                            if ( newestProducts != null &&newestProducts.size() > 0)
+                            {
+                                newestProducts.get(0).setSort(productsOutputs.getResultData().getSort());
+                                newestProducts.get(0).setType(productsOutputs.getResultData().getType());
+                            }
                         } else {
                             //空数据处理
+                            newestGrid.setEmptyView(emptyView);
                         }
                     } else {
                         //异常处理，自动切换成无数据
                         //空数据处理
+                        newestGrid.setEmptyView(emptyView);
                     }
                 }
             }, new Response.ErrorListener() {
@@ -201,6 +211,7 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
                         return;
                     }
                     //空数据处理
+                    newestGrid.setEmptyView(emptyView);
                 }
             });
 
@@ -215,7 +226,7 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
         rootAty.mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (getActivity().isFinishing()) return;
+                if (rootAty.isFinishing()) return;
                 operateType = OperateTypeEnum.REFRESH;
                 newestGrid.setRefreshing(true);
             }
@@ -225,11 +236,14 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(getActivity());
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.unbind(getActivity());
+        if ( null != tc ) {
+            tc.Stop ( );
+        }
     }
 }

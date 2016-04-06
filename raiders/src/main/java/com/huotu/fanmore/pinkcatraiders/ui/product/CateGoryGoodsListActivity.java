@@ -27,11 +27,13 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AreaProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
+import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.GoodsListByOtherOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.CartUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
@@ -114,7 +116,6 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
 
     private void initList()
     {
-        areaList.setMode ( PullToRefreshBase.Mode.BOTH );
         areaList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
@@ -149,21 +150,7 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
             String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_AREA;
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
-            maps.put("categoryId", bundle.get("categoryId"));
-            if ( OperateTypeEnum.REFRESH == operateType )
-            {// 下拉
-                maps.put("lastSort", 0);
-            } else if (OperateTypeEnum.LOADMORE == operateType)
-            {// 上拉
-                if ( products != null && products.size() > 0)
-                {
-                    ProductModel product = products.get(products.size() - 1);
-                    maps.put("lastSort", product.getPid());
-                } else if (products != null && products.size() == 0)
-                {
-                    maps.put("lastSort", 0);
-                }
-            }
+            maps.put("step", 0);
             String suffix = params.obtainGetParam(maps);
             url = url + suffix;
             HttpUtils httpUtils = new HttpUtils();
@@ -178,14 +165,19 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                     JSONUtil<AreaProductsOutputModel> jsonUtil = new JSONUtil<AreaProductsOutputModel>();
                     AreaProductsOutputModel areaProductsOutputs = new AreaProductsOutputModel();
                     areaProductsOutputs = jsonUtil.toBean(response.toString(), areaProductsOutputs);
-                    if (null != areaProductsOutputs && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList()) {
+                    if (null != areaProductsOutputs && 1==areaProductsOutputs.getResultCode() && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList() && !areaProductsOutputs.getResultData().getList().isEmpty()) {
 
                         //修改记录总数
                         Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, areaProductsOutputs.getResultData().getList().size());
                         mHandler.sendMessage(message);
-                        products.clear();
-                        products.addAll(areaProductsOutputs.getResultData().getList());
-                        adapter.notifyDataSetChanged();
+                        if( operateType == OperateTypeEnum.REFRESH){
+                            products.clear();
+                            products.addAll(areaProductsOutputs.getResultData().getList());
+                            adapter.notifyDataSetChanged();
+                        }else if( operateType == OperateTypeEnum.LOADMORE){
+                            products.addAll(areaProductsOutputs.getResultData().getList());
+                            adapter.notifyDataSetChanged();
+                        }
                     } else {
                         //提示获取数据失败
                         areaList.setEmptyView(emptyView);
@@ -206,21 +198,7 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
             String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_CATEGORY;
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
-            maps.put("categoryId", bundle.get("categoryId"));
-            if ( OperateTypeEnum.REFRESH == operateType )
-            {// 下拉
-                maps.put("lastSort", 0);
-            } else if (OperateTypeEnum.LOADMORE == operateType)
-            {// 上拉
-                if ( products != null && products.size() > 0)
-                {
-                    ProductModel product = products.get(products.size() - 1);
-                    maps.put("lastSort", product.getPid());
-                } else if (products != null && products.size() == 0)
-                {
-                    maps.put("lastSort", 0);
-                }
-            }
+            maps.put("categoryId", bundle.getLong("categoryId"));
             String suffix = params.obtainGetParam(maps);
             url = url + suffix;
             HttpUtils httpUtils = new HttpUtils();
@@ -235,14 +213,19 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                     JSONUtil<AreaProductsOutputModel> jsonUtil = new JSONUtil<AreaProductsOutputModel>();
                     AreaProductsOutputModel areaProductsOutputs = new AreaProductsOutputModel();
                     areaProductsOutputs = jsonUtil.toBean(response.toString(), areaProductsOutputs);
-                    if (null != areaProductsOutputs && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList()) {
+                    if (null != areaProductsOutputs && 1==areaProductsOutputs.getResultCode() && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList() && !areaProductsOutputs.getResultData().getList().isEmpty()) {
 
                         //修改记录总数
                         Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, areaProductsOutputs.getResultData().getList().size());
                         mHandler.sendMessage(message);
-                        products.clear();
-                        products.addAll(areaProductsOutputs.getResultData().getList());
-                        adapter.notifyDataSetChanged();
+                        if( operateType == OperateTypeEnum.REFRESH){
+                            products.clear();
+                            products.addAll(areaProductsOutputs.getResultData().getList());
+                            adapter.notifyDataSetChanged();
+                        }else if( operateType == OperateTypeEnum.LOADMORE){
+                            products.addAll(areaProductsOutputs.getResultData().getList());
+                            adapter.notifyDataSetChanged();
+                        }
                     } else {
                         //提示获取数据失败
                         areaList.setEmptyView(emptyView);
@@ -260,10 +243,10 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
             });
         }
         else if (bundle.get("type").equals(3L)) {
+            areaList.setMode ( PullToRefreshBase.Mode.BOTH );
             String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_ALL_CATEGORY;
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
-            maps.put("lastSort", bundle.get("categoryId"));
             if ( OperateTypeEnum.REFRESH == operateType )
             {// 下拉
                 maps.put("lastSort", 0);
@@ -272,7 +255,7 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                 if ( products != null && products.size() > 0)
                 {
                     ProductModel product = products.get(products.size() - 1);
-                    maps.put("lastSort", products.size());
+                    maps.put("lastSort", product.getSort());
                 } else if (products != null && products.size() == 0)
                 {
                     maps.put("lastSort", 0);
@@ -297,9 +280,17 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                         //修改记录总数
                         Message message = mHandler.obtainMessage(Contant.LOAD_ALL_COUNT, goodsListByOtherOutputModel.getResultData().getCount());
                         mHandler.sendMessage(message);
-                        products.clear();
-                        products.addAll(goodsListByOtherOutputModel.getResultData().getList());
-                        adapter.notifyDataSetChanged();
+
+                        if( operateType == OperateTypeEnum.REFRESH){
+                            products.clear();
+                            products.addAll(goodsListByOtherOutputModel.getResultData().getList());
+                            products.get(products.size()-1).setSort(goodsListByOtherOutputModel.getResultData().getSort());
+                            adapter.notifyDataSetChanged();
+                        }else if( operateType == OperateTypeEnum.LOADMORE){
+                            products.addAll(goodsListByOtherOutputModel.getResultData().getList());
+                            products.get(products.size()-1).setSort(goodsListByOtherOutputModel.getResultData().getSort());
+                            adapter.notifyDataSetChanged();
+                        }
                     } else {
                         //提示获取数据失败
                         areaList.setEmptyView(emptyView);
@@ -316,10 +307,10 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                 }
             });
         }else if (bundle.get("type").equals(2L)) {
+            areaList.setMode ( PullToRefreshBase.Mode.BOTH );
             String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_OTHER_CATEGORY;
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
-            maps.put("lastSort", bundle.get("categoryId"));
             if ( OperateTypeEnum.REFRESH == operateType )
             {// 下拉
                 maps.put("lastSort", 0);
@@ -328,7 +319,7 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                 if ( products != null && products.size() > 0)
                 {
                     ProductModel product = products.get(products.size() - 1);
-                    maps.put("lastSort", product.getPid());
+                    maps.put("lastSort", product.getSort());
                 } else if (products != null && products.size() == 0)
                 {
                     maps.put("lastSort", 0);
@@ -348,14 +339,21 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                     JSONUtil<GoodsListByOtherOutputModel> jsonUtil = new JSONUtil<GoodsListByOtherOutputModel>();
                     GoodsListByOtherOutputModel goodsListByOtherOutputModel = new GoodsListByOtherOutputModel();
                     goodsListByOtherOutputModel = jsonUtil.toBean(response.toString(), goodsListByOtherOutputModel);
-                    if (null != goodsListByOtherOutputModel && null != goodsListByOtherOutputModel.getResultData() && null != goodsListByOtherOutputModel.getResultData().getList()) {
+                    if (null != goodsListByOtherOutputModel && null != goodsListByOtherOutputModel.getResultData() && null != goodsListByOtherOutputModel.getResultData().getList() && !goodsListByOtherOutputModel.getResultData().getList().isEmpty() && 1==goodsListByOtherOutputModel.getResultCode()) {
 
                         //修改记录总数
                         Message message = mHandler.obtainMessage(Contant.LOAD_ALL_COUNT, goodsListByOtherOutputModel.getResultData().getCount());
                         mHandler.sendMessage(message);
-                        products.clear();
-                        products.addAll(goodsListByOtherOutputModel.getResultData().getList());
-                        adapter.notifyDataSetChanged();
+                        if( operateType == OperateTypeEnum.REFRESH){
+                            products.clear();
+                            products.addAll(goodsListByOtherOutputModel.getResultData().getList());
+                            products.get(products.size()-1).setSort(goodsListByOtherOutputModel.getResultData().getSort());
+                            adapter.notifyDataSetChanged();
+                        }else if( operateType == OperateTypeEnum.LOADMORE){
+                            products.addAll(goodsListByOtherOutputModel.getResultData().getList());
+                            products.get(products.size()-1).setSort(goodsListByOtherOutputModel.getResultData().getSort());
+                            adapter.notifyDataSetChanged();
+                        }
                     } else {
                         //提示获取数据失败
                         areaList.setEmptyView(emptyView);
@@ -439,42 +437,7 @@ public class CateGoryGoodsListActivity extends BaseActivity implements View.OnCl
                 progress.showAtLocation (titleLayoutL,
                         Gravity.CENTER, 0, 0
                 );
-                String url = Contant.REQUEST_URL + Contant.JOIN_SHOPPING_CART;
-                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), CateGoryGoodsListActivity.this);
-                Map<String, Object> maps = new HashMap<String, Object> ();
-                maps.put ( "issueId", String.valueOf ( product.getIssueId () ) );
-                Map<String, Object> param = params.obtainPostParam(maps);
-                BaseModel base = new BaseModel ();
-                HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
-                httpUtils.doVolleyPost (
-                        base, url, param, new Response.Listener< BaseModel > ( ) {
-                            @Override
-                            public
-                            void onResponse ( BaseModel response ) {
-                                progress.dismissView ();
-                                BaseModel base = response;
-                                if(1==base.getResultCode ())
-                                {
-                                    //上传成功
-                                    ToastUtils.showLongToast(CateGoryGoodsListActivity.this, "添加清单成功");
-                                }
-                                else
-                                {
-                                    //上传失败
-                                    ToastUtils.showLongToast ( CateGoryGoodsListActivity.this, "添加清单失败" );
-                                }
-                            }
-                        }, new Response.ErrorListener ( ) {
-
-                            @Override
-                            public
-                            void onErrorResponse ( VolleyError error ) {
-                                progress.dismissView ( );
-                                //系统级别错误
-                                ToastUtils.showLongToast ( CateGoryGoodsListActivity.this, "添加清单失败" );
-                            }
-                        }
-                );
+                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, CateGoryGoodsListActivity.this, mHandler,0);
             }
             default:
                 break;

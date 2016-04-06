@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.model.MsgData;
+import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 
 import java.util.List;
 
@@ -70,16 +71,14 @@ public class SysMsgAdapter extends BaseAdapter {
         }
         if(null!=msgs && msgs.size() > 0)
         {
-            holder.msgTime.setText("");
+            holder.msgTime.setText(DateUtils.transformDataformat6(msgs.get(position).getDate()));
             holder.msgCon.setText(msgs.get(position).getContext());
         }
-
         return convertView;
     }
 
     class ViewHolder
     {
-
         public ViewHolder(View view)
         {
             ButterKnife.bind(this, view);

@@ -47,6 +47,14 @@ public class ActivityUtils
         aty.finish();
     }
 
+    public void skipActivity(Activity aty, Class clazz, Bundle bundle)
+    {
+        Intent i = new Intent(aty, clazz);
+        i.putExtras(bundle);
+        aty.startActivity(i);
+        aty.finish();
+    }
+
     public void skipActivity(Activity aty, Class clazz, int task)
     {
         Intent i = new Intent(aty, clazz);
@@ -96,6 +104,14 @@ public class ActivityUtils
     public void showActivity(Activity aty, Class clazz, Bundle bundle)
     {
         Intent i = new Intent(aty, clazz);
+        i.putExtras(bundle);
+        aty.startActivity(i);
+    }
+
+    public void showActivityPush(Activity aty, Class clazz, Bundle bundle)
+    {
+        Intent i = new Intent(aty, clazz);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS |Intent.FLAG_ACTIVITY_CLEAR_TOP );
         i.putExtras(bundle);
         aty.startActivity(i);
     }

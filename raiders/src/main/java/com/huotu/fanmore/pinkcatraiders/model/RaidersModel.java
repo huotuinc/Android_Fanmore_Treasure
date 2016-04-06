@@ -17,6 +17,15 @@ public class RaidersModel extends BaseModel {
     private long toAmount;
     private String winner;
     private long winnerAttendAmount;
+    private String time;
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public long getPid() {
         return pid;

@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/color_white">
     <TextView
+        android:layout_marginLeft="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/bottomPeriodsLabel"
@@ -14,6 +15,7 @@
         android:textSize="@dimen/text_size_16"
         android:text="新一期正在火热进行中..."/>
     <TextView
+        android:layout_marginRight="10dp"
         android:id="@+id/bottomPeriodsBtn"
         android:layout_width="@dimen/common_btn_width_1"
         android:layout_height="@dimen/common_btn_height_1"

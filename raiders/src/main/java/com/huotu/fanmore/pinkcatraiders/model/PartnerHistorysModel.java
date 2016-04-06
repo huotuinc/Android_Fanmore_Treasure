@@ -10,7 +10,7 @@ public class PartnerHistorysModel extends BaseModel {
     //城市
     private String city;
     //时间
-    private String date;
+    private long date;
     //ip
     private String ip;
     //昵称
@@ -36,11 +36,11 @@ public class PartnerHistorysModel extends BaseModel {
         this.city = city;
     }
 
-    public String getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(long date) {
         this.date = date;
     }
 

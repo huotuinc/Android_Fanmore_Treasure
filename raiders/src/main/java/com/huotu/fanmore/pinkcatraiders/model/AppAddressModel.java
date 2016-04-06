@@ -4,26 +4,26 @@ package com.huotu.fanmore.pinkcatraiders.model;
  * Created by Administrator on 2016/1/25.
  */
 public class AppAddressModel {
-    Integer cityId;
-    Boolean defaultAddress;
+    int cityId;
+    int defaultAddress;
     String details;
-    Long id;
+    long addressId ;
     String mobile;
     String receiver;
 
-    public Integer getCityId() {
+    public int getCityId() {
         return cityId;
     }
 
-    public void setCityId(Integer cityId) {
+    public void setCityId(int cityId) {
         this.cityId = cityId;
     }
 
-    public Boolean getDefaultAddress() {
+    public int getDefaultAddress() {
         return defaultAddress;
     }
 
-    public void setDefaultAddress(Boolean defaultAddress) {
+    public void setDefaultAddress(int defaultAddress) {
         this.defaultAddress = defaultAddress;
     }
 
@@ -35,12 +35,12 @@ public class AppAddressModel {
         this.details = details;
     }
 
-    public Long getId() {
-        return id;
+    public long getAddressId() {
+        return addressId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAddressId(long addressId) {
+        this.addressId = addressId;
     }
 
     public String getReceiver() {

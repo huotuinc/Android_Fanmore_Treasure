@@ -64,13 +64,17 @@ public class RechargeAdapter extends BaseAdapter {
             {
                 holder.payChannel.setText("支付宝支付");
             }
-            else
+            else if(2==recharge.getMoneyFlowType())
             {
-                holder.payChannel.setText("其他支付");
+                holder.payChannel.setText("购买");
+            }
+            else if(3==recharge.getMoneyFlowType())
+            {
+                holder.payChannel.setText("充值红包");
             }
 
             holder.payTime.setText(DateUtils.transformDataformat1(recharge.getTime ()));
-            holder.payStatus.setText(recharge.getRemark ());
+            holder.payStatus.setText("已付款");
             holder.money.setText(recharge.getMoney()+"元");
         } else {
 

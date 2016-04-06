@@ -9,6 +9,8 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +41,11 @@ import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.ScanRedpackageModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.ShowOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.product.AreaActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.product.CateGoryActivity;
@@ -49,8 +53,10 @@ import com.huotu.fanmore.pinkcatraiders.ui.product.ProductDetailActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.BuyLogActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
+import com.huotu.fanmore.pinkcatraiders.ui.redpackage.ReadPackageActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
@@ -140,21 +146,21 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     public
     void onResume ( ) {
 
-        super.onResume ( );
+        super.onResume();
     }
 
     @Override
     public
     void onCreate ( Bundle savedInstanceState ) {
 
-        super.onCreate ( savedInstanceState );
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
     @Override
     public
     View onCreateView ( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-
+        super.onCreate(savedInstanceState);
         resources = getActivity ( ).getResources ( );
         rootView = inflater.inflate ( R.layout.home_frag, container, false );
         application = ( BaseApplication ) getActivity ( ).getApplication ( );
@@ -190,70 +196,82 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     void onPullUpToRefresh ( PullToRefreshBase< ScrollView > pullToRefreshBase ) {
 
                         operateType = OperateTypeEnum.LOADMORE;
-                        initProduct ( );
+                        initProduct();
                     }
                 }
-                                             );
-        homePullRefresh.getRefreshableView ( ).smoothScrollTo ( 0, 0 );
+        );
+        homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
     }
 
-    private
-    void initView ( ) {
+    private void initView() {
 
         currentIndex = 0;
-        application.proFragManager.setCurrentFrag ( FragManager.FragType.POPULAR );
-        Drawable normal = resources.getDrawable ( R.drawable.switch_normal );
-        Drawable press  = resources.getDrawable ( R.drawable.switch_press );
-        rqLabel.setTextColor ( resources.getColor ( R.color.deep_red ) );
-        zxLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
-        jdLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
-        zxrsLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
-        SystemTools.loadBackground ( rqInnerL, press );
-        SystemTools.loadBackground ( zxInnerL, normal );
-        SystemTools.loadBackground ( jdInnerL, normal );
-        SystemTools.loadBackground ( zxrsInnerL, normal );
-        initSwitchImg ( );
-        firstGetData ( );
+        application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
+        Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
+        Drawable press = resources.getDrawable(R.drawable.switch_press);
+        rqLabel.setTextColor(resources.getColor(R.color.deep_red));
+        zxLabel.setTextColor(resources.getColor(R.color.text_black));
+        jdLabel.setTextColor(resources.getColor(R.color.text_black));
+        zxrsLabel.setTextColor(resources.getColor(R.color.text_black));
+        SystemTools.loadBackground(rqInnerL, press);
+        SystemTools.loadBackground(zxInnerL, normal);
+        SystemTools.loadBackground(jdInnerL, normal);
+        SystemTools.loadBackground(zxrsInnerL, normal);
+        initSwitchImg();
+        mHandler.sendEmptyMessage(0x22113344);
+        firstGetData();
     }
 
-    @OnClick ( R.id.lbL )
-    void showCatagoryUi ( ) {
+    @OnClick(R.id.lbL)
+    void showCatagoryUi() {
 
-        ActivityUtils.getInstance ( ).showActivity ( getActivity ( ), CateGoryActivity.class );
+        ActivityUtils.getInstance().showActivity(getActivity(), CateGoryActivity.class);
     }
 
-    @OnClick ( R.id.zqL )
-    void showZqUi ( ) {
+    @OnClick(R.id.zqL)
+    void showZqUi() {
 
-        Bundle bundle = new Bundle ( );
-        bundle.putLong ( "step", 10 );
-        ActivityUtils.getInstance ( ).showActivity ( getActivity ( ), AreaActivity.class, bundle );
+        Bundle bundle = new Bundle();
+        ActivityUtils.getInstance().showActivity(getActivity(), AreaActivity.class);
     }
 
-    @OnClick ( R.id.sdL )
-    void showSdUi ( ) {
+    @OnClick(R.id.redPackageL)
+    void showRadPackageUi() {
+
+        if(!application.isLogin())
+        {
+            ActivityUtils.getInstance().showActivity(getActivity(), LoginActivity.class);
+        }
+        else
+        {
+            Bundle bundle = new Bundle();
+            ActivityUtils.getInstance().showActivity(getActivity(), ReadPackageActivity.class, bundle);
+        }
+
+    }
+
+    @OnClick(R.id.sdL)
+    void showSdUi() {
         //ToastUtils.showLongToast(getActivity(), "弹出晒单界面");
-        Bundle bundle = new Bundle (  );
+        Bundle bundle = new Bundle();
         //首页晒单
-        bundle.putInt ( "type", 0 );
+        bundle.putInt("type", 0);
         ActivityUtils.getInstance().showActivity(getActivity(), ShowOrderActivity.class, bundle);
     }
 
     @OnClick(R.id.wtL)
-    void showWtUi()
-    {
+    void showWtUi() {
         //显示常见问题
-        Bundle bundle = new Bundle (  );
-        bundle.putString ( "title", "常见问题" );
-        bundle.putString ( "link", "https://www.baidu.com/" );
-        ActivityUtils.getInstance ().showActivity ( getActivity ( ), WebExhibitionActivity.class,
-                                                    bundle );
+        Bundle bundle = new Bundle();
+        bundle.putString("title", "常见问题");
+        bundle.putString("link", application.readHelpURL());
+        ActivityUtils.getInstance().showActivity(getActivity(), WebExhibitionActivity.class,
+                bundle);
     }
 
-    private void initProduct()
-    {
+    private void initProduct() {
 
-        if( false == rootAty.canConnect() ){
+        if (false == rootAty.canConnect()) {
             rootAty.mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -262,8 +280,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             });
             return;
         }
-        if(0==currentIndex)
-        {
+        if (0 == currentIndex) {
             //人气
             String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_INDEX;
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
@@ -276,9 +293,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             {// 上拉
                 if ( rootAty.popProducts != null && rootAty.popProducts.size() > 0)
                 {
-                    ProductModel product = rootAty.popProducts.get(rootAty.popProducts.size() - 1);
-                    maps.put("lastSort", product.getPid());
-                } else if (rootAty.popProducts != null && rootAty.popProducts.size() == 0)
+                    ProductModel product = rootAty.popProducts.get(0);
+                    maps.put("lastSort", product.getSort());
+                } else
                 {
                     maps.put("lastSort", 0);
                 }
@@ -306,6 +323,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                             } else if (operateType == OperateTypeEnum.LOADMORE) {
                                 rootAty.popProducts.addAll(productsOutputs.getResultData().getList());
                                 rootAty.popAdapter.notifyDataSetChanged();
+                            }
+                            if ( rootAty.popProducts != null && rootAty.popProducts.size() > 0)
+                            {
+                                rootAty.popProducts.get(0).setSort(productsOutputs.getResultData().getSort());
                             }
                         } else {
                             //空数据处理
@@ -340,9 +361,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             {// 上拉
                 if ( rootAty.newestProducts != null && rootAty.newestProducts.size() > 0)
                 {
-                    ProductModel product = rootAty.newestProducts.get(rootAty.newestProducts.size() - 1);
-                    maps.put("lastSort", product.getPid());
-                } else if (rootAty.newestProducts != null && rootAty.newestProducts.size() == 0)
+                    ProductModel product = rootAty.newestProducts.get(0);
+                    maps.put("lastSort", product.getSort());
+                } else
                 {
                     maps.put("lastSort", 0);
                 }
@@ -362,7 +383,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
                     if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
                         if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
-
                             if (operateType == OperateTypeEnum.REFRESH) {
                                 rootAty.newestProducts.clear();
                                 rootAty.newestProducts.addAll(productsOutputs.getResultData().getList());
@@ -371,6 +391,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                                 rootAty.newestProducts.addAll(productsOutputs.getResultData().getList());
                                 rootAty.newestAdapter.notifyDataSetChanged();
                             }
+                            if ( rootAty.newestProducts != null && rootAty.newestProducts.size() > 0) {
+                                rootAty.newestProducts.get(0).setSort(productsOutputs.getResultData().getSort());
+                            }
+
                         } else {
                             //空数据处理
                         }
@@ -398,16 +422,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             maps.put("type", "3");
             if ( OperateTypeEnum.REFRESH == operateType )
             {// 下拉
-                maps.put("lastSort", 0);
+                maps.put("lastSort", 100);
             } else if (OperateTypeEnum.LOADMORE == operateType)
             {// 上拉
                 if ( rootAty.progressProducts != null && rootAty.progressProducts.size() > 0)
                 {
-                    ProductModel product = rootAty.progressProducts.get(rootAty.progressProducts.size() - 1);
-                    maps.put("lastSort", product.getPid());
-                } else if (rootAty.progressProducts != null && rootAty.progressProducts.size() == 0)
+                    ProductModel product = rootAty.progressProducts.get(0);
+                    maps.put("lastSort", product.getSort());
+                } else
                 {
-                    maps.put("lastSort", 0);
+                    maps.put("lastSort", 100);
                 }
             }
             String suffix = params.obtainGetParam(maps);
@@ -433,6 +457,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                             } else if (operateType == OperateTypeEnum.LOADMORE) {
                                 rootAty.progressProducts.addAll(productsOutputs.getResultData().getList());
                                 rootAty.progressAdapter.notifyDataSetChanged();
+                            }
+                            if ( rootAty.progressProducts != null && rootAty.progressProducts.size() > 0)
+                            {
+                                rootAty.progressProducts.get(0).setSort(productsOutputs.getResultData().getSort());
                             }
                         } else {
                             //空数据处理
@@ -466,9 +494,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             {// 上拉
                 if ( rootAty.totalProducts != null && rootAty.totalProducts.size() > 0)
                 {
-                    ProductModel product = rootAty.totalProducts.get(rootAty.totalProducts.size() - 1);
-                    maps.put("lastSort", product.getPid());
-                } else if (rootAty.totalProducts != null && rootAty.totalProducts.size() == 0)
+                    ProductModel product = rootAty.totalProducts.get(0);
+                    maps.put("lastSort", product.getSort());
+                } else
                 {
                     maps.put("lastSort", 0);
                 }
@@ -496,6 +524,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                             } else if (operateType == OperateTypeEnum.LOADMORE) {
                                 rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
                                 rootAty.totalAdapter.notifyDataSetChanged();
+                            }
+                            if ( rootAty.totalProducts != null && rootAty.totalProducts.size() > 0)
+                            {
+                                rootAty.totalProducts.get(0).setSort(productsOutputs.getResultData().getSort());
                             }
                         } else {
                             //空数据处理
@@ -530,9 +562,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             {// 上拉
                 if ( rootAty.totalProducts != null && rootAty.totalProducts.size() > 0)
                 {
-                    ProductModel product = rootAty.totalProducts.get(rootAty.totalProducts.size() - 1);
-                    maps.put("lastSort", product.getPid());
-                } else if (rootAty.totalProducts != null && rootAty.totalProducts.size() == 0)
+                    ProductModel product = rootAty.totalProducts.get(0);
+                    maps.put("lastSort", product.getSort());
+                } else
                 {
                     maps.put("lastSort", 0);
                 }
@@ -541,44 +573,48 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             url = url + suffix;
             HttpUtils httpUtils = new HttpUtils();
             httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
-                                      @Override
-                                      public void onResponse(JSONObject response) {
-                                          homePullRefresh.onRefreshComplete();
-                                          if (rootAty.isFinishing()) {
-                                              return;
-                                          }
-                                          JSONUtil<ProductsOutputModel> jsonUtil = new JSONUtil<ProductsOutputModel>();
-                                          ProductsOutputModel productsOutputs = new ProductsOutputModel();
-                                          productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
-                                          if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
-                                              if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
+                @Override
+                public void onResponse(JSONObject response) {
+                    homePullRefresh.onRefreshComplete();
+                    if (rootAty.isFinishing()) {
+                        return;
+                    }
+                    JSONUtil<ProductsOutputModel> jsonUtil = new JSONUtil<ProductsOutputModel>();
+                    ProductsOutputModel productsOutputs = new ProductsOutputModel();
+                    productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
+                    if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
+                        if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
 
-                                                  if (operateType == OperateTypeEnum.REFRESH) {
-                                                      rootAty.totalProducts.clear();
-                                                      rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
-                                                      rootAty.totalAdapter.notifyDataSetChanged();
-                                                  } else if (operateType == OperateTypeEnum.LOADMORE) {
-                                                      rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
-                                                      rootAty.totalAdapter.notifyDataSetChanged();
-                                                  }
-                                              } else {
-                                                  //空数据处理
-                                              }
-                                          } else {
-                                              //异常处理，自动切换成无数据
-                                              //空数据处理
-                                          }
-                                      }
-                                  }, new Response.ErrorListener() {
-                                      @Override
-                                      public void onErrorResponse(VolleyError error) {
-                                          homePullRefresh.onRefreshComplete();
-                                          if (rootAty.isFinishing()) {
-                                              return;
-                                          }
-                                          //空数据处理
-                                      }
-                                  });
+                            if (operateType == OperateTypeEnum.REFRESH) {
+                                rootAty.totalProducts.clear();
+                                rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
+                                rootAty.totalAdapter.notifyDataSetChanged();
+                            } else if (operateType == OperateTypeEnum.LOADMORE) {
+                                rootAty.totalProducts.addAll(productsOutputs.getResultData().getList());
+                                rootAty.totalAdapter.notifyDataSetChanged();
+                            }
+                            if ( rootAty.totalProducts != null && rootAty.totalProducts.size() > 0)
+                            {
+                                rootAty.totalProducts.get(0).setSort(productsOutputs.getResultData().getSort());
+                            }
+                        } else {
+                            //空数据处理
+                        }
+                    } else {
+                        //异常处理，自动切换成无数据
+                        //空数据处理
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    homePullRefresh.onRefreshComplete();
+                    if (rootAty.isFinishing()) {
+                        return;
+                    }
+                    //空数据处理
+                }
+            });
         }
 
     }
@@ -586,9 +622,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @OnClick(R.id.rqInnerL)
     void clickRql()
     {
+        //重置加载模式
+        operateType = OperateTypeEnum.REFRESH;
         currentIndex = 0;
         application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
-        Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+        Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
         Drawable press = resources.getDrawable(R.drawable.switch_press);
         rqLabel.setTextColor(resources.getColor(R.color.deep_red));
         zxLabel.setTextColor(resources.getColor(R.color.text_black));
@@ -598,17 +636,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(zxInnerL, normal);
         SystemTools.loadBackground(jdInnerL, normal);
         SystemTools.loadBackground(zxrsInnerL, normal);
-        if(null==rootAty.popProducts || rootAty.popProducts.isEmpty())
-        {
-            initProduct();
-        }
+        initProduct();
     }
     @OnClick(R.id.zxInnerL)
     void clickZxl()
     {
+        //重置加载模式
+        operateType = OperateTypeEnum.REFRESH;
         currentIndex = 1;
         application.proFragManager.setCurrentFrag(FragManager.FragType.NEWEST_PRODUCT);
-        Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+        Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
         Drawable press = resources.getDrawable(R.drawable.switch_press);
         rqLabel.setTextColor(resources.getColor(R.color.text_black));
         zxLabel.setTextColor(resources.getColor(R.color.deep_red));
@@ -618,17 +655,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(zxInnerL, press);
         SystemTools.loadBackground(jdInnerL, normal);
         SystemTools.loadBackground(zxrsInnerL, normal);
-        if(null==rootAty.newestProducts || rootAty.newestProducts.isEmpty())
-        {
-            initProduct();
-        }
+        initProduct();
     }
     @OnClick(R.id.jdInnerL)
     void clickJdl()
     {
+        //重置加载模式
+        operateType = OperateTypeEnum.REFRESH;
         currentIndex = 2;
         application.proFragManager.setCurrentFrag(FragManager.FragType.PROGRESS);
-        Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+        Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
         Drawable press = resources.getDrawable(R.drawable.switch_press);
         rqLabel.setTextColor(resources.getColor(R.color.text_black));
         zxLabel.setTextColor(resources.getColor(R.color.text_black));
@@ -638,14 +674,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(zxInnerL, normal);
         SystemTools.loadBackground(jdInnerL, press);
         SystemTools.loadBackground(zxrsInnerL, normal);
-        if(null==rootAty.progressProducts || rootAty.progressProducts.isEmpty())
-        {
-            initProduct();
-        }
+        initProduct();
     }
     @OnClick(R.id.zxrsInnerL)
     void clickZxrsl()
     {
+        //重置加载模式
+        operateType = OperateTypeEnum.REFRESH;
         if(0 == Integer.parseInt(zxrsInnerL.getTag ( ).toString()))
         {
             //转换成UP
@@ -653,7 +688,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             SystemTools.loadBackground ( zxrsLogo, resources.getDrawable ( R.mipmap.sort_up ) );
             currentIndex = 4;
             application.proFragManager.setCurrentFrag(FragManager.FragType.TOTAL);
-            Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+            Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
             Drawable press = resources.getDrawable ( R.drawable.switch_press );
             rqLabel.setTextColor(resources.getColor(R.color.text_black));
             zxLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
@@ -671,7 +706,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             SystemTools.loadBackground ( zxrsLogo, resources.getDrawable ( R.mipmap.sort_down ) );
             currentIndex = 3;
             application.proFragManager.setCurrentFrag(FragManager.FragType.TOTAL);
-            Drawable normal = resources.getDrawable(R.drawable.switch_normal);
+            Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
             Drawable press = resources.getDrawable ( R.drawable.switch_press );
             rqLabel.setTextColor(resources.getColor(R.color.text_black));
             zxLabel.setTextColor ( resources.getColor ( R.color.text_black ) );
@@ -682,35 +717,29 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             SystemTools.loadBackground ( jdInnerL, normal );
             SystemTools.loadBackground ( zxrsInnerL, press );
         }
-
-        if(null==rootAty.totalProducts || rootAty.totalProducts.isEmpty())
-        {
-            initProduct();
-        }
+        initProduct();
     }
 
     /**
      * 初始化加载数据
      */
     protected void firstGetData(){
-        mHandler.postDelayed (
-                new Runnable ( ) {
+        mHandler.postDelayed(
+                new Runnable() {
 
                     @Override
-                    public
-                    void run ( ) {
+                    public void run() {
 
-                        if ( getActivity ( ).isFinishing ( ) ) return;
+                        if (rootAty.isFinishing()) return;
                         operateType = OperateTypeEnum.REFRESH;
-                        homePullRefresh.setRefreshing ( true );
+                        homePullRefresh.setRefreshing(true);
                     }
                 }, 1000
-                             );
+        );
     }
 
-    private void initSwitchImg()
+    private void initNotice()
     {
-
         //滚动消息
         String url = Contant.REQUEST_URL + Contant.GET_NOTICE_LIST;
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity ());
@@ -724,7 +753,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public
                     void onResponse ( JSONObject response ) {
-                            JSONUtil<NoticeOutputModel > jsonUtil = new JSONUtil<NoticeOutputModel>();
+                        JSONUtil<NoticeOutputModel > jsonUtil = new JSONUtil<NoticeOutputModel>();
                         NoticeOutputModel noticeOutput = new NoticeOutputModel();
                         noticeOutput = jsonUtil.toBean(response.toString(), noticeOutput);
                         if(null != noticeOutput && null != noticeOutput.getResultData() && (1==noticeOutput.getResultCode()))
@@ -737,8 +766,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                                 {
                                     NoticeModel notice = iterator.next ( );
                                     TextView textView = new TextView ( getActivity () );
-                                    textView.setText ( notice.getTitle () );
-                                    list.add ( textView );
+                                    textView.setSingleLine(true);
+                                    textView.setEllipsize(TextUtils.TruncateAt.END);
+                                    textView.setText(Html.fromHtml("<font color=\"#54595f\">恭喜</font><font color=\"#0c83d4\">" + notice.getName() + "</font><font color=\"#54595f\">在</font><font color=\"#d4750c\">" + DateUtils.getMinHome(notice.getTime()) + "</font><font color=\"#54595f\">获得</font><font color=\"#0c83d4\">" + notice.getTitle() + "</font>"));
+                                    list.add(textView );
                                 }
 
                                 Iterator<TextView> it = list.iterator ();
@@ -748,9 +779,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                                 }
 
                                 // 设置文字in/out的动画效果
-                                homeHornText.setInAnimation(getActivity (), R.anim.push_up_in);
-                                homeHornText.setOutAnimation(getActivity (), R.anim.push_up_out);
+                                homeHornText.setInAnimation(getActivity(), R.anim.push_up_in);
+                                homeHornText.setOutAnimation(getActivity(), R.anim.push_up_out);
                                 homeHornText.startFlipping();
+
+                                mHandler.sendEmptyMessageDelayed(1, 600000);
                             }
                             else
                             {
@@ -768,10 +801,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public
                     void onErrorResponse ( VolleyError error ) {
-
+                        error.getMessage();
                     }
                 }
-                              );
+        );
+    }
+
+    private void initSwitchImg()
+    {
         adDataList = new ArrayList<CarouselModel> (  );
         //读取轮播图片实体
         Iterator<CarouselModel> iterator = CarouselModel.findAll ( CarouselModel.class );
@@ -849,13 +886,18 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(getActivity());
-        VolleyUtil.cancelAllRequest();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.unbind(getActivity());
+        VolleyUtil.cancelAllRequest();
+        if(null!= mHandler)
+        {
+            mHandler.removeMessages(0);
+            mHandler.removeMessages(1);
+        }
     }
 
     @Override
@@ -883,6 +925,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 {
                     homeViewPager.setCurrentItem(homeViewPager.getCurrentItem()+1);
                     mHandler.sendEmptyMessageDelayed(0, 3000);
+                }
+                break;
+                case 0x22113344:
+                {
+                    initNotice();
+                    mHandler.sendEmptyMessageDelayed(0x22113344, 600000);
                 }
                 break;
                 default:

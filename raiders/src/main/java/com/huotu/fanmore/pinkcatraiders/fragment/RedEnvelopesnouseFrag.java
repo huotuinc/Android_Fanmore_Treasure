@@ -1,6 +1,7 @@
 package com.huotu.fanmore.pinkcatraiders.fragment;
 
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
@@ -28,6 +30,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.raiders.RedEnvelopesActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
 import org.json.JSONObject;
 
@@ -132,60 +135,67 @@ public class RedEnvelopesnouseFrag extends BaseFragment implements Handler.Callb
         }
         String suffix = params.obtainGetParam(maps);
         url = url + suffix;
-        HttpUtils httpUtils = new HttpUtils();
-        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject >() {
-                                  @Override
-                                  public void onResponse(JSONObject response) {
-                                      redPackageList.onRefreshComplete();
-                                      if(rootAty.isFinishing())
-                                      {
-                                          return;
-                                      }
-                                      JSONUtil<RedPacketOutputModel > jsonUtil = new JSONUtil<RedPacketOutputModel>();
-                                      RedPacketOutputModel redPacketOutput = new RedPacketOutputModel();
-                                      redPacketOutput = jsonUtil.toBean(response.toString(), redPacketOutput);
-                                      if(null != redPacketOutput && null != redPacketOutput.getResultData() && (1==redPacketOutput.getResultCode()))
-                                      {
-                                          if(null != redPacketOutput.getResultData().getList() && !redPacketOutput.getResultData().getList().isEmpty())
-                                          {
-                                              if( operateType == OperateTypeEnum.REFRESH){
-                                                  redPacketsModels.clear();
-                                                  redPacketsModels.addAll(redPacketOutput.getResultData().getList());
-                                                  adapter.notifyDataSetChanged();
-                                              }else if( operateType == OperateTypeEnum.LOADMORE){
-                                                  redPacketsModels.addAll( redPacketOutput.getResultData().getList());
-                                                  adapter.notifyDataSetChanged();
-                                              }
-                                          }
-                                          else
-                                          {
-                                              redPackageList.setEmptyView(emptyView);
-                                          }
-                                      }
-                                      else
-                                      {
-                                          //异常处理，自动切换成无数据
-                                          redPackageList.setEmptyView(emptyView);
-                                      }
-                                  }
-                              }, new Response.ErrorListener() {
-                                  @Override
-                                  public void onErrorResponse(VolleyError error) {
-                                      redPackageList.onRefreshComplete();
-                                      if(rootAty.isFinishing())
-                                      {
-                                          return;
-                                      }
-                                      redPackageList.setEmptyView(emptyView);
-                                  }
-                              });
+        final HttpUtils httpUtils = new HttpUtils();
+        new AsyncTask<String, Void, RedPacketOutputModel>() {
+            @Override
+            protected RedPacketOutputModel doInBackground(String... params) {
+                RedPacketOutputModel redPacketOutput = new RedPacketOutputModel();
+                try {
+                    JSONUtil<RedPacketOutputModel > jsonUtil = new JSONUtil<RedPacketOutputModel>();
+                    String jsonStr = httpUtils.doGet(params[0]);
+                    redPacketOutput = jsonUtil.toBean(jsonStr, redPacketOutput);
+                }catch (JsonSyntaxException e)
+                {
+                    redPacketOutput.setResultCode(0);
+                    redPacketOutput.setResultDescription("解析json出错");
+                } catch (Exception ex)
+                {
+                    // TODO: handle exception
+                    return null;
+                }
+                return redPacketOutput;
+            }
+
+            @Override
+            protected void onPostExecute(RedPacketOutputModel redPacketOutputModel) {
+                super.onPostExecute(redPacketOutputModel);
+                redPackageList.onRefreshComplete();
+                if(null != redPacketOutputModel && null != redPacketOutputModel.getResultData() && (1==redPacketOutputModel.getResultCode()))
+                {
+                    if(null != redPacketOutputModel.getResultData().getList() && !redPacketOutputModel.getResultData().getList().isEmpty())
+                    {
+                        String[] counts = new String[]{String.valueOf(redPacketOutputModel.getResultData().getUnused()), String.valueOf(redPacketOutputModel.getResultData().getUsedOrExpire())};
+                        Message message = rootAty.mHandler.obtainMessage(Contant.REDPACKAGE_COUNT, counts);
+                        rootAty.mHandler.sendMessage(message);
+
+                        if( operateType == OperateTypeEnum.REFRESH){
+                            redPacketsModels.clear();
+                            redPacketsModels.addAll(redPacketOutputModel.getResultData().getList());
+                            adapter.notifyDataSetChanged();
+                        }else if( operateType == OperateTypeEnum.LOADMORE){
+                            redPacketsModels.addAll( redPacketOutputModel.getResultData().getList());
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                    else
+                    {
+                        redPackageList.setEmptyView(emptyView);
+                    }
+                }
+                else
+                {
+                    //异常处理，自动切换成无数据
+                    redPackageList.setEmptyView(emptyView);
+                }
+            }
+        }.execute(url);
     }
 
     protected void firstGetData() {
         rootAty.mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (getActivity().isFinishing()) {
+                if (rootAty.isFinishing()) {
                     return;
                 }
                 operateType = OperateTypeEnum.REFRESH;
@@ -202,6 +212,8 @@ public class RedEnvelopesnouseFrag extends BaseFragment implements Handler.Callb
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.unbind(this);
+        VolleyUtil.cancelAllRequest();
     }
 
     @Override

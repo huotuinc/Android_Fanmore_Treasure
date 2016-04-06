@@ -42,7 +42,7 @@
                     android:layout_below="@id/oneBuy"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="2dp"
-                    android:text="1元购"
+                    android:text="首页"
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_12" />
             </RelativeLayout>
@@ -114,7 +114,39 @@
                     android:textSize="@dimen/text_size_12" />
             </RelativeLayout>
         </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/mallL"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="onTabClicked"
+            android:padding="3dp" >
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/mall"
+                    android:layout_width="@dimen/common_icon_size"
+                    android:layout_height="@dimen/common_icon_size"
+                    android:layout_centerHorizontal="true"
+                    android:background="@mipmap/mall_icon_common"
+                    android:focusable="false"
+                    android:scaleType="centerInside" />
 
+                <TextView
+                    android:id="@+id/mallLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/mall"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="2dp"
+                    android:text="积分兑换"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_12" />
+            </RelativeLayout>
+        </RelativeLayout>
         <RelativeLayout
             android:id="@+id/profileL"
             android:layout_width="0dp"

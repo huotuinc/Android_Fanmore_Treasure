@@ -14,19 +14,33 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.SysMsgAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.MsgData;
+import com.huotu.fanmore.pinkcatraiders.model.MsgOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
+import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
+import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
+import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -124,8 +138,82 @@ class MsgActivity extends BaseActivity implements Handler.Callback, View.OnClick
 
     private void loadData()
     {
-        msgList.onRefreshComplete ();
-        msgList.setEmptyView ( emptyView );
+        if( false == MsgActivity.this.canConnect() ){
+                mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    msgList.onRefreshComplete();
+                }
+            });
+            return;
+        }
+        String url = Contant.REQUEST_URL + Contant.MESSAGE;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), MsgActivity.this);
+        Map<String, Object> maps = new HashMap<String, Object>();
+        Paging paging = new Paging();
+        if ( OperateTypeEnum.REFRESH == operateType )
+        {// 下拉
+            maps.put("pagingSize", 10);
+            maps.put("pagingTag", "");
+
+        } else if (OperateTypeEnum.LOADMORE == operateType)
+        {// 上拉
+            if ( msgs != null && msgs.size() > 0)
+            {
+                maps.put("pagingSize", 10);
+                maps.put("pagingTag", String.valueOf(msgs.get(msgs.size() - 1).getMessageOrder()));
+            } else {
+                maps.put("pagingSize", 10);
+                maps.put("pagingTag", "");
+            }
+        }
+
+        String suffix = params.obtainGetParam(maps);
+        url = url + suffix;
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                msgList.onRefreshComplete();
+                if (MsgActivity.this.isFinishing()) {
+                    return;
+                }
+                JSONUtil<MsgOutputModel> jsonUtil = new JSONUtil<MsgOutputModel>();
+                MsgOutputModel msgOutput = new MsgOutputModel();
+                msgOutput = jsonUtil.toBean(response.toString(), msgOutput);
+                if (null != msgOutput && null != msgOutput.getResultData() && (1 == msgOutput.getResultCode())) {
+                    if (null != msgOutput.getResultData().getMessages() && !msgOutput.getResultData().getMessages().isEmpty()) {
+
+                        if (operateType == OperateTypeEnum.REFRESH) {
+                            msgs.clear();
+                            msgs.addAll(msgOutput.getResultData().getMessages());
+                            adapter.notifyDataSetChanged();
+                        } else if (operateType == OperateTypeEnum.LOADMORE) {
+                            msgs.addAll(msgOutput.getResultData().getMessages());
+                            adapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        //空数据处理
+                        msgList.setEmptyView ( emptyView );
+                    }
+                } else {
+                    //异常处理，自动切换成无数据
+                    //空数据处理
+                    msgList.setEmptyView(emptyView );
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                msgList.onRefreshComplete();
+                if (MsgActivity.this.isFinishing()) {
+                    return;
+                }
+                //空数据处理
+                msgList.setEmptyView(emptyView );
+            }
+        });
     }
 
     protected void firstGetData(){
@@ -180,5 +268,28 @@ class MsgActivity extends BaseActivity implements Handler.Callback, View.OnClick
     public
     void onClick ( View v ) {
 
+    }
+
+    public class Paging
+    {
+        private int pagingSize;
+        private String pagingTag;
+
+        public String getPagingTag()
+        {
+            return pagingTag;
+        }
+        public void setPagingTag(String pagingTag)
+        {
+            this.pagingTag = pagingTag;
+        }
+        public Integer getPagingSize()
+        {
+            return pagingSize;
+        }
+        public void setPagingSize(Integer pagingSize)
+        {
+            this.pagingSize = pagingSize;
+        }
     }
 }

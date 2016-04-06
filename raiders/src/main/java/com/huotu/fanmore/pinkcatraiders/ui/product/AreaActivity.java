@@ -27,11 +27,13 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AreaProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
+import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.CartUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
@@ -77,7 +79,6 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public List<ProductModel> products;
     public AreaProductAdapter adapter;
-    public Bundle bundle;
     TextView titleCount;
 
     @Override
@@ -91,10 +92,9 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
         wManager = this.getWindowManager();
         emptyView = LayoutInflater.from(AreaActivity.this).inflate(R.layout.empty, null);
         TextView label = (TextView) emptyView.findViewById(R.id.emptyTag);
-        label.setText("暂无数据");
         TextView contrl = (TextView) emptyView.findViewById(R.id.emptyBtn);
         contrl.setVisibility(View.GONE);
-        bundle = this.getIntent().getExtras();
+        label.setText("暂无专区商品数据");
         initTitle();
         initList();
     }
@@ -110,14 +110,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
         SystemTools.loadBackground(titleRightImage, rightDraw);
         stubTitleText1.inflate();
         TextView titleText = (TextView) this.findViewById(R.id.titleText);
-        if(10 == bundle.getLong("step"))
-        {
-            titleText.setText("十元专区");
-        }
-        else if(5 == bundle.getLong("step"))
-        {
-            titleText.setText("五元专区");
-        }
+        titleText.setText("专区商品");
         titleCount = (TextView) this.findViewById(R.id.titleCount);
         titleCount.setText("（0）");
     }
@@ -151,7 +144,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
         String url = Contant.REQUEST_URL + Contant.GET_GOODS_LIST_BY_AREA;
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), AreaActivity.this);
         Map<String, Object> maps = new HashMap<String, Object>();
-        maps.put("step", bundle.get("step"));
+        maps.put("step", "0");
         String suffix = params.obtainGetParam(maps);
         url = url + suffix;
         HttpUtils httpUtils = new HttpUtils();
@@ -166,7 +159,7 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
                 JSONUtil<AreaProductsOutputModel> jsonUtil = new JSONUtil<AreaProductsOutputModel>();
                 AreaProductsOutputModel areaProductsOutputs = new AreaProductsOutputModel();
                 areaProductsOutputs = jsonUtil.toBean(response.toString(), areaProductsOutputs);
-                if (null != areaProductsOutputs && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList()) {
+                if (null != areaProductsOutputs && null != areaProductsOutputs.getResultData() && null != areaProductsOutputs.getResultData().getList() && !areaProductsOutputs.getResultData().getList().isEmpty()) {
 
                     //修改记录总数
                     Message message = mHandler.obtainMessage(Contant.LOAD_AREA_COUNT, areaProductsOutputs.getResultData().getList().size());
@@ -248,45 +241,10 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
                 ProductModel product = ( ProductModel ) msg.obj;
                 progress = new ProgressPopupWindow( AreaActivity.this, AreaActivity.this, wManager );
                 progress.showProgress ( "正在添加清单" );
-                progress.showAtLocation (titleLayoutL,
+                progress.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0
                 );
-                String url = Contant.REQUEST_URL + Contant.JOIN_SHOPPING_CART;
-                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), AreaActivity.this);
-                Map<String, Object> maps = new HashMap<String, Object> ();
-                maps.put ( "issueId", String.valueOf ( product.getIssueId () ) );
-                Map<String, Object> param = params.obtainPostParam(maps);
-                BaseModel base = new BaseModel ();
-                HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
-                httpUtils.doVolleyPost (
-                        base, url, param, new Response.Listener< BaseModel > ( ) {
-                            @Override
-                            public
-                            void onResponse ( BaseModel response ) {
-                                progress.dismissView ();
-                                BaseModel base = response;
-                                if(1==base.getResultCode ())
-                                {
-                                    //上传成功
-                                    ToastUtils.showLongToast(AreaActivity.this, "添加清单成功");
-                                }
-                                else
-                                {
-                                    //上传失败
-                                    ToastUtils.showLongToast ( AreaActivity.this, "添加清单失败" );
-                                }
-                            }
-                        }, new Response.ErrorListener ( ) {
-
-                            @Override
-                            public
-                            void onErrorResponse ( VolleyError error ) {
-                                progress.dismissView ( );
-                                //系统级别错误
-                                ToastUtils.showLongToast ( AreaActivity.this, "添加清单失败" );
-                            }
-                        }
-                );
+                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, AreaActivity.this, mHandler,0);
             }
             break;
             default:

@@ -79,12 +79,9 @@ public class PastListAdapter extends BaseAdapter {
             }
             else
             {
-                if (TextUtils.isEmpty(product.getUserHeadUrl())||null==product.getUserHeadUrl()){
-                    BitmapLoader.create().displayUrl(mContext, holder.userlogo, "http://image.baidu.com/search/detail?ct=503316480&tn=baiduimagedetail&statnum=head&ipn=d&z=0&s=0&ic=0&lm=-1&itg=1&cg=head&word=%E5%8F%AF%E7%88%B1%E5%9B%BE%E7%89%87%E5%A4%B4%E5%83%8F&ie=utf-8&in=3354&cl=2&st=&pn=17&rn=1&di=106150154000&ln=1000&&fmq=1378374347070_R&se=&sme=0&tab=&face=&&cs=1381935472,3771048222&simid=3543930211,329439139&adpicid=undefined&pi=0&os=649894240,2600133867&istype=&ist=&jit=&objurl=http%3A%2F%2Fwww.wosoni.com%2Fwww.wosoni.com%2Fpic.wenwen.soso.com%2Fp%2F20111001%2F20111001151539-984477232.jpg", R.mipmap.error);
-                }else {
-                    BitmapLoader.create().displayUrl(mContext, holder.userlogo, product.getUserHeadUrl(), R.mipmap.ic_launcher);
-                }
+                holder.LL1.setVisibility(View.VISIBLE);
                 holder.issueId.setText("期号" + product.getIssueId() + "(揭晓时间:" + DateUtils.transformDataformat2(product.getDate()) + ")");
+                BitmapLoader.create().loadRoundImage(mContext, holder.userlogo, product.getUserHeadUrl(), R.mipmap.defluat_logo);
                 holder.nickName.setText(product.getNickName());
                 holder.ip.setText("(" + product.getIp() + ")");
                 holder.userId.setText("用户ID:" + product.getUserId());
@@ -92,8 +89,6 @@ public class PastListAdapter extends BaseAdapter {
                 holder.attendAmount.setText(String.valueOf(product.getAttendAmount()));
 
             }
-
-
 
         }
         return convertView;

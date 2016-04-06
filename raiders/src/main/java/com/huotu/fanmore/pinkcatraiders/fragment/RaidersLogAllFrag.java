@@ -1,6 +1,7 @@
 package com.huotu.fanmore.pinkcatraiders.fragment;
 
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
@@ -29,6 +31,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
 import org.json.JSONObject;
 
@@ -103,7 +106,7 @@ public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback 
             }
         });
         raiders = new ArrayList<RaidersModel>();
-        adapter = new RaidersAdapter(raiders, getActivity());
+        adapter = new RaidersAdapter(raiders, getActivity(), getActivity(), rootAty.mHandler);
         raidersLogList.setAdapter(adapter);
         firstGetData();
     }
@@ -126,46 +129,62 @@ public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback 
         maps.put("type", "0");
         if ( OperateTypeEnum.REFRESH == operateType )
         {// 下拉
-            maps.put("lastId", 0);
+            maps.put("lastTime", 0);
         } else if (OperateTypeEnum.LOADMORE == operateType)
         {// 上拉
             if ( raiders != null && raiders.size() > 0)
             {
                 RaidersModel raider = raiders.get(raiders.size() - 1);
-                maps.put("lastId", raider.getPid());
+                maps.put("lastTime", raider.getTime());
             } else if (raiders != null && raiders.size() == 0)
             {
-                maps.put("lastId", 0);
+                maps.put("lastTime", 0);
             }
         }
         String suffix = params.obtainGetParam(maps);
         url = url + suffix;
-        HttpUtils httpUtils = new HttpUtils();
-        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+        final HttpUtils httpUtils = new HttpUtils();
+
+        new AsyncTask<String, Void, RaidersOutputModel>()
+        {
+
             @Override
-            public void onResponse(JSONObject response) {
-                raidersLogList.onRefreshComplete();
-                if(rootAty.isFinishing())
-                {
-                    return;
-                }
+            protected RaidersOutputModel doInBackground(String... params) {
                 JSONUtil<RaidersOutputModel> jsonUtil = new JSONUtil<RaidersOutputModel>();
                 RaidersOutputModel raiderOutputs = new RaidersOutputModel();
-                raiderOutputs = jsonUtil.toBean(response.toString(), raiderOutputs);
-                if(null != raiderOutputs && null != raiderOutputs.getResultData() && (1==raiderOutputs.getResultCode()))
+                try {
+                    String jsonStr = httpUtils.doGet(params[0]);
+                    raiderOutputs = jsonUtil.toBean(jsonStr, raiderOutputs);
+                }catch (JsonSyntaxException e)
                 {
-                    if(null != raiderOutputs.getResultData().getList() && !raiderOutputs.getResultData().getList().isEmpty())
+                    raiderOutputs.setResultCode(0);
+                    raiderOutputs.setResultDescription("解析json出错");
+                } catch (Exception ex)
+                {
+                    // TODO: handle exception
+                    return null;
+                }
+                return raiderOutputs;
+            }
+
+            @Override
+            protected void onPostExecute(RaidersOutputModel raidersOutputModel) {
+                super.onPostExecute(raidersOutputModel);
+                raidersLogList.onRefreshComplete();
+                if(null != raidersOutputModel && null != raidersOutputModel.getResultData() && (1==raidersOutputModel.getResultCode()))
+                {
+                    if(null != raidersOutputModel.getResultData().getList() && !raidersOutputModel.getResultData().getList().isEmpty())
                     {
                         //更新夺宝数据
-                        String[] counts = new String[]{String.valueOf(raiderOutputs.getResultData().getAllNumber()), String.valueOf(raiderOutputs.getResultData().getRunNumber()), String.valueOf(raiderOutputs.getResultData().getFinishNumber())};
+                        String[] counts = new String[]{String.valueOf(raidersOutputModel.getResultData().getAllNumber()), String.valueOf(raidersOutputModel.getResultData().getRunNumber()), String.valueOf(raidersOutputModel.getResultData().getFinishNumber())};
                         Message message = rootAty.mHandler.obtainMessage(Contant.UPDATE_RAIDER_COUNT, counts);
                         rootAty.mHandler.sendMessage(message);
                         if( operateType == OperateTypeEnum.REFRESH){
                             raiders.clear();
-                            raiders.addAll(raiderOutputs.getResultData().getList());
+                            raiders.addAll(raidersOutputModel.getResultData().getList());
                             adapter.notifyDataSetChanged();
                         }else if( operateType == OperateTypeEnum.LOADMORE){
-                            raiders.addAll( raiderOutputs.getResultData().getList());
+                            raiders.addAll( raidersOutputModel.getResultData().getList());
                             adapter.notifyDataSetChanged();
                         }
                     }
@@ -180,24 +199,14 @@ public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback 
                     raidersLogList.setEmptyView(emptyView);
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                raidersLogList.onRefreshComplete();
-                if(rootAty.isFinishing())
-                {
-                    return;
-                }
-                raidersLogList.setEmptyView(emptyView);
-            }
-        });
+        }.execute(url);
     }
 
     protected void firstGetData(){
         rootAty.mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (getActivity().isFinishing()) {
+                if (rootAty.isFinishing()) {
                     return;
                 }
                 operateType = OperateTypeEnum.REFRESH;
@@ -214,6 +223,8 @@ public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.unbind(this);
+        VolleyUtil.cancelAllRequest();
     }
 
     @Override

@@ -76,11 +76,12 @@ class AliPayUtil {
 
     public
     void pay ( String subject, String body, String price, String noticeUrl, final int
-            productType, final long productId ) {
+            productType, final long productId, String orderNo ) {
 
         this.notify_url = noticeUrl;
         this.productId = productId;
         this.productType = productType;
+        out_trade_no = orderNo;
 
         // 订单
         String orderInfo = getOrderInfo ( subject , body, price );
@@ -144,7 +145,6 @@ class AliPayUtil {
         orderInfo += "&seller_id=" + "\"" + Contant.ALIPAY_KEY + "\"";
 
         // 商户网站唯一订单号
-        this.out_trade_no=getOutTradeNo();
         orderInfo += "&out_trade_no=" + "\"" + out_trade_no + "\"";
 
         // 商品名称

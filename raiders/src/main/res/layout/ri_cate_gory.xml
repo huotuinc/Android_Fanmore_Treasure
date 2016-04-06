@@ -51,7 +51,7 @@
             android:text="全部商品"
             android:layout_marginLeft="10dp"
             android:layout_gravity="center_vertical"
-            android:textSize="18sp"/>
+            />
     </LinearLayout>
     <TextView
         android:layout_marginLeft="50dp"
@@ -62,7 +62,8 @@
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="分类浏览"/>
+        android:text="分类浏览"
+        android:textColor="#31313c"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1px"

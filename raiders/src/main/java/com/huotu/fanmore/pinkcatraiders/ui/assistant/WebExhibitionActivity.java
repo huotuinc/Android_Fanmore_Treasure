@@ -16,6 +16,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -57,6 +58,8 @@ public class WebExhibitionActivity extends BaseActivity implements View.OnClickL
     @Bind(R.id.webPage)
     PullToRefreshWebView webPage;
     public Bundle bundle;
+    @Bind(R.id.progressBar)
+    ProgressBar progressBar;
 
     @Override
     public boolean handleMessage(Message msg) {
@@ -77,6 +80,7 @@ public class WebExhibitionActivity extends BaseActivity implements View.OnClickL
         application = (BaseApplication) this.getApplication();
         wManager = this.getWindowManager();
         bundle = this.getIntent().getExtras();
+        progressBar.setMax(100);
         initTitle();
         initWebPage();
     }
@@ -135,6 +139,7 @@ public class WebExhibitionActivity extends BaseActivity implements View.OnClickL
         viewPage.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
+                progressBar.setProgress(newProgress);
                 if (100 == newProgress) {
                     webPage.onRefreshComplete();
                 }

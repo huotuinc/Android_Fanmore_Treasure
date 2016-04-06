@@ -1,5 +1,6 @@
 package com.huotu.fanmore.pinkcatraiders.model;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -16,6 +17,78 @@ public class ProductModel extends BaseModel {
     private long remainAmount;
     private long stepAmount;
     private List<String> imgs;
+    private long sort;
+    private long	attendAmount;
+    private long	buyAmount;
+    private long	defaultAmount;
+    private boolean	isSelect;
+    private BigDecimal pricePercentAmount;
+    private long	sid;
+    private long	userBuyAmount;
+
+    public long getSort() {
+        return sort;
+    }
+
+    public long getAttendAmount() {
+        return attendAmount;
+    }
+
+    public void setAttendAmount(long attendAmount) {
+        this.attendAmount = attendAmount;
+    }
+
+    public long getBuyAmount() {
+        return buyAmount;
+    }
+
+    public void setBuyAmount(long buyAmount) {
+        this.buyAmount = buyAmount;
+    }
+
+    public long getDefaultAmount() {
+        return defaultAmount;
+    }
+
+    public void setDefaultAmount(long defaultAmount) {
+        this.defaultAmount = defaultAmount;
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setIsSelect(boolean isSelect) {
+        this.isSelect = isSelect;
+    }
+
+    public BigDecimal getPricePercentAmount() {
+        return pricePercentAmount;
+    }
+
+    public void setPricePercentAmount(BigDecimal pricePercentAmount) {
+        this.pricePercentAmount = pricePercentAmount;
+    }
+
+    public long getSid() {
+        return sid;
+    }
+
+    public void setSid(long sid) {
+        this.sid = sid;
+    }
+
+    public void setUserBuyAmount(long userBuyAmount) {
+        this.userBuyAmount = userBuyAmount;
+    }
+
+    public long getUserBuyAmount() {
+        return userBuyAmount;
+    }
+
+    public void setSort(long sort) {
+        this.sort = sort;
+    }
 
     public
     long getIssueId ( ) {

@@ -44,7 +44,7 @@ public class LoadSwitchImgAdapter extends PagerAdapter {
         String String = datas.get(position%datas.size());
         View view=View.inflate(mContext, R.layout.fillview,null);
         ImageView image=(ImageView) view.findViewById(R.id.image);
-        BitmapLoader.create().displayUrl(mContext, image, String, R.mipmap.ic_launcher);
+        BitmapLoader.create().displayUrlBanner(mContext, image, String, R.mipmap.banner);
         container.addView(view);
         return view;
     }

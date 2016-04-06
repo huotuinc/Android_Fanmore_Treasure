@@ -6,6 +6,7 @@ import com.mob.tools.utils.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/2/25.
@@ -22,6 +23,34 @@ public class NewOpenListModel extends BaseModel {
     long time;
     String title;
     long toAwardingTime;
+    private long type;
+    private long sort;
+
+    public long getType() {
+        return type;
+    }
+
+    public void setType(long type) {
+        this.type = type;
+    }
+
+    public long getSort() {
+        return sort;
+    }
+
+    public void setSort(long sort) {
+        this.sort = sort;
+    }
+
+    public List<String> getImgs() {
+        return imgs;
+    }
+
+    public void setImgs(List<String> imgs) {
+        this.imgs = imgs;
+    }
+
+    private List<String> imgs;
 
     public BigDecimal getAreaAmount() {
         return areaAmount;

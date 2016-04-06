@@ -29,6 +29,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.raiders.WinLogActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 
 import org.json.JSONObject;
 
@@ -93,7 +94,7 @@ public class WinLogFrag extends BaseFragment implements Handler.Callback {
             }
         });
         raiders = new ArrayList<RaidersModel>();
-        adapter = new RaidersAdapter(raiders, getActivity());
+        adapter = new RaidersAdapter(raiders, getActivity(), getActivity(), rootAty.mHandler);
         raidersLogList.setAdapter(adapter);
         firstGetData();
     }
@@ -115,16 +116,16 @@ public class WinLogFrag extends BaseFragment implements Handler.Callback {
         maps.put("type", "0");
         if ( OperateTypeEnum.REFRESH == operateType )
         {// 下拉
-            maps.put("lastId", 0);
+            maps.put("lastTime", 0);
         } else if (OperateTypeEnum.LOADMORE == operateType)
         {// 上拉
             if ( raiders != null && raiders.size() > 0)
             {
                 RaidersModel raider = raiders.get(raiders.size() - 1);
-                maps.put("lastId", raider.getPid());
+                maps.put("lastTime", raider.getTime());
             } else if (raiders != null && raiders.size() == 0)
             {
-                maps.put("lastId", 0);
+                maps.put("lastTime", 0);
             }
         }
         String suffix = params.obtainGetParam(maps);
@@ -177,7 +178,7 @@ public class WinLogFrag extends BaseFragment implements Handler.Callback {
         rootAty.mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (getActivity().isFinishing()) {
+                if (rootAty.isFinishing()) {
                     return;
                 }
                 operateType = OperateTypeEnum.REFRESH;
@@ -203,5 +204,17 @@ public class WinLogFrag extends BaseFragment implements Handler.Callback {
     @Override
     public boolean handleMessage(Message msg) {
         return false;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        VolleyUtil.cancelAllRequest();
+        ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

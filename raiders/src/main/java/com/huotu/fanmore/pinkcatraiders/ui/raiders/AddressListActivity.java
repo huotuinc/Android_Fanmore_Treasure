@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -36,6 +37,7 @@ import com.huotu.fanmore.pinkcatraiders.model.MyAddressListModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.AddAddressActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -58,8 +60,11 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+/**
+ * 添加地址
+ */
 
-public class AddressListActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+public class AddressListActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, MyBroadcastReceiver.BroadcastListener {
 
     public
     Resources resources;
@@ -98,6 +103,7 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
 
     public
     ProgressPopupWindow progress;
+    private MyBroadcastReceiver myBroadcastReceiver;
 
     @Override
     public
@@ -125,15 +131,16 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate ( savedInstanceState );
-        setContentView ( R.layout.ri_address_list );
-        ButterKnife.bind ( this );
+        setContentView(R.layout.ri_address_list);
+        ButterKnife.bind(this);
         application = ( BaseApplication ) this.getApplication ( );
         resources = this.getResources ( );
         mHandler = new Handler ( this );
         inflate = LayoutInflater.from ( AddressListActivity.this );
-        wManager = this.getWindowManager ( );
-        emptyView = inflate.inflate ( R.layout.empty, null );
+        wManager = this.getWindowManager();
+        emptyView = inflate.inflate(R.layout.empty, null);
         progress = new ProgressPopupWindow ( AddressListActivity.this, AddressListActivity.this, wManager );
+        myBroadcastReceiver = new MyBroadcastReceiver(AddressListActivity.this, this, MyBroadcastReceiver.TO_ADDRESSLIST);
         TextView emptyTag = ( TextView ) emptyView.findViewById ( R.id.emptyTag );
         emptyTag.setText ( "暂无收货地址信息" );
         TextView emptyBtn = ( TextView ) emptyView.findViewById ( R.id.emptyBtn );
@@ -186,31 +193,39 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
                             long id
                                             ) {
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder (
-                                AddressListActivity.this
-                        );
-                        builder.setTitle ( "删除地址" );
-                        builder.setMessage ( "确定删除？" );
-                        builder.setPositiveButton (
-                                "确定", new DialogInterface.OnClickListener ( ) {
+                        final AlertDialog.Builder dialog = new AlertDialog.Builder(
+                                AddressListActivity.this,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+                        final AlertDialog alertdialog = dialog.create();
+                        LayoutInflater inflater = LayoutInflater.from(AddressListActivity.this);
+                        View view1 = inflater.inflate(R.layout.activity_dialog, null);
+                        alertdialog.setView(view1, 0, 0, 0, 0);
+                        TextView titletext = (TextView) view1.findViewById(R.id.titletext);
+                        TextView messagetext = (TextView) view1.findViewById(R.id.messagetext);
+                        Button btn_lift = (Button) view1.findViewById(R.id.btn_lift);
+                        Button btn_right = (Button) view1.findViewById(R.id.btn_right);
+                        titletext.setTextColor(getResources().getColor(R.color.text_black));
+                        btn_lift.setTextColor(getResources().getColor(R.color.color_blue));
+                        btn_right.setTextColor(getResources().getColor(R.color.color_blue));
+                        titletext.setText("删除地址");
+                        messagetext.setText("确定删除地址吗?");
+                        btn_lift.setText("取消");
+                        btn_right.setText("确定");
+                        btn_right.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alertdialog.dismiss();
+                                deleteAddress(lists.get(position - 1).getAddressId());
 
-                                    public
-                                    void onClick ( DialogInterface dialog, int whichButton ) {
+                            }
+                        });
+                        btn_lift.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alertdialog.dismiss();
+                            }
+                        });
 
-                                        deleteAddress ( lists.get ( position-1 ).getAddressId ( ) );
-                                    }
-                                }
-                                                  );
-                        builder.setNegativeButton (
-                                "取消", new DialogInterface.OnClickListener ( ) {
-
-                                    public
-                                    void onClick ( DialogInterface dialog, int whichButton ) {
-
-                                    }
-                                }
-                                                  );
-                        builder.show ( );
+                        alertdialog.show();
                         return false;
                     }
                 }
@@ -260,12 +275,13 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
                         if(1==base.getResultCode ())
                         {
                             //删除成功
-                            addressList.setRefreshing ( true );
+                            lists.clear();
+                            firstGetData();
                         }
                         else
                         {
                             //上传失败
-                            ToastUtils.showLongToast ( AddressListActivity.this, "地址删除失败" );
+                            ToastUtils.showMomentToast(AddressListActivity.this, AddressListActivity.this, "地址删除失败");
                         }
                     }
                 }, new Response.ErrorListener ( ) {
@@ -275,7 +291,7 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
                     void onErrorResponse ( VolleyError error ) {
                         progress.dismissView ( );
                         //系统级别错误
-                        ToastUtils.showLongToast ( AddressListActivity.this, "地址删除失败" );
+                        ToastUtils.showMomentToast(AddressListActivity.this, AddressListActivity.this, "服务器未响应");
                     }
                 }
                                );
@@ -285,7 +301,7 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     void addAddress()
     {
 
-        ActivityUtils.getInstance ().showActivity ( AddressListActivity.this, AddAddressActivity.class );
+        ActivityUtils.getInstance ().showActivity(AddressListActivity.this, AddAddressActivity.class);
     }
 
     private void loadData()
@@ -317,11 +333,21 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
                                       JSONUtil<AddressOutputModel> jsonUtil = new JSONUtil<AddressOutputModel>();
                                       AddressOutputModel addressOutput = new AddressOutputModel();
                                       addressOutput = jsonUtil.toBean(response.toString(), addressOutput);
-                                      if(null != addressOutput && null != addressOutput.getResultData() && (1==addressOutput.getResultCode()))
+                                      if(null != addressOutput && null != addressOutput.getResultData() && (1==addressOutput.getResultCode())&&null!=addressOutput.getResultData().getList())
                                       {
-                                          lists.clear();
-                                          lists.addAll(addressOutput.getResultData().getList());
-                                          adapter.notifyDataSetChanged();
+                                          List<MyAddressListModel> list = addressOutput.getResultData().getList();
+                                          if(null!=list&&!list.isEmpty())
+                                          {
+                                              lists.clear();
+                                              lists.addAll(addressOutput.getResultData().getList());
+                                              adapter.notifyDataSetChanged();
+                                          }
+                                          else
+                                          {
+                                              //异常处理，自动切换成无数据
+                                              addressList.setEmptyView(emptyView);
+                                          }
+
                                       }
                                       else
                                       {
@@ -355,5 +381,13 @@ public class AddressListActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
 
+    }
+
+    @Override
+    public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
+        if (type==MyBroadcastReceiver.ReceiverType.toaddresslist){
+            firstGetData();
+
+        }
     }
 }

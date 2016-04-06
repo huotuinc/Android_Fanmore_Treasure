@@ -25,18 +25,22 @@ import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
 import com.huotu.fanmore.pinkcatraiders.model.CarouselModel;
 import com.huotu.fanmore.pinkcatraiders.model.CateGoryOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.InitOutputsModel;
+import com.huotu.fanmore.pinkcatraiders.model.LocalAddressModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
+import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideListModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideListOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.guide.GuideActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.AssetsUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
+import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.MsgPopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
@@ -50,6 +54,8 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * 启动界面
  */
@@ -83,6 +89,22 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
         setImmerseLayout(splashL);
         resources = this.getResources();
         progress = new ProgressPopupWindow ( SplashActivity.this, SplashActivity.this, wManager );
+        //如果本地存在地址数据则不加载
+        if(null==application.localAddress)
+        {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    AssetsUtils assetsUtils = new AssetsUtils(SplashActivity.this);
+                    String json = assetsUtils.readAddress("addressData.json");
+                    //json转Adress类
+                    JSONUtil<LocalAddressModel> jsonUtil = new JSONUtil<LocalAddressModel>();
+                    LocalAddressModel localAddress = new LocalAddressModel();
+                    localAddress = jsonUtil.toBean(json, localAddress);
+                    application.localAddress = localAddress;
+                }
+            });
+        }
         initView();
     }
 
@@ -100,10 +122,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
         anima.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                progress.showProgress ( "正在初始化数据" );
-                progress.showAtLocation(splashL,
-                        Gravity.CENTER, 0, 0
-                );
+
                 //检测网络
                 isConnection = application.checkNet ( SplashActivity.this );
                 if ( ! isConnection ) {
@@ -134,36 +153,35 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                     if ( SplashActivity.this.isFinishing ( ) ) {
                                         return;
                                     }
-                                    JSONUtil< InitOutputsModel > jsonUtil    = new JSONUtil<
-                                            InitOutputsModel > ( );
+                                    JSONUtil< InitOutputsModel > jsonUtil    = new JSONUtil<InitOutputsModel > ( );
                                     InitOutputsModel             initOutputs = new
                                             InitOutputsModel ( );
                                     initOutputs = jsonUtil.toBean ( response.toString ( ),
-                                                                    initOutputs );
+                                            initOutputs );
                                     if ( null != initOutputs && null != initOutputs.getResultData
                                             ( ) && ( 1 == initOutputs.getResultCode ( ) ) ) {
                                         //加载全局变量数据
                                         if ( null != initOutputs.getResultData ( ).getGlobal ( ) ) {
                                             application.loadGlobalData ( initOutputs
-                                                                                 .getResultData (
-                                                                                                )
-                                                                                 .getGlobal ( ) );
+                                                    .getResultData (
+                                                    )
+                                                    .getGlobal ( ) );
                                         }
                                         if ( null != initOutputs.getResultData ( ).getUpdate ( ) ) {
                                             //加载更新信息
                                             application.loadUpdate ( initOutputs.getResultData (
-                                                                                               )
-                                                                                .getUpdate ( ) );
+                                            )
+                                                    .getUpdate ( ) );
                                         }
                                         if ( null != initOutputs.getResultData ( ).getUser ( ) ) {
                                             //加载用户信息
                                             application.writeUserInfo ( initOutputs.getResultData
-                                                                                ( ).getUser ( ) );
+                                                    ( ).getUser ( ) );
                                         }
                                         //记载首页轮播图片数据
                                         String url = Contant.REQUEST_URL + Contant.GET_SLIDE_LIST;
                                         AuthParamUtils params = new AuthParamUtils ( application,
-                                                                                     System.currentTimeMillis ( ), SplashActivity.this );
+                                                System.currentTimeMillis ( ), SplashActivity.this );
                                         Map< String, Object > maps = new HashMap< String, Object
                                                 > ( );
                                         String suffix = params.obtainGetParam ( maps );
@@ -185,7 +203,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                                         SlideListOutputModel             slideListOutput = new
                                                                 SlideListOutputModel ( );
                                                         slideListOutput = jsonUtil.toBean ( response.toString ( ),
-                                                                                            slideListOutput );
+                                                                slideListOutput );
                                                         if ( null != slideListOutput && null != slideListOutput.getResultData
                                                                 ( ) && ( 1 == slideListOutput.getResultCode ( ) ) ) {
 
@@ -216,102 +234,23 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                                                     application.writeInitInfo ( "inited" );
                                                                 }
                                                                 else {
-                                                                    //判断是否登录
-                                                                    if ( application.isLogin ( ) ) {
                                                                         ActivityUtils.getInstance ( ).skipActivity (
                                                                                 SplashActivity.this, HomeActivity.class );
-                                                                    }
-                                                                    else {
-                                                                        ActivityUtils.getInstance ( )
-                                                                                     .skipActivity (
-                                                                                             SplashActivity
-                                                                                                     .this,
-                                                                                             LoginActivity.class
-                                                                                                   );
-                                                                    }
                                                                 }
                                                             }
                                                             else
                                                             {
-                                                                //判断数据库中是否有旧数据
-                                                                Iterator<CarouselModel> iterator = CarouselModel.findAll (
-                                                                    CarouselModel.class );
-                                                                if(iterator.hasNext ( ))
-                                                                {
-                                                                    if ( application.isFirst ( ) ) {
-                                                                        ActivityUtils.getInstance ( ).skipActivity (
-                                                                                SplashActivity.this, GuideActivity.class );
-                                                                        //写入初始化数据
-                                                                        application.writeInitInfo ( "inited" );
-                                                                    }
-                                                                    else {
-                                                                        //判断是否登录
-                                                                        if ( application.isLogin ( ) ) {
-                                                                            ActivityUtils.getInstance ( ).skipActivity (
-                                                                                    SplashActivity.this, HomeActivity.class );
-                                                                        }
-                                                                        else {
-                                                                            ActivityUtils.getInstance ( )
-                                                                                         .skipActivity (
-                                                                                                 SplashActivity
-                                                                                                         .this,
-                                                                                                 LoginActivity.class
-                                                                                                       );
-                                                                        }
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    //使用默认图片
-                                                                    CarouselModel carousel1 = new CarouselModel (  );
-                                                                    carousel1.setGoodsId ( 0 );
-                                                                    carousel1.setPictureUrl (
-                                                                            "http://i2.sinaimg"
-                                                                            + ".cn/IT/n/2011-07-29/1311925271_3WrwAI.jpg"
-                                                                                            );
-                                                                    carousel1.setPid ( 0 );
-                                                                    CarouselModel.save ( carousel1 );
-                                                                    CarouselModel carousel2 = new CarouselModel (  );
-                                                                    carousel2.setGoodsId ( 1 );
-                                                                    carousel2.setPictureUrl (
-                                                                            "http://pic36.nipic"
-                                                                            + ".com/20131206/12954233_100711457187_2.jpg"
-                                                                                            );
-                                                                    carousel2.setPid ( 1 );
-                                                                    CarouselModel.save ( carousel2 );
+                                                                //删除全部
+                                                                CarouselModel.deleteAll(
+                                                                        CarouselModel.class);
+                                                                //使用默认图片
+                                                                CarouselModel carousel = new CarouselModel (  );
+                                                                carousel.setGoodsId ( 0 );
+                                                                carousel.setPictureUrl ("");
+                                                                carousel.setPid ( 0 );
 
-                                                                    if ( application.isFirst ( ) ) {
-                                                                        ActivityUtils.getInstance ( ).skipActivity (
-                                                                                SplashActivity.this, GuideActivity.class );
-                                                                        //写入初始化数据
-                                                                        application.writeInitInfo ( "inited" );
-                                                                    }
-                                                                    else {
-                                                                        //判断是否登录
-                                                                        if ( application.isLogin ( ) ) {
-                                                                            ActivityUtils.getInstance ( ).skipActivity (
-                                                                                    SplashActivity.this, HomeActivity.class );
-                                                                        }
-                                                                        else {
-                                                                            ActivityUtils.getInstance ( )
-                                                                                         .skipActivity (
-                                                                                                 SplashActivity
-                                                                                                         .this,
-                                                                                                 LoginActivity.class
-                                                                                                       );
-                                                                        }
-                                                                    }
-                                                                }
+                                                                CarouselModel.save ( carousel );
 
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            //判断数据库中是否有旧数据
-                                                            Iterator<CarouselModel> iterator = CarouselModel.findAll (
-                                                                    CarouselModel.class );
-                                                            if(iterator.hasNext ( ))
-                                                            {
                                                                 if ( application.isFirst ( ) ) {
                                                                     ActivityUtils.getInstance ( ).skipActivity (
                                                                             SplashActivity.this, GuideActivity.class );
@@ -319,25 +258,23 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                                                     application.writeInitInfo ( "inited" );
                                                                 }
                                                                 else {
-                                                                    //判断是否登录
-                                                                    if ( application.isLogin ( ) ) {
-                                                                        ActivityUtils.getInstance ( ).skipActivity (
-                                                                                SplashActivity.this, HomeActivity.class );
-                                                                    }
-                                                                    else {
-                                                                        ActivityUtils.getInstance ( )
-                                                                                     .skipActivity (
-                                                                                             SplashActivity
-                                                                                                     .this,
-                                                                                             LoginActivity.class
-                                                                                                   );
-                                                                    }
+                                                                    ActivityUtils.getInstance ( ).skipActivity (
+                                                                            SplashActivity.this, HomeActivity.class );
                                                                 }
                                                             }
-                                                            else
-                                                            {
-                                                                ToastUtils.showLongToast ( SplashActivity.this, "初始化数据失败" );
-                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                                if ( application.isFirst ( ) ) {
+                                                                    ActivityUtils.getInstance ( ).skipActivity (
+                                                                            SplashActivity.this, GuideActivity.class );
+                                                                    //写入初始化数据
+                                                                    application.writeInitInfo ( "inited" );
+                                                                }
+                                                                else {
+                                                                        ActivityUtils.getInstance ( ).skipActivity (
+                                                                                SplashActivity.this, HomeActivity.class );
+                                                                }
                                                         }
                                                     }
                                                 }, new Response.ErrorListener ( ) {
@@ -345,14 +282,14 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                                     @Override
                                                     public
                                                     void onErrorResponse ( VolleyError error ) {
-                                                        ToastUtils.showLongToast ( SplashActivity.this, "初始化数据失败" );
+                                                        ToastUtils.showMomentToast(SplashActivity.this, SplashActivity.this, "服务器未响应");
                                                     }
                                                 }
-                                                              );
+                                        );
                                     }
                                     else {
                                         //异常处理，自动切换成无数据
-                                        ToastUtils.showLongToast ( SplashActivity.this, "初始化数据失败" );
+                                        ToastUtils.showMomentToast(SplashActivity.this, SplashActivity.this, "初始化数据失败");
                                     }
                                 }
                             }, new Response.ErrorListener ( ) {
@@ -362,10 +299,10 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                 void onErrorResponse ( VolleyError error ) {
                                     //初始化失败
                                     //异常处理，自动切换成无数据
-                                    ToastUtils.showLongToast ( SplashActivity.this, "初始化数据失败" );
+                                    ToastUtils.showMomentToast(SplashActivity.this, SplashActivity.this, "服务器未响应");
                                 }
                             }
-                                          );
+                    );
 
                 }
             }
@@ -390,6 +327,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
     @Override
     protected void onDestroy () {
         super.onDestroy();
+        VolleyUtil.cancelAllRequest();
         ButterKnife.unbind(this);
     }
 
@@ -407,6 +345,10 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
     @Override
     protected void onResume() {
         super.onResume();
+        if(  JPushInterface.isPushStopped(SplashActivity.this))
+        {
+            JPushInterface.resumePush(SplashActivity.this);
+        }
     }
 
     //设置网络点击事件

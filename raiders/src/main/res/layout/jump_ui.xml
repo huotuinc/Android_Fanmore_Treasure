@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popLayout"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="5dp"
+    android:background="@color/color_white">
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/text_size_16"
+        android:text="选择新增地址"
+        android:background="@drawable/account_bg_bottom"/>
+    <LinearLayout
+        android:id="@+id/allAddressL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="5dp"
+        android:background="@color/account_bg">
+
+    </LinearLayout>
+</LinearLayout>

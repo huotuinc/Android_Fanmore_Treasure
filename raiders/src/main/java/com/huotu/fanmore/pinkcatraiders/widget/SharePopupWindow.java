@@ -198,10 +198,10 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         if (shareModel != null) {
             Platform.ShareParams sp = new Platform.ShareParams ();
             sp.setShareType(Platform.SHARE_WEBPAGE);
-            sp.setTitle(shareModel.getText());
+            sp.setTitle(shareModel.getTitle());
             sp.setText(shareModel.getText());
             sp.setUrl(shareModel.getUrl());
-            sp.setImageUrl(shareModel.getImageUrl());
+            sp.setImageUrl(shareModel.getImgUrl());
             shareParams = sp;
         }
     }
@@ -240,6 +240,8 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         sp.setTitleUrl ( shareParams.getUrl ( ) ); // 标题的超链接
         sp.setText ( shareParams.getText ( ) );
         sp.setImageUrl ( shareParams.getImageUrl ( ) );
+        sp.setSite("ht");
+        sp.setSiteUrl("http://www.baidu.com");
         Platform qzone = ShareSDK.getPlatform(context, QZone.NAME);
         qzone.setPlatformActionListener(platformActionListener); // 设置分享事件回调 //
         // 执行图文分享
@@ -260,6 +262,8 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         //执行分享
         sinaWeibo.share ( sp );
     }
+
+
 
     /**
      * 分享单元实体

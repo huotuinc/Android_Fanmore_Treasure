@@ -12,6 +12,10 @@
         <item name="android:windowEnterAnimation">@anim/in_from_down</item>
         <item name="android:windowExitAnimation">@anim/out_to_top</item>
     </style>
+    <style name="AnimationBootom">
+        <item name="android:windowEnterAnimation">@anim/out_to_top</item>
+        <item name="android:windowExitAnimation">@anim/in_from_down</item>
+    </style>
     <!-- animation 样式 -->
     <style name="activityAnimation" parent="@android:style/Animation">
         <item name="android:activityOpenEnterAnimation">@anim/slide_right_in</item>

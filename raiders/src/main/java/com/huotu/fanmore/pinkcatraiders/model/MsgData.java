@@ -8,7 +8,7 @@ import java.util.Date;
 public class MsgData extends BaseModel {
 
     private String context;
-    private Date date ;
+    private String date ;
     private long messageid ;
     private long messageOrder;
 
@@ -20,11 +20,11 @@ public class MsgData extends BaseModel {
         this.context = context;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

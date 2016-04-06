@@ -106,7 +106,7 @@ public class BuyWaitDeliverFrag extends BaseFragment implements Handler.Callback
         rootAty.mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (getActivity().isFinishing()) {
+                if (rootAty.isFinishing()) {
                     return;
                 }
                 operateType = OperateTypeEnum.REFRESH;

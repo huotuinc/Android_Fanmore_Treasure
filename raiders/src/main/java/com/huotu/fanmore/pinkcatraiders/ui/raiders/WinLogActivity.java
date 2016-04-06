@@ -31,6 +31,7 @@ import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.WinnerOutputModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
@@ -54,7 +55,7 @@ import butterknife.OnClick;
 /**
  * 中奖记录
  */
-public class WinLogActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+public class WinLogActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, MyBroadcastReceiver.BroadcastListener {
 
     public
     Resources resources;
@@ -87,19 +88,21 @@ public class WinLogActivity extends BaseActivity implements View.OnClickListener
     public
     WinAdapter adapter;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
+    private MyBroadcastReceiver myBroadcastReceiver;
 
     @Override
     protected
     void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate ( savedInstanceState );
-        setContentView ( R.layout.ri_win_log );
-        ButterKnife.bind ( this );
+        setContentView(R.layout.ri_win_log);
+        ButterKnife.bind(this);
         application = ( BaseApplication ) this.getApplication ( );
         resources = this.getResources ( );
         mHandler = new Handler ( this );
         inflate = LayoutInflater.from ( WinLogActivity.this );
-        wManager = this.getWindowManager ( );
+        wManager = this.getWindowManager();
+        myBroadcastReceiver = new MyBroadcastReceiver(WinLogActivity.this, this, MyBroadcastReceiver.SHOW_ORDER);
         emptyView = inflate.inflate ( R.layout.empty, null );
         TextView emptyTag = ( TextView ) emptyView.findViewById ( R.id.emptyTag );
         emptyTag.setText ( "暂无中奖记录信息" );
@@ -110,7 +113,7 @@ public class WinLogActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public
                     void onClick ( View v ) {
-                        ActivityUtils.getInstance().showActivity(WinLogActivity.this,HomeActivity.class);
+                        ActivityUtils.getInstance().skipActivity(WinLogActivity.this,HomeActivity.class);
                         closeSelf(WinLogActivity.this);
                     }
                 }
@@ -146,7 +149,7 @@ public class WinLogActivity extends BaseActivity implements View.OnClickListener
                 }
                                         );
         winners = new ArrayList<AppUserBuyFlowModel> ();
-        adapter = new WinAdapter (winners, WinLogActivity.this);
+        adapter = new WinAdapter (winners, WinLogActivity.this,WinLogActivity.this);
         winLogList.setAdapter ( adapter );
         firstGetData ( );
     }
@@ -166,19 +169,18 @@ public class WinLogActivity extends BaseActivity implements View.OnClickListener
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), WinLogActivity.this);
         Map<String, Object> maps = new HashMap<String, Object> ();
         //全部
-        maps.put("userId", String.valueOf ( application.readUerId () ));
         if ( OperateTypeEnum.REFRESH == operateType )
         {// 下拉
-            maps.put("lastId", 0);
+            maps.put("lastTime", 0);
         } else if (OperateTypeEnum.LOADMORE == operateType)
         {// 上拉
             if ( winners != null && winners.size() > 0)
             {
                 AppUserBuyFlowModel winner = winners.get(winners.size() - 1);
-                maps.put("lastId", winner.getPid());
+                maps.put("lastTime", winner.getTime());
             } else if (winners != null && winners.size() == 0)
             {
-                maps.put("lastId", 0);
+                maps.put("lastTime", 0);
             }
         }
         String suffix = params.obtainGetParam(maps);
@@ -197,7 +199,7 @@ public class WinLogActivity extends BaseActivity implements View.OnClickListener
                                       winnerOutput = jsonUtil.toBean(response.toString(), winnerOutput);
                                       if(null != winnerOutput && null != winnerOutput.getResultData() && (1==winnerOutput.getResultCode()))
                                       {
-                                          if(null != winnerOutput.getResultData().getList() && !winnerOutput.getResultData().getList().isEmpty())
+                                          if(null != winnerOutput.getResultData().getList() && !winnerOutput.getResultData().getList().isEmpty()&&null!=winnerOutput.getResultData().getList().get(0))
                                           {
                                               if( operateType == OperateTypeEnum.REFRESH){
                                                   winners.clear();
@@ -290,5 +292,20 @@ public class WinLogActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
 
+    }
+
+    @Override
+    public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
+        if(type == MyBroadcastReceiver.ReceiverType.showOrder)
+        {
+            //清单结算模式
+            Bundle bundle = (Bundle) msg;
+            int types = bundle.getInt("type");
+            if(0==types)
+            {
+                //刷新列表
+                firstGetData();
+            }
+        }
     }
 }

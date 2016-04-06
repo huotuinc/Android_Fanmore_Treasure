@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
+import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 
 public class VolleyUtil
 {
@@ -32,11 +33,11 @@ public class VolleyUtil
         }
     }
     public static void addRequest(Request request){
-        getRequestQueue().cancelAll( "MT_REQUEST" );
+        getRequestQueue().cancelAll( Contant.VOLLEY_TAG );
         getRequestQueue().add( request);
     }
     public static void cancelAllRequest(){
-        getRequestQueue().cancelAll("MT_REQUEST");
+        getRequestQueue().cancelAll(Contant.VOLLEY_TAG);
     }
     public static void addRequest(Request<?> request, Object tag) {
         if (tag != null) {

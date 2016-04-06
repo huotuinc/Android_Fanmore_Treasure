@@ -13,6 +13,7 @@ import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
 import com.huotu.fanmore.pinkcatraiders.model.CarouselModel;
+import com.huotu.fanmore.pinkcatraiders.model.SlideListModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class HomeViewPagerAdapter extends PagerAdapter {
     private Context mContext;
 
     public
-    HomeViewPagerAdapter ( List< CarouselModel > datas, Context mContext, Handler mHandler ) {
+    HomeViewPagerAdapter ( List<CarouselModel> datas, Context mContext, Handler mHandler ) {
 
         this.datas = datas;
         this.mContext = mContext;
@@ -63,17 +64,16 @@ public class HomeViewPagerAdapter extends PagerAdapter {
         String String = datas.get(position%datas.size()).getPictureUrl ();
         View view=View.inflate(mContext, R.layout.fillview,null);
         ImageView image=(ImageView) view.findViewById(R.id.image);
-        BitmapLoader.create ( ).displayUrl ( mContext, image, String, R.mipmap.ic_launcher );
+        BitmapLoader.create ( ).displayUrlBanner ( mContext, image, String, R.mipmap.banner );
         container.addView ( view );
         image.setOnClickListener ( new View.OnClickListener ( ) {
 
                                        @Override
                                        public
                                        void onClick ( View v ) {
-
                                            Message message = mHandler.obtainMessage ();
                                            message.what = Contant.CAROUSE_URL;
-                                           message.obj = datas.get ( position%datas.size() ).getPid ();
+                                           message.obj = datas.get ( position%datas.size() );
                                            mHandler.sendMessage ( message );
                                        }
                                    } );

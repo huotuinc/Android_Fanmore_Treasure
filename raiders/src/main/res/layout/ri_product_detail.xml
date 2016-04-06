@@ -17,14 +17,15 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/account_bg">
-    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
-        xmlns:ptr= "http://schemas.android.com/apk/res-auto"
-        android:id="@+id/productDetailPullRefresh"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        ptr:ptrAnimationStyle= "flip"
-        android:layout_above="@+id/bottomL"
-        ptr:ptrMode= "both">
+
+        <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+            xmlns:ptr= "http://schemas.android.com/apk/res-auto"
+            android:id="@+id/productDetailPullRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            ptr:ptrAnimationStyle= "flip"
+            android:layout_above="@+id/bottomL"
+            ptr:ptrMode= "both">
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -65,28 +66,26 @@
                 android:padding="2dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+
                 android:text="进行中"
-                android:gravity="center"
                 android:textColor="@color/color_white"
-                android:textSize="@dimen/text_size_14"
+                android:textSize="@dimen/text_size_10"
                 android:background="@drawable/button_common_1"/>
             <RelativeLayout
                 android:id="@+id/productDetailNameL"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
                 android:layout_toRightOf="@+id/productDetailNameLabel"
                 android:layout_centerVertical="true"
-                android:padding="5dp"
                 android:background="@color/color_white">
                 <TextView
                     android:id="@+id/productDetailName"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="贝恩施 儿童玩具 托马斯积木益智玩具轨道火车1688组合装"
+                    android:text=""
                     android:textColor="@color/text_black"
-                    android:textSize="@dimen/text_size_14"
                     android:ellipsize="end"
                     android:lines="2"/>
             </RelativeLayout>
@@ -99,36 +98,56 @@
             android:layout_below="@+id/productDetailNameLL"
             android:background="@color/color_white">
             <!--登录状态-->
-            <ViewStub
+            <RelativeLayout
                 android:id="@+id/loginedDetail"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout="@layout/login_detail">
-            </ViewStub>
+                android:visibility="gone">
+                <include
+                    layout="@layout/login_detail"/>
+            </RelativeLayout>
+
             <!--登录状态-->
             <!--未登录全价-->
-            <ViewStub
-                android:id="@+id/unloginFullPrice"
-                android:layout_width="fill_parent"
+            <RelativeLayout
+                android:id="@+id/unlogin_funllprice"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout="@layout/unlogin_funllprice">
-            </ViewStub>
+                android:visibility="gone">
+            <include
+               layout="@layout/unlogin_funllprice"/>
+            </RelativeLayout>
+
             <!--未登录全价-->
+
             <!--未登录-->
-            <ViewStub
+            <RelativeLayout
                 android:id="@+id/unlogin"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout="@layout/unlogin">
-            </ViewStub>
+                android:visibility="gone">
+                <include
+                    layout="@layout/unlogin"/>
+            </RelativeLayout>
             <!--未登录-->
             <!--揭晓详情-->
-            <ViewStub
+            <RelativeLayout
                 android:id="@+id/announcedDetail"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout="@layout/announced_detail">
-            </ViewStub>
+                android:visibility="gone">
+                <include
+                    layout="@layout/announced_detail"/>
+            </RelativeLayout>
+            <!--倒计时-->
+            <RelativeLayout
+                android:id="@+id/countdownDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+                <include
+                    layout="@layout/countdown_detail"/>
+            </RelativeLayout>
             <!--揭晓详情-->
         </RelativeLayout>
         <!--功能列表-->
@@ -159,7 +178,6 @@
                         android:layout_height="wrap_content"
                         android:text="图文详情"
                         android:layout_marginLeft="10dp"
-                        android:textSize="@dimen/text_size_16"
                         android:textColor="@color/text_black"/>
                     <TextView
                         android:layout_width="0dp"
@@ -170,7 +188,7 @@
                         android:maxLength="20"
                         android:text="建议在WIFI下打开"
                         android:textColor="@color/text_gray"
-                        android:textSize="@dimen/text_size_14" />
+                        />
                     <ImageView
                         android:layout_width="@dimen/account_arrow_size"
                         android:layout_height="@dimen/account_arrow_size"
@@ -194,7 +212,6 @@
                         android:layout_height="wrap_content"
                         android:text="往期揭晓"
                         android:layout_marginLeft="10dp"
-                        android:textSize="@dimen/text_size_16"
                         android:textColor="@color/text_black"/>
 
                     <TextView
@@ -232,7 +249,6 @@
                         android:layout_height="wrap_content"
                         android:text="晒单分享"
                         android:layout_marginLeft="10dp"
-                        android:textSize="@dimen/text_size_16"
                         android:textColor="@color/text_black"/>
 
                     <TextView
@@ -269,7 +285,6 @@
                         android:layout_height="wrap_content"
                         android:text="参与记录"
                         android:layout_marginLeft="10dp"
-                        android:textSize="@dimen/text_size_16"
                         android:textColor="@color/text_black"/>
 
                     <TextView
@@ -302,7 +317,6 @@
                         android:layout_height="wrap_content"
                         android:text="所有参与记录"
                         android:layout_marginLeft="10dp"
-                        android:textSize="@dimen/text_size_16"
                         android:textColor="@color/text_black"/>
 
                     <TextView
@@ -312,8 +326,8 @@
                         android:layout_marginLeft="10dp"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:maxLength="30"
-                        android:text="（2016-1-21 10:07:12开始）"
+                        android:maxLength="40"
+                        android:text=""
                         android:textSize="@dimen/text_size_14"
                         android:textColor="@color/text_gray"/>
                 </LinearLayout>
@@ -332,6 +346,7 @@
 
     </RelativeLayout>
     </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+
     <RelativeLayout
         android:id="@+id/bottomL"
         android:layout_width="fill_parent"

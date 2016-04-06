@@ -30,15 +30,13 @@ class AutnLogin {
     Context context;
     private
     Handler mHandler;
-    private View view;
     private
     BaseApplication application;
 
     public
-    AutnLogin ( Context context, Handler mHandler, View view, BaseApplication application ) {
+    AutnLogin ( Context context, Handler mHandler, BaseApplication application ) {
         this.context = context;
         this.mHandler = mHandler;
-        this.view = view;
         this.application = application;
     }
 
@@ -57,12 +55,15 @@ class AutnLogin {
                 return;
             }
         }
+        else
+        {
+            mHandler.sendEmptyMessage ( Contant.MSG_UN_LOGIN );
+        }
         plat.setPlatformActionListener ( new PlatformActionListener ( ) {
                                              @Override
                                              public
                                              void onComplete ( Platform platform, int action, HashMap< String, Object > hashMap ) {
 
-                                                 view.setClickable ( true );
                                                  if ( action == Platform.ACTION_USER_INFOR ) {
                                                      Message msg = new Message();
                                                      msg.what = Contant.MSG_AUTH_COMPLETE;
@@ -74,7 +75,6 @@ class AutnLogin {
                                              @Override
                                              public
                                              void onError ( Platform platform, int action, Throwable throwable ) {
-                                                 view.setClickable ( true );
                                                  Message msg = new Message();
                                                  msg.what = Contant.MSG_AUTH_ERROR;
                                                  msg.obj = throwable;
@@ -84,7 +84,6 @@ class AutnLogin {
                                              @Override
                                              public
                                              void onCancel ( Platform platform, int action ) {
-                                                 view.setClickable ( true );
                                                  if (action == Platform.ACTION_USER_INFOR) {
                                                      mHandler.sendEmptyMessage(Contant.MSG_AUTH_CANCEL );
                                                  }

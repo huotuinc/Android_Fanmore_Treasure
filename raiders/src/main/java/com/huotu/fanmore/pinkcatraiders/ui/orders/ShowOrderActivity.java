@@ -153,7 +153,7 @@ public class ShowOrderActivity extends BaseActivity implements View.OnClickListe
                 }
                                        );
         orders = new ArrayList< OrderModel > ( );
-        adapter = new OrderAdapter ( orders, ShowOrderActivity.this );
+        adapter = new OrderAdapter ( orders, ShowOrderActivity.this, wManager );
         orderList.setAdapter ( adapter );
         orderList.setOnItemClickListener (
                 new AdapterView.OnItemClickListener ( ) {

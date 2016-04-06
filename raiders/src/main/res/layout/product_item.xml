@@ -22,7 +22,7 @@
         android:layout_marginLeft="10dp"
         android:gravity="center"
         android:textColor="@color/color_white"
-        android:textSize="@dimen/text_size_12"/>
+        android:textSize="@dimen/text_size_8"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -59,20 +59,21 @@
                 android:layout_toLeftOf="@+id/addBtn"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="8dp"
+                android:layout_height="5dp"
                 android:max="100"
                 android:progress="50"
                 android:progressDrawable="@drawable/progress_draw"/>
             <TextView
                 android:id="@+id/addBtn"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
+                android:layout_alignParentBottom="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/lotteryScheduleProgress"
                 android:text="加入清单"
-                android:padding="5dp"
+                android:padding="2dp"
                 android:gravity="center"
+                android:textSize="@dimen/text_size_10"
                 android:textColor="@color/deep_red"
                 android:background="@drawable/add_draw"/>
         </RelativeLayout>

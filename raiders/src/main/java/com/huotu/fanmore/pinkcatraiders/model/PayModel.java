@@ -1,5 +1,7 @@
 package com.huotu.fanmore.pinkcatraiders.model;
 
+import java.math.BigDecimal;
+
 /**
  * 支付订单信息model
  */
@@ -7,7 +9,25 @@ public
 class PayModel extends BaseModel {
 
     private String alipayCallbackUrl;
-    private int fee;
+    private String alipayFee;
+    private String wxFee;
+
+    public String getAlipayFee() {
+        return alipayFee;
+    }
+
+    public void setAlipayFee(String alipayFee) {
+        this.alipayFee = alipayFee;
+    }
+
+    public String getWxFee() {
+        return wxFee;
+    }
+
+    public void setWxFee(String wxFee) {
+        this.wxFee = wxFee;
+    }
+
     private String orderNo;
     private String remainPayUrl;
     private String wxCallbackUrl;
@@ -87,18 +107,6 @@ class PayModel extends BaseModel {
     void setAlipayCallbackUrl ( String alipayCallbackUrl ) {
 
         this.alipayCallbackUrl = alipayCallbackUrl;
-    }
-
-    public
-    int getFee ( ) {
-
-        return fee;
-    }
-
-    public
-    void setFee ( int fee ) {
-
-        this.fee = fee;
     }
 
     public
