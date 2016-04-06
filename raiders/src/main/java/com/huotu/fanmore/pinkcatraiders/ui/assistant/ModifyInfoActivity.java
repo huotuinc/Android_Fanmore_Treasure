@@ -106,13 +106,13 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
     protected
     void onCreate ( Bundle savedInstanceState ) {
 
-        super.onCreate ( savedInstanceState );
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.user_modify);
         ButterKnife.bind(this);
         application = ( BaseApplication ) this.getApplication ( );
         resources = this.getResources ( );
         mHandler = new Handler ( this );
-        bundle = this.getIntent ( ).getExtras ( );
+        bundle = this.getIntent ( ).getExtras();
         wManager = this.getWindowManager();
         myBroadcastReceiver = new MyBroadcastReceiver(ModifyInfoActivity.this, this, MyBroadcastReceiver.REFRESH_USERLIST);
         progress = new ProgressPopupWindow ( ModifyInfoActivity.this, ModifyInfoActivity.this, wManager );
@@ -179,6 +179,16 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
                                 if (1 == updateProfile.getResultCode()) {
                                     //更新本地用户信息
                                     updateUserInformation();
+                                    //上传成功
+                                    noticePop = new NoticePopWindow(ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户" + bundle.get("profile") + "修改成功");
+                                    noticePop.showNotice();
+                                    noticePop.showAtLocation(
+                                            findViewById(R.id.titleLayout),
+                                            Gravity.CENTER, 0, 0
+                                    );
+                                    //更新本地用户信息
+                                    application
+                                            .writeUserInfo(updateProfile.getResultData().getUser());
                                 } else {
                                     //上传失败
                                     noticePop = new NoticePopWindow(ModifyInfoActivity.this, ModifyInfoActivity.this, wManager, "用户" + bundle.get("profile") + "修改失败");

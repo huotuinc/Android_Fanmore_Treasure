@@ -341,14 +341,12 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                 //全选
                 adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 1, application, types);
                 menuList.setAdapter(adapter);
-                //firstGetData();
             }
             else if(12==types)
             {
                 //全部选
                 adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 1, application, types);
                 menuList.setAdapter(adapter);
-                //firstGetData();
             }
 
         }

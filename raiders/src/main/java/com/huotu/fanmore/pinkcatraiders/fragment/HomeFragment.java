@@ -801,7 +801,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public
                     void onErrorResponse ( VolleyError error ) {
-                        error.getMessage();
                     }
                 }
         );
