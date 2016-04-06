@@ -104,7 +104,7 @@ public class ListAdapter extends BaseAdapter {
                         void onClick ( View v ) {
 
                             Message message = mHandler.obtainMessage ( );
-                            if ( 0 == editBtn.getTag ( ) ) {
+                            if ( 0 == Integer.parseInt(editBtn.getTag ( ).toString()) ) {
                                 //添加
                                 message.arg1 = 0;
                                 editBtn.setTag ( 1 );
@@ -113,7 +113,7 @@ public class ListAdapter extends BaseAdapter {
                                                            );
 
                             }
-                            else if ( 1 == editBtn.getTag ( ) ) {
+                            else if ( 1 == Integer.parseInt(editBtn.getTag ( ).toString()) ) {
                                 //删除
                                 message.arg1 = 1;
                                 editBtn.setTag ( 0 );
