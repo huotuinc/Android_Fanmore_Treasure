@@ -115,13 +115,13 @@ public class CountResultActivity extends BaseActivity implements View.OnClickLis
     @OnClick(R.id.openBtn)
     void openClick()
     {
-        if(0==openBtn.getTag())
+        if(0==Integer.parseInt(openBtn.getTag().toString()))
         {
             openBtn.setText("展开");
             openBtn.setTag(1);
             list.setVisibility(View.GONE);
         }
-        else if(1==openBtn.getTag())
+        else if(1==Integer.parseInt(openBtn.getTag().toString()))
         {
             openBtn.setText("收起");
             openBtn.setTag(0);

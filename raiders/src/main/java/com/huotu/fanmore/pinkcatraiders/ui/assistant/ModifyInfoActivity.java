@@ -152,7 +152,7 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
             ToastUtils.showMomentToast(ModifyInfoActivity.this, ModifyInfoActivity.this, "请输入修改后的信息");
             return;
         } else {
-            if (bundle.get("moblieband") == 1) {
+            if (1 == Integer.parseInt(bundle.get("moblieband").toString())) {
                 //弹出执行进度条
                 progress.showProgress("正在修改用户" + bundle.get("profile"));
                 progress.showAtLocation(titleLayoutL,

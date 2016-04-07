@@ -505,28 +505,28 @@ public class ShareOrderActivity extends BaseActivity implements View.OnClickList
                                         ToastUtils.showMomentToast(ShareOrderActivity.this, ShareOrderActivity.this, "上传晒单图片成功");
                                         imgs.add(updateProfile.getResultData().getFilename());
                                         miniImgs.add(updateProfile.getResultData().getMiniFilename());
-                                        if(0==addImgBtn1.getTag())
+                                        if(0==Integer.parseInt(addImgBtn1.getTag().toString()))
                                         {
                                             addImgBtn1.setTag(null);
                                             BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn1, updateProfile.getResultData().getMiniUrl(), R.mipmap.defluat_logo);
                                             addImgBtn1.setEnabled(false);
                                             addImgBtn1.setClickable(false);
                                         }
-                                        else if(0==addImgBtn2.getTag())
+                                        else if(0==Integer.parseInt(addImgBtn2.getTag().toString()))
                                         {
                                             addImgBtn2.setTag(null);
                                             BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn2, updateProfile.getResultData().getMiniUrl(), R.mipmap.defluat_logo);
                                             addImgBtn2.setEnabled(false);
                                             addImgBtn2.setClickable(false);
                                         }
-                                        else if(0==addImgBtn3.getTag())
+                                        else if(0==Integer.parseInt(addImgBtn3.getTag().toString()))
                                         {
                                             addImgBtn3.setTag(null);
                                             BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn3, updateProfile.getResultData().getMiniUrl(), R.mipmap.defluat_logo);
                                             addImgBtn3.setEnabled(false);
                                             addImgBtn3.setClickable(false);
                                         }
-                                        else if(0==addImgBtn4.getTag())
+                                        else if(0==Integer.parseInt(addImgBtn4.getTag().toString()))
                                         {
                                             addImgBtn4.setTag(null);
                                             BitmapLoader.create().displayUrl(ShareOrderActivity.this, addImgBtn4, updateProfile.getResultData().getMiniUrl(), R.mipmap.defluat_logo);

@@ -681,7 +681,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     {
         //重置加载模式
         operateType = OperateTypeEnum.REFRESH;
-        if(0 == zxrsInnerL.getTag ( ))
+        if(0 == Integer.parseInt(zxrsInnerL.getTag ( ).toString()))
         {
             //转换成UP
             zxrsInnerL.setTag ( 1 );
@@ -699,7 +699,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             SystemTools.loadBackground ( jdInnerL, normal );
             SystemTools.loadBackground ( zxrsInnerL, press );
         }
-        else if(1 == zxrsInnerL.getTag ())
+        else if(1 == Integer.parseInt(zxrsInnerL.getTag ( ).toString()))
         {
             //转换成DOWN
             zxrsInnerL.setTag ( 0 );
