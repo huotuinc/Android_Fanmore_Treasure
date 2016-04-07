@@ -25,6 +25,8 @@ import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.TimeCount;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.widget.CountDownTimerButton;
+import com.huotu.fanmore.pinkcatraiders.widget.MyGridView;
+import com.huotu.fanmore.pinkcatraiders.widget.MyRefreshGridView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +39,12 @@ import butterknife.ButterKnife;
  */
 public class NewestProductAdapter extends BaseAdapter {
 
-    private GridView gv;
+    private MyRefreshGridView gv;
     private List<NewOpenListModel> newestProducts;
     private Context context;
     private Activity aty;
     private TimeCount tc;
-    public NewestProductAdapter(GridView gv, List<NewOpenListModel> newestProducts,Activity aty,Context context, TimeCount tc)
+    public NewestProductAdapter(MyRefreshGridView gv, List<NewOpenListModel> newestProducts,Activity aty,Context context, TimeCount tc)
     {
         this.newestProducts = newestProducts;
         this.context = context;
@@ -68,76 +70,82 @@ public class NewestProductAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
-        Resources resources = context.getResources();
-        if (convertView == null)
-        {
-            convertView = View.inflate(context, R.layout.newest_product_item, null);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-            // 绑定listener监听器，检测convertview的height
-            holder.update();
+        if(parent instanceof MyRefreshGridView) {
+            ViewHolder holder = null;
+            Resources resources = context.getResources();
+            if (convertView == null) {
+                convertView = View.inflate(context, R.layout.newest_product_item, null);
+                holder = new ViewHolder(convertView);
+                convertView.setTag(holder);
+                // 绑定listener监听器，检测convertview的height
+                holder.update();
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            if(((MyRefreshGridView)parent).isMeasure())
+            {
+                //在measure
+                return convertView;
+            }else {
+                holder.nickName.setTag(position);
+                holder.luckyNumber.setTag(convertView);
+                if (null != newestProducts && !newestProducts.isEmpty() && null != newestProducts.get(position)) {
+                    final NewOpenListModel product = newestProducts.get(position);
+                    BitmapLoader.create().displayUrlNewest(context, holder.newestProductIcon, product.getPictureUrl(), R.mipmap.defluat_logo);
+
+                    if (0 != product.getAreaAmount().intValue()) {
+                        holder.newestProductTag.setText("专区\n商品");
+                        SystemTools.loadBackground(holder.newestProductTag, resources.getDrawable(R.mipmap.area_1));
+                    } else {
+
+                        holder.newestProductTag.setVisibility(View.GONE);
+
+                    }
+                    if (1 == product.getStatus()) {
+                        if(null!=tc)
+                        {
+                            tc.cancel();
+                        }
+                        holder.Rl1.setVisibility(View.VISIBLE);
+                        holder.Rl2.setVisibility(View.GONE);
+                        holder.announcedTag.setText("即将揭晓");
+
+                        long millSec = product.getToAwardingTime();
+
+                        tc = new TimeCount(millSec * 1000, 100, holder.countdown);
+                        tc.start();
+                    } else if (2 == product.getStatus()) {
+                        holder.Rl1.setVisibility(View.GONE);
+                        holder.Rl2.setVisibility(View.VISIBLE);
+                        holder.nickName.setText(product.getNickName());
+                        holder.attendAmount.setText("参与人次:" + String.valueOf(product.getAttendAmount()));
+                        holder.luckyNumber.setText(String.valueOf(product.getLuckyNumber()));
+                        holder.time.setText("揭晓时间:" + DateUtils.transformDataformat2(product.getTime()));
+
+                    } else {
+                    }
+                    holder.newestProductName.setText(product.getTitle());
+                    holder.newestIssue.setText("期号:" + product.getIssueId());
+                    holder.newestProductLL.setOnClickListener(
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putInt("tip", 2);
+                                    bundle.putLong("issueId", product.getIssueId());
+                                    bundle.putSerializable("newopenlist", product);
+                                    ActivityUtils.getInstance().showActivity(aty, ProductDetailActivity.class, bundle);
+                                }
+                            });
+
+                }
+                return convertView;
+            }
         }
         else
         {
-            holder = (ViewHolder) convertView.getTag();
+            return null;
         }
-        holder.nickName.setTag(position);
-        holder.luckyNumber.setTag(convertView);
-        if(null!=newestProducts&&!newestProducts.isEmpty()&&null!=newestProducts.get(position))
-        {
-            final NewOpenListModel product = newestProducts.get(position);
-            BitmapLoader.create().displayUrlNewest(context, holder.newestProductIcon, product.getPictureUrl(), R.mipmap.defluat_logo);
-
-            if(0!=product.getAreaAmount().intValue())
-            {
-                holder.newestProductTag.setText("专区\n商品");
-                SystemTools.loadBackground(holder.newestProductTag, resources.getDrawable(R.mipmap.area_1));
-            }
-            else {
-
-                holder.newestProductTag.setVisibility(View.GONE);
-
-            }
-            if (1==product.getStatus()) {
-                /*if(null!=tc)
-                {
-                    tc.cancel();
-                }*/
-                holder.Rl1.setVisibility(View.VISIBLE);
-                holder.Rl2.setVisibility(View.GONE);
-                holder.announcedTag.setText("即将揭晓");
-
-                long millSec = product.getToAwardingTime();
-
-                tc = new TimeCount(millSec*1000, 100, holder.countdown);
-                tc.start();
-            }  else if (2==product.getStatus()){
-                holder.Rl1.setVisibility(View.GONE);
-                holder.Rl2.setVisibility(View.VISIBLE);
-                holder.nickName.setText(product.getNickName());
-                holder.attendAmount.setText("参与人次:"+String.valueOf(product.getAttendAmount()));
-                holder.luckyNumber.setText(String.valueOf(product.getLuckyNumber()));
-                holder.time.setText("揭晓时间:" + DateUtils.transformDataformat2(product.getTime()));
-
-            }else {
-            }
-            holder.newestProductName.setText(product.getTitle());
-            holder.newestIssue.setText("期号:" + product.getIssueId());
-            holder.newestProductLL.setOnClickListener(
-                    new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Bundle bundle = new Bundle ( );
-                    bundle.putInt("tip",2);
-                    bundle.putLong("issueId", product.getIssueId());
-                    bundle.putSerializable("newopenlist", product);
-                    ActivityUtils.getInstance().showActivity ( aty, ProductDetailActivity.class, bundle );
-                }
-            });
-
-        }
-        return convertView;
     }
 //    class CountDownFinish  implements CountDownTimerButton.CountDownFinishListener {
 //

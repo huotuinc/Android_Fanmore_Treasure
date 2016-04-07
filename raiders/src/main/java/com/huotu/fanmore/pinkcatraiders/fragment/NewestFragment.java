@@ -32,6 +32,8 @@ import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.TimeCount;
 import com.huotu.fanmore.pinkcatraiders.widget.CountDownTimerButton;
+import com.huotu.fanmore.pinkcatraiders.widget.MyPullToRefreshGridView;
+import com.huotu.fanmore.pinkcatraiders.widget.MyRefreshGridView;
 
 import org.json.JSONObject;
 
@@ -54,7 +56,7 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
     public HomeActivity rootAty;
     public WindowManager wManager;
     @Bind(R.id.newestGrid)
-    PullToRefreshGridView newestGrid;
+    MyPullToRefreshGridView newestGrid;
     View emptyView = null;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public List<NewOpenListModel> newestProducts;
@@ -111,15 +113,15 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
 
     private void initGrid()
     {
-        newestGrid.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
+        newestGrid.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<MyRefreshGridView>() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<GridView> pullToRefreshBase) {
+            public void onPullDownToRefresh(PullToRefreshBase<MyRefreshGridView> pullToRefreshBase) {
                 operateType = OperateTypeEnum.REFRESH;
                 initProducts();
             }
 
             @Override
-            public void onPullUpToRefresh(PullToRefreshBase<GridView> pullToRefreshBase) {
+            public void onPullUpToRefresh(PullToRefreshBase<MyRefreshGridView> pullToRefreshBase) {
                 operateType = OperateTypeEnum.LOADMORE;
                 initProducts();
             }
