@@ -72,7 +72,16 @@ public class CropperView {
                                                                     public void onClick(View v) {
                                                                         dismiss();
                                                                         if(listener != null){
-                                                                            listener.OnCropperBack(createNewSize(cropImageView.getCroppedImage()));
+                                                                            try
+                                                                            {
+                                                                                listener.OnCropperBack(createNewSize(cropImageView.getCroppedImage()));
+                                                                            }
+                                                                            catch (RuntimeException e)
+                                                                            {
+                                                                                //出现异常,捕获
+                                                                                listener.OnCropperBack(null);
+                                                                            }
+
 //				 					 if(mOutWidth == 0 && mOutHeight == 0){
 //				 						listener.OnCropperBack(cropImageView.getCroppedImage());
 //				 					 }else{
@@ -144,8 +153,16 @@ public class CropperView {
         }
         float scaleWidth = ((float) 200 / width);
         float scaleHeight = ((float) 200 / height);
+        if(scaleHeight>10 && scaleWidth>10)
+        {
+            matrix.postScale(10, 10);
+        }
+        else
+        {
+            float scale = (scaleWidth>=scaleHeight)?scaleHeight:scaleWidth;
+            matrix.postScale(scale, scale);
+        }
 
-        matrix.postScale(scaleWidth, scaleHeight);
         Bitmap newbmp = Bitmap.createBitmap(source, 0, 0, width, height,
                                             matrix, true);
         return newbmp;
