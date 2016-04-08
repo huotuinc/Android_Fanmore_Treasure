@@ -19,7 +19,6 @@
         </ViewStub>
         <ViewStub
             android:id="@+id/stubSearchBar"
-            android:layout_toLeftOf="@+id/titleRightImage"
             android:layout_toRightOf="@+id/titleLeftImage"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"

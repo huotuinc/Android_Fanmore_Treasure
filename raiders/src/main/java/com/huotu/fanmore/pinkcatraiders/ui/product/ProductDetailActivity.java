@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -28,32 +27,23 @@ import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.huotu.fanmore.pinkcatraiders.R;
-import com.huotu.fanmore.pinkcatraiders.adapter.HomeViewPagerAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.LoadSwitchImgAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
-import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
-import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
-import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.NewOpenListModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.PartnerHistorysModel;
 import com.huotu.fanmore.pinkcatraiders.model.PartnerHistorysOutputModel;
-import com.huotu.fanmore.pinkcatraiders.model.PartnerLogModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductDetailModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductDetailsOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
-import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
-import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
-import com.huotu.fanmore.pinkcatraiders.ui.assistant.MsgActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.ShowOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidersNumberActivity;
-import com.huotu.fanmore.pinkcatraiders.ui.raiders.ShareOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
@@ -72,9 +62,7 @@ import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -145,7 +133,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     LinearLayout partnerLogL;
     @Bind(R.id.bottomL)
     RelativeLayout bottomL;
-    public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
+    public OperateTypeEnum operateType = OperateTypeEnum.REFRESH;
     public Handler mHandler;
     public Bundle bundle;
     public long issueId;
@@ -170,21 +158,20 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         wManager = this.getWindowManager();
         bundle = this.getIntent().getExtras();
         product = (ProductModel) bundle.getSerializable("product");
-        newopenlist=(NewOpenListModel)bundle.getSerializable("newopenlist");
+        newopenlist = (NewOpenListModel) bundle.getSerializable("newopenlist");
         mHandler = new Handler(this);
 
         initTitle();
-        if (1==bundle.getInt("tip")) {
+        if (1 == bundle.getInt("tip")) {
             initBottomOther();
-        }else if(2==bundle.getInt("tip")) {
+        } else if (2 == bundle.getInt("tip")) {
             initBottomAnnounced();
         }
         initSwitchImg();
         initView();
     }
 
-    private void initView()
-    {
+    private void initView() {
         getDetailData();
         productDetailPullRefresh.setOnRefreshListener(
                 new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
@@ -207,10 +194,9 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         productDetailPullRefresh.getRefreshableView().smoothScrollTo(0, 0);
     }
 
-    private void getDetailData()
-    {
+    private void getDetailData() {
         //获取产品详情
-        if( false == ProductDetailActivity.this.canConnect() ){
+        if (false == ProductDetailActivity.this.canConnect()) {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -219,7 +205,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             });
             return;
         }
-        if (bundle.getInt("tip")==1) {
+        if (bundle.getInt("tip") == 1) {
             String url = Contant.REQUEST_URL + Contant.GET_GOODS_DTAIL_BY_GOODS_ID;
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ProductDetailActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
@@ -252,8 +238,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                     productDetail = productDetailsOutput
                                             .getResultData().getData();
                                     issueId = productDetail.getIssueId();
-                                    pid=productDetail.getPid();
-                                    allLogText.setText("("+DateUtils.transformDataformat16(productDetail.getFirstBuyTime())+"开始");
+                                    pid = productDetail.getPid();
+                                    allLogText.setText("(" + DateUtils.transformDataformat16(productDetail.getFirstBuyTime()) + "开始");
                                     detailUrl = productDetail.getLink();
                                     if (0 == productDetail.getStatus()) {
                                         productDetailNameLabel.setText("进行中");
@@ -262,7 +248,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                     } else if (2 == productDetail.getStatus()) {
                                         productDetailNameLabel.setText("已揭晓");
                                     }
-                                    productDetailName.setText(Html.fromHtml("<font color=\"#000000\">"+productDetail.getTitle() + "</font> " +"<font color=\"#EF6314\">"+productDetail.getCharacter()+"</font>"));
+                                    productDetailName.setText(Html.fromHtml("<font color=\"#000000\">" + productDetail.getTitle() + "</font> " + "<font color=\"#EF6314\">" + productDetail.getCharacter() + "</font>"));
                                     //是否登录
                                     if (application.isLogin()) {
                                         //登录
@@ -302,11 +288,10 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             );
                                             TextView parentCount = (TextView) ProductDetailActivity
                                                     .this.findViewById(R.id.parentCount);
-                                            parentCount.setText("您参与了："+productDetail.getNumbers().size()+"人次");
+                                            parentCount.setText("您参与了：" + productDetail.getNumbers().size() + "人次");
                                             TextView raidersNo = (TextView) ProductDetailActivity
                                                     .this.findViewById(R.id.raidersNo);
-                                            if(null!=productDetail.getNumbers()&&!productDetail.getNumbers().isEmpty())
-                                            {
+                                            if (null != productDetail.getNumbers() && !productDetail.getNumbers().isEmpty()) {
                                                 raidersNo.setText("夺宝号码：" + productDetail.getNumbers().get(0));
                                                 raidersNo.setTextColor(resources.getColor(R.color.color_blue));
                                                 raidersNo.setOnClickListener(new View.OnClickListener() {
@@ -317,29 +302,24 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                         ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, RaidersNumberActivity.class, bundle);
                                                     }
                                                 });
-                                            }
-                                            else
-                                            {
+                                            } else {
                                                 raidersNo.setTextColor(resources.getColor(R.color.color_blue));
                                                 raidersNo.setText("暂无夺宝号码");
                                             }
 
-                                        } else if(1 == productDetail.getStatus()) {
+                                        } else if (1 == productDetail.getStatus()) {
                                             //倒计时
                                             countdownDetail.setVisibility(View.VISIBLE);
                                             TextView issue = (TextView) countdownDetail.findViewById(R.id.issue);
                                             issue.setText("期号：" + productDetail.getIssueId());
                                             TextView countdown = (TextView) countdownDetail.findViewById(R.id.countdown);
-                                            tc = new TimeCount(productDetail.getRemainSecond()*1000, 100, countdown);
+                                            tc = new TimeCount(productDetail.getRemainSecond() * 1000, 100, countdown);
                                             tc.start();
                                             TextView calculationDetail = (TextView) countdownDetail.findViewById(R.id.calculationDetail);
                                             TextView noLoginTip = (TextView) countdownDetail.findViewById(R.id.noLoginTip);
-                                            if(null!=productDetail.getNumbers()&&!productDetail.getNumbers().isEmpty())
-                                            {
-                                                noLoginTip.setText("您已参与了"+productDetail.getNumbers().size()+"次");
-                                            }
-                                            else
-                                            {
+                                            if (null != productDetail.getNumbers() && !productDetail.getNumbers().isEmpty()) {
+                                                noLoginTip.setText("您已参与了" + productDetail.getNumbers().size() + "次");
+                                            } else {
                                                 noLoginTip.setText("您没有参加本期夺宝哦！");
                                             }
                                             calculationDetail.setText("计算详情");
@@ -349,9 +329,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "倒计时中不能计算结果");
                                                 }
                                             });
-                                        }
-                                        else if(2 == productDetail.getStatus())
-                                        {
+                                        } else if (2 == productDetail.getStatus()) {
 
                                             //已揭晓
                                             announcedDetail.setVisibility(View.VISIBLE);
@@ -362,41 +340,36 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     productDetail.getAwardingUserHead(), R.mipmap.defluat_logo
                                             );
                                             TextView winnerName = (TextView) announcedDetail.findViewById(R.id.winnerName);
-                                            winnerName.setText("中奖者："+productDetail.getAwardingUserName());
+                                            winnerName.setText("中奖者：" + productDetail.getAwardingUserName());
                                             TextView winnerIp = (TextView) announcedDetail.findViewById(R.id.winnerIp);
-                                            winnerIp.setText(productDetail.getAwardingUserCityName()+"："+productDetail.getAwardingUserIp());
+                                            winnerIp.setText(productDetail.getAwardingUserCityName() + "：" + productDetail.getAwardingUserIp());
                                             TextView winnerId = (TextView) announcedDetail.findViewById(R.id.winnerId);
-                                            winnerId.setText("用户ID："+productDetail.getAwardingUserId());
+                                            winnerId.setText("用户ID：" + productDetail.getAwardingUserId());
                                             TextView partnerUser = (TextView) announcedDetail.findViewById(R.id.partnerUser);
-                                            partnerUser.setText("本期参与："+productDetail.getAwardingUserBuyCount()+"次");
+                                            partnerUser.setText("本期参与：" + productDetail.getAwardingUserBuyCount() + "次");
                                             TextView partnerTime = (TextView) announcedDetail.findViewById(R.id.partnerTime);
-                                            partnerTime.setText("揭晓时间："+DateUtils.transformDataformat6(productDetail.getAwardingDate()));
+                                            partnerTime.setText("揭晓时间：" + DateUtils.transformDataformat6(productDetail.getAwardingDate()));
                                             TextView luckyNo = (TextView) announcedDetail.findViewById(R.id.luckyNo);
-                                            luckyNo.setText("幸运号："+productDetail.getLuckyNumber());
+                                            luckyNo.setText("幸运号：" + productDetail.getLuckyNumber());
                                             TextView calculationDetail = (TextView)
                                                     announcedDetail.findViewById(R.id.calculationDetail);
                                             TextView noLoginTip = (TextView) announcedDetail.findViewById(R.id.noLoginTip);
-                                            if(null!=productDetail.getNumbers()&&!productDetail.getNumbers().isEmpty())
-                                            {
-                                                noLoginTip.setText("您已参与了"+productDetail.getNumbers().size()+"次");
-                                            }
-                                            else
-                                            {
+                                            if (null != productDetail.getNumbers() && !productDetail.getNumbers().isEmpty()) {
+                                                noLoginTip.setText("您已参与了" + productDetail.getNumbers().size() + "次");
+                                            } else {
                                                 noLoginTip.setText("您没有参加本期夺宝哦！");
                                             }
                                             calculationDetail.setText("计算详情");
                                             calculationDetail.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    Bundle bundle=new Bundle();
-                                                    bundle.putLong("issueId",productDetail.getIssueId());
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putLong("issueId", productDetail.getIssueId());
                                                     ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, CountResultActivity.class, bundle);
                                                 }
                                             });
                                         }
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         if (0 == productDetail.getStatus()) {
                                             //未揭晓
                                             unlogin.setVisibility(View.VISIBLE);
@@ -440,15 +413,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, LoginActivity.class);
                                                 }
                                             });
-                                        } else if(1==productDetail.getStatus())
-                                        {
+                                        } else if (1 == productDetail.getStatus()) {
 
                                             //倒计时
                                             countdownDetail.setVisibility(View.VISIBLE);
                                             TextView issue = (TextView) countdownDetail.findViewById(R.id.issue);
                                             issue.setText("期号：" + productDetail.getIssueId());
                                             TextView countdown = (TextView) countdownDetail.findViewById(R.id.countdown);
-                                            tc = new TimeCount(productDetail.getRemainSecond()*1000, 100, countdown);
+                                            tc = new TimeCount(productDetail.getRemainSecond() * 1000, 100, countdown);
                                             tc.start();
                                             TextView calculationDetail = (TextView) countdownDetail.findViewById(R.id.countdown);
                                             //计算结果
@@ -470,9 +442,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, LoginActivity.class);
                                                 }
                                             });
-                                        }
-                                        else if(2==productDetail.getStatus())
-                                        {
+                                        } else if (2 == productDetail.getStatus()) {
 
                                             //已揭晓
                                             announcedDetail.setVisibility(View.VISIBLE);
@@ -483,15 +453,15 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     productDetail.getAwardingUserHead(), R.mipmap.defluat_logo
                                             );
                                             TextView winnerName = (TextView) announcedDetail.findViewById(R.id.winnerName);
-                                            winnerName.setText("中奖者："+productDetail.getAwardingUserName());
+                                            winnerName.setText("中奖者：" + productDetail.getAwardingUserName());
                                             TextView winnerIp = (TextView) announcedDetail.findViewById(R.id.winnerIp);
-                                            winnerIp.setText(productDetail.getAwardingUserCityName()+"："+productDetail.getAwardingUserIp());
+                                            winnerIp.setText(productDetail.getAwardingUserCityName() + "：" + productDetail.getAwardingUserIp());
                                             TextView winnerId = (TextView) announcedDetail.findViewById(R.id.winnerId);
-                                            winnerId.setText("用户ID："+productDetail.getAwardingUserId());
+                                            winnerId.setText("用户ID：" + productDetail.getAwardingUserId());
                                             TextView partnerUser = (TextView) announcedDetail.findViewById(R.id.partnerUser);
-                                            partnerUser.setText("本期参与："+productDetail.getAwardingUserBuyCount()+"次");
+                                            partnerUser.setText("本期参与：" + productDetail.getAwardingUserBuyCount() + "次");
                                             TextView partnerTime = (TextView) announcedDetail.findViewById(R.id.partnerTime);
-                                            partnerTime.setText("揭晓时间："+DateUtils.transformDataformat6(productDetail.getAwardingDate()));
+                                            partnerTime.setText("揭晓时间：" + DateUtils.transformDataformat6(productDetail.getAwardingDate()));
                                             TextView luckyNo = (TextView) announcedDetail.findViewById(R.id.luckyNo);
                                             luckyNo.setText("幸运号：" + productDetail.getLuckyNumber());
                                             TextView calculationDetail = (TextView)
@@ -512,7 +482,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             bottomOperatorL.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    ActivityUtils.getInstance ( ).showActivity ( ProductDetailActivity.this, LoginActivity.class );
+                                                    ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, LoginActivity.class);
                                                 }
                                             });
                                         }
@@ -531,7 +501,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                         }
                                     }, 1000);
                                 }
-                            } else if(1!=productDetailsOutput.getResultCode()) {
+                            } else if (1 != productDetailsOutput.getResultCode()) {
                                 //异常处理，自动切换成无数据
                                 ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "请求数据出错，1秒后退出");
                                 mHandler.postDelayed(new Runnable() {
@@ -562,7 +532,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                         }
                     }
             );
-        }else if (bundle.getInt("tip")==2){
+        } else if (bundle.getInt("tip") == 2) {
             String url = Contant.REQUEST_URL + Contant.GET_GOODS_DETAIL_BY_ISSUEID;
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), ProductDetailActivity.this);
             Map<String, Object> maps = new HashMap<String, Object>();
@@ -596,7 +566,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                     productDetail = productDetailsOutput
                                             .getResultData().getData();
                                     issueId = productDetail.getIssueId();
-                                    pid=productDetail.getPid();
+                                    pid = productDetail.getPid();
 
                                     detailUrl = productDetail.getLink();
                                     if (0 == productDetail.getStatus()) {
@@ -606,7 +576,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                     } else if (2 == productDetail.getStatus()) {
                                         productDetailNameLabel.setText("已揭晓");
                                     }
-                                    productDetailName.setText(Html.fromHtml("<font color=\"#000000\">"+productDetail.getTitle() + "</font> " +"<font color=\"#EF6314\">"+productDetail.getCharacter()+"</font>"));
+                                    productDetailName.setText(Html.fromHtml("<font color=\"#000000\">" + productDetail.getTitle() + "</font> " + "<font color=\"#EF6314\">" + productDetail.getCharacter() + "</font>"));
                                     //是否登录
                                     if (application.isLogin()) {
                                         //登录
@@ -644,9 +614,9 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                             .getRemainAmount()
                                             );
                                             TextView parentCount = (TextView) loginedDetail.findViewById(R.id.parentCount);
-                                            parentCount.setText("您参与了："+productDetail.getNumbers().size()+"人次");
+                                            parentCount.setText("您参与了：" + productDetail.getNumbers().size() + "人次");
                                             TextView raidersNo = (TextView) loginedDetail.findViewById(R.id.raidersNo);
-                                            raidersNo.setText("夺宝号码："+ productDetail.getLuckyNumber());
+                                            raidersNo.setText("夺宝号码：" + productDetail.getLuckyNumber());
                                             raidersNo.setTextColor(resources.getColor(R.color.color_blue));
                                             raidersNo.setOnClickListener(new View.OnClickListener() {
                                                 @Override
@@ -656,21 +626,18 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, RaidersNumberActivity.class, bundle);
                                                 }
                                             });
-                                        } else if(1 == productDetail.getStatus()) {
+                                        } else if (1 == productDetail.getStatus()) {
                                             //倒计时
                                             countdownDetail.setVisibility(View.VISIBLE);
                                             TextView issue = (TextView) countdownDetail.findViewById(R.id.issue);
                                             issue.setText("期号：" + productDetail.getIssueId());
                                             TextView countdown = (TextView) countdownDetail.findViewById(R.id.countdown);
-                                            tc = new TimeCount(productDetail.getRemainSecond()*1000, 100, countdown);
+                                            tc = new TimeCount(productDetail.getRemainSecond() * 1000, 100, countdown);
                                             tc.start();
                                             TextView noLoginTip = (TextView) countdownDetail.findViewById(R.id.noLoginTip);
-                                            if(null!=productDetail.getNumbers()&&!productDetail.getNumbers().isEmpty())
-                                            {
-                                                noLoginTip.setText("您已参与了"+productDetail.getNumbers().size()+"次");
-                                            }
-                                            else
-                                            {
+                                            if (null != productDetail.getNumbers() && !productDetail.getNumbers().isEmpty()) {
+                                                noLoginTip.setText("您已参与了" + productDetail.getNumbers().size() + "次");
+                                            } else {
                                                 noLoginTip.setText("您没有参加本期夺宝哦！");
                                             }
                                             TextView calculationDetail = (TextView) countdownDetail.findViewById(R.id.calculationDetail);
@@ -680,8 +647,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "倒计时中不能计算结果");
                                                 }
                                             });
-                                        }
-                                        else if(2 == productDetail.getStatus()) {
+                                        } else if (2 == productDetail.getStatus()) {
                                             //已揭晓
                                             announcedDetail.setVisibility(View.VISIBLE);
                                             CircleImageView accountLogo = (CircleImageView)
@@ -691,26 +657,23 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     productDetail.getAwardingUserHead(), R.mipmap.defluat_logo
                                             );
                                             TextView winnerName = (TextView) announcedDetail.findViewById(R.id.winnerName);
-                                            winnerName.setText("中奖者："+productDetail.getAwardingUserName());
+                                            winnerName.setText("中奖者：" + productDetail.getAwardingUserName());
                                             TextView winnerIp = (TextView) announcedDetail.findViewById(R.id.winnerIp);
-                                            winnerIp.setText(productDetail.getAwardingUserCityName()+"："+productDetail.getAwardingUserIp());
+                                            winnerIp.setText(productDetail.getAwardingUserCityName() + "：" + productDetail.getAwardingUserIp());
                                             TextView winnerId = (TextView) announcedDetail.findViewById(R.id.winnerId);
-                                            winnerId.setText("用户ID："+productDetail.getAwardingUserId());
+                                            winnerId.setText("用户ID：" + productDetail.getAwardingUserId());
                                             TextView partnerUser = (TextView) announcedDetail.findViewById(R.id.partnerUser);
-                                            partnerUser.setText("本期参与："+productDetail.getAwardingUserBuyCount()+"次");
+                                            partnerUser.setText("本期参与：" + productDetail.getAwardingUserBuyCount() + "次");
                                             TextView partnerTime = (TextView) announcedDetail.findViewById(R.id.partnerTime);
-                                            partnerTime.setText("揭晓时间："+DateUtils.transformDataformat6(productDetail.getAwardingDate()));
+                                            partnerTime.setText("揭晓时间：" + DateUtils.transformDataformat6(productDetail.getAwardingDate()));
                                             TextView luckyNo = (TextView) announcedDetail.findViewById(R.id.luckyNo);
-                                            luckyNo.setText("幸运号："+productDetail.getLuckyNumber());
+                                            luckyNo.setText("幸运号：" + productDetail.getLuckyNumber());
                                             TextView calculationDetail = (TextView)
                                                     announcedDetail.findViewById(R.id.calculationDetail);
                                             TextView noLoginTip = (TextView) announcedDetail.findViewById(R.id.noLoginTip);
-                                            if(null!=productDetail.getNumbers()&&!productDetail.getNumbers().isEmpty())
-                                            {
-                                                noLoginTip.setText("您已参与了"+productDetail.getNumbers().size()+"次");
-                                            }
-                                            else
-                                            {
+                                            if (null != productDetail.getNumbers() && !productDetail.getNumbers().isEmpty()) {
+                                                noLoginTip.setText("您已参与了" + productDetail.getNumbers().size() + "次");
+                                            } else {
                                                 noLoginTip.setText("您没有参加本期夺宝哦！");
                                             }
                                             calculationDetail.setText("计算详情");
@@ -769,13 +732,13 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, LoginActivity.class);
                                                 }
                                             });
-                                        } else if(1 == productDetail.getStatus()) {
+                                        } else if (1 == productDetail.getStatus()) {
                                             //倒计时
                                             countdownDetail.setVisibility(View.VISIBLE);
                                             TextView issue = (TextView) countdownDetail.findViewById(R.id.issue);
                                             issue.setText("期号：" + productDetail.getIssueId());
                                             TextView countdown = (TextView) countdownDetail.findViewById(R.id.countdown);
-                                            tc = new TimeCount(productDetail.getRemainSecond()*1000, 100, countdown);
+                                            tc = new TimeCount(productDetail.getRemainSecond() * 1000, 100, countdown);
                                             tc.start();
                                             TextView calculationDetail = (TextView) countdownDetail.findViewById(R.id.countdown);
                                             //计算结果
@@ -794,11 +757,10 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             bottomOperatorL.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    ActivityUtils.getInstance ( ).showActivity ( ProductDetailActivity.this, LoginActivity.class );
+                                                    ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, LoginActivity.class);
                                                 }
                                             });
-                                        }
-                                        else if(2 == productDetail.getStatus()) {
+                                        } else if (2 == productDetail.getStatus()) {
                                             //已揭晓
                                             announcedDetail.setVisibility(View.VISIBLE);
                                             CircleImageView accountLogo = (CircleImageView)
@@ -808,15 +770,15 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                                     productDetail.getAwardingUserHead(), R.mipmap.defluat_logo
                                             );
                                             TextView winnerName = (TextView) announcedDetail.findViewById(R.id.winnerName);
-                                            winnerName.setText("中奖者："+productDetail.getAwardingUserName());
+                                            winnerName.setText("中奖者：" + productDetail.getAwardingUserName());
                                             TextView winnerIp = (TextView) announcedDetail.findViewById(R.id.winnerIp);
-                                            winnerIp.setText(productDetail.getAwardingUserCityName()+"："+productDetail.getAwardingUserIp());
+                                            winnerIp.setText(productDetail.getAwardingUserCityName() + "：" + productDetail.getAwardingUserIp());
                                             TextView winnerId = (TextView) announcedDetail.findViewById(R.id.winnerId);
-                                            winnerId.setText("用户ID："+productDetail.getAwardingUserId());
+                                            winnerId.setText("用户ID：" + productDetail.getAwardingUserId());
                                             TextView partnerUser = (TextView) announcedDetail.findViewById(R.id.partnerUser);
-                                            partnerUser.setText("本期参与："+productDetail.getAwardingUserBuyCount()+"次");
+                                            partnerUser.setText("本期参与：" + productDetail.getAwardingUserBuyCount() + "次");
                                             TextView partnerTime = (TextView) announcedDetail.findViewById(R.id.partnerTime);
-                                            partnerTime.setText("揭晓时间："+DateUtils.transformDataformat6(productDetail.getAwardingDate()));
+                                            partnerTime.setText("揭晓时间：" + DateUtils.transformDataformat6(productDetail.getAwardingDate()));
                                             TextView luckyNo = (TextView) announcedDetail.findViewById(R.id.luckyNo);
                                             luckyNo.setText("幸运号：" + productDetail.getLuckyNumber());
                                             TextView calculationDetail = (TextView)
@@ -837,7 +799,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                             bottomOperatorL.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    ActivityUtils.getInstance ( ).showActivity ( ProductDetailActivity.this, LoginActivity.class );
+                                                    ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, LoginActivity.class);
                                                 }
                                             });
                                         }
@@ -892,14 +854,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     }
 
     @OnClick(R.id.calculationDetail)
-    void calculationDetail(){
-        Bundle bundle=new Bundle();
-        bundle.putLong("issueId",productDetail.getIssueId());
+    void calculationDetail() {
+        Bundle bundle = new Bundle();
+        bundle.putLong("issueId", productDetail.getIssueId());
         ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, CountResultActivity.class, bundle);
     }
+
     @OnClick(R.id.titleLeftImage)
-    void doBack()
-    {
+    void doBack() {
         closeSelf(ProductDetailActivity.this);
     }
 
@@ -912,15 +874,11 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     }
 
     @OnClick(R.id.sdL)
-    void doShareOrder()
-    {
-        if(null==productDetail)
-        {
+    void doShareOrder() {
+        if (null == productDetail) {
             ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "产品数据出错，请重试");
-        }
-        else
-        {
-            Bundle bundle = new Bundle (  );
+        } else {
+            Bundle bundle = new Bundle();
             //产品晒单
             bundle.putInt("type", 2);
             bundle.putLong("goodsId", productDetail.getPid());
@@ -928,9 +886,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         }
     }
 
-    private void getCommentLog()
-    {
-        if( false == ProductDetailActivity.this.canConnect() ){
+    private void getCommentLog() {
+        if (false == ProductDetailActivity.this.canConnect()) {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -944,16 +901,13 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         Map<String, Object> maps = new HashMap<String, Object>();
         //全部
         maps.put("issueId", issueId);
-        if ( OperateTypeEnum.REFRESH == operateType )
-        {// 下拉
+        if (OperateTypeEnum.REFRESH == operateType) {// 下拉
             maps.put("lastId", 0);
-        } else if (OperateTypeEnum.LOADMORE == operateType)
-        {// 上拉
-            if ( partnerHistorys != null && partnerHistorys.size() > 0)
-            {
+        } else if (OperateTypeEnum.LOADMORE == operateType) {// 上拉
+            if (partnerHistorys != null && partnerHistorys.size() > 0) {
                 PartnerHistorysModel partnerHistory = partnerHistorys.get(partnerHistorys.size() - 1);
                 maps.put("lastId", String.valueOf(partnerHistory.getDate()));
-            } else{
+            } else {
                 maps.put("lastId", 0);
             }
         }
@@ -1022,7 +976,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     /**
      * 初始化加载数据
      */
-    protected void firstGetData(){
+    protected void firstGetData() {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -1033,8 +987,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         }, 1000);
     }
 
-    private void initBottomAnnounced()
-    {
+    private void initBottomAnnounced() {
         productDetailBottomAnnounced.inflate();
 
         TextView bottomPeriodsBtn = (TextView) this.findViewById(R.id.bottomPeriodsBtn);
@@ -1049,8 +1002,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         });
     }
 
-    private void initBottomOther()
-    {
+    private void initBottomOther() {
         //非揭晓底部
         productDetailBottomOther.inflate();
         //左边
@@ -1058,26 +1010,20 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         bottomOtherBtnLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(0==product.getRemainAmount())
-                {
+                if (0 == product.getRemainAmount()) {
                     ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "该期商品已售完");
-                }
-                else
-                {
+                } else {
                     //立即参与
                     progress = new ProgressPopupWindow(ProductDetailActivity.this, ProductDetailActivity.this, wManager);
                     progress.showProgress("正在加入清单");
                     progress.showAtLocation(titleLayoutL,
                             Gravity.CENTER, 0, 0
                     );
-                    if(product.getDefaultAmount()>product.getRemainAmount())
-                    {
+                    if (product.getDefaultAmount() > product.getRemainAmount()) {
                         ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "该期商品仅剩" + product.getRemainAmount());
                         product.setDefaultAmount(product.getRemainAmount());
                         CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler, 1);
-                    }
-                    else
-                    {
+                    } else {
                         CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler, 1);
                     }
                 }
@@ -1089,26 +1035,21 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         bottomOtherBtnCenter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(0==product.getRemainAmount())
-                {
+                if (0 == product.getRemainAmount()) {
                     ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "该期商品已售完");
-                }
-                else {
+                } else {
                     //加入清单
                     progress = new ProgressPopupWindow(ProductDetailActivity.this, ProductDetailActivity.this, wManager);
                     progress.showProgress("正在加入清单");
                     progress.showAtLocation(titleLayoutL,
                             Gravity.CENTER, 0, 0
                     );
-                    if(product.getDefaultAmount()>product.getRemainAmount())
-                    {
-                        ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "该期商品仅剩"+product.getRemainAmount());
+                    if (product.getDefaultAmount() > product.getRemainAmount()) {
+                        ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "该期商品仅剩" + product.getRemainAmount());
                         product.setDefaultAmount(product.getRemainAmount());
-                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler,2);
-                    }
-                    else
-                    {
-                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler,2);
+                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler, 2);
+                    } else {
+                        CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, ProductDetailActivity.this, mHandler, 2);
                     }
 
                 }
@@ -1130,25 +1071,21 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         //数量
         bottomOtherCartAmount = (TextView) this.findViewById(R.id.bottomOtherCartAmount);
         CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
-        if(null!=cartCountIt)
-        {
-                bottomOtherCartAmount.setText(String.valueOf(cartCountIt.getCount()));
-        }
-        else
-        {
-                bottomOtherCartAmount.setText("0");
+        if (null != cartCountIt) {
+            bottomOtherCartAmount.setText(String.valueOf(cartCountIt.getCount()));
+        } else {
+            bottomOtherCartAmount.setText("0");
         }
         //设置宽度
         ViewGroup.LayoutParams pl = bottomOtherBtnLeft.getLayoutParams();
-        pl.width = wManager.getDefaultDisplay().getWidth()/3;
+        pl.width = wManager.getDefaultDisplay().getWidth() / 3;
         bottomOtherBtnLeft.setLayoutParams(pl);
         ViewGroup.LayoutParams pc = bottomOtherBtnCenter.getLayoutParams();
-        pc.width = wManager.getDefaultDisplay().getWidth()/3;
+        pc.width = wManager.getDefaultDisplay().getWidth() / 3;
         bottomOtherBtnCenter.setLayoutParams(pc);
     }
 
-    private void initTitle()
-    {
+    private void initTitle() {
         //背景色
         Drawable bgDraw = resources.getDrawable(R.drawable.account_bg_bottom);
         SystemTools.loadBackground(titleLayoutL, bgDraw);
@@ -1159,18 +1096,17 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         titleText.setText("奖品详情");
     }
 
-    private void initSwitchImg()
-    {
-    if (bundle.getInt("tip")==1) {
-        imgs = product.getImgs();
-    }else {
-        imgs=newopenlist.getImgs();
-    }
+    private void initSwitchImg() {
+        if (bundle.getInt("tip") == 1) {
+            imgs = product.getImgs();
+        } else {
+            imgs = newopenlist.getImgs();
+        }
         initDots();
         //通过适配器引入图片
         productDetailViewPager.setAdapter(new LoadSwitchImgAdapter(imgs, ProductDetailActivity.this));
-        int centerValue=Integer.MAX_VALUE/2;
-        int value=centerValue%imgs.size();
+        int centerValue = Integer.MAX_VALUE / 2;
+        int value = centerValue % imgs.size();
         productDetailViewPager.setCurrentItem(centerValue - value);
         initListener();
         //更新文本内容
@@ -1207,8 +1143,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     /**
      * 更新文本信息
      */
-    private void updateTextAndDot(){
-        int currentPage=productDetailViewPager.getCurrentItem()%imgs.size();
+    private void updateTextAndDot() {
+        int currentPage = productDetailViewPager.getCurrentItem() % imgs.size();
 
         //改变dot
         for (int i = 0; i < productDetaildot.getChildCount(); i++) {
@@ -1217,13 +1153,12 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     }
 
-    private void initDots()
-    {
+    private void initDots() {
         for (int i = 0; i < imgs.size(); i++) {
-            View view=new View(ProductDetailActivity.this);
-            LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(8,8);
-            if(i!=0){
-                params.leftMargin=5;
+            View view = new View(ProductDetailActivity.this);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(8, 8);
+            if (i != 0) {
+                params.leftMargin = 5;
             }
 
             view.setLayoutParams(params);
@@ -1237,16 +1172,15 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         super.onDestroy();
         VolleyUtil.cancelAllRequest();
         ButterKnife.unbind(this);
-        if ( null != tc ) {
-            tc.Stop ( );
+        if (null != tc) {
+            tc.Stop();
         }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
-                && event.getAction() == KeyEvent.ACTION_DOWN)
-        {
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
             //关闭
             this.closeSelf(ProductDetailActivity.this);
         }
@@ -1254,20 +1188,18 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     }
 
     @OnClick(R.id.historys)
-   void tohistorys (){
-        try
-        {
-            Bundle bundle = new Bundle ( );
-            bundle.putLong("goodsId",  productDetail.getPid());
-            ActivityUtils.getInstance ().showActivity ( ProductDetailActivity.this, HistorysActivity.class,bundle);
-        }
-        catch (NullPointerException e)
-        {
+    void tohistorys() {
+        try {
+            Bundle bundle = new Bundle();
+            bundle.putLong("goodsId", productDetail.getPid());
+            ActivityUtils.getInstance().showActivity(ProductDetailActivity.this, HistorysActivity.class, bundle);
+        } catch (NullPointerException e) {
 
         }
 
 
     }
+
     @Override
     public void onClick(View v) {
 
@@ -1276,16 +1208,13 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     @Override
     public boolean handleMessage(Message msg) {
 
-        switch (msg.what)
-        {
-            case Contant.CART_AMOUNT:
-            {
+        switch (msg.what) {
+            case Contant.CART_AMOUNT: {
                 long amount = (long) msg.obj;
                 bottomOtherCartAmount.setText(String.valueOf(amount));
             }
             break;
-            case 0x99990001:
-            {
+            case 0x99990001: {
                 closeSelf(ProductDetailActivity.this);
             }
             break;

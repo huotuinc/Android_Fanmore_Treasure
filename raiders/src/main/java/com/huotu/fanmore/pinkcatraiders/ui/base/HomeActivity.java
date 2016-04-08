@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,9 +31,7 @@ import com.huotu.fanmore.pinkcatraiders.adapter.TotalGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
-
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
-import com.huotu.fanmore.pinkcatraiders.model.AddressOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.AppBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BalanceOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseBalanceModel;
@@ -41,13 +40,10 @@ import com.huotu.fanmore.pinkcatraiders.model.CarouselModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
-
-import com.huotu.fanmore.pinkcatraiders.model.MyAddressListModel;
-import com.huotu.fanmore.pinkcatraiders.model.OutputUrlModel;
-
 import com.huotu.fanmore.pinkcatraiders.model.LocalCartOutputModel;
-
+import com.huotu.fanmore.pinkcatraiders.model.OutputUrlModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductDetailsOutputModel;
+import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.ScanRedpackageModel;
 import com.huotu.fanmore.pinkcatraiders.model.ShareModel;
 import com.huotu.fanmore.pinkcatraiders.model.ShareOutputModel;
@@ -56,9 +52,6 @@ import com.huotu.fanmore.pinkcatraiders.ui.assistant.MsgActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.SearchActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
-
-import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
-
 import com.huotu.fanmore.pinkcatraiders.ui.mall.MallHomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.PayOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.product.ProductDetailActivity;
@@ -86,7 +79,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.BrokenBarrierException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -116,9 +108,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     WindowManager wManager;
 
     public
-    AssetManager  am;
+    AssetManager am;
 
-    public MorePopWin          morePopWin;
+    public MorePopWin morePopWin;
 
     public ProgressPopupWindow progress;
 
@@ -129,94 +121,94 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     private SharePopupWindow share;
 
-    public  FuncPopWin       funcPopWin;
+    public FuncPopWin funcPopWin;
     public
     FunPopWin1 funcPopWin1;
 
     //title
-    @Bind ( R.id.titleLayoutL )
+    @Bind(R.id.titleLayoutL)
     RelativeLayout titleLayoutL;
 
-    @Bind ( R.id.titleLeftImage )
-    ImageView      titleLeftImage;
+    @Bind(R.id.titleLeftImage)
+    ImageView titleLeftImage;
 
-    @Bind ( R.id.titleRightImage )
-    ImageView      titleRightImage;
+    @Bind(R.id.titleRightImage)
+    ImageView titleRightImage;
 
-    @Bind ( R.id.stubTitleText )
-    ViewStub       stubTitleText;
+    @Bind(R.id.stubTitleText)
+    ViewStub stubTitleText;
 
-    @Bind ( R.id.stubSearchBar )
-    ViewStub       stubSearchBar;
+    @Bind(R.id.stubSearchBar)
+    ViewStub stubSearchBar;
 
     //bottom
-    @Bind ( R.id.onBuyL )
+    @Bind(R.id.onBuyL)
     RelativeLayout onBuyL;
 
-    @Bind ( R.id.newestL )
+    @Bind(R.id.newestL)
     RelativeLayout newestL;
 
-    @Bind ( R.id.listL )
+    @Bind(R.id.listL)
     RelativeLayout listL;
-    @Bind ( R.id.mallL )
+    @Bind(R.id.mallL)
     RelativeLayout mallL;
 
-    @Bind ( R.id.profileL )
+    @Bind(R.id.profileL)
     RelativeLayout profileL;
 
-    @Bind ( R.id.oneBuy )
-    ImageView      oneBuy;
+    @Bind(R.id.oneBuy)
+    ImageView oneBuy;
 
-    @Bind ( R.id.obBuyLabel )
-    TextView       obBuyLabel;
+    @Bind(R.id.obBuyLabel)
+    TextView obBuyLabel;
 
-    @Bind ( R.id.newest )
-    ImageView      newest;
+    @Bind(R.id.newest)
+    ImageView newest;
 
-    @Bind ( R.id.newestLabel )
-    TextView       newestLabel;
+    @Bind(R.id.newestLabel)
+    TextView newestLabel;
 
-    @Bind ( R.id.list )
-    ImageView      list;
+    @Bind(R.id.list)
+    ImageView list;
 
-    @Bind ( R.id.listLabel )
-    TextView       listLabel;
+    @Bind(R.id.listLabel)
+    TextView listLabel;
 
-    @Bind ( R.id.mall )
-    ImageView      mall;
+    @Bind(R.id.mall)
+    ImageView mall;
 
-    @Bind ( R.id.mallLabel )
-    TextView       mallLabel;
+    @Bind(R.id.mallLabel)
+    TextView mallLabel;
 
-    @Bind ( R.id.profile )
-    ImageView      profile;
+    @Bind(R.id.profile)
+    ImageView profile;
 
-    @Bind ( R.id.profileLabel )
-    TextView       profileLabel;
+    @Bind(R.id.profileLabel)
+    TextView profileLabel;
 
-    @Bind ( R.id.homeBottom )
-    LinearLayout   homeBottom;
+    @Bind(R.id.homeBottom)
+    LinearLayout homeBottom;
 
     //加载首页产品列表适配器
     //人气
     public PopGridAdapter popAdapter;
 
-    public List< ProductModel > popProducts;
+    public List<ProductModel> popProducts;
 
     //最新
     public NewestGridAdapter newestAdapter;
 
-    public List< ProductModel > newestProducts;
+    public List<ProductModel> newestProducts;
 
     //进度
     public ProgressGridAdapter progressAdapter;
 
-    public List< ProductModel > progressProducts;
+    public List<ProductModel> progressProducts;
 
     //总需
     public TotalGridAdapter totalAdapter;
 
-    public List< ProductModel > totalProducts;
+    public List<ProductModel> totalProducts;
 
     public NoticePopWindow noticePopWin;
     public SharePopupWindow sharePopupWindow;
@@ -230,53 +222,50 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     //购物车删除ID列表
     public double prices = 0;
     public int payNum = 0;
-    public long cartAmount=0;
+    public long cartAmount = 0;
 
     private MyBroadcastReceiver myBroadcastReceiver;
 
     @Override
-    protected
-    void onResume ( ) {
+    protected void onResume() {
 
-        super.onResume ( );
+        super.onResume();
     }
 
     @Override
-    protected
-    void onCreate ( Bundle savedInstanceState ) {
+    protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.ri_home);
         ButterKnife.bind(this);
-        application = ( BaseApplication ) this.getApplication ( );
+        application = (BaseApplication) this.getApplication();
         application.mFragManager = FragManager.getIns(this, R.id.fragment_container);
         resources = this.getResources();
-        mHandler = new Handler ( this );
+        mHandler = new Handler(this);
         myBroadcastReceiver = new MyBroadcastReceiver(HomeActivity.this, this, MyBroadcastReceiver.JUMP_CART);
-        sharePopupWindow= new SharePopupWindow(HomeActivity.this,HomeActivity.this,application);
+        sharePopupWindow = new SharePopupWindow(HomeActivity.this, HomeActivity.this, application);
         //设置沉浸模式
         setImmerseLayout(this.findViewById(R.id.titleLayoutL));
-        wManager = this.getWindowManager ( );
-        funcPopWin = new FuncPopWin ( HomeActivity.this, HomeActivity.this, wManager, mHandler  );
-        funcPopWin1 = new FunPopWin1 ( HomeActivity.this, HomeActivity.this, wManager, mHandler );
-        am = this.getAssets ( );
+        wManager = this.getWindowManager();
+        funcPopWin = new FuncPopWin(HomeActivity.this, HomeActivity.this, wManager, mHandler);
+        funcPopWin1 = new FunPopWin1(HomeActivity.this, HomeActivity.this, wManager, mHandler);
+        am = this.getAssets();
         mHandler.sendEmptyMessage(0x11112222);
         //初始化title面板
         initTitle();
-        application.mFragManager.setCurrentFrag ( FragManager.FragType.HOME );
+        application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
         initView();
     }
 
-    private
-    void initTitle ( ) {
+    private void initTitle() {
         //背景色
-        Drawable bgDraw = resources.getDrawable ( R.color.title_bg );
+        Drawable bgDraw = resources.getDrawable(R.color.title_bg);
         SystemTools.loadBackground(titleLayoutL, bgDraw);
-        Drawable leftDraw = resources.getDrawable ( R.mipmap.title_search );
-        SystemTools.loadBackground(titleLeftImage, leftDraw );
+        Drawable leftDraw = resources.getDrawable(R.mipmap.title_search);
+        SystemTools.loadBackground(titleLeftImage, leftDraw);
         //消息模式
         titleRightImage.setTag(0);
-        Drawable rightDraw = resources.getDrawable ( R.mipmap.title_msg );
+        Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
         SystemTools.loadBackground(titleRightImage, rightDraw);
         stubTitleText.inflate();
         TextView titleText = (TextView) this.findViewById(R.id.titleText);
@@ -284,36 +273,27 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         titleText.setText("奇兵夺宝");
     }
 
-    @OnClick (R.id.titleLeftImage)
-    void doSetting()
-    {
-        ActivityUtils.getInstance ( ).showActivity (
+    @OnClick(R.id.titleLeftImage)
+    void doSetting() {
+        ActivityUtils.getInstance().showActivity(
                 HomeActivity.this,
-                SearchActivity.class );
+                SearchActivity.class);
     }
 
-    @OnClick (R.id.titleRightImage)
-    void showMsg()
-    {
-        int tag = ( int ) titleRightImage.getTag ();
-        if(0 == tag)
-        {
-            if(application.isLogin())
-            {
-                ActivityUtils.getInstance ( ).showActivity ( HomeActivity.this, MsgActivity.class );
+    @OnClick(R.id.titleRightImage)
+    void showMsg() {
+        int tag = (int) titleRightImage.getTag();
+        if (0 == tag) {
+            if (application.isLogin()) {
+                ActivityUtils.getInstance().showActivity(HomeActivity.this, MsgActivity.class);
+            } else {
+                ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class);
             }
-            else
-            {
-                ActivityUtils.getInstance ( ).showActivity ( HomeActivity.this, LoginActivity.class );
-            }
-        }
-        else if(1 == tag)
-        {
+        } else if (1 == tag) {
             //切换编辑模式
             //隐藏
-            if(0 == label)
-            {
-                SystemTools.loadBackground ( titleRightImage, resources.getDrawable ( R.mipmap.title_cancel ) );
+            if (0 == label) {
+                SystemTools.loadBackground(titleRightImage, resources.getDrawable(R.mipmap.title_cancel));
                 label = 1;
                 //显示清单操作弹出框
                 funcPopWin1.dismissView();
@@ -323,10 +303,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 Bundle bundle = new Bundle();
                 bundle.putInt("type", 1);
                 MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
-            }
-            else if(1 == label)
-            {
-                SystemTools.loadBackground ( titleRightImage, resources.getDrawable ( R.mipmap.title_edit ) );
+            } else if (1 == label) {
+                SystemTools.loadBackground(titleRightImage, resources.getDrawable(R.mipmap.title_edit));
                 label = 0;
                 funcPopWin.dismissView();
                 funcPopWin1.showLayout();
@@ -345,16 +323,13 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     }
 
 
-
     @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState)
-    {
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    private void initTab()
-    {
+    private void initTab() {
         Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_press);
         SystemTools.loadBackground(oneBuy, oneBuyDraw);
         obBuyLabel.setTextColor(resources.getColor(R.color.title_bg));
@@ -378,18 +353,14 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         super.onDestroy();
         ButterKnife.unbind(this);
         VolleyUtil.cancelAllRequest();
-        if( null != myBroadcastReceiver)
-        {
+        if (null != myBroadcastReceiver) {
             myBroadcastReceiver.unregisterReceiver();
         }
     }
 
-    public void onTabClicked(View view)
-    {
-        switch (view.getId())
-        {
-            case R.id.onBuyL:
-            {
+    public void onTabClicked(View view) {
+        switch (view.getId()) {
+            case R.id.onBuyL: {
                 //设置选中状态
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_press);
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
@@ -418,18 +389,17 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 String tag = Contant.TAG_1;
                 //加载具体的页面
                 Message msg = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
-                mHandler.sendMessage(msg );
+                mHandler.sendMessage(msg);
             }
             break;
-            case R.id.newestL:
-            {
+            case R.id.newestL: {
                 //设置选中状态
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
                 obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
                 //标题栏右图标
                 //消息模式
-                titleRightImage.setTag ( 0 );
+                titleRightImage.setTag(0);
                 Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
                 SystemTools.loadBackground(titleRightImage, rightDraw);
                 //重置其他
@@ -454,15 +424,14 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 mHandler.sendMessage(msg);
             }
             break;
-            case R.id.listL:
-            {
+            case R.id.listL: {
                 //设置选中状态
-                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal );
+                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
                 obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
                 //标题栏右图标
                 //编辑模式
-                titleRightImage.setTag ( 1 );
+                titleRightImage.setTag(1);
                 Drawable rightDraw = resources.getDrawable(R.mipmap.title_edit);
                 SystemTools.loadBackground(titleRightImage, rightDraw);
                 //重置其他
@@ -493,15 +462,14 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
             }
             break;
-            case R.id.mallL:
-            {
+            case R.id.mallL: {
                 //设置选中状态
-                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal );
+                Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);
                 obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
                 //标题栏右图标
                 //编辑模式
-                titleRightImage.setTag ( 0 );
+                titleRightImage.setTag(0);
                 Drawable rightDraw = resources.getDrawable(R.mipmap.title_msg);
                 SystemTools.loadBackground(titleRightImage, rightDraw);
                 //重置其他
@@ -528,14 +496,13 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 mHandler.sendMessage(msg);
             }
             break;
-            case R.id.profileL:
-            {
+            case R.id.profileL: {
                 //设置选中状态
-                if (application.isLogin()==false){
+                if (application.isLogin() == false) {
                     Intent intent = new Intent();
                     intent.setClass(HomeActivity.this, LoginActivity.class);
                     startActivity(intent);
-                }else {
+                } else {
                     Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_normal);
                     SystemTools.loadBackground(oneBuy, oneBuyDraw);
                     obBuyLabel.setTextColor(resources.getColor(R.color.text_black));
@@ -564,7 +531,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     //加载具体的页面
                     Message msg = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
                     mHandler.sendMessage(msg);
-             }
+                }
             }
             break;
             default:
@@ -577,16 +544,13 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
         // 2秒以内按两次推出程序
         if (keyCode == KeyEvent.KEYCODE_BACK
-                && event.getAction() == KeyEvent.ACTION_DOWN)
-        {
-            if ((System.currentTimeMillis() - exitTime) > 2000)
-            {
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
                 ToastUtils.showLongToast(getApplicationContext(), "再按一次退出程序");
                 exitTime = System.currentTimeMillis();
                 // 切出菜单界面
                 // layDrag.openDrawer(Gravity.LEFT);
-            } else
-            {
+            } else {
                 closeSelf(HomeActivity.this);
                 int currentVersion = android.os.Build.VERSION.SDK_INT;
                 if (currentVersion > android.os.Build.VERSION_CODES.ECLAIR_MR1) {
@@ -622,8 +586,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 } else if (tag.equals(Contant.TAG_4)) {
                     application.mFragManager.setCurrentFrag(FragManager.FragType.PROFILE);
                 } else if (tag.equals(Contant.TAG_5)) {
-                    progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
-                    progress.showProgress ( "正在获取商城数据" );
+                    progress = new ProgressPopupWindow(HomeActivity.this, HomeActivity.this, wManager);
+                    progress.showProgress("正在获取商城数据");
                     progress.showAtLocation(titleLayoutL,
                             Gravity.CENTER, 0, 0
                     );
@@ -635,85 +599,81 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 //                        ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class);
 //                    } else {
 
-                        String url = Contant.REQUEST_URL + Contant.GETMALLURL;
-                        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
-                        //中文字符特殊处理
-                        //1 拼装参数
-                        Map<String, Object> maps = new HashMap<String, Object>();
-                        String suffix = params.obtainGetParam(maps);
-                        url = url + suffix;
-                        HttpUtils httpUtils = new HttpUtils();
-                        httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                progress.dismissView();
-                                if (HomeActivity.this.isFinishing()) {
-                                    return;
-                                }
-                                JSONUtil<OutputUrlModel> jsonUtil = new JSONUtil<OutputUrlModel>();
-                                OutputUrlModel getmallurl = new OutputUrlModel();
-                                getmallurl = jsonUtil.toBean(response.toString(), getmallurl);
-                                if (1 == getmallurl.getResultCode() && getmallurl.getResultData() != null) {
+                    String url = Contant.REQUEST_URL + Contant.GETMALLURL;
+                    AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
+                    //中文字符特殊处理
+                    //1 拼装参数
+                    Map<String, Object> maps = new HashMap<String, Object>();
+                    String suffix = params.obtainGetParam(maps);
+                    url = url + suffix;
+                    HttpUtils httpUtils = new HttpUtils();
+                    httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            progress.dismissView();
+                            if (HomeActivity.this.isFinishing()) {
+                                return;
+                            }
+                            JSONUtil<OutputUrlModel> jsonUtil = new JSONUtil<OutputUrlModel>();
+                            OutputUrlModel getmallurl = new OutputUrlModel();
+                            getmallurl = jsonUtil.toBean(response.toString(), getmallurl);
+                            if (1 == getmallurl.getResultCode() && getmallurl.getResultData() != null) {
 
-                                    try {
-                                        String loginUrl = getmallurl.getResultData().getLoginUrl();
-                                        String bottomUrl = getmallurl.getResultData().getBottomNavUrl();
-                                        String orderUrl = getmallurl.getResultData().getOrderRequestUrl();
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("url", loginUrl);
-                                        bundle.putString("bottomurl", bottomUrl);
-                                        bundle.putString("orderurl", orderUrl);
-                                        ActivityUtils.getInstance().showActivity(HomeActivity.this, MallHomeActivity.class, bundle);
-                                    } catch (Exception e) {
-                                        //未获取该用户信息
-                                        noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "用户数据存在非法字符");
-                                        noticePop.showNotice();
-                                        noticePop.showAtLocation(titleLayoutL,
-                                                Gravity.CENTER, 0, 0
-                                        );
-
-                                    }
-                                } else {
+                                try {
+                                    String loginUrl = getmallurl.getResultData().getLoginUrl();
+                                    String bottomUrl = getmallurl.getResultData().getBottomNavUrl();
+                                    String orderUrl = getmallurl.getResultData().getOrderRequestUrl();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("url", loginUrl);
+                                    bundle.putString("bottomurl", bottomUrl);
+                                    bundle.putString("orderurl", orderUrl);
+                                    ActivityUtils.getInstance().showActivity(HomeActivity.this, MallHomeActivity.class, bundle);
+                                } catch (Exception e) {
                                     //未获取该用户信息
-                                    noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "未获取该用户信息");
+                                    noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "用户数据存在非法字符");
                                     noticePop.showNotice();
                                     noticePop.showAtLocation(titleLayoutL,
                                             Gravity.CENTER, 0, 0
                                     );
+
                                 }
-
-                            }
-
-
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                if(null!=progress)
-                                {
-                                    progress.dismissView();
-                                }
-                                //初始化失败
-                                //异常处理，自动切换成无数据
-                                noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "服务器未响应");
+                            } else {
+                                //未获取该用户信息
+                                noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "未获取该用户信息");
                                 noticePop.showNotice();
                                 noticePop.showAtLocation(titleLayoutL,
                                         Gravity.CENTER, 0, 0
                                 );
                             }
-                        });
+
+                        }
 
 
-                    }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (null != progress) {
+                                progress.dismissView();
+                            }
+                            //初始化失败
+                            //异常处理，自动切换成无数据
+                            noticePop = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, "服务器未响应");
+                            noticePop.showNotice();
+                            noticePop.showAtLocation(titleLayoutL,
+                                    Gravity.CENTER, 0, 0
+                            );
+                        }
+                    });
 
+
+                }
 
 
             }
             break;
-            case Contant.CAROUSE_URL:
-            {
-                CarouselModel model = ( CarouselModel ) msg.obj;
-                if(model.getGoodsId()>0)
-                {
+            case Contant.CAROUSE_URL: {
+                CarouselModel model = (CarouselModel) msg.obj;
+                if (model.getGoodsId() > 0) {
                     //直接跳转到goods详情
                     final ProductModel productModel = new ProductModel();
                     productModel.setPid(model.getGoodsId());
@@ -723,6 +683,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     //商品id
                     maps.put("goodsId", productModel.getPid());
                     String suffix = params.obtainGetParam(maps);
+                    Log.i("sun", "suffix: " + suffix);
                     url = url + suffix;
                     HttpUtils httpUtils = new HttpUtils();
                     httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
@@ -735,10 +696,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                             JSONUtil<ProductDetailsOutputModel>();
                                     ProductDetailsOutputModel productDetailsOutput = new
                                             ProductDetailsOutputModel();
-                                    productDetailsOutput = jsonUtil.toBean(
-                                            response.toString(),
-                                            productDetailsOutput
-                                    );
+                                    productDetailsOutput = jsonUtil.toBean(response.toString(), productDetailsOutput);
                                     if (null != productDetailsOutput && null != productDetailsOutput
                                             .getResultData() && (
                                             1 == productDetailsOutput.getResultCode(
@@ -774,197 +732,159 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                 }
                             }
                     );
-                }
-                else
-                {
-                    if(null==model.getLink() || model.getLink().isEmpty())
-                    {
+                } else {
+                    if (null == model.getLink() || model.getLink().isEmpty()) {
                         ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "商品链接无效");
-                    }
-                    else {
-                        Bundle bundle = new Bundle ( );
-                        bundle.putString ( "title", "详情信息" );
-                        bundle.putString ( "link", model.getLink() );
-                        ActivityUtils.getInstance ().showActivity ( HomeActivity.this, WebExhibitionActivity.class, bundle );
+                    } else {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("title", "详情信息");
+                        bundle.putString("link", model.getLink());
+                        ActivityUtils.getInstance().showActivity(HomeActivity.this, WebExhibitionActivity.class, bundle);
                     }
                 }
             }
             break;
-            case Contant.CART_SELECT:
-            {
-                if(0==msg.arg1)
-                {
+            case Contant.CART_SELECT: {
+                if (0 == msg.arg1) {
                     //结算模式
                     prices = 0;
-                    cartAmount=0;
+                    cartAmount = 0;
                     //规整购物车数量
                     CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
                     payNum = lists.size();
-                    while (it.hasNext())
-                    {
+                    while (it.hasNext()) {
 
                         ListModel list = it.next();
-                        cartAmount+=(list.getUserBuyAmount()>list.getRemainAmount()?list.getRemainAmount():list.getUserBuyAmount());
+                        cartAmount += (list.getUserBuyAmount() > list.getRemainAmount() ? list.getRemainAmount() : list.getUserBuyAmount());
                         double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        double total = price*list.getUserBuyAmount();
-                        prices+=total;
+                        double total = price * list.getUserBuyAmount();
+                        prices += total;
                     }
 
                     funcPopWin1.setMsg(String.valueOf(payNum), String.valueOf(prices));
                     funcPopWin1.setData(lists);
-                    if(null==cartCountIt)
-                    {
+                    if (null == cartCountIt) {
                         CartCountModel cartCount = new CartCountModel();
                         cartCount.setId(0l);
                         cartCount.setCount(0);
                         CartCountModel.save(cartCount);
-                    }
-                    else
-                    {
+                    } else {
 
                         cartCountIt.setCount(cartAmount);
                         CartCountModel.save(cartCountIt);
                     }
-                }
-                else if(2==msg.arg1)
-                {
+                } else if (2 == msg.arg1) {
                     //结算模式 加
-                    prices=0;
-                    long addCartAmount= 0;
+                    prices = 0;
+                    long addCartAmount = 0;
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
                     payNum = lists.size();
-                    while (it.hasNext())
-                    {
+                    while (it.hasNext()) {
                         ListModel list = it.next();
                         double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        double total = price*list.getUserBuyAmount();
+                        double total = price * list.getUserBuyAmount();
                         addCartAmount += list.getUserBuyAmount();
-                        prices+=total;
+                        prices += total;
                     }
 
                     funcPopWin1.setMsg(String.valueOf(payNum), String.valueOf(prices));
                     funcPopWin1.setData(lists);
                     //修改购物车数量
                     CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
-                    if(null==cartCountIt)
-                    {
+                    if (null == cartCountIt) {
                         CartCountModel cartCount = new CartCountModel();
                         cartCount.setId(0l);
                         cartCount.setCount(addCartAmount);
                         CartCountModel.save(cartCount);
-                    }
-                    else
-                    {
+                    } else {
                         cartCountIt.setCount(addCartAmount);
                         CartCountModel.save(cartCountIt);
                     }
-                }
-                else if(3==msg.arg1)
-                {
+                } else if (3 == msg.arg1) {
                     //结算模式 减
-                    prices=0;
+                    prices = 0;
                     long subCartAmount = 0;
                     List<ListModel> lists = (List<ListModel>) msg.obj;
                     Iterator<ListModel> it = lists.iterator();
                     payNum = lists.size();
-                    while (it.hasNext())
-                    {
+                    while (it.hasNext()) {
                         ListModel list = it.next();
                         double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        double total = price*list.getUserBuyAmount();
+                        double total = price * list.getUserBuyAmount();
                         subCartAmount += list.getUserBuyAmount();
-                        prices+=total;
+                        prices += total;
                     }
 
                     funcPopWin1.setMsg(String.valueOf(payNum), String.valueOf(prices));
                     funcPopWin1.setData(lists);
                     //修改购物车数量
                     CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
-                    if(null==cartCountIt)
-                    {
+                    if (null == cartCountIt) {
                         CartCountModel cartCount = new CartCountModel();
                         cartCount.setId(0l);
                         cartCount.setCount(subCartAmount);
                         CartCountModel.save(cartCount);
-                    }
-                    else
-                    {
+                    } else {
                         cartCountIt.setCount(subCartAmount);
                         CartCountModel.save(cartCountIt);
                     }
-                }
-                else if(1==msg.arg1)
-                {
-                    long deleteCartAmount= 0;
+                } else if (1 == msg.arg1) {
+                    long deleteCartAmount = 0;
                     //购物车删除ID列表
                     List<Long> deleteIds = new ArrayList<Long>();
-                    int deleteAllNum =0;
+                    int deleteAllNum = 0;
                     //编辑模式
                     List<ListModel> lists = (List<ListModel>) msg.obj;
-                    for(int i=0; i<lists.size(); i++)
-                    {
-                        if(lists.get(i).isSelect())
-                        {
+                    for (int i = 0; i < lists.size(); i++) {
+                        if (lists.get(i).isSelect()) {
                             deleteAllNum++;
                             deleteIds.add(lists.get(i).getSid());
-                            deleteCartAmount+=(lists.get(i).getUserBuyAmount()>lists.get(i).getRemainAmount()?lists.get(i).getRemainAmount():lists.get(i).getUserBuyAmount());
+                            deleteCartAmount += (lists.get(i).getUserBuyAmount() > lists.get(i).getRemainAmount() ? lists.get(i).getRemainAmount() : lists.get(i).getUserBuyAmount());
                         }
                     }
-                    if(deleteIds.size()==lists.size())
-                    {
+                    if (deleteIds.size() == lists.size()) {
                         //设置全选
                         funcPopWin.setSelectAll();
-                    }
-                    else
+                    } else
 
                     {
                         //取消全选
                         funcPopWin.setUNSelectAll();
                     }
-                    funcPopWin.setMsg ( String.valueOf ( deleteAllNum ) );
+                    funcPopWin.setMsg(String.valueOf(deleteAllNum));
                     funcPopWin.setDeletes(deleteIds);
                     funcPopWin.setDeleteCartAmount(deleteCartAmount);
 
-                }
-                else if(4==msg.arg1)
-                {
+                } else if (4 == msg.arg1) {
                     //全部选
                     funcPopWin.setMsg(String.valueOf(0));
                     funcPopWin.setDeletes(null);
-                }
-                else if(5==msg.arg1)
-                {
-                    long deleteCartAmount= 0;
+                } else if (5 == msg.arg1) {
+                    long deleteCartAmount = 0;
                     List<Long> deleteIds = new ArrayList<Long>();
                     //全部选
                     List<ListModel> ls = (List<ListModel>) msg.obj;
                     funcPopWin.setMsg(String.valueOf(ls.size()));
-                    for(int i=0; i<ls.size(); i++)
-                    {
-                        deleteCartAmount+=(ls.get(i).getUserBuyAmount()>ls.get(i).getRemainAmount()?ls.get(i).getRemainAmount():ls.get(i).getUserBuyAmount());
+                    for (int i = 0; i < ls.size(); i++) {
+                        deleteCartAmount += (ls.get(i).getUserBuyAmount() > ls.get(i).getRemainAmount() ? ls.get(i).getRemainAmount() : ls.get(i).getUserBuyAmount());
                         deleteIds.add(ls.get(i).getSid());
                     }
                     funcPopWin.setDeletes(deleteIds);
                     funcPopWin.setDeleteCartAmount(deleteCartAmount);
-                }
-                else if(6==msg.arg1)
-                {
+                } else if (6 == msg.arg1) {
                     //结算后，数据清空
                     funcPopWin1.setMsg("0", "0");
                     //修改购物车数量
                     CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
-                    if(null==cartCountIt)
-                    {
+                    if (null == cartCountIt) {
                         CartCountModel cartCount = new CartCountModel();
                         cartCount.setId(0l);
                         cartCount.setCount(0);
                         CartCountModel.save(cartCount);
-                    }
-                    else
-                    {
+                    } else {
 
                         cartCountIt.setCount(0);
                         CartCountModel.save(cartCountIt);
@@ -973,33 +893,25 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
             }
             break;
-            case Contant.ADD_LIST:
-            {
-                ProductModel product = ( ProductModel ) msg.obj;
-                progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
-                progress.showProgress ( "正在添加清单" );
+            case Contant.ADD_LIST: {
+                ProductModel product = (ProductModel) msg.obj;
+                progress = new ProgressPopupWindow(HomeActivity.this, HomeActivity.this, wManager);
+                progress.showProgress("正在添加清单");
                 progress.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0
                 );
-                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, HomeActivity.this, mHandler,0);
+                CartUtils.addCartDone(product, String.valueOf(product.getIssueId()), progress, application, HomeActivity.this, mHandler, 0);
             }
             break;
-            case Contant.BILLING:
-            {
+            case Contant.BILLING: {
                 List<CartBalanceModel> list = new ArrayList<CartBalanceModel>();
                 List<ListModel> datas = (List<ListModel>) msg.obj;
-                if(0==payNum||0==prices)
-                {
+                if (0 == payNum || 0 == prices) {
                     ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "购物车为空");
-                }
-                else if(null==datas || datas.isEmpty())
-                {
+                } else if (null == datas || datas.isEmpty()) {
                     ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "购物车为空");
-                }
-                else
-                {
-                    if(!application.isLogin())
-                    {
+                } else {
+                    if (!application.isLogin()) {
                         //未登录状态
                         //跳转到登陆
                         CartDataModel cartData = CartDataModel.findById(CartDataModel.class, 1000l);
@@ -1007,12 +919,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         Bundle bundle = new Bundle();
                         bundle.putString("loginData", cartStr);
                         ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class, bundle);
-                    }
-                    else
-                    {
+                    } else {
                         Iterator<ListModel> it = datas.iterator();
-                        while (it.hasNext())
-                        {
+                        while (it.hasNext()) {
                             ListModel listModel = it.next();
                             CartBalanceModel cartBalanceModel = new CartBalanceModel();
                             cartBalanceModel.setPid(listModel.getSid());
@@ -1024,11 +933,11 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         String carts = gson.toJson(list);
                         String url = Contant.REQUEST_URL + Contant.BALANCE;
                         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
-                        Map<String, Object> maps = new HashMap<String, Object> ();
+                        Map<String, Object> maps = new HashMap<String, Object>();
                         maps.put("carts", carts);
                         Map<String, Object> param = params.obtainPostParam(maps);
-                        BalanceOutputModel base = new BalanceOutputModel ();
-                        HttpUtils<BalanceOutputModel> httpUtils = new HttpUtils<BalanceOutputModel> ();
+                        BalanceOutputModel base = new BalanceOutputModel();
+                        HttpUtils<BalanceOutputModel> httpUtils = new HttpUtils<BalanceOutputModel>();
                         httpUtils.doVolleyPost(
                                 base, url, param, new Response.Listener<BalanceOutputModel>() {
                                     @Override
@@ -1052,8 +961,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                             bundle.putSerializable("baseBalance", baseBalance);
                                             ActivityUtils.getInstance().showActivity(HomeActivity.this, PayOrderActivity.class, bundle);
                                         } else {
-                                            if(null!=progress)
-                                            {
+                                            if (null != progress) {
                                                 progress.dismissView();
                                             }
 
@@ -1087,23 +995,18 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
             }
             break;
-            case Contant.LIST_DELETE:
-            {
-                if(1==msg.arg1)
-                {
+            case Contant.LIST_DELETE: {
+                if (1 == msg.arg1) {
                     ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "未选择删除的商品");
-                }
-                else if(0==msg.arg1)
-                {
+                } else if (0 == msg.arg1) {
                     //弹出确认框
-                    if(!application.isLogin())
-                    {
-                        progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
+                    if (!application.isLogin()) {
+                        progress = new ProgressPopupWindow(HomeActivity.this, HomeActivity.this, wManager);
                         progress.showProgress("正在删除选中的商品");
                         progress.showAtLocation(titleLayoutL,
                                 Gravity.CENTER, 0, 0
                         );
-                        FuncPopWin.DeleteCart deleteCart =  (FuncPopWin.DeleteCart) msg.obj;
+                        FuncPopWin.DeleteCart deleteCart = (FuncPopWin.DeleteCart) msg.obj;
                         final List<Long> deletes = deleteCart.getDeletesAll();
                         final long deleteAmount = deleteCart.getDeleteCartAmountAll();
                         //未登录状态
@@ -1115,12 +1018,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         localCartOutput = jsonUtil.toBean(data, localCartOutput);
                         List<ListModel> lists = localCartOutput.getResultData().getLists();
                         List<ListModel> removes = new ArrayList<ListModel>();
-                        for(int j=0; j<deletes.size(); j++)
-                        {
-                            for(int i=0; i<lists.size(); i++)
-                            {
-                                if(deletes.get(j) == lists.get(i).getSid())
-                                {
+                        for (int j = 0; j < deletes.size(); j++) {
+                            for (int i = 0; i < lists.size(); i++) {
+                                if (deletes.get(j) == lists.get(i).getSid()) {
                                     removes.add(lists.get(i));
                                 }
                             }
@@ -1128,17 +1028,14 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         lists.removeAll(removes);
                         //规整购物车数量
                         CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
-                        if(null==cartCountIt)
-                        {
+                        if (null == cartCountIt) {
                             CartCountModel cartCount = new CartCountModel();
                             cartCount.setId(0l);
                             cartCount.setCount(0);
                             CartCountModel.save(cartCount);
-                        }
-                        else
-                        {
+                        } else {
 
-                            cartCountIt.setCount((cartCountIt.getCount()-deleteAmount>0)?cartCountIt.getCount()-deleteAmount:0);
+                            cartCountIt.setCount((cartCountIt.getCount() - deleteAmount > 0) ? cartCountIt.getCount() - deleteAmount : 0);
                             CartCountModel.save(cartCountIt);
                         }
                         progress.dismissView();
@@ -1153,21 +1050,18 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         Bundle bundle = new Bundle();
                         bundle.putInt("type", 1);
                         MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
-                    }
-                    else
-                    {
+                    } else {
                         //删除清单数据
-                        progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
-                        progress.showProgress ( "正在删除选中的商品" );
-                        progress.showAtLocation (titleLayoutL,
+                        progress = new ProgressPopupWindow(HomeActivity.this, HomeActivity.this, wManager);
+                        progress.showProgress("正在删除选中的商品");
+                        progress.showAtLocation(titleLayoutL,
                                 Gravity.CENTER, 0, 0
                         );
-                        FuncPopWin.DeleteCart deleteCart =  (FuncPopWin.DeleteCart) msg.obj;
+                        FuncPopWin.DeleteCart deleteCart = (FuncPopWin.DeleteCart) msg.obj;
                         final List<Long> deletes = deleteCart.getDeletesAll();
                         final long deleteAmount = deleteCart.getDeleteCartAmountAll();
                         List<DeleteModel> deleteLs = new ArrayList<DeleteModel>();
-                        for(int i=0; i<deletes.size(); i++)
-                        {
+                        for (int i = 0; i < deletes.size(); i++) {
                             DeleteModel model = new DeleteModel();
                             model.setShoppingCartId(deletes.get(i));
                             deleteLs.add(model);
@@ -1178,59 +1072,56 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         String carts = gson.toJson(deleteLs);
                         String url = Contant.REQUEST_URL + Contant.DELETE_CART;
                         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
-                        Map<String, Object> maps = new HashMap<String, Object> ();
-                        maps.put ( "shoppingCarts",  carts);
+                        Map<String, Object> maps = new HashMap<String, Object>();
+                        maps.put("shoppingCarts", carts);
                         Map<String, Object> param = params.obtainPostParam(maps);
-                        BaseModel base = new BaseModel ();
-                        HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
+                        BaseModel base = new BaseModel();
+                        HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel>();
                         httpUtils.doVolleyPost(
-                                    base, url, param, new Response.Listener<BaseModel>() {
-                                        @Override
-                                        public void onResponse(BaseModel response) {
-                                            BaseModel base = response;
-                                            if (1 == base.getResultCode()) {
+                                base, url, param, new Response.Listener<BaseModel>() {
+                                    @Override
+                                    public void onResponse(BaseModel response) {
+                                        BaseModel base = response;
+                                        if (1 == base.getResultCode()) {
 
-                                                //规整购物车数量
-                                                CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
-                                                if(null==cartCountIt)
-                                                {
-                                                    CartCountModel cartCount = new CartCountModel();
-                                                    cartCount.setId(0l);
-                                                    cartCount.setCount(0);
-                                                    CartCountModel.save(cartCount);
-                                                }
-                                                else
-                                                {
-
-                                                    cartCountIt.setCount((cartCountIt.getCount()-deleteAmount>0)?cartCountIt.getCount()-deleteAmount:0);
-                                                    CartCountModel.save(cartCountIt);
-                                                }
-                                                //全选按钮置空
-                                                funcPopWin.setUNSelectAll();
-                                                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "成功删除"+deletes.size()+"条记录");
-
-
+                                            //规整购物车数量
+                                            CartCountModel cartCountIt = CartCountModel.findById(CartCountModel.class, 0l);
+                                            if (null == cartCountIt) {
+                                                CartCountModel cartCount = new CartCountModel();
+                                                cartCount.setId(0l);
+                                                cartCount.setCount(0);
+                                                CartCountModel.save(cartCount);
                                             } else {
-                                                progress.dismissView();
-                                                //全选按钮置空
-                                                funcPopWin.setUNSelectAll();
-                                                VolleyUtil.cancelAllRequest();
-                                                //上传失败
-                                                ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除失败");
-                                            }
-                                        }
-                                    }, new Response.ErrorListener() {
 
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
+                                                cartCountIt.setCount((cartCountIt.getCount() - deleteAmount > 0) ? cartCountIt.getCount() - deleteAmount : 0);
+                                                CartCountModel.save(cartCountIt);
+                                            }
+                                            //全选按钮置空
+                                            funcPopWin.setUNSelectAll();
+                                            ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "成功删除" + deletes.size() + "条记录");
+
+
+                                        } else {
                                             progress.dismissView();
                                             //全选按钮置空
                                             funcPopWin.setUNSelectAll();
                                             VolleyUtil.cancelAllRequest();
-                                            //系统级别错误
-                                            ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "服务器未响应");
+                                            //上传失败
+                                            ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "删除失败");
                                         }
                                     }
+                                }, new Response.ErrorListener() {
+
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        progress.dismissView();
+                                        //全选按钮置空
+                                        funcPopWin.setUNSelectAll();
+                                        VolleyUtil.cancelAllRequest();
+                                        //系统级别错误
+                                        ToastUtils.showMomentToast(HomeActivity.this, HomeActivity.this, "服务器未响应");
+                                    }
+                                }
                         );
 
                         progress.dismissView();
@@ -1242,11 +1133,10 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 }
             }
             break;
-            case 0x11112222:
-            {
+            case 0x11112222: {
                 String url = Contant.REQUEST_URL + Contant.GET_REMIND_REDPACKAGE;
                 AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
-                final Map<String, Object> maps = new HashMap<String, Object> ();
+                final Map<String, Object> maps = new HashMap<String, Object>();
                 String suffix = params.obtainGetParam(maps);
                 url = url + suffix;
                 HttpUtils httpUtils = new HttpUtils();
@@ -1277,8 +1167,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 });
             }
             break;
-            case 0x33110090:
-            {
+            case 0x33110090: {
 
                 String url = Contant.REQUEST_URL + Contant.SHARE_REF_PACKETS;
                 AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
@@ -1372,8 +1261,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 });
             }
             break;
-            case 0x11112223:
-            {
+            case 0x11112223: {
                 String message = (String) msg.obj;
                 scanRedpackagePopWin = new ScanRedpackagePopWin(HomeActivity.this, HomeActivity.this, wManager, mHandler, 1, message);
                 scanRedpackagePopWin.addData(null);
@@ -1381,8 +1269,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 scanRedpackagePopWin.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
             }
             break;
-            case Contant.SCAN_REDPACKAGE:
-            {
+            case Contant.SCAN_REDPACKAGE: {
                 List<Double> redpackages = (List<Double>) msg.obj;
                 scanRedpackagePopWin = new ScanRedpackagePopWin(HomeActivity.this, HomeActivity.this, wManager, mHandler, 0, null);
                 scanRedpackagePopWin.addData(redpackages);
@@ -1402,11 +1289,10 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     @Override
     public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
-        if(type == MyBroadcastReceiver.ReceiverType.jumpCart)
-        {
+        if (type == MyBroadcastReceiver.ReceiverType.jumpCart) {
             Bundle bundle = (Bundle) msg;
             int types = bundle.getInt("type");
-            if(1==types) {
+            if (1 == types) {
                 Bundle bundle1 = new Bundle();
                 bundle1.putInt("type", 0);
                 MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle1);
@@ -1442,9 +1328,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 //加载具体的页面
                 Message message = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
                 mHandler.sendMessage(message);
-            }
-            else if(0==types)
-            {
+            } else if (0 == types) {
                 //跳转到首页产品列表
 
                 //设置选中状态
@@ -1475,12 +1359,12 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 String tag = Contant.TAG_1;
                 //加载具体的页面
                 Message message = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
-                mHandler.sendMessage(message );
+                mHandler.sendMessage(message);
 
                 //调用是否有权限发红包
                 String url = Contant.REQUEST_URL + Contant.JUDGE_IF_CAN_SHARE_REDPACKAGE;
                 AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
-                final Map<String, Object> maps = new HashMap<String, Object> ();
+                final Map<String, Object> maps = new HashMap<String, Object>();
                 String suffix = params.obtainGetParam(maps);
                 url = url + suffix;
                 HttpUtils httpUtils = new HttpUtils();
@@ -1498,7 +1382,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                             } else {
                                 Message message = mHandler.obtainMessage();
                                 message.what = 0x11112223;
-                                message.obj = (null==canShare.getResultData().getRedShareInfo()|| TextUtils.isEmpty(canShare.getResultData().getRedShareInfo())?"你获取一次发红包的机会\n邀请好友参与即可获得金币奖励":canShare.getResultData().getRedShareInfo());
+                                message.obj = (null == canShare.getResultData().getRedShareInfo() || TextUtils.isEmpty(canShare.getResultData().getRedShareInfo()) ? "你获取一次发红包的机会\n邀请好友参与即可获得金币奖励" : canShare.getResultData().getRedShareInfo());
                                 mHandler.sendMessage(message);
                             }
                         } else {
@@ -1509,9 +1393,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                     public void onErrorResponse(VolleyError error) {
                     }
                 });
-            }
-            else if(2==types)
-            {
+            } else if (2 == types) {
                 //跳转到首页产品列表
 
                 //设置选中状态
@@ -1542,13 +1424,13 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 String tag = Contant.TAG_1;
                 //加载具体的页面
                 Message message = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
-                mHandler.sendMessage(message );
+                mHandler.sendMessage(message);
             }
         }
     }
 
 
-    private void successshare(){
+    private void successshare() {
         String url = Contant.REQUEST_URL + Contant.SUCCESS_SHARE_REDPACKETS;
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), HomeActivity.this);
         Map<String, Object> maps = new HashMap<String, Object>();
@@ -1566,8 +1448,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 baseModel = jsonUtil.toBean(response.toString(), baseModel);
                 if (null != baseModel && null != baseModel.getResultDescription() && (1 == baseModel.getResultCode())) {
 
-                }
-                else {
+                } else {
                     noticePopWin = new NoticePopWindow(HomeActivity.this, HomeActivity.this, wManager, baseModel.getResultDescription());
                     noticePopWin.showNotice();
                     noticePopWin.showAtLocation(titleLayoutL,
@@ -1587,8 +1468,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         });
     }
 
-    public class CartBalanceModel
-    {
+    public class CartBalanceModel {
         private long pid;
         private long buyAmount;
 
@@ -1609,8 +1489,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         }
     }
 
-    public class DeleteModel
-    {
+    public class DeleteModel {
         private long shoppingCartId;
 
         public long getShoppingCartId() {
@@ -1622,8 +1501,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         }
     }
 
-    public class CanShareModel extends BaseModel
-    {
+    public class CanShareModel extends BaseModel {
         private CanShareInnerModel resultData;
 
         public CanShareInnerModel getResultData() {
@@ -1634,8 +1512,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             this.resultData = resultData;
         }
 
-        public class CanShareInnerModel
-        {
+        public class CanShareInnerModel {
             private int canShare;
             private String redShareInfo;
 
