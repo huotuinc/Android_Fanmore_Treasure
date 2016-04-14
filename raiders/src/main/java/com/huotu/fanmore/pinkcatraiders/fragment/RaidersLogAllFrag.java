@@ -59,6 +59,8 @@ public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback 
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public List<RaidersModel> raiders;
     public RaidersAdapter adapter;
+    boolean init;
+    private AsyncTask<String, Void, RaidersOutputModel> mAsyncTask;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,23 +70,25 @@ public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        resources = getActivity().getResources();
-        rootView = inflater.inflate ( R.layout.raiders_log_frag, container, false );
-        application = (BaseApplication) getActivity().getApplication();
-        rootAty = (RaidesLogActivity) getActivity ( );
-        ButterKnife.bind(this, rootView);
-        emptyView = inflater.inflate(R.layout.empty, null);
-        TextView emptyBtn = ( TextView ) emptyView.findViewById ( R.id.emptyBtn );
-        emptyBtn.setOnClickListener ( new View.OnClickListener ( ) {
+        if (!init) {
+            resources = getActivity().getResources();
+            rootView = inflater.inflate(R.layout.raiders_log_frag, container, false);
+            application = (BaseApplication) getActivity().getApplication();
+            rootAty = (RaidesLogActivity) getActivity();
+            ButterKnife.bind(this, rootView);
+            emptyView = inflater.inflate(R.layout.empty, null);
+            TextView emptyBtn = (TextView) emptyView.findViewById(R.id.emptyBtn);
+            emptyBtn.setOnClickListener(new View.OnClickListener() {
 
-                                          @Override
-                                          public
-                                          void onClick ( View v ) {
-                                              rootAty.mHandler.sendEmptyMessage ( Contant.RAIDERS_NOW );
-                                          }
-                                      } );
-        wManager = getActivity().getWindowManager();
-        initList();
+                @Override
+                public void onClick(View v) {
+                    rootAty.mHandler.sendEmptyMessage(Contant.RAIDERS_NOW);
+                }
+            });
+            wManager = getActivity().getWindowManager();
+            initList();
+            init=true;
+        }
         return rootView;
     }
 
@@ -145,8 +149,7 @@ public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback 
         url = url + suffix;
         final HttpUtils httpUtils = new HttpUtils();
 
-        new AsyncTask<String, Void, RaidersOutputModel>()
-        {
+        mAsyncTask = new AsyncTask<String, Void, RaidersOutputModel>() {
 
             @Override
             protected RaidersOutputModel doInBackground(String... params) {
@@ -155,12 +158,10 @@ public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback 
                 try {
                     String jsonStr = httpUtils.doGet(params[0]);
                     raiderOutputs = jsonUtil.toBean(jsonStr, raiderOutputs);
-                }catch (JsonSyntaxException e)
-                {
+                } catch (JsonSyntaxException e) {
                     raiderOutputs.setResultCode(0);
                     raiderOutputs.setResultDescription("解析json出错");
-                } catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     // TODO: handle exception
                     return null;
                 }
@@ -171,30 +172,24 @@ public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback 
             protected void onPostExecute(RaidersOutputModel raidersOutputModel) {
                 super.onPostExecute(raidersOutputModel);
                 raidersLogList.onRefreshComplete();
-                if(null != raidersOutputModel && null != raidersOutputModel.getResultData() && (1==raidersOutputModel.getResultCode()))
-                {
-                    if(null != raidersOutputModel.getResultData().getList() && !raidersOutputModel.getResultData().getList().isEmpty())
-                    {
+                if (null != raidersOutputModel && null != raidersOutputModel.getResultData() && (1 == raidersOutputModel.getResultCode())) {
+                    if (null != raidersOutputModel.getResultData().getList() && !raidersOutputModel.getResultData().getList().isEmpty()) {
                         //更新夺宝数据
                         String[] counts = new String[]{String.valueOf(raidersOutputModel.getResultData().getAllNumber()), String.valueOf(raidersOutputModel.getResultData().getRunNumber()), String.valueOf(raidersOutputModel.getResultData().getFinishNumber())};
                         Message message = rootAty.mHandler.obtainMessage(Contant.UPDATE_RAIDER_COUNT, counts);
                         rootAty.mHandler.sendMessage(message);
-                        if( operateType == OperateTypeEnum.REFRESH){
+                        if (operateType == OperateTypeEnum.REFRESH) {
                             raiders.clear();
                             raiders.addAll(raidersOutputModel.getResultData().getList());
                             adapter.notifyDataSetChanged();
-                        }else if( operateType == OperateTypeEnum.LOADMORE){
-                            raiders.addAll( raidersOutputModel.getResultData().getList());
+                        } else if (operateType == OperateTypeEnum.LOADMORE) {
+                            raiders.addAll(raidersOutputModel.getResultData().getList());
                             adapter.notifyDataSetChanged();
                         }
-                    }
-                    else
-                    {
+                    } else {
                         raidersLogList.setEmptyView(emptyView);
                     }
-                }
-                else
-                {
+                } else {
                     //异常处理，自动切换成无数据
                     raidersLogList.setEmptyView(emptyView);
                 }
@@ -218,6 +213,7 @@ public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback 
     @Override
     public void onDestroy() {
         super.onDestroy();
+
     }
 
     @Override
@@ -225,6 +221,9 @@ public class RaidersLogAllFrag extends BaseFragment implements Handler.Callback 
         super.onDestroyView();
         ButterKnife.unbind(this);
         VolleyUtil.cancelAllRequest();
+//        mAsyncTask.cancel(true);
+        rootAty.mHandler.removeCallbacksAndMessages(null);
+
     }
 
     @Override

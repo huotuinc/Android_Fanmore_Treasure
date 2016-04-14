@@ -63,6 +63,9 @@
     <!-- 蓝牙权限 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!--完全退出项目权限-->
+    <uses-permission android:name="android.permission.RESTART_PACKAGES"/>
+    <uses-permission android:name="KILL_BACKGROUND_PROCESSES"/>
 
     <application
         android:name=".base.BaseApplication"

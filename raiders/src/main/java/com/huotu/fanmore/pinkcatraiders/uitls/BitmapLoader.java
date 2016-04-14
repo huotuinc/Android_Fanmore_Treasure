@@ -1,9 +1,12 @@
 package com.huotu.fanmore.pinkcatraiders.uitls;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
@@ -128,12 +131,13 @@ public class BitmapLoader
         }, 0, 0 , ImageView.ScaleType.CENTER_INSIDE);
     }
 
-    public void displayUrlBanner(Context context, final ImageView imageView, String logoUrl, final int errorImg)
+    public void displayUrlBanner(final Context context, final ImageView imageView, String logoUrl, final int errorImg)
     {
         VolleyUtil.getImageLoader(context).get(logoUrl, new ImageLoader.ImageListener() {
             @Override
             public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
                 if (imageContainer != null && imageContainer.getBitmap() != null) {
+
                     imageView.setImageBitmap(imageContainer.getBitmap());
                 }
             }

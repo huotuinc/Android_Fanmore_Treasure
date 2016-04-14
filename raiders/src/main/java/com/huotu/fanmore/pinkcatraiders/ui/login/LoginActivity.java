@@ -666,6 +666,24 @@ public class LoginActivity extends BaseActivity
                             );
                         }
                     }
+                    else if(56000==loginOutputs.getResultCode())
+                    {
+                        //异常处理，自动切换成无数据
+                        noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "该用户不存在");
+                        noticePop.showNotice ( );
+                        noticePop.showAtLocation(titleLayoutL,
+                                Gravity.CENTER, 0, 0
+                        );
+                    }
+                    else if(57002==loginOutputs.getResultCode())
+                    {
+                        //异常处理，自动切换成无数据
+                        noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "密码错误");
+                        noticePop.showNotice ( );
+                        noticePop.showAtLocation(titleLayoutL,
+                                Gravity.CENTER, 0, 0
+                        );
+                    }
                     else
                     {
                         //异常处理，自动切换成无数据

@@ -46,6 +46,7 @@ import com.huotu.fanmore.pinkcatraiders.model.LoginWXModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.UpdateProfileModel;
 import com.huotu.fanmore.pinkcatraiders.model.UserUnwrapOutput;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.ModifyInfoActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.login.AutnLogin;
@@ -89,7 +90,7 @@ import cn.sharesdk.wechat.friends.Wechat;
 /**
  * 用户设置界面
  */
-public class UserSettingActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, CropperView.OnCropperBackListener {
+public class UserSettingActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, CropperView.OnCropperBackListener,MyBroadcastReceiver.BroadcastListener {
 
     private
     AutnLogin      login;
@@ -146,6 +147,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
     NoticePopWindow noticePop;
     public Bundle bundle;
     public SetPasswordPopWindow setPasswordPop;
+    private MyBroadcastReceiver myBroadcastReceiver;
 
 
     @Override
@@ -162,6 +164,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
         bundle=new Bundle();
         progress = new ProgressPopupWindow ( UserSettingActivity.this, UserSettingActivity.this, wManager );
         setPasswordPop=new SetPasswordPopWindow(UserSettingActivity.this,UserSettingActivity.this,mHandler,application,null,wManager);
+        myBroadcastReceiver = new MyBroadcastReceiver(UserSettingActivity.this, this, MyBroadcastReceiver.REFRESH_USERLIST);
         initTitle();
         initSroll();
     }
@@ -885,25 +888,22 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
                 userUnwrapOutput = jsonUtil.toBean(response.toString(), userUnwrapOutput);
                 if (null != userUnwrapOutput && null != userUnwrapOutput.getResultData() && (1 == userUnwrapOutput.getResultCode())) {
                     AppUserModel user = userUnwrapOutput.getResultData().getData();
-                    if(null != user) {
+                    if (null != user) {
                         BaseApplication.getInstance().writeUserInfo(user);
                         initData();
                         ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "解绑成功");
-                    } else
-                    {
+                    } else {
                         ToastUtils.showMomentToast(UserSettingActivity.this, UserSettingActivity.this, "未请求到数据");
                     }
 
-                }
-                else if(52013 == userUnwrapOutput.getResultCode()) {
+                } else if (52013 == userUnwrapOutput.getResultCode()) {
                     //未获取该用户信息
                     noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "不能解绑最后一个账号");
                     noticePop.showNotice();
                     noticePop.showAtLocation(titleLayoutL,
                             Gravity.CENTER, 0, 0
                     );
-                }
-                else {
+                } else {
                     //未获取该用户信息
                     noticePop = new NoticePopWindow(UserSettingActivity.this, UserSettingActivity.this, wManager, "解绑失败");
                     noticePop.showNotice();
@@ -928,19 +928,25 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
     }
 
     protected void firstGetData(){
-        mHandler.postDelayed (
-                new Runnable ( ) {
+        mHandler.postDelayed(
+                new Runnable() {
 
                     @Override
-                    public
-                    void run ( ) {
+                    public void run() {
 
-                        if ( UserSettingActivity.this.isFinishing ( ) ) {
+                        if (UserSettingActivity.this.isFinishing()) {
                             return;
                         }
-                        userSettingPullRefresh.setRefreshing ( true );
+                        userSettingPullRefresh.setRefreshing(true);
                     }
                 }, 1000
-                             );
+        );
+    }
+    @Override
+    public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
+        if (type==MyBroadcastReceiver.ReceiverType.RefreshUserlist){
+            firstGetData();
+
+        }
     }
 }

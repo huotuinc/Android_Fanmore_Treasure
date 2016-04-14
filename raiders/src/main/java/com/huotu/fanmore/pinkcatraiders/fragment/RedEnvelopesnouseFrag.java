@@ -57,6 +57,8 @@ public class RedEnvelopesnouseFrag extends BaseFragment implements Handler.Callb
     public OperateTypeEnum operateType = OperateTypeEnum.REFRESH;
     public List<RedPacketsModel> redPacketsModels;
     public RedAdapter adapter;
+    boolean init;
+    private AsyncTask<String, Void, RedPacketOutputModel> mAsyncTask;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,18 +68,21 @@ public class RedEnvelopesnouseFrag extends BaseFragment implements Handler.Callb
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        resources = getActivity().getResources();
-        rootView = inflater.inflate(R.layout.raiders_log_frag, container, false);
-        application = (BaseApplication) getActivity().getApplication();
-        rootAty = (RedEnvelopesActivity) getActivity();
-        ButterKnife.bind(this, rootView);
-        emptyView = inflater.inflate(R.layout.empty, null);
-        TextView emptyTag = (TextView) emptyView.findViewById(R.id.emptyTag);
-        emptyTag.setText ( "暂无过期红包信息" );
-        TextView emptyBtn = (TextView) emptyView.findViewById(R.id.emptyBtn);
-        emptyBtn.setVisibility(View.GONE);
-        wManager = getActivity().getWindowManager();
-        initList();
+        if (!init) {
+            resources = getActivity().getResources();
+            rootView = inflater.inflate(R.layout.raiders_log_frag, container, false);
+            application = (BaseApplication) getActivity().getApplication();
+            rootAty = (RedEnvelopesActivity) getActivity();
+            ButterKnife.bind(this, rootView);
+            emptyView = inflater.inflate(R.layout.empty, null);
+            TextView emptyTag = (TextView) emptyView.findViewById(R.id.emptyTag);
+            emptyTag.setText("暂无过期红包信息");
+            TextView emptyBtn = (TextView) emptyView.findViewById(R.id.emptyBtn);
+            emptyBtn.setVisibility(View.GONE);
+            wManager = getActivity().getWindowManager();
+            initList();
+            init=true;
+        }
         return rootView;
     }
 
@@ -136,20 +141,18 @@ public class RedEnvelopesnouseFrag extends BaseFragment implements Handler.Callb
         String suffix = params.obtainGetParam(maps);
         url = url + suffix;
         final HttpUtils httpUtils = new HttpUtils();
-        new AsyncTask<String, Void, RedPacketOutputModel>() {
+        mAsyncTask = new AsyncTask<String, Void, RedPacketOutputModel>() {
             @Override
             protected RedPacketOutputModel doInBackground(String... params) {
                 RedPacketOutputModel redPacketOutput = new RedPacketOutputModel();
                 try {
-                    JSONUtil<RedPacketOutputModel > jsonUtil = new JSONUtil<RedPacketOutputModel>();
+                    JSONUtil<RedPacketOutputModel> jsonUtil = new JSONUtil<RedPacketOutputModel>();
                     String jsonStr = httpUtils.doGet(params[0]);
                     redPacketOutput = jsonUtil.toBean(jsonStr, redPacketOutput);
-                }catch (JsonSyntaxException e)
-                {
+                } catch (JsonSyntaxException e) {
                     redPacketOutput.setResultCode(0);
                     redPacketOutput.setResultDescription("解析json出错");
-                } catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     // TODO: handle exception
                     return null;
                 }
@@ -160,30 +163,24 @@ public class RedEnvelopesnouseFrag extends BaseFragment implements Handler.Callb
             protected void onPostExecute(RedPacketOutputModel redPacketOutputModel) {
                 super.onPostExecute(redPacketOutputModel);
                 redPackageList.onRefreshComplete();
-                if(null != redPacketOutputModel && null != redPacketOutputModel.getResultData() && (1==redPacketOutputModel.getResultCode()))
-                {
-                    if(null != redPacketOutputModel.getResultData().getList() && !redPacketOutputModel.getResultData().getList().isEmpty())
-                    {
+                if (null != redPacketOutputModel && null != redPacketOutputModel.getResultData() && (1 == redPacketOutputModel.getResultCode())) {
+                    if (null != redPacketOutputModel.getResultData().getList() && !redPacketOutputModel.getResultData().getList().isEmpty()) {
                         String[] counts = new String[]{String.valueOf(redPacketOutputModel.getResultData().getUnused()), String.valueOf(redPacketOutputModel.getResultData().getUsedOrExpire())};
                         Message message = rootAty.mHandler.obtainMessage(Contant.REDPACKAGE_COUNT, counts);
                         rootAty.mHandler.sendMessage(message);
 
-                        if( operateType == OperateTypeEnum.REFRESH){
+                        if (operateType == OperateTypeEnum.REFRESH) {
                             redPacketsModels.clear();
                             redPacketsModels.addAll(redPacketOutputModel.getResultData().getList());
                             adapter.notifyDataSetChanged();
-                        }else if( operateType == OperateTypeEnum.LOADMORE){
-                            redPacketsModels.addAll( redPacketOutputModel.getResultData().getList());
+                        } else if (operateType == OperateTypeEnum.LOADMORE) {
+                            redPacketsModels.addAll(redPacketOutputModel.getResultData().getList());
                             adapter.notifyDataSetChanged();
                         }
-                    }
-                    else
-                    {
+                    } else {
                         redPackageList.setEmptyView(emptyView);
                     }
-                }
-                else
-                {
+                } else {
                     //异常处理，自动切换成无数据
                     redPackageList.setEmptyView(emptyView);
                 }
@@ -214,6 +211,8 @@ public class RedEnvelopesnouseFrag extends BaseFragment implements Handler.Callb
         super.onDestroyView();
         ButterKnife.unbind(this);
         VolleyUtil.cancelAllRequest();
+//        mAsyncTask.cancel(true);
+        rootAty.mHandler.removeCallbacksAndMessages(null);
     }
 
     @Override

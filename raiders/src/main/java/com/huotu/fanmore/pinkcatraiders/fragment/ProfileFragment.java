@@ -73,6 +73,7 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
     PullToRefreshScrollView profilePullRefresh;
     @Bind(R.id.mallPoints)
     TextView mallPoints;
+    boolean init;
 
     @Override
     public void onReshow() {
@@ -108,15 +109,18 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        resources = getActivity().getResources ( );
-        rootView = inflater.inflate(R.layout.profile_frag, container, false);
-        application = (BaseApplication) getActivity().getApplication ( );
-        rootAty = (HomeActivity) getActivity();
-        ButterKnife.bind(this, rootView);
-        userimg.setBorderColor(resources.getColor(R.color.color_white));
-        userimg.setBorderWidth((int) resources.getDimension(R.dimen.head_width));
-        initScroll();
-        wManager = getActivity().getWindowManager();
+        if (!init) {
+            resources = getActivity().getResources();
+            rootView = inflater.inflate(R.layout.profile_frag, container, false);
+            application = (BaseApplication) getActivity().getApplication();
+            rootAty = (HomeActivity) getActivity();
+            ButterKnife.bind(this, rootView);
+            userimg.setBorderColor(resources.getColor(R.color.color_white));
+            userimg.setBorderWidth((int) resources.getDimension(R.dimen.head_width));
+            initScroll();
+            wManager = getActivity().getWindowManager();
+            init=true;
+        }
         return rootView;
     }
 

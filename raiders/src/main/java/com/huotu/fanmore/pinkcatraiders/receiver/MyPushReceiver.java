@@ -120,7 +120,7 @@ class MyPushReceiver extends BroadcastReceiver
                     .getString(JPushInterface.EXTRA_NOTIFICATION_TITLE);
             String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
             // json封装成bean
-            /*JModel bean = new JModel();
+            JModel bean = new JModel();
             JSONUtil<JModel> jsonUtil = new JSONUtil<JModel>();
             bean = jsonUtil.toBean(extra, bean);
             bean.setTitle(title);
@@ -136,8 +136,11 @@ class MyPushReceiver extends BroadcastReceiver
                 winner.setAwardingDate(bean.getAnnounceTime());
                 bundle.putSerializable("winner", winner);
                 //中奖，跳转到中奖列表
-                ActivityUtils.getInstance().showActivityPush((Activity) context, WinLogDetailActivity.class, bundle);
-            }*/
+                Intent i = new Intent(context, WinLogDetailActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.putExtras(bundle);
+                context.startActivity(i);
+            }
 
 
 

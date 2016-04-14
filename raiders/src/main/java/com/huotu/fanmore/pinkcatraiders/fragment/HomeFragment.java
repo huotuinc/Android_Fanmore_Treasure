@@ -43,6 +43,7 @@ import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.ScanRedpackageModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
@@ -79,7 +80,7 @@ import butterknife.OnClick;
 /**
  * 首页UI
  */
-public class HomeFragment extends BaseFragment implements View.OnClickListener {
+public class HomeFragment extends BaseFragment implements View.OnClickListener, MyBroadcastReceiver.BroadcastListener {
 
     View rootView;
 
@@ -141,6 +142,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     public OperateTypeEnum operateType = OperateTypeEnum.REFRESH;
 
+    boolean init;
+    private MyBroadcastReceiver broadcastReceiver;
 
     @Override
     public void onResume() {
@@ -154,26 +157,31 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
     }
 
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        resources = getActivity().getResources();
-        rootView = inflater.inflate(R.layout.home_frag, container, false);
-        application = (BaseApplication) getActivity().getApplication();
-        rootAty = (HomeActivity) getActivity();
-        ButterKnife.bind(this, rootView);
-        application.proFragManager = FragManager.getIns(getActivity(), R.id.productsL);
-        application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
-        wManager = getActivity().getWindowManager();
-        //初始化总需
-        zxrsInnerL.setTag(0);
-        SystemTools.loadBackground(zxrsLogo, resources.getDrawable(R.mipmap.sort_down));
-        initView();
-        iniScroll();
+        if (!init) {
+            resources = getActivity().getResources();
+            rootView = inflater.inflate(R.layout.home_frag, container, false);
+            application = (BaseApplication) getActivity().getApplication();
+            rootAty = (HomeActivity) getActivity();
+            ButterKnife.bind(this, rootView);
+            application.proFragManager = FragManager.getIns(getActivity(), R.id.productsL);
+            application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
+            broadcastReceiver = new MyBroadcastReceiver(getActivity(),this,MyBroadcastReceiver.GO_TO_HOMEFRAG);
+            wManager = getActivity().getWindowManager();
+            //初始化总需
+            zxrsInnerL.setTag(0);
+            SystemTools.loadBackground(zxrsLogo, resources.getDrawable(R.mipmap.sort_down));
+            initView();
+            iniScroll();
+           init=true;
+        }
         return rootView;
     }
-
     private void iniScroll() {
 
         homePullRefresh.setOnRefreshListener(
@@ -212,7 +220,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(jdInnerL, normal);
         SystemTools.loadBackground(zxrsInnerL, normal);
         initSwitchImg();
-        initNotice();
+        mHandler.sendEmptyMessage(0x22113344);
         firstGetData();
     }
 
@@ -307,6 +315,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                                 rootAty.popProducts.clear();
                                 rootAty.popProducts.addAll(productsOutputs.getResultData().getList());
                                 rootAty.popAdapter.notifyDataSetChanged();
+
                             } else if (operateType == OperateTypeEnum.LOADMORE) {
                                 rootAty.popProducts.addAll(productsOutputs.getResultData().getList());
                                 rootAty.popAdapter.notifyDataSetChanged();
@@ -598,6 +607,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(jdInnerL, normal);
         SystemTools.loadBackground(zxrsInnerL, normal);
         initProduct();
+        homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
     }
 
     @OnClick(R.id.zxInnerL)
@@ -617,6 +627,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(jdInnerL, normal);
         SystemTools.loadBackground(zxrsInnerL, normal);
         initProduct();
+        homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
+
     }
 
     @OnClick(R.id.jdInnerL)
@@ -636,13 +648,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         SystemTools.loadBackground(jdInnerL, press);
         SystemTools.loadBackground(zxrsInnerL, normal);
         initProduct();
+        homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
     }
 
     @OnClick(R.id.zxrsInnerL)
     void clickZxrsl() {
         //重置加载模式
         operateType = OperateTypeEnum.REFRESH;
-        if (0 == zxrsInnerL.getTag()) {
+        if (0 == Integer.parseInt(zxrsInnerL.getTag().toString())) {
             //转换成UP
             zxrsInnerL.setTag(1);
             SystemTools.loadBackground(zxrsLogo, resources.getDrawable(R.mipmap.sort_up));
@@ -658,7 +671,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             SystemTools.loadBackground(zxInnerL, normal);
             SystemTools.loadBackground(jdInnerL, normal);
             SystemTools.loadBackground(zxrsInnerL, press);
-        } else if (1 == zxrsInnerL.getTag()) {
+        } else if (1 == Integer.parseInt(zxrsInnerL.getTag().toString())) {
             //转换成DOWN
             zxrsInnerL.setTag(0);
             SystemTools.loadBackground(zxrsLogo, resources.getDrawable(R.mipmap.sort_down));
@@ -676,6 +689,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             SystemTools.loadBackground(zxrsInnerL, press);
         }
         initProduct();
+        homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
     }
 
     /**
@@ -697,7 +711,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void initNotice() {
-//滚动消息
+        //滚动消息
         String url = Contant.REQUEST_URL + Contant.GET_NOTICE_LIST;
         AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), getActivity());
         Map<String, Object> maps = new HashMap<String, Object>();
@@ -748,7 +762,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
                     }
                 }
         );
@@ -830,6 +843,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if( null != broadcastReceiver)
+        {
+            broadcastReceiver.unregisterReceiver();
+        }
     }
 
     @Override
@@ -867,9 +884,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     mHandler.sendEmptyMessageDelayed(0, 3000);
                 }
                 break;
-                case 1: {
+                case 0x22113344: {
                     initNotice();
-                    mHandler.sendEmptyMessageDelayed(1, 600000);
+                    mHandler.sendEmptyMessageDelayed(0x22113344, 600000);
                 }
                 break;
                 default:
@@ -880,4 +897,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     };
 
+    @Override
+    public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
+        if (type==MyBroadcastReceiver.ReceiverType.goToHomeFrag){
+            homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
+        }
+    }
 }

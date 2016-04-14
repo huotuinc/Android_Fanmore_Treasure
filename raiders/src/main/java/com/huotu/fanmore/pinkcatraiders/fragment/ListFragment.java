@@ -1,5 +1,6 @@
 package com.huotu.fanmore.pinkcatraiders.fragment;
 
+import android.app.Activity;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -60,6 +61,7 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
     public ListAdapter adapter;
 
     private MyBroadcastReceiver myBroadcastReceiver;
+    boolean init;
 
     @Override
     public void onReshow() {
@@ -95,19 +97,22 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        resources = getActivity().getResources();
-        rootView = inflater.inflate(R.layout.list_frag, container, false);
-        application = (BaseApplication) getActivity().getApplication();
-        rootAty = (HomeActivity) getActivity();
-        ButterKnife.bind(this, rootView);
-        wManager = getActivity().getWindowManager();
-        emptyView = inflater.inflate(R.layout.empty, null);
-        TextView emptyTag = (TextView) emptyView.findViewById(R.id.emptyTag);
-        emptyTag.setText("暂无清单信息");
-        TextView emptyBtn = (TextView) emptyView.findViewById(R.id.emptyBtn);
-        emptyBtn.setVisibility(View.GONE);
-        myBroadcastReceiver = new MyBroadcastReceiver(getActivity(), this, MyBroadcastReceiver.SHOP_CART);
-        initList();
+        if (!init) {
+            resources = getActivity().getResources();
+            rootView = inflater.inflate(R.layout.list_frag, container, false);
+            application = (BaseApplication) getActivity().getApplication();
+            rootAty = (HomeActivity) getActivity();
+            ButterKnife.bind(this, rootView);
+            wManager = getActivity().getWindowManager();
+            emptyView = inflater.inflate(R.layout.empty, null);
+            TextView emptyTag = (TextView) emptyView.findViewById(R.id.emptyTag);
+            emptyTag.setText("暂无清单信息");
+            TextView emptyBtn = (TextView) emptyView.findViewById(R.id.emptyBtn);
+            emptyBtn.setVisibility(View.GONE);
+            myBroadcastReceiver = new MyBroadcastReceiver(getActivity(), this, MyBroadcastReceiver.SHOP_CART);
+            initList();
+            init=true;
+        }
         return rootView;
     }
 
@@ -122,6 +127,7 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                                             }
                                         } );
         lists = new ArrayList<ListModel>();
+
         adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 0, application, 0);
         menuList.setAdapter(adapter);
         firstGetData();
@@ -303,12 +309,26 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                 //编辑模式
                 adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 1, application, 12);
                 menuList.setAdapter(adapter);
-                firstGetData();
+                //firstGetData();
             }
             else if(0==types)
             {
                 //结算模式
                 adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 0, application, 0);
+                menuList.setAdapter(adapter);
+                //firstGetData();
+            }
+            else if(3==types)
+            {
+                //结算模式
+                adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 0, application, 0);
+                menuList.setAdapter(adapter);
+                firstGetData();
+            }
+            else if(2==types)
+            {
+                //编辑模式
+                adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 1, application, 12);
                 menuList.setAdapter(adapter);
                 firstGetData();
             }
@@ -317,14 +337,12 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
                 //全选
                 adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 1, application, types);
                 menuList.setAdapter(adapter);
-                firstGetData();
             }
             else if(12==types)
             {
                 //全部选
                 adapter = new ListAdapter(lists, getActivity(), rootAty.mHandler, 1, application, types);
                 menuList.setAdapter(adapter);
-                firstGetData();
             }
 
         }

@@ -8,12 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
-import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
 import com.huotu.fanmore.pinkcatraiders.model.CarouselModel;
-import com.huotu.fanmore.pinkcatraiders.model.SlideListModel;
 import com.huotu.fanmore.pinkcatraiders.uitls.BitmapLoader;
 
 import java.util.List;
@@ -63,7 +60,7 @@ public class HomeViewPagerAdapter extends PagerAdapter {
 
         String String = datas.get(position%datas.size()).getPictureUrl ();
         View view=View.inflate(mContext, R.layout.fillview,null);
-        ImageView image=(ImageView) view.findViewById(R.id.image);
+        ImageView image= (ImageView) view.findViewById(R.id.image);
         BitmapLoader.create ( ).displayUrlBanner ( mContext, image, String, R.mipmap.banner );
 
         container.addView ( view );

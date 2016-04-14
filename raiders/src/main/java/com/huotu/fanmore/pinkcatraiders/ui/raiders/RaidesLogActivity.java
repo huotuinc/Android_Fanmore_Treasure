@@ -126,6 +126,7 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
         mFragmentList.add(raidersLogFragDone);
         tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), mFragmentList);
         raidersViewPager.setAdapter(tabPagerAdapter);
+        raidersViewPager.setOffscreenPageLimit(3);
         raidersViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override

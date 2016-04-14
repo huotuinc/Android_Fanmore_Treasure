@@ -390,6 +390,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 //加载具体的页面
                 Message msg = mHandler.obtainMessage(Contant.SWITCH_UI, tag);
                 mHandler.sendMessage(msg);
+                MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.GO_TO_HOMEFRAG);
             }
             break;
             case R.id.newestL: {
@@ -458,7 +459,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 mHandler.sendMessage(msg);
                 //广播确认每次都是结算界面，并且下拉刷新
                 Bundle bundle = new Bundle();
-                bundle.putInt("type", 0);
+                bundle.putInt("type", 3);
                 MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
             }
             break;
@@ -553,17 +554,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             } else {
                 closeSelf(HomeActivity.this);
                 int currentVersion = android.os.Build.VERSION.SDK_INT;
-                if (currentVersion > android.os.Build.VERSION_CODES.ECLAIR_MR1) {
-                    Intent startMain = new Intent(Intent.ACTION_MAIN);
-                    startMain.addCategory(Intent.CATEGORY_HOME);
-                    startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(startMain);
-                    System.exit(0);
-                } else {
-                    // android2.1
-                    ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-                    am.restartPackage(getPackageName());
-                }
+                SystemTools.killAppDestory(HomeActivity.this);
             }
 
             return true;
@@ -759,8 +750,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         ListModel list = it.next();
                         cartAmount += (list.getUserBuyAmount() > list.getRemainAmount() ? list.getRemainAmount() : list.getUserBuyAmount());
                         double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        double total = price * list.getUserBuyAmount();
-                        prices += total;
+                        double total = price*(list.getUserBuyAmount()>list.getRemainAmount()?list.getRemainAmount():list.getUserBuyAmount());
+                        prices+=total;
                     }
 
                     funcPopWin1.setMsg(String.valueOf(payNum), String.valueOf(prices));
@@ -919,7 +910,14 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         Bundle bundle = new Bundle();
                         bundle.putString("loginData", cartStr);
                         ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class, bundle);
-                    } else {
+                    }
+                    else
+                    {
+                        progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
+                        progress.showProgress ( "正在结算" );
+                        progress.showAtLocation(titleLayoutL,
+                                Gravity.CENTER, 0, 0
+                        );
                         Iterator<ListModel> it = datas.iterator();
                         while (it.hasNext()) {
                             ListModel listModel = it.next();
@@ -942,6 +940,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                                 base, url, param, new Response.Listener<BalanceOutputModel>() {
                                     @Override
                                     public void onResponse(BalanceOutputModel response) {
+                                        progress.dismissView();
                                         BalanceOutputModel base = response;
                                         if (1 == base.getResultCode() && null != base.getResultData() && null != base.getResultData().getData()) {
                                             AppBalanceModel balance = base.getResultData().getData();
@@ -1048,7 +1047,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         cartData.setCartData(str);
                         CartDataModel.save(cartData);
                         Bundle bundle = new Bundle();
-                        bundle.putInt("type", 1);
+                        bundle.putInt("type", 2);
                         MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
                     } else {
                         //删除清单数据
@@ -1126,7 +1125,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
                         progress.dismissView();
                         Bundle bundle = new Bundle();
-                        bundle.putInt("type", 1);
+                        bundle.putInt("type", 2);
                         MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle);
                     }
 
@@ -1294,7 +1293,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             int types = bundle.getInt("type");
             if (1 == types) {
                 Bundle bundle1 = new Bundle();
-                bundle1.putInt("type", 0);
+                bundle1.putInt("type", 3);
                 MyBroadcastReceiver.sendBroadcast(this, MyBroadcastReceiver.SHOP_CART, bundle1);
                 //显示清单列表
                 //设置选中状态

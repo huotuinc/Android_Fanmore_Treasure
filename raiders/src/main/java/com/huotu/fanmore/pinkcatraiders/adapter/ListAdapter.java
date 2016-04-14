@@ -162,7 +162,7 @@ public class ListAdapter extends BaseAdapter {
                             void onClick ( View v ) {
 
                                 Message message = mHandler.obtainMessage ( );
-                                if ( 0 == editBtn.getTag ( ) ) {
+                                if ( 0 == Integer.parseInt(editBtn.getTag ( ).toString()) ) {
                                     //添加
                                     editBtn.setTag ( 1 );
                                     list.setIsSelect(true);
@@ -171,7 +171,7 @@ public class ListAdapter extends BaseAdapter {
                                     );
 
                                 }
-                                else if ( 1 == editBtn.getTag ( ) ) {
+                                else if ( 1 == Integer.parseInt(editBtn.getTag ( ).toString()) ) {
                                     //删除
                                     editBtn.setTag(0);
                                     list.setIsSelect(false);
@@ -325,7 +325,7 @@ public class ListAdapter extends BaseAdapter {
                 }
             });
 
-            if(1==list.getStepAmount())
+            if(0==list.getAreaAmount()||1==list.getStepAmount())
             {
                 holder.stepTag.setVisibility(View.GONE);
             }

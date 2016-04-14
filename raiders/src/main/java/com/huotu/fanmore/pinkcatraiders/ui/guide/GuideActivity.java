@@ -19,7 +19,6 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
-import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
@@ -161,7 +160,14 @@ class GuideActivity extends BaseActivity implements View.OnClickListener, ViewPa
     @Override
     public
     void onPageSelected ( int arg0 ) {
-
+        if (arg0==pics.length-1){
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    ActivityUtils.getInstance().skipActivity(GuideActivity.this, HomeActivity.class);
+                }
+            },3000);
+        }
     }
 
     @Override
@@ -181,5 +187,6 @@ class GuideActivity extends BaseActivity implements View.OnClickListener, ViewPa
         super.onDestroy();
         ButterKnife.unbind(this);
         VolleyUtil.cancelAllRequest();
+        mHandler.removeCallbacksAndMessages(null);
     }
 }

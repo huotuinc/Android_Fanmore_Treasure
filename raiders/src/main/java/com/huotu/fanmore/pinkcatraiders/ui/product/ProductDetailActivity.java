@@ -238,8 +238,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                     productDetail = productDetailsOutput
                                             .getResultData().getData();
                                     issueId = productDetail.getIssueId();
-                                    pid = productDetail.getPid();
-                                    allLogText.setText("(" + DateUtils.transformDataformat16(productDetail.getFirstBuyTime()) + "开始");
+                                    pid=productDetail.getPid();
+                                    allLogText.setText("("+DateUtils.transformDataformat16(productDetail.getFirstBuyTime())+"开始)");
                                     detailUrl = productDetail.getLink();
                                     if (0 == productDetail.getStatus()) {
                                         productDetailNameLabel.setText("进行中");
@@ -493,7 +493,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                                     getCommentLog();
                                 } else {
                                     //暂无数据提示
-                                    ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "为请求到数据，1秒后退出");
+                                    ToastUtils.showMomentToast(ProductDetailActivity.this, ProductDetailActivity.this, "未请求到数据，1秒后退出");
                                     mHandler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {

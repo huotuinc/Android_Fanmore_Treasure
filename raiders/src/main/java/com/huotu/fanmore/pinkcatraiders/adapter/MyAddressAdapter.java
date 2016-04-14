@@ -59,7 +59,7 @@ public class MyAddressAdapter extends BaseAdapter {
         this.type = type;
     }
 
-    public MyAddressAdapter(List<MyAddressListModel> lists, Context context, Activity aty,  int type) {
+    public MyAddressAdapter(List<MyAddressListModel> lists, Context context, Activity aty, int type) {
         this.lists = lists;
         this.context = context;
         this.aty = aty;
@@ -85,88 +85,74 @@ public class MyAddressAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         Resources resources = context.getResources();
-        if (convertView == null)
-        {
+        if (convertView == null) {
             convertView = View.inflate(context, R.layout.addresslist_item, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-        }
-        else
-        {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.editBtn.setVisibility ( View.GONE );
-        SystemTools.loadBackground ( holder.editIcon, resources.getDrawable ( R.mipmap.editor_icon ) );
+        holder.editBtn.setVisibility(View.GONE);
+        SystemTools.loadBackground(holder.editIcon, resources.getDrawable(R.mipmap.editor_icon));
         final MyAddressListModel MyAddressList = lists.get(position);
-        if(1==MyAddressList.getDefaultAddress ())
-        {
+        if (1 == MyAddressList.getDefaultAddress()) {
             holder.isDefault.setVisibility(View.VISIBLE);
-            holder.isDefault.setText ( "[默认]" );
-        }
-        else
-        {
-            holder.isDefault.setVisibility ( View.GONE );
+            holder.isDefault.setText("[默认]");
+        } else {
+            holder.isDefault.setVisibility(View.GONE);
         }
         holder.receiver.setText(MyAddressList.getReceiver());
-        holder.mobile.setText(MyAddressList.getMobile ( ));
+        holder.mobile.setText(MyAddressList.getMobile());
         holder.details.setText(obtainDetails(MyAddressList.getDetails(), MyAddressList.getCityName()));
-        holder.editIcon.setOnClickListener ( new View.OnClickListener ( ) {
+        holder.editIcon.setOnClickListener(new View.OnClickListener() {
 
-                                                 @Override
-                                                 public
-                                                 void onClick ( View v ) {
+            @Override
+            public void onClick(View v) {
 
-                                                     Bundle bundle = new Bundle ( );
-                                                     bundle.putString ( "receiver",  MyAddressList.getReceiver ());
-                                                     bundle.putString ( "mobile", MyAddressList.getMobile ( ) );
-                                                     bundle.putString ( "details", MyAddressList.getDetails ( ) );
-                                                     bundle.putString("cityName", MyAddressList.getCityName());
-                                                     bundle.putLong ( "addressId", MyAddressList.getAddressId () );
-                                                     bundle.putInt ( "defaultAddress",
-                                                                     MyAddressList
-                                                                             .getDefaultAddress ( ) );
-                                                     ActivityUtils.getInstance ().showActivity ( aty, AddAddressActivity.class, bundle );
-                                                 }
-                                             } );
+                Bundle bundle = new Bundle();
+                bundle.putString("receiver", MyAddressList.getReceiver());
+                bundle.putString("mobile", MyAddressList.getMobile());
+                bundle.putString("details", MyAddressList.getDetails());
+                bundle.putString("cityName", MyAddressList.getCityName());
+                bundle.putLong("addressId", MyAddressList.getAddressId());
+                bundle.putInt("defaultAddress", MyAddressList.getDefaultAddress());
+                ActivityUtils.getInstance().showActivity(aty, AddAddressActivity.class, bundle);
+            }
+        });
 
         return convertView;
     }
-    class ViewHolder
-    {
-        public ViewHolder(View view)
-        {
+
+    class ViewHolder {
+        public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+
         @Bind(R.id.receiver)
         TextView receiver;
         @Bind(R.id.mobile)
         TextView mobile;
         @Bind(R.id.details)
         TextView details;
-        @Bind ( R.id.editBtn )
+        @Bind(R.id.editBtn)
         TextView editBtn;
-        @Bind ( R.id.editIcon )
+        @Bind(R.id.editIcon)
         TextView editIcon;
-        @Bind ( R.id.isDefault )
+        @Bind(R.id.isDefault)
         TextView isDefault;
     }
 
-    private String obtainDetails(String detail, String suffix)
-    {
+    private String obtainDetails(String detail, String suffix) {
         String[] suffixs = suffix.split("&");
-        if(null == suffix)
-        {
+        if (null == suffix) {
             return detail;
-        }
-        else
-        {
+        } else {
             StringBuilder builder = new StringBuilder();
-            for(int i=0; i<suffixs.length;i++)
-            {
+            for (int i = 0; i < suffixs.length; i++) {
                 builder.append(suffixs[i]);
             }
-            return builder.toString()+detail;
+            return builder.toString() + detail;
         }
 
     }

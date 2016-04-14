@@ -52,8 +52,7 @@ import butterknife.OnClick;
 /**
  * 添加收货地址
  */
-public
-class AddAddressActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, MyBroadcastReceiver.BroadcastListener {
+public class AddAddressActivity extends BaseActivity implements View.OnClickListener, Handler.Callback, MyBroadcastReceiver.BroadcastListener {
 
     public
     Resources resources;
@@ -66,61 +65,61 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
     public
     WindowManager wManager;
 
-    @Bind ( R.id.titleLayoutL )
+    @Bind(R.id.titleLayoutL)
     RelativeLayout titleLayoutL;
 
-    @Bind ( R.id.stubTitleText )
+    @Bind(R.id.stubTitleText)
     ViewStub stubTitleText;
 
-    @Bind ( R.id.titleLeftImage )
+    @Bind(R.id.titleLeftImage)
     ImageView titleLeftImage;
 
-    @Bind ( R.id.titleRightImage )
+    @Bind(R.id.titleRightImage)
     ImageView titleRightImage;
 
-    @Bind ( R.id.receiverName )
+    @Bind(R.id.receiverName)
     EditText receiverName;
 
-    @Bind ( R.id.receiverNameBtn )
+    @Bind(R.id.receiverNameBtn)
     ImageView receiverNameBtn;
 
-    @Bind ( R.id.receiverPhone )
+    @Bind(R.id.receiverPhone)
     EditText receiverPhone;
 
-    @Bind ( R.id.receiverPhoneBtn )
+    @Bind(R.id.receiverPhoneBtn)
     ImageView receiverPhoneBtn;
 
-    @Bind ( R.id.provinceL )
+    @Bind(R.id.provinceL)
     LinearLayout provinceL;
 
-    @Bind ( R.id.province )
+    @Bind(R.id.province)
     TextView province;
 
-    @Bind ( R.id.cityL )
+    @Bind(R.id.cityL)
     LinearLayout cityL;
 
-    @Bind ( R.id.city )
+    @Bind(R.id.city)
     TextView city;
 
-    @Bind ( R.id.areaL )
+    @Bind(R.id.areaL)
     LinearLayout areaL;
 
-    @Bind ( R.id.area )
+    @Bind(R.id.area)
     TextView area;
 
-    @Bind ( R.id.detail )
+    @Bind(R.id.detail)
     EditText detail;
 
-    @Bind ( R.id.detailBtn )
+    @Bind(R.id.detailBtn)
     ImageView detailBtn;
 
-    @Bind ( R.id.defauleBtn )
+    @Bind(R.id.defauleBtn)
     ImageView defauleBtn;
 
-    public List< AddressModel > addresses;
+    public List<AddressModel> addresses;
 
     public
-    AddressPopWin       addressPopWin;
+    AddressPopWin addressPopWin;
 
     public
     ProgressPopupWindow progress;
@@ -133,15 +132,14 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
 
 
     @Override
-    public
-    boolean handleMessage ( Message msg ) {
+    public boolean handleMessage(Message msg) {
 
-        switch ( msg.what ) {
+        switch (msg.what) {
             case Contant.SELECT_ADDRESS: {
                 List<String> address = (List<String>) msg.obj;
-                    province.setText ( address.get(0) );
-                    city.setText ( address.get(1)  );
-                    area.setText ( address.get(2)  );
+                province.setText(address.get(0));
+                city.setText(address.get(1));
+                area.setText(address.get(2));
             }
             break;
             default:
@@ -151,255 +149,200 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
     }
 
     @Override
-    public
-    void onClick ( View v ) {
+    public void onClick(View v) {
 
     }
 
     @Override
-    protected
-    void onCreate ( Bundle savedInstanceState ) {
+    protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_address);
         ButterKnife.bind(this);
-        application = ( BaseApplication ) this.getApplication ( );
+        application = (BaseApplication) this.getApplication();
         imm = ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE));
-        bundle = this.getIntent ().getExtras();
+        bundle = this.getIntent().getExtras();
         resources = this.getResources();
-        mHandler = new Handler ( this );
-        wManager = this.getWindowManager ( );
-        progress = new ProgressPopupWindow ( AddAddressActivity.this, AddAddressActivity.this, wManager );
+        mHandler = new Handler(this);
+        wManager = this.getWindowManager();
+        progress = new ProgressPopupWindow(AddAddressActivity.this, AddAddressActivity.this, wManager);
         myBroadcastReceiver = new MyBroadcastReceiver(AddAddressActivity.this, this, MyBroadcastReceiver.TO_ADDRESSLIST);
         data = application.localAddress;
-        initTitle ( );
-        initData ( );
+        initTitle();
+        initData();
     }
 
-    private
-    void initData ( ) {
+    private void initData() {
         //设置标记：1 非默认  0 默认
-        if(null!=bundle)
-        {
-            if(bundle.containsKey( "receiver"))
-            {
-                receiverName.setText ( bundle.getString ( "receiver" ) );
+        if (null != bundle) {
+            if (bundle.containsKey("receiver")) {
+                receiverName.setText(bundle.getString("receiver"));
             }
-            if(bundle.containsKey( "mobile" ))
-            {
-                receiverPhone.setText ( bundle.getString ( "mobile" ) );
+            if (bundle.containsKey("mobile")) {
+                receiverPhone.setText(bundle.getString("mobile"));
             }
-            if(bundle.containsKey ( "details" ))
-            {
-                detail.setText ( bundle.getString ( "details" ) );
+            if (bundle.containsKey("details")) {
+                detail.setText(bundle.getString("details"));
             }
-            if(bundle.containsKey ( "cityName" ))
-            {
+            if (bundle.containsKey("cityName")) {
                 String cityName = bundle.getString("cityName");
-                if(null!=cityName)
-                {
+                if (null != cityName) {
                     String[] address = cityName.split("&");
-                    if(3!=address.length)
-                    {
+                    if (3 != address.length) {
                         ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "获取城市信息失败");
-                    }
-                    else
-                    {
+                    } else {
                         province.setText(address[0]);
                         city.setText(address[1]);
                         area.setText(address[2]);
                     }
-                }
-                else
-                {
+                } else {
                     ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "获取城市信息失败");
                 }
             }
-            if(bundle.containsKey ( "defaultAddress" ))
-            {
-                defauleBtn.setTag ( bundle.getInt ( "defaultAddress" ) );
+            if (bundle.containsKey("defaultAddress")) {
+                defauleBtn.setTag(bundle.getInt("defaultAddress"));
+            } else {
+                defauleBtn.setTag(0);
             }
-            else
-            {
-                defauleBtn.setTag ( 0 );
-            }
-            if(1==defauleBtn.getTag ())
-            {
-                SystemTools.loadBackground ( defauleBtn, resources.getDrawable ( R.mipmap.setting_default_a ) );
-            }
-            else if(0==defauleBtn.getTag ())
-            {
-                SystemTools.loadBackground ( defauleBtn, resources.getDrawable ( R.mipmap.setting_default_b ) );
+            if (1 == Integer.parseInt(defauleBtn.getTag().toString())) {
+                SystemTools.loadBackground(defauleBtn, resources.getDrawable(R.mipmap.setting_default_a));
+            } else if (0 == Integer.parseInt(defauleBtn.getTag().toString())) {
+                SystemTools.loadBackground(defauleBtn, resources.getDrawable(R.mipmap.setting_default_b));
             }
 
-        }
-        else
-        {
-            defauleBtn.setTag ( 0 );
+        } else {
+            defauleBtn.setTag(0);
         }
 
 
     }
 
-    private
-    void initTitle ( ) {
+    private void initTitle() {
         //背景色
-        Drawable bgDraw = resources.getDrawable ( R.drawable.account_bg_bottom );
-        SystemTools.loadBackground ( titleLayoutL, bgDraw );
-        Drawable leftDraw = resources.getDrawable ( R.mipmap.back_gray );
-        SystemTools.loadBackground ( titleLeftImage, leftDraw );
-        stubTitleText.inflate ( );
-        TextView titleText = ( TextView ) this.findViewById ( R.id.titleText );
-        SystemTools.loadBackground ( titleRightImage, resources.getDrawable ( R.mipmap.save_btn ) );
-        titleText.setText ( "添加地址" );
+        Drawable bgDraw = resources.getDrawable(R.drawable.account_bg_bottom);
+        SystemTools.loadBackground(titleLayoutL, bgDraw);
+        Drawable leftDraw = resources.getDrawable(R.mipmap.back_gray);
+        SystemTools.loadBackground(titleLeftImage, leftDraw);
+        stubTitleText.inflate();
+        TextView titleText = (TextView) this.findViewById(R.id.titleText);
+        SystemTools.loadBackground(titleRightImage, resources.getDrawable(R.mipmap.save_btn));
+        titleText.setText("添加地址");
     }
 
     //清空收货人
     @OnClick(R.id.receiverNameBtn)
-    void clearReceiverName()
-    {
-        receiverName.setText ( "" );
+    void clearReceiverName() {
+        receiverName.setText("");
     }
 
     //清空收货人手机号
     @OnClick(R.id.receiverPhoneBtn)
-    void clearReceiverPhone()
-    {
-        receiverPhone.setText ( "" );
+    void clearReceiverPhone() {
+        receiverPhone.setText("");
     }
 
     //清空收货人详细地址
     @OnClick(R.id.detailBtn)
-    void clearReceiverDetail()
-    {
-        detail.setText ( "" );
+    void clearReceiverDetail() {
+        detail.setText("");
     }
 
     //设置默认按钮
     @OnClick(R.id.defauleBtn)
-    void settingDefault()
-    {
-        if(0 == defauleBtn.getTag ())
-        {
+    void settingDefault() {
+        if (0 == Integer.parseInt(defauleBtn.getTag().toString())) {
             //设置默认背景
-            defauleBtn.setTag ( 1 );
-            SystemTools.loadBackground ( defauleBtn, resources.getDrawable ( R.mipmap.setting_default_a ) );
-        }
-        else if(1 == defauleBtn.getTag ())
-        {
+            defauleBtn.setTag(1);
+            SystemTools.loadBackground(defauleBtn, resources.getDrawable(R.mipmap.setting_default_a));
+        } else if (1 == Integer.parseInt(defauleBtn.getTag().toString())) {
             //设置非默认背景
-            defauleBtn.setTag ( 0 );
-            SystemTools.loadBackground ( defauleBtn, resources.getDrawable ( R.mipmap.setting_default_b ) );
+            defauleBtn.setTag(0);
+            SystemTools.loadBackground(defauleBtn, resources.getDrawable(R.mipmap.setting_default_b));
         }
     }
 
-    @OnClick ( R.id.provinceL )
-    void selectProvince()
-    {
+    @OnClick(R.id.provinceL)
+    void selectProvince() {
         imm.hideSoftInputFromWindow(provinceL.getWindowToken(), 0);
-        addressPopWin = new AddressPopWin ( mHandler, application, AddAddressActivity.this, application.localAddress, 0, wManager, AddAddressActivity.this );
+        addressPopWin = new AddressPopWin(mHandler, application, AddAddressActivity.this, application.localAddress, 0, wManager, AddAddressActivity.this);
         addressPopWin.initView();
-        addressPopWin.showAtLocation (titleLeftImage, Gravity.BOTTOM, 0, 0);
-        addressPopWin.setOnDismissListener(new PoponDismissListener (AddAddressActivity.this));
+        addressPopWin.showAtLocation(titleLeftImage, Gravity.BOTTOM, 0, 0);
+        addressPopWin.setOnDismissListener(new PoponDismissListener(AddAddressActivity.this));
     }
 
-    @OnClick ( R.id.cityL )
-    void selectCity()
-    {
+    @OnClick(R.id.cityL)
+    void selectCity() {
         imm.hideSoftInputFromWindow(cityL.getWindowToken(), 0);
-        addressPopWin = new AddressPopWin ( mHandler, application, AddAddressActivity.this, application.localAddress, 0, wManager, AddAddressActivity.this );
+        addressPopWin = new AddressPopWin(mHandler, application, AddAddressActivity.this, application.localAddress, 0, wManager, AddAddressActivity.this);
         addressPopWin.initView();
-        addressPopWin.showAtLocation (titleLeftImage, Gravity.BOTTOM, 0, 0);
-        addressPopWin.setOnDismissListener(new PoponDismissListener (AddAddressActivity.this));
+        addressPopWin.showAtLocation(titleLeftImage, Gravity.BOTTOM, 0, 0);
+        addressPopWin.setOnDismissListener(new PoponDismissListener(AddAddressActivity.this));
     }
 
-    @OnClick ( R.id.areaL )
-    void selectArea()
-    {
+    @OnClick(R.id.areaL)
+    void selectArea() {
         imm.hideSoftInputFromWindow(areaL.getWindowToken(), 0);
-        addressPopWin = new AddressPopWin ( mHandler, application, AddAddressActivity.this, application.localAddress, 0, wManager, AddAddressActivity.this );
+        addressPopWin = new AddressPopWin(mHandler, application, AddAddressActivity.this, application.localAddress, 0, wManager, AddAddressActivity.this);
         addressPopWin.initView();
-        addressPopWin.showAtLocation (titleLeftImage, Gravity.BOTTOM, 0, 0);
-        addressPopWin.setOnDismissListener(new PoponDismissListener (AddAddressActivity.this));
+        addressPopWin.showAtLocation(titleLeftImage, Gravity.BOTTOM, 0, 0);
+        addressPopWin.setOnDismissListener(new PoponDismissListener(AddAddressActivity.this));
     }
 
     @OnClick(R.id.titleLeftImage)
-    void doBack()
-    {
-        closeSelf ( AddAddressActivity.this );
+    void doBack() {
+        closeSelf(AddAddressActivity.this);
     }
 
     @OnClick(R.id.titleRightImage)
-    void doSave()
-    {
+    void doSave() {
         //保存地址数据
-        if( TextUtils.isEmpty ( receiverName.getText () ))
-        {
-            ToastUtils.showMomentToast(AddAddressActivity.this,  AddAddressActivity.this, "请输入收货人" );
+        if (TextUtils.isEmpty(receiverName.getText())) {
+            ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "请输入收货人");
             return;
-        }
-        else if(TextUtils.isEmpty ( receiverPhone.getText () ))
-        {
+        } else if (TextUtils.isEmpty(receiverPhone.getText())) {
             ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "请输入收货手机");
             return;
-        }
-        else if(TextUtils.isEmpty ( detail.getText () ))
-        {
+        } else if (TextUtils.isEmpty(detail.getText())) {
             ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "请输入详细地址");
             return;
-        }
-        else if(TextUtils.isEmpty ( province.getText () ))
-        {
+        } else if (TextUtils.isEmpty(province.getText())) {
             ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "请选择省份");
             return;
-        }
-        else if(TextUtils.isEmpty ( city.getText () ))
-        {
+        } else if (TextUtils.isEmpty(city.getText())) {
             ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "请选择城市");
             return;
-        }
-        else if(TextUtils.isEmpty ( area.getText () ))
-        {
+        } else if (TextUtils.isEmpty(area.getText())) {
             ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "请选择区域");
             return;
-        }
-
-        else
-        {
+        } else {
             //弹出执行进度条
-            progress.showProgress ( "正在处理数据" );
-            progress.showAtLocation (titleLayoutL,
-                                     Gravity.CENTER, 0, 0
-                                    );
+            progress.showProgress("正在处理数据");
+            progress.showAtLocation(titleLayoutL,
+                    Gravity.CENTER, 0, 0
+            );
             String url = null;
-            if(null==bundle)
-            {
+            if (null == bundle) {
                 url = Contant.REQUEST_URL + Contant.ADD_MY_ADDRESS;
-            }
-            else
-            {
+            } else {
                 url = Contant.REQUEST_URL + Contant.UPDATE_ADDRESS;
             }
 
             AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), AddAddressActivity.this);
-            Map<String, Object> maps = new HashMap<String, Object> ();
+            Map<String, Object> maps = new HashMap<String, Object>();
             //1 拼装参数
-            if(null==bundle)
-            {
+            if (null == bundle) {
                 maps.put("cityId", "0");
+            } else {
+                maps.put("addressId", String.valueOf(bundle.getLong("addressId")));
             }
-            else
-            {
-                maps.put("addressId", String.valueOf ( bundle.getLong ( "addressId" ) ));
-            }
-            maps.put("cityName", province.getText ().toString()+"&"+city.getText ().toString()+"&"+area.getText ().toString());
-            maps.put ( "receiver",  receiverName.getText ().toString ( ));
-            maps.put ( "mobile",  receiverPhone.getText ().toString ( ));
-            maps.put("details", detail.getText ().toString ( ));
-            maps.put("defaultAddress", String.valueOf(defauleBtn.getTag () ) );
+            maps.put("cityName", province.getText().toString() + "&" + city.getText().toString() + "&" + area.getText().toString());
+            maps.put("receiver", receiverName.getText().toString());
+            maps.put("mobile", receiverPhone.getText().toString());
+            maps.put("details", detail.getText().toString());
+            maps.put("defaultAddress", String.valueOf(defauleBtn.getTag()));
             Map<String, Object> param = params.obtainPostParam(maps);
-            BaseModel base = new BaseModel ();
-            HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel> ();
+            BaseModel base = new BaseModel();
+            HttpUtils<BaseModel> httpUtils = new HttpUtils<BaseModel>();
             httpUtils.doVolleyPost(
                     base, url, param, new Response.Listener<BaseModel>() {
                         @Override
@@ -408,13 +351,10 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
                             BaseModel base = response;
                             if (1 == base.getResultCode()) {
                                 //上传成功
-                                if(null==bundle)
-                                {
+                                if (null == bundle) {
                                     ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "地址添加成功");
                                     MyBroadcastReceiver.sendBroadcast(AddAddressActivity.this, MyBroadcastReceiver.TO_ADDRESSLIST);
-                                }
-                                else
-                                {
+                                } else {
                                     ToastUtils.showMomentToast(AddAddressActivity.this, AddAddressActivity.this, "地址修改成功");
                                     MyBroadcastReceiver.sendBroadcast(AddAddressActivity.this, MyBroadcastReceiver.TO_ADDRESSLIST);
                                 }
@@ -426,16 +366,14 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
                                 }, 1500);
                             } else {
                                 //上传失败
-                                if(null==bundle) {
+                                if (null == bundle) {
                                     noticePop = new NoticePopWindow(AddAddressActivity.this, AddAddressActivity.this, wManager, "地址添加失败");
                                     noticePop.showNotice();
                                     noticePop.showAtLocation(
                                             findViewById(R.id.titleLayout),
                                             Gravity.CENTER, 0, 0
                                     );
-                                }
-                                else
-                                {
+                                } else {
                                     noticePop = new NoticePopWindow(AddAddressActivity.this, AddAddressActivity.this, wManager, "地址修改失败");
                                     noticePop.showNotice();
                                     noticePop.showAtLocation(
@@ -451,16 +389,14 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
                         public void onErrorResponse(VolleyError error) {
                             progress.dismissView();
                             //系统级别错误
-                            if(null==bundle) {
+                            if (null == bundle) {
                                 noticePop = new NoticePopWindow(AddAddressActivity.this, AddAddressActivity.this, wManager, "服务器未响应");
                                 noticePop.showNotice();
                                 noticePop.showAtLocation(
                                         findViewById(R.id.titleLayout),
                                         Gravity.CENTER, 0, 0
                                 );
-                            }
-                            else
-                            {
+                            } else {
                                 noticePop = new NoticePopWindow(AddAddressActivity.this, AddAddressActivity.this, wManager, "服务器未响应");
                                 noticePop.showNotice();
                                 noticePop.showAtLocation(
@@ -476,28 +412,25 @@ class AddAddressActivity extends BaseActivity implements View.OnClickListener, H
 
 
     @Override
-    protected
-    void onDestroy ( ) {
+    protected void onDestroy() {
 
-        super.onDestroy ( );
-        VolleyUtil.cancelAllRequest ( );
-        ButterKnife.unbind ( this );
-        if( null != myBroadcastReceiver)
-        {
+        super.onDestroy();
+        VolleyUtil.cancelAllRequest();
+        ButterKnife.unbind(this);
+        if (null != myBroadcastReceiver) {
             myBroadcastReceiver.unregisterReceiver();
         }
     }
 
     @Override
-    public
-    boolean onKeyDown ( int keyCode, KeyEvent event ) {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        if ( keyCode == KeyEvent.KEYCODE_BACK
-             && event.getAction ( ) == KeyEvent.ACTION_DOWN ) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
             //关闭
-            this.closeSelf ( AddAddressActivity.this );
+            this.closeSelf(AddAddressActivity.this);
         }
-        return super.onKeyDown ( keyCode, event );
+        return super.onKeyDown(keyCode, event);
     }
 
 

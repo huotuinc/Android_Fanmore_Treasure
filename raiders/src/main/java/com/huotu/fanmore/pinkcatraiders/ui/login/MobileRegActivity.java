@@ -301,9 +301,9 @@ public class MobileRegActivity extends BaseActivity implements Handler.Callback,
      * @since
      */
     private void bindMobile() {
-        if (bundle.get("type")==3){
+        if (3 == Integer.parseInt(bundle.get("type").toString())){
             progress.showProgress ( "正在修改手机" );
-        }else if (bundle.get("type")==4){
+        }else if (4 == Integer.parseInt(bundle.get("type").toString())){
             progress.showProgress ( "正在绑定手机" );
         }
         progress.showAtLocation ( btn_commit, Gravity.CENTER, 0, 0 );

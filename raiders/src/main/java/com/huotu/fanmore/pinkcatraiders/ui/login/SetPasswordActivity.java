@@ -121,14 +121,14 @@ public class SetPasswordActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btnshow:{
-                if(0==btnshow.getTag())
+                if(0==Integer.parseInt(btnshow.getTag().toString()))
                 {
                     //显示密码
                     edtpsd.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                     btnshow.setText("隐藏密码");
                     btnshow.setTag(1);
                 }
-                else if(1==btnshow.getTag())
+                else if(1==Integer.parseInt(btnshow.getTag().toString()))
                 {
                     edtpsd.setTransformationMethod(PasswordTransformationMethod.getInstance());
                     btnshow.setText("显示密码");

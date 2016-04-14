@@ -28,6 +28,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+import com.huotu.fanmore.pinkcatraiders.widget.MyGridView;
 
 import org.json.JSONObject;
 
@@ -50,7 +51,7 @@ public class PopularityFrag extends BaseFragment {
     public HomeActivity rootAty;
     public WindowManager wManager;
     @Bind(R.id.popularGrid)
-    GridView popularGrid;
+    MyGridView popularGrid;
 
     @Override
     public void onResume() {
@@ -76,6 +77,8 @@ public class PopularityFrag extends BaseFragment {
         rootAty.popProducts = new ArrayList<ProductModel>();
         rootAty.popAdapter = new PopGridAdapter(rootAty.popProducts, getActivity(), getActivity(), rootAty.mHandler);
         popularGrid.setAdapter(rootAty.popAdapter);
+
+
     }
 
     @Override

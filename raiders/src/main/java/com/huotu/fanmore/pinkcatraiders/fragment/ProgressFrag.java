@@ -22,6 +22,7 @@ import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
+import com.huotu.fanmore.pinkcatraiders.widget.MyGridView;
 
 import org.json.JSONObject;
 
@@ -44,7 +45,7 @@ public class ProgressFrag extends BaseFragment {
     public HomeActivity rootAty;
     public WindowManager wManager;
     @Bind(R.id.progressGrid)
-    GridView progressGrid;
+    MyGridView progressGrid;
 
     @Override
     public void onResume() {

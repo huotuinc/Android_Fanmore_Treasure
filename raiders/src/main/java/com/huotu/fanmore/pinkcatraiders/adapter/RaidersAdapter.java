@@ -63,7 +63,7 @@ public class RaidersAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return (null==raiders||raiders.isEmpty())?null:raiders.get(position);
+        return (null==raiders||raiders.isEmpty())?null:raiders.get(position-1);
     }
 
     @Override

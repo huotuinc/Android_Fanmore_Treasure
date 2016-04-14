@@ -5,8 +5,7 @@ package com.huotu.fanmore.pinkcatraiders.model;
  */
 public enum OperateTypeEnum {
 
-    REFRESH("刷新",1),
-    LOADMORE("加载更多",2);
+    REFRESH("刷新",1),LOADMORE("加载更多",2);
 
     private OperateTypeEnum(String name , int index){
         this.name=name;
