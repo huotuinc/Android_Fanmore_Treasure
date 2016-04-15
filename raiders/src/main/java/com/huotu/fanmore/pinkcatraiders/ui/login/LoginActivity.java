@@ -1,6 +1,5 @@
 package com.huotu.fanmore.pinkcatraiders.ui.login;
 
-import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -18,20 +17,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.google.common.eventbus.EventBus;
 import com.google.gson.Gson;
 import com.huotu.android.library.libedittext.EditText;
-import com.huotu.android.library.libedittext.MainActivity;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
@@ -40,10 +30,7 @@ import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
 import com.huotu.fanmore.pinkcatraiders.model.AppWXLoginModel;
 import com.huotu.fanmore.pinkcatraiders.model.BalanceOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseBalanceModel;
-import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
-import com.huotu.fanmore.pinkcatraiders.model.CartCountModel;
 import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
-import com.huotu.fanmore.pinkcatraiders.model.InitOutputsModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListModel;
 import com.huotu.fanmore.pinkcatraiders.model.ListOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.LocalCartOutputModel;
@@ -53,7 +40,6 @@ import com.huotu.fanmore.pinkcatraiders.model.LoginWXModel;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
-import com.huotu.fanmore.pinkcatraiders.ui.guide.GuideActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.PayOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
@@ -61,10 +47,8 @@ import com.huotu.fanmore.pinkcatraiders.uitls.EncryptUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.GsonRequest;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
-import com.huotu.fanmore.pinkcatraiders.uitls.PreferenceHelper;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
-
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
@@ -76,13 +60,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 
@@ -90,10 +72,10 @@ import cn.sharesdk.wechat.friends.Wechat;
  * 登录界面
  */
 public class LoginActivity extends BaseActivity
-        implements Handler.Callback,View.OnClickListener {
+        implements Handler.Callback, View.OnClickListener {
 
     private
-    AutnLogin      login;
+    AutnLogin login;
     //handler对象
     public Handler mHandler;
     public
@@ -132,7 +114,7 @@ public class LoginActivity extends BaseActivity
     @Bind(R.id.tv_qq)
     TextView tv_qq;
     @Bind(R.id.loginL)
-    RelativeLayout  loginL;
+    RelativeLayout loginL;
     @Bind(R.id.tv_forgetpsd)
     TextView tv_forgetpsd;
     @Bind(R.id.titleLeftImage)
@@ -141,41 +123,34 @@ public class LoginActivity extends BaseActivity
 
     @Override
     public boolean handleMessage(Message msg) {
-        switch ( msg.what )
-        {
+        switch (msg.what) {
 
             //授权登录
-            case Contant.MSG_AUTH_COMPLETE:
-            {
+            case Contant.MSG_AUTH_COMPLETE: {
                 //提示授权成功
-                Platform plat = ( Platform ) msg.obj;
-                login.authorize ( plat );
+                Platform plat = (Platform) msg.obj;
+                login.authorize(plat);
             }
             break;
             //授权登录
-            case Contant.LOGIN_AUTH_ERROR:
-            {
+            case Contant.LOGIN_AUTH_ERROR: {
                 btn_wx.setEnabled(true);
                 btn_qq.setEnabled(true);
                 progress.dismissView();
                 ToastUtils.showMomentToast(LoginActivity.this, this, "登录失败");
             }
             break;
-            case Contant.MSG_AUTH_ERROR:
-            {
+            case Contant.MSG_AUTH_ERROR: {
                 btn_wx.setEnabled(true);
                 btn_qq.setEnabled(true);
                 progress.dismissView();
 
-                Throwable throwable = ( Throwable ) msg.obj;
-                if("cn.sharesdk.wechat.utils.WechatClientNotExistException".equals ( throwable.toString () ))
-                {
+                Throwable throwable = (Throwable) msg.obj;
+                if ("cn.sharesdk.wechat.utils.WechatClientNotExistException".equals(throwable.toString())) {
                     //手机没有安装微信客户端
                     ToastUtils.showMomentToast(LoginActivity.this, this, "手机没有安装微信客户端");
 
-                }
-                else
-                {
+                } else {
 //                    //提示授权失败
                     ToastUtils.showMomentToast(LoginActivity.this, this, "授权操作遇到错误");
 
@@ -183,16 +158,13 @@ public class LoginActivity extends BaseActivity
 
             }
             break;
-            case Contant.MSG_UN_LOGIN:
-            {
+            case Contant.MSG_UN_LOGIN: {
                 //处理微信未登录
                 progress.dismissView();
             }
             break;
-            case Contant.MSG_AUTH_CANCEL:
-            {
-                if(null!=btn_wx&&null!=btn_qq)
-                {
+            case Contant.MSG_AUTH_CANCEL: {
+                if (null != btn_wx && null != btn_qq) {
                     btn_wx.setEnabled(true);
                     btn_qq.setEnabled(true);
                 }
@@ -203,98 +175,85 @@ public class LoginActivity extends BaseActivity
 
             }
             break;
-            case Contant.MSG_USERID_FOUND:
-            {
+            case Contant.MSG_USERID_FOUND: {
                 progress.dismissView();
             }
             break;
-            case Contant.MSG_LOGIN:
-            {
+            case Contant.MSG_LOGIN: {
                 progress.showProgress("正在登录");
                 progress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
                 btn_wx.setEnabled(true);
                 btn_qq.setEnabled(true);
-                if( msg.arg1 == 1 ) {
+                if (msg.arg1 == 1) {
                     LoginQQModel qqModel = (LoginQQModel) msg.obj;
                     String url = Contant.REQUEST_URL + Contant.AUTHLOGIN;
                     AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), LoginActivity.this);
                     //中文字符特殊处理
                     //1 拼装参数
-                    Map<String, Object> maps = new HashMap<String, Object> ();
-                    maps.put("username",qqModel.getNickname());
-                    maps.put("unionId",qqModel.getOpenid());
+                    Map<String, Object> maps = new HashMap<String, Object>();
+                    maps.put("username", qqModel.getNickname());
+                    maps.put("unionId", qqModel.getOpenid());
                     application.writeunionid(qqModel.getOpenid());
-                    maps.put("head",qqModel.getIcon());
+                    maps.put("head", qqModel.getIcon());
                     maps.put("type", 2);
-                    maps = params.obtainAllParamUTF8 ( maps );
+                    maps = params.obtainAllParamUTF8(maps);
                     //获取sign
-                    String signStr = params.obtainSignUTF8 ( maps );
+                    String signStr = params.obtainSignUTF8(maps);
                     maps.put("username", URLEncoder.encode(qqModel.getNickname()));
-                    maps.put ( "sign", signStr);
+                    maps.put("sign", signStr);
                     //拼装URL
-                    String suffix = params.obtainGetParamUTF8 (maps);
+                    String suffix = params.obtainGetParamUTF8(maps);
                     url = url + suffix;
                     HttpUtils httpUtils = new HttpUtils();
                     httpUtils.doVolleyGet(url, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             progress.dismissView();
-                            if(LoginActivity.this.isFinishing())
-                            {
+                            if (LoginActivity.this.isFinishing()) {
                                 return;
                             }
                             JSONUtil<AppWXLoginModel> jsonUtil = new JSONUtil<AppWXLoginModel>();
                             AppWXLoginModel appWXLoginModel = new AppWXLoginModel();
                             appWXLoginModel = jsonUtil.toBean(response.toString(), appWXLoginModel);
-                            if(null != appWXLoginModel && null != appWXLoginModel.getResultData() && (1==appWXLoginModel.getResultCode()))
-                            {
-                                if(null!=appWXLoginModel.getResultData().getUser())
-                                {
+                            if (null != appWXLoginModel && null != appWXLoginModel.getResultData() && (1 == appWXLoginModel.getResultCode())) {
+                                if (null != appWXLoginModel.getResultData().getUser()) {
                                     try {
                                         //加载用户信息
                                         application.writeUserInfo(appWXLoginModel.getResultData().getUser());
-                                        if(bundle!=null&&null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
-                                        {
+                                        if (bundle != null && null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData"))) {
                                             ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "登陆成功，1秒后开始自动结算");
                                             mHandler.postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     uploadCartData();
                                                 }
-                                            },1000);
+                                            }, 1000);
 
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             //跳转到首页
                                             ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
                                         }
 
-                                    } catch (Exception e)
-                                    {
+                                    } catch (Exception e) {
                                         //未获取该用户信息
-                                        noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "用户数据存在非法字符");
-                                        noticePop.showNotice ( );
-                                        noticePop.showAtLocation (titleLayoutL,
+                                        noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "用户数据存在非法字符");
+                                        noticePop.showNotice();
+                                        noticePop.showAtLocation(titleLayoutL,
                                                 Gravity.CENTER, 0, 0
                                         );
                                     }
-                                }
-                                else
-                                {
+                                } else {
                                     //未获取该用户信息
-                                    noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "未获取该用户信息");
-                                    noticePop.showNotice ( );
-                                    noticePop.showAtLocation (titleLayoutL,
+                                    noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "未获取该用户信息");
+                                    noticePop.showNotice();
+                                    noticePop.showAtLocation(titleLayoutL,
                                             Gravity.CENTER, 0, 0
                                     );
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 //异常处理，自动切换成无数据
-                                noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "登录失败");
-                                noticePop.showNotice ( );
+                                noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "登录失败");
+                                noticePop.showNotice();
                                 noticePop.showAtLocation(titleLayoutL,
                                         Gravity.CENTER, 0, 0
                                 );
@@ -306,37 +265,36 @@ public class LoginActivity extends BaseActivity
                             progress.dismissView();
                             //初始化失败
                             //异常处理，自动切换成无数据
-                            noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "服务器未响应");
-                            noticePop.showNotice ( );
+                            noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "服务器未响应");
+                            noticePop.showNotice();
                             noticePop.showAtLocation(titleLayoutL,
                                     Gravity.CENTER, 0, 0
                             );
                         }
                     });
 
-                }
-                else if( msg.arg1 == 2 ) {
+                } else if (msg.arg1 == 2) {
                     LoginWXModel loginWXModel = (LoginWXModel) msg.obj;
-                    AuthParamUtils paramUtils = new AuthParamUtils( application, System.currentTimeMillis (),  LoginActivity.this );
+                    AuthParamUtils paramUtils = new AuthParamUtils(application, System.currentTimeMillis(), LoginActivity.this);
                     //中文字符特殊处理
                     //1 拼装参数
-                    Map<String, Object> maps = new HashMap<String, Object> ();
-                    maps.put("username",loginWXModel.getNickname());
-                    maps.put("unionId",loginWXModel.getUnionid());
+                    Map<String, Object> maps = new HashMap<String, Object>();
+                    maps.put("username", loginWXModel.getNickname());
+                    maps.put("unionId", loginWXModel.getUnionid());
                     maps.put("head", loginWXModel.getHeadimgurl());
                     maps.put("type", 1);
-                    maps = paramUtils.obtainAllParamUTF8 ( maps );
+                    maps = paramUtils.obtainAllParamUTF8(maps);
                     //获取sign
-                    String signStr = paramUtils.obtainSignUTF8 ( maps );
+                    String signStr = paramUtils.obtainSignUTF8(maps);
                     maps.put("username", URLEncoder.encode(loginWXModel.getNickname()));
-                    maps.put ( "sign", signStr);
+                    maps.put("sign", signStr);
                     //拼装URL
-                    String suffix = paramUtils.obtainGetParamUTF8 (maps);
-                    String url=Contant.REQUEST_URL+"authLogin"+suffix;
+                    String suffix = paramUtils.obtainGetParamUTF8(maps);
+                    String url = Contant.REQUEST_URL + "authLogin" + suffix;
 
                     GsonRequest<AppWXLoginModel> loginRequest = new GsonRequest<AppWXLoginModel>(
                             Request.Method.GET,
-                            url ,
+                            url,
                             AppWXLoginModel.class,
                             null,
                             loginListener,
@@ -349,8 +307,7 @@ public class LoginActivity extends BaseActivity
             }
             break;
 
-            case Contant.MSG_USERID_NO_FOUND:
-            {
+            case Contant.MSG_USERID_NO_FOUND: {
                 btn_wx.setEnabled(true);
                 btn_qq.setEnabled(true);
                 progress.dismissView();
@@ -359,8 +316,7 @@ public class LoginActivity extends BaseActivity
 
             }
             break;
-            case Contant.INIT_MENU_ERROR:
-            {
+            case Contant.INIT_MENU_ERROR: {
                 btn_wx.setEnabled(true);
                 btn_qq.setEnabled(true);
                 progress.dismissView();
@@ -372,132 +328,104 @@ public class LoginActivity extends BaseActivity
         return false;
     }
 
-    private void uploadCartData()
-    {
-            //提交本地购物数据
-            String data = bundle.getString("loginData");
-            JSONUtil<LocalCartOutputModel> jsonUtil = new JSONUtil<LocalCartOutputModel>();
-            LocalCartOutputModel localCartOutput = new LocalCartOutputModel();
-            localCartOutput = jsonUtil.toBean(data, localCartOutput);
-            List<ListModel> lists = localCartOutput.getResultData().getLists();
-            List<UploadLocalCartDataModel> uploadLocalCarts = new ArrayList<UploadLocalCartDataModel>();
-            for(int i=0; i<lists.size(); i++)
-            {
-                UploadLocalCartDataModel uploadLocalCartData = new UploadLocalCartDataModel();
-                uploadLocalCartData.setIssueId(lists.get(i).getIssueId());
-                uploadLocalCartData.setAmount(lists.get(i).getUserBuyAmount());
-                uploadLocalCarts.add(uploadLocalCartData);
-            }
+    private void uploadCartData() {
+        //提交本地购物数据
+        String data = bundle.getString("loginData");
+        JSONUtil<LocalCartOutputModel> jsonUtil = new JSONUtil<LocalCartOutputModel>();
+        LocalCartOutputModel localCartOutput = new LocalCartOutputModel();
+        localCartOutput = jsonUtil.toBean(data, localCartOutput);
+        List<ListModel> lists = localCartOutput.getResultData().getLists();
+        List<UploadLocalCartDataModel> uploadLocalCarts = new ArrayList<UploadLocalCartDataModel>();
+        for (int i = 0; i < lists.size(); i++) {
+            UploadLocalCartDataModel uploadLocalCartData = new UploadLocalCartDataModel();
+            uploadLocalCartData.setIssueId(lists.get(i).getIssueId());
+            uploadLocalCartData.setAmount(lists.get(i).getUserBuyAmount());
+            uploadLocalCarts.add(uploadLocalCartData);
+        }
 
-            Gson gson = new Gson();
-            String carts = gson.toJson(uploadLocalCarts);
+        Gson gson = new Gson();
+        String carts = gson.toJson(uploadLocalCarts);
 
-            String url = Contant.REQUEST_URL + Contant.JOIN_ALL_CART_TO_SERVER;
-            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), LoginActivity.this);
-            Map<String, Object> maps = new HashMap<String, Object>();
-            maps.put ( "cartsJson", carts );
-            Map<String, Object> param = params.obtainPostParam(maps);
-            ListOutputModel base = new ListOutputModel ();
-            HttpUtils<ListOutputModel> httpUtils = new HttpUtils<ListOutputModel> ();
+        String url = Contant.REQUEST_URL + Contant.JOIN_ALL_CART_TO_SERVER;
+        AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), LoginActivity.this);
+        Map<String, Object> maps = new HashMap<String, Object>();
+        maps.put("cartsJson", carts);
+        Map<String, Object> param = params.obtainPostParam(maps);
+        ListOutputModel base = new ListOutputModel();
+        HttpUtils<ListOutputModel> httpUtils = new HttpUtils<ListOutputModel>();
 
-            httpUtils.doVolleyPost (
-                    base, url, param, new Response.Listener< ListOutputModel > ( ) {
-                        @Override
-                        public
-                        void onResponse ( ListOutputModel response ) {
-                            //清空本地数据
-                            CartDataModel.deleteAll(CartDataModel.class);
-                            ListOutputModel base = response;
-                            if(null!=base&&null!=base.getResultData()&&null!=base.getResultData().getList()&&1==base.getResultCode())
-                            {
-                                //跳转到结算界面
-                                List<ListModel> ls = base.getResultData().getList();
-                                List<CartBalanceModel> paramsList = new ArrayList<CartBalanceModel>();
-                                for(int i=0; i<ls.size(); i++)
-                                {
-                                    CartBalanceModel cartBalanceModel = new CartBalanceModel();
-                                    cartBalanceModel.setPid(ls.get(i).getSid());
-                                    cartBalanceModel.setBuyAmount(ls.get(i).getUserBuyAmount());
-                                    paramsList.add(cartBalanceModel);
-                                }
+        httpUtils.doVolleyPost(
+                base, url, param, new Response.Listener<ListOutputModel>() {
+                    @Override
+                    public void onResponse(ListOutputModel response) {
+                        //清空本地数据
+                        CartDataModel.deleteAll(CartDataModel.class);
+                        ListOutputModel base = response;
+                        if (null != base && null != base.getResultData() && null != base.getResultData().getList() && 1 == base.getResultCode()) {
+                            //跳转到结算界面
+                            List<ListModel> ls = base.getResultData().getList();
+                            List<CartBalanceModel> paramsList = new ArrayList<CartBalanceModel>();
+                            for (int i = 0; i < ls.size(); i++) {
+                                CartBalanceModel cartBalanceModel = new CartBalanceModel();
+                                cartBalanceModel.setPid(ls.get(i).getSid());
+                                cartBalanceModel.setBuyAmount(ls.get(i).getUserBuyAmount());
+                                paramsList.add(cartBalanceModel);
+                            }
 
-                                //转成json格式参数
-                                Gson gson = new Gson();
-                                String carts = gson.toJson(paramsList);
-                                String url = Contant.REQUEST_URL + Contant.BALANCE;
-                                AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), LoginActivity.this);
-                                Map<String, Object> maps = new HashMap<String, Object> ();
-                                maps.put ( "carts",  carts);
-                                Map<String, Object> param = params.obtainPostParam(maps);
-                                BalanceOutputModel base1 = new BalanceOutputModel ();
-                                HttpUtils<BalanceOutputModel> httpUtils = new HttpUtils<BalanceOutputModel> ();
-                                httpUtils.doVolleyPost(
-                                        base1, url, param, new Response.Listener<BalanceOutputModel>() {
-                                            @Override
-                                            public void onResponse(BalanceOutputModel response) {
-                                                BalanceOutputModel base1 = response;
-                                                if (1 == base1.getResultCode() && null != base1.getResultData() && null != base1.getResultData().getData()) {
-                                                    AppBalanceModel balance = base1.getResultData().getData();
-                                                    BaseBalanceModel baseBalance = new BaseBalanceModel();
-                                                    baseBalance.setMoney(balance.getMoney());
-                                                    baseBalance.setRedPacketsEndTime(balance.getRedPacketsEndTime());
-                                                    baseBalance.setRedPacketsFullMoney(balance.getRedPacketsFullMoney());
-                                                    baseBalance.setRedPacketsId(balance.getRedPacketsId());
-                                                    baseBalance.setRedPacketsMinusMoney(balance.getRedPacketsMinusMoney());
-                                                    baseBalance.setRedPacketsNumber(balance.getRedPacketsNumber());
-                                                    baseBalance.setRedPacketsRemark(balance.getRedPacketsRemark());
-                                                    baseBalance.setRedPacketsStartTime(balance.getRedPacketsStartTime());
-                                                    baseBalance.setRedPacketsStatus(null==balance.getRedPacketsStatus()?null:balance.getRedPacketsStatus().getName());
-                                                    baseBalance.setTotalMoney(balance.getTotalMoney());
-                                                    baseBalance.setRedPacketsTitle(balance.getRedPacketsTitle());
-                                                    Bundle bundle = new Bundle();
-                                                    bundle.putSerializable("baseBalance", baseBalance);
-                                                    ActivityUtils.getInstance ().skipActivity(LoginActivity.this, PayOrderActivity.class, bundle );
-                                                } else if(1115 == base1.getResultCode()) {
-                                                    progress.dismissView();
-                                                    VolleyUtil.cancelAllRequest();
-                                                    //上传失败
-                                                    noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "该期商品已经过期，请重新购买");
-                                                    noticePop.showNotice();
-                                                    noticePop.showAtLocation(
-                                                            findViewById(R.id.titleLayout),
-                                                            Gravity.CENTER, 0, 0
-                                                    );
-                                                    mHandler.postDelayed(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            //跳转到首页
-                                                            ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
-                                                        }
-                                                    }, 1000);
-                                                }
-                                                else {
-                                                    progress.dismissView();
-                                                    VolleyUtil.cancelAllRequest();
-                                                    //上传失败
-                                                    noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "结算失败");
-                                                    noticePop.showNotice();
-                                                    noticePop.showAtLocation(
-                                                            findViewById(R.id.titleLayout),
-                                                            Gravity.CENTER, 0, 0
-                                                    );
-                                                    mHandler.postDelayed(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            //跳转到首页
-                                                            ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
-                                                        }
-                                                    }, 1000);
-                                                }
-                                            }
-                                        }, new Response.ErrorListener() {
-
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
+                            //转成json格式参数
+                            Gson gson = new Gson();
+                            String carts = gson.toJson(paramsList);
+                            String url = Contant.REQUEST_URL + Contant.BALANCE;
+                            AuthParamUtils params = new AuthParamUtils(application, System.currentTimeMillis(), LoginActivity.this);
+                            Map<String, Object> maps = new HashMap<String, Object>();
+                            maps.put("carts", carts);
+                            Map<String, Object> param = params.obtainPostParam(maps);
+                            BalanceOutputModel base1 = new BalanceOutputModel();
+                            HttpUtils<BalanceOutputModel> httpUtils = new HttpUtils<BalanceOutputModel>();
+                            httpUtils.doVolleyPost(
+                                    base1, url, param, new Response.Listener<BalanceOutputModel>() {
+                                        @Override
+                                        public void onResponse(BalanceOutputModel response) {
+                                            BalanceOutputModel base1 = response;
+                                            if (1 == base1.getResultCode() && null != base1.getResultData() && null != base1.getResultData().getData()) {
+                                                AppBalanceModel balance = base1.getResultData().getData();
+                                                BaseBalanceModel baseBalance = new BaseBalanceModel();
+                                                baseBalance.setMoney(balance.getMoney());
+                                                baseBalance.setRedPacketsEndTime(balance.getRedPacketsEndTime());
+                                                baseBalance.setRedPacketsFullMoney(balance.getRedPacketsFullMoney());
+                                                baseBalance.setRedPacketsId(balance.getRedPacketsId());
+                                                baseBalance.setRedPacketsMinusMoney(balance.getRedPacketsMinusMoney());
+                                                baseBalance.setRedPacketsNumber(balance.getRedPacketsNumber());
+                                                baseBalance.setRedPacketsRemark(balance.getRedPacketsRemark());
+                                                baseBalance.setRedPacketsStartTime(balance.getRedPacketsStartTime());
+                                                baseBalance.setRedPacketsStatus(null == balance.getRedPacketsStatus() ? null : balance.getRedPacketsStatus().getName());
+                                                baseBalance.setTotalMoney(balance.getTotalMoney());
+                                                baseBalance.setRedPacketsTitle(balance.getRedPacketsTitle());
+                                                Bundle bundle = new Bundle();
+                                                bundle.putSerializable("baseBalance", baseBalance);
+                                                ActivityUtils.getInstance().skipActivity(LoginActivity.this, PayOrderActivity.class, bundle);
+                                            } else if (1115 == base1.getResultCode()) {
                                                 progress.dismissView();
                                                 VolleyUtil.cancelAllRequest();
-                                                //系统级别错误
-                                                noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "服务器未响应");
+                                                //上传失败
+                                                noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "该期商品已经过期，请重新购买");
+                                                noticePop.showNotice();
+                                                noticePop.showAtLocation(
+                                                        findViewById(R.id.titleLayout),
+                                                        Gravity.CENTER, 0, 0
+                                                );
+                                                mHandler.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        //跳转到首页
+                                                        ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                                                    }
+                                                }, 1000);
+                                            } else {
+                                                progress.dismissView();
+                                                VolleyUtil.cancelAllRequest();
+                                                //上传失败
+                                                noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "结算失败");
                                                 noticePop.showNotice();
                                                 noticePop.showAtLocation(
                                                         findViewById(R.id.titleLayout),
@@ -512,23 +440,30 @@ public class LoginActivity extends BaseActivity
                                                 }, 1000);
                                             }
                                         }
-                                );
-                            }
-                            else
-                            {
-                                //跳转到购物车
-                                Bundle bundle = new Bundle();
-                                bundle.putInt("type", 1);
-                                MyBroadcastReceiver.sendBroadcast(LoginActivity.this, MyBroadcastReceiver.JUMP_CART, bundle);
-                                ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
-                            }
-                        }
-                    }, new Response.ErrorListener ( ) {
+                                    }, new Response.ErrorListener() {
 
-                        @Override
-                        public
-                        void onErrorResponse ( VolleyError error ) {
-                            CartDataModel.deleteAll(CartDataModel.class);
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            progress.dismissView();
+                                            VolleyUtil.cancelAllRequest();
+                                            //系统级别错误
+                                            noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "服务器未响应");
+                                            noticePop.showNotice();
+                                            noticePop.showAtLocation(
+                                                    findViewById(R.id.titleLayout),
+                                                    Gravity.CENTER, 0, 0
+                                            );
+                                            mHandler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    //跳转到首页
+                                                    ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                                                }
+                                            }, 1000);
+                                        }
+                                    }
+                            );
+                        } else {
                             //跳转到购物车
                             Bundle bundle = new Bundle();
                             bundle.putInt("type", 1);
@@ -536,14 +471,25 @@ public class LoginActivity extends BaseActivity
                             ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
                         }
                     }
-            );
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        CartDataModel.deleteAll(CartDataModel.class);
+                        //跳转到购物车
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("type", 1);
+                        MyBroadcastReceiver.sendBroadcast(LoginActivity.this, MyBroadcastReceiver.JUMP_CART, bundle);
+                        ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
+                    }
+                }
+        );
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
-                && event.getAction() == KeyEvent.ACTION_DOWN)
-        {
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
             //关闭
             this.closeSelf(LoginActivity.this);
         }
@@ -555,20 +501,20 @@ public class LoginActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_ui);
         ButterKnife.bind(this);
-        mHandler = new Handler ( this );
+        mHandler = new Handler(this);
         //设置沉浸模式
         setImmerseLayout(titleLayoutL);
         am = this.getAssets();
         res = this.getResources();
-        application = ( BaseApplication ) this.getApplication ();
+        application = (BaseApplication) this.getApplication();
         wManager = this.getWindowManager();
-        progress = new ProgressPopupWindow ( LoginActivity.this, LoginActivity.this, wManager );
-        successProgress = new ProgressPopupWindow ( LoginActivity.this, LoginActivity.this, wManager );
+        progress = new ProgressPopupWindow(LoginActivity.this, LoginActivity.this, wManager);
+        successProgress = new ProgressPopupWindow(LoginActivity.this, LoginActivity.this, wManager);
         successProgress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
         Drawable bgDraw = res.getDrawable(R.color.title_bg);
         bundle = this.getIntent().getExtras();
         stubTitleText.inflate();
-        TextView titleText= (TextView) findViewById(R.id.titleText);
+        TextView titleText = (TextView) findViewById(R.id.titleText);
         titleText.setText("用户登录");
 
         titleText.setTextColor(getResources().getColor(R.color.color_white));
@@ -583,20 +529,14 @@ public class LoginActivity extends BaseActivity
     }
 
     @OnClick(R.id.btn_login)
-    void doLogin()
-    {
-        if(TextUtils.isEmpty(edtUserName.getText()))
-        {
+    void doLogin() {
+        if (TextUtils.isEmpty(edtUserName.getText())) {
             ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "请输入手机号");
             return;
-        }
-        else if(TextUtils.isEmpty(edtPwd.getText()))
-        {
+        } else if (TextUtils.isEmpty(edtPwd.getText())) {
             ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "请输入密码");
             return;
-        }
-        else
-        {
+        } else {
             btn_login.setEnabled(false);
             progress.showProgress("正在登录");
             progress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
@@ -614,23 +554,20 @@ public class LoginActivity extends BaseActivity
                 public void onResponse(JSONObject response) {
                     btn_login.setEnabled(true);
                     progress.dismissView();
-                    if(LoginActivity.this.isFinishing())
-                    {
+                    if (LoginActivity.this.isFinishing()) {
                         return;
                     }
                     JSONUtil<LoginOutputsModel> jsonUtil = new JSONUtil<LoginOutputsModel>();
                     LoginOutputsModel loginOutputs = new LoginOutputsModel();
                     loginOutputs = jsonUtil.toBean(response.toString(), loginOutputs);
-                    if(null != loginOutputs && null != loginOutputs.getResultData() && (1==loginOutputs.getResultCode()))
-                    {
+                    if (null != loginOutputs && null != loginOutputs.getResultData() && (1 == loginOutputs.getResultCode())) {
 
-                        if(null!=loginOutputs.getResultData().getUser())
-                        {
+                        if (null != loginOutputs.getResultData().getUser()) {
                             try {
                                 //加载用户信息
                                 application.writeUserInfo(loginOutputs.getResultData().getUser());
 
-                                if(bundle!=null&&null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
+                                if (bundle != null && null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
 
                                 {
                                     ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "登陆成功，1秒后开始自动结算");
@@ -640,55 +577,44 @@ public class LoginActivity extends BaseActivity
                                             uploadCartData();
                                         }
                                     }, 1000);
-                                }
-                                else
-                                {
+                                } else {
                                     //跳转到首页
                                     ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
                                 }
-                            } catch (Exception e)
-                            {
+                            } catch (Exception e) {
                                 //未获取该用户信息
-                                noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "用户数据存在非法字符");
-                                noticePop.showNotice ( );
-                                noticePop.showAtLocation (titleLayoutL,
+                                noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "用户数据存在非法字符");
+                                noticePop.showNotice();
+                                noticePop.showAtLocation(titleLayoutL,
                                         Gravity.CENTER, 0, 0
                                 );
                             }
-                        }
-                        else
-                        {
+                        } else {
                             //未获取该用户信息
-                            noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "未获取该用户信息");
-                            noticePop.showNotice ( );
-                            noticePop.showAtLocation (titleLayoutL,
+                            noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "未获取该用户信息");
+                            noticePop.showNotice();
+                            noticePop.showAtLocation(titleLayoutL,
                                     Gravity.CENTER, 0, 0
                             );
                         }
-                    }
-                    else if(56000==loginOutputs.getResultCode())
-                    {
+                    } else if (56000 == loginOutputs.getResultCode()) {
                         //异常处理，自动切换成无数据
-                        noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "该用户不存在");
-                        noticePop.showNotice ( );
+                        noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "该用户不存在");
+                        noticePop.showNotice();
                         noticePop.showAtLocation(titleLayoutL,
                                 Gravity.CENTER, 0, 0
                         );
-                    }
-                    else if(57002==loginOutputs.getResultCode())
-                    {
+                    } else if (57002 == loginOutputs.getResultCode()) {
                         //异常处理，自动切换成无数据
-                        noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "密码错误");
-                        noticePop.showNotice ( );
+                        noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "密码错误");
+                        noticePop.showNotice();
                         noticePop.showAtLocation(titleLayoutL,
                                 Gravity.CENTER, 0, 0
                         );
-                    }
-                    else
-                    {
+                    } else {
                         //异常处理，自动切换成无数据
-                        noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "登录失败");
-                        noticePop.showNotice ( );
+                        noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "登录失败");
+                        noticePop.showNotice();
                         noticePop.showAtLocation(titleLayoutL,
                                 Gravity.CENTER, 0, 0
                         );
@@ -701,8 +627,8 @@ public class LoginActivity extends BaseActivity
                     progress.dismissView();
                     //初始化失败
                     //异常处理，自动切换成无数据
-                    noticePop = new NoticePopWindow ( LoginActivity.this, LoginActivity.this, wManager, "服务器未响应");
-                    noticePop.showNotice ( );
+                    noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "服务器未响应");
+                    noticePop.showNotice();
                     noticePop.showAtLocation(titleLayoutL,
                             Gravity.CENTER, 0, 0
                     );
@@ -712,14 +638,12 @@ public class LoginActivity extends BaseActivity
     }
 
     @OnClick(R.id.titleLeftImage)
-    void doBack()
-    {
+    void doBack() {
         closeSelf(LoginActivity.this);
     }
 
     @OnClick(R.id.btn_phonereg)
-    void doReg()
-    {
+    void doReg() {
         //注册
         Bundle bundle = new Bundle();
         bundle.putInt("type", 1);
@@ -735,19 +659,19 @@ public class LoginActivity extends BaseActivity
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tv_wx:
-            case R.id.btn_wx:{
+            case R.id.btn_wx: {
                 progress.showProgress("正在授权");
                 progress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
-               login = new AutnLogin(LoginActivity.this, mHandler, application);
-               login.authorize(new Wechat(LoginActivity.this));
+                login = new AutnLogin(LoginActivity.this, mHandler, application);
+                login.authorize(new Wechat(LoginActivity.this));
                 btn_wx.setEnabled(false);
 
             }
-           break;
+            break;
             case R.id.tv_qq:
-            case R.id.btn_qq:{
+            case R.id.btn_qq: {
                 progress.showProgress("正在授权");
                 progress.showAtLocation(titleLayoutL, Gravity.CENTER, 0, 0);
                 login = new AutnLogin(LoginActivity.this, mHandler, application);
@@ -755,57 +679,50 @@ public class LoginActivity extends BaseActivity
                 btn_qq.setEnabled(false);
             }
             break;
-            case R.id.tv_forgetpsd:
-            {
+            case R.id.tv_forgetpsd: {
                 //修改密码
                 Bundle bundle = new Bundle();
                 bundle.putInt("type", 2);
                 ActivityUtils.getInstance().showActivity(LoginActivity.this, MobileRegActivity.class, bundle);
             }
-           default:
-               break;
+            default:
+                break;
         }
 
     }
 
-     Response.ErrorListener errorListener =new Response.ErrorListener() {
-         @Override
-         public void onErrorResponse(VolleyError error) {
-             progress.dismissView();
-             noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "服务器未响应");
-             noticePop.showNotice();
-             noticePop.showAtLocation(titleLayoutL,
-                     Gravity.CENTER, 0, 0);
-         }
+    Response.ErrorListener errorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            progress.dismissView();
+            noticePop = new NoticePopWindow(LoginActivity.this, LoginActivity.this, wManager, "服务器未响应");
+            noticePop.showNotice();
+            noticePop.showAtLocation(titleLayoutL,
+                    Gravity.CENTER, 0, 0);
+        }
 
-     };
+    };
 
     Response.Listener<AppWXLoginModel> loginListener = new Response.Listener<AppWXLoginModel>() {
         @Override
         public void onResponse(AppWXLoginModel appWXLoginModel) {
             //LoginActivity.this.closeProgressDialog();
             progress.dismissView();
-            if( null == appWXLoginModel ){
+            if (null == appWXLoginModel) {
 
                 ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "服务器登录处理失败");
-            }
-            else if( appWXLoginModel.getResultData() ==null ){
+            } else if (appWXLoginModel.getResultData() == null) {
 
                 ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "服务器登录处理失败");
-            }
-            else if(0==appWXLoginModel.getResultCode()&&500==appWXLoginModel.getSystemResultCode())
-            {
+            } else if (0 == appWXLoginModel.getResultCode() && 500 == appWXLoginModel.getSystemResultCode()) {
                 ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "服务器登录处理失败");
-            }
-            else if(null!=appWXLoginModel.getResultData()&&1==appWXLoginModel.getResultCode())
-            {
+            } else if (null != appWXLoginModel.getResultData() && 1 == appWXLoginModel.getResultCode()) {
                 AppUserModel user = appWXLoginModel.getResultData().getUser();
-                if(null != user)
-                {
+                if (null != user) {
                     //记录token
                     BaseApplication.getInstance().writeUserInfo(user);
 
-                    if(null!=bundle&&null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
+                    if (null != bundle && null != bundle.getString("loginData") && !"".equals(bundle.getString("loginData")))
 
                     {
                         ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "登陆成功，1秒后开始自动结算");
@@ -815,23 +732,19 @@ public class LoginActivity extends BaseActivity
                                 uploadCartData();
                             }
                         }, 1000);
-                    }
-                    else
-                    {
+                    } else {
                         //跳转到首页
                         ActivityUtils.getInstance().skipActivity(LoginActivity.this, HomeActivity.class);
                     }
-                }
-                else
-                {
+                } else {
                     ToastUtils.showMomentToast(LoginActivity.this, LoginActivity.this, "未请求到数据");
                 }
             }
-        }};
+        }
+    };
 
 
-    public class UploadLocalCartDataModel
-    {
+    public class UploadLocalCartDataModel {
         private long issueId;
         private long amount;
 
@@ -852,8 +765,7 @@ public class LoginActivity extends BaseActivity
         }
     }
 
-    public class CartBalanceModel
-    {
+    public class CartBalanceModel {
         private long pid;
         private long buyAmount;
 

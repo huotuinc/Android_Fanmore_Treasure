@@ -50,8 +50,7 @@ public class ListAdapter extends BaseAdapter {
     private BaseApplication application;
     private int deleteType;
 
-    public ListAdapter(List<ListModel> lists, Context context, Handler mHandler, int type, BaseApplication application, int deleteType)
-    {
+    public ListAdapter(List<ListModel> lists, Context context, Handler mHandler, int type, BaseApplication application, int deleteType) {
         this.lists = lists;
         this.context = context;
         this.mHandler = mHandler;
@@ -62,12 +61,12 @@ public class ListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return null==lists?0:lists.size();
+        return null == lists ? 0 : lists.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return (null==lists||lists.isEmpty())?null:lists.get(position);
+        return (null == lists || lists.isEmpty()) ? null : lists.get(position);
     }
 
     @Override
@@ -79,103 +78,83 @@ public class ListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         Resources resources = context.getResources();
-        if (convertView == null)
-        {
+        if (convertView == null) {
             convertView = View.inflate(context, R.layout.list_item, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-        }
-        else
-        {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if(1==type&&12==deleteType)
-        {
-            Message message = mHandler.obtainMessage ( );
+        if (1 == type && 12 == deleteType) {
+            Message message = mHandler.obtainMessage();
             message.what = Contant.CART_SELECT;
             message.arg1 = 4;
             mHandler.sendMessage(message);
-        }
-        else if(1==type&&11==deleteType)
-        {
-            Message message = mHandler.obtainMessage ( );
+        } else if (1 == type && 11 == deleteType) {
+            Message message = mHandler.obtainMessage();
             message.what = Contant.CART_SELECT;
             message.arg1 = 5;
             message.obj = lists;
             mHandler.sendMessage(message);
         }
-        if(null!=lists&&!lists.isEmpty()&&null!=lists.get(position))
-        {
+        if (null != lists && !lists.isEmpty() && null != lists.get(position)) {
             final ListModel list = lists.get(position);
             //禁止手动输入
             holder.num.setInputType(InputType.TYPE_NULL);
             BitmapLoader.create().displayUrl(context, holder.listProductIcon, list.getPictureUrl(), R.mipmap.defluat_logo);
-            if(0!=list.getAreaAmount())
-            {
+            if (0 != list.getAreaAmount()) {
                 holder.productTag.setText("专区\n商品");
                 SystemTools.loadBackground(holder.productTag, resources.getDrawable(R.mipmap.area_1));
-            }
-            else
-            {
+            } else {
                 holder.productTag.setVisibility(View.GONE);
             }
 
             holder.listProductName.setText(list.getTitle());
-            if(0==type)
-            {
+            if (0 == type) {
                 holder.editBtn.setVisibility(View.GONE);
                 //结算模式
                 //选择项目列表
-                Message message = mHandler.obtainMessage ( );
+                Message message = mHandler.obtainMessage();
                 message.what = Contant.CART_SELECT;
                 message.arg1 = 0;
                 message.obj = lists;
-                mHandler.sendMessage ( message );
-            }
-            else if(1==type)
-            {
+                mHandler.sendMessage(message);
+            } else if (1 == type) {
                 //编辑模式
                 final TextView editBtn = holder.editBtn;
-                final Drawable draw1 = resources.getDrawable ( R.mipmap.unselect );
-                final Drawable draw2 = resources.getDrawable ( R.mipmap.unselected );
-                if(12==deleteType)
-                {
+                final Drawable draw1 = resources.getDrawable(R.mipmap.unselect);
+                final Drawable draw2 = resources.getDrawable(R.mipmap.unselected);
+                if (12 == deleteType) {
                     //全不选
-                    editBtn.setTag ( 0 );
+                    editBtn.setTag(0);
                     list.setIsSelect(false);
                     SystemTools.loadBackground(holder.editBtn, draw1);
-                }
-                else if(11==deleteType)
-                {
+                } else if (11 == deleteType) {
                     //全选
-                    editBtn.setTag ( 1 );
+                    editBtn.setTag(1);
                     list.setIsSelect(true);
                     SystemTools.loadBackground(holder.editBtn, draw2);
                 }
 
-                editBtn.setOnClickListener (
-                        new View.OnClickListener ( ) {
+                editBtn.setOnClickListener(
+                        new View.OnClickListener() {
 
                             @Override
-                            public
-                            void onClick ( View v ) {
+                            public void onClick(View v) {
 
-                                Message message = mHandler.obtainMessage ( );
-                                if ( 0 == Integer.parseInt(editBtn.getTag ( ).toString()) ) {
+                                Message message = mHandler.obtainMessage();
+                                if (0 == Integer.parseInt(editBtn.getTag().toString())) {
                                     //添加
-                                    editBtn.setTag ( 1 );
+                                    editBtn.setTag(1);
                                     list.setIsSelect(true);
-                                    SystemTools.loadBackground (
-                                            editBtn, draw2
-                                    );
+                                    SystemTools.loadBackground(editBtn, draw2);
 
-                                }
-                                else if ( 1 == Integer.parseInt(editBtn.getTag ( ).toString()) ) {
+                                } else if (1 == Integer.parseInt(editBtn.getTag().toString())) {
                                     //删除
                                     editBtn.setTag(0);
                                     list.setIsSelect(false);
-                                    SystemTools.loadBackground (
+                                    SystemTools.loadBackground(
                                             editBtn, draw1
                                     );
                                 }
@@ -184,7 +163,7 @@ public class ListAdapter extends BaseAdapter {
                                 message.what = Contant.CART_SELECT;
                                 message.arg1 = 1;
                                 message.obj = lists;
-                                mHandler.sendMessage ( message );
+                                mHandler.sendMessage(message);
                             }
                         }
                 );
@@ -194,7 +173,7 @@ public class ListAdapter extends BaseAdapter {
             //加减控件
             final EditText numView = holder.num;
             //数量
-            numView.setTag(list.getUserBuyAmount()>list.getRemainAmount()?list.getRemainAmount():list.getUserBuyAmount());
+            numView.setTag(list.getUserBuyAmount() > list.getRemainAmount() ? list.getRemainAmount() : list.getUserBuyAmount());
             numView.setText(String.valueOf(numView.getTag()));
             //加
             holder.addBtn.setOnClickListener(new View.OnClickListener() {
@@ -205,32 +184,25 @@ public class ListAdapter extends BaseAdapter {
                     if (numString == null || numString.equals("")) {
                         numView.setTag(list.getStepAmount());
                         numView.setText(String.valueOf(list.getStepAmount()));
-                    } else
-                    {
-                        if (((long)numView.getTag()+list.getStepAmount()) < 1) // 先加，再判断
+                    } else {
+                        if (((long) numView.getTag() + list.getStepAmount()) < 1) // 先加，再判断
                         {
                             //buyNum  = buyNum-list.getStepAmount();
                             ToastUtils.showMomentToast((Activity) context, context, "亲，数量至少为" + list.getStepAmount() + "哦~");
-                            numView.setText(String.valueOf ( list.getStepAmount()));
-                        }
-                        else if(((long)numView.getTag()+list.getStepAmount()) > list.getRemainAmount())
-                        {
+                            numView.setText(String.valueOf(list.getStepAmount()));
+                        } else if (((long) numView.getTag() + list.getStepAmount()) > list.getRemainAmount()) {
                             //buyNum  = buyNum-list.getStepAmount();
                             ToastUtils.showMomentToast((Activity) context, context, "亲，数量不能超过" + list.getRemainAmount() + "哦~");
                             numView.setText(String.valueOf(numView.getTag()));
-                        }
-                        else
-                        {
-                            numView.setTag((long)numView.getTag()+list.getStepAmount());
-                            numView.setText(String.valueOf((long)numView.getTag()));
-                            list.setUserBuyAmount((long)numView.getTag());
+                        } else {
+                            numView.setTag((long) numView.getTag() + list.getStepAmount());
+                            numView.setText(String.valueOf((long) numView.getTag()));
+                            list.setUserBuyAmount((long) numView.getTag());
                             //非登陆状态下加
-                            if(!application.isLogin())
-                            {
+                            if (!application.isLogin()) {
                                 //修改本地购物车数据
                                 CartDataModel cartData = CartDataModel.findById(CartDataModel.class, 1000l);
-                                if(null!=cartData)
-                                {
+                                if (null != cartData) {
                                     String dataStr = cartData.getCartData();
                                     LocalCartOutputModel localCartOutput = new LocalCartOutputModel();
                                     JSONUtil<LocalCartOutputModel> jsonUtil = new JSONUtil<LocalCartOutputModel>();
@@ -238,10 +210,8 @@ public class ListAdapter extends BaseAdapter {
                                     localCartOutput = jsonUtil.toBean(dataStr, localCartOutput);
                                     List<ListModel> lists = localCartOutput.getResultData().getLists();
 
-                                    for(int i=0; i<lists.size(); i++)
-                                    {
-                                        if(list.getIssueId()==lists.get(i).getIssueId())
-                                        {
+                                    for (int i = 0; i < lists.size(); i++) {
+                                        if (list.getIssueId() == lists.get(i).getIssueId()) {
                                             lists.get(i).setUserBuyAmount(list.getUserBuyAmount());
                                         }
                                     }
@@ -249,7 +219,7 @@ public class ListAdapter extends BaseAdapter {
                                     CartDataModel.save(cartData);
                                 }
                             }
-                            Message message = mHandler.obtainMessage ( );
+                            Message message = mHandler.obtainMessage();
                             message.what = Contant.CART_SELECT;
                             message.arg1 = 2;
                             message.obj = lists;
@@ -268,33 +238,26 @@ public class ListAdapter extends BaseAdapter {
                     if (numString == null || numString.equals("")) {
                         numView.setTag(list.getStepAmount());
                         numView.setText(String.valueOf(list.getStepAmount()));
-                    }
-                    else if(((long)numView.getTag()-list.getStepAmount()) > list.getRemainAmount())
-                    {
-                        numView.setTag((long)numView.getTag()+list.getStepAmount());
+                    } else if (((long) numView.getTag() - list.getStepAmount()) > list.getRemainAmount()) {
+                        numView.setTag((long) numView.getTag() + list.getStepAmount());
                         ToastUtils.showMomentToast((Activity) context, context, "亲，数量不能超过" + list.getRemainAmount() + "哦~");
-                        numView.setText(String.valueOf((long)numView.getTag()));
-                    }
-                    else
-                    {
+                        numView.setText(String.valueOf((long) numView.getTag()));
+                    } else {
 
-                        if (((long)numView.getTag()-list.getStepAmount()) < 1) // 先减，再判断
+                        if (((long) numView.getTag() - list.getStepAmount()) < 1) // 先减，再判断
                         {
                             //numView.setTag((long)numView.getTag()+list.getStepAmount());
                             ToastUtils.showMomentToast((Activity) context, context, "亲，数量至少为" + (list.getRemainAmount() > list.getStepAmount() ? list.getStepAmount() : list.getRemainAmount()) + "哦~");
-                            numView.setText(String.valueOf ( (list.getRemainAmount()>list.getStepAmount()?list.getStepAmount():list.getRemainAmount())));
-                        } else
-                        {
-                            numView.setTag((long)numView.getTag()-list.getStepAmount());
-                            numView.setText(String.valueOf((long)numView.getTag()));
-                            list.setUserBuyAmount((long)numView.getTag());
+                            numView.setText(String.valueOf((list.getRemainAmount() > list.getStepAmount() ? list.getStepAmount() : list.getRemainAmount())));
+                        } else {
+                            numView.setTag((long) numView.getTag() - list.getStepAmount());
+                            numView.setText(String.valueOf((long) numView.getTag()));
+                            list.setUserBuyAmount((long) numView.getTag());
                             //非登陆状态下加
-                            if(!application.isLogin())
-                            {
+                            if (!application.isLogin()) {
                                 //修改本地购物车数据
                                 CartDataModel cartData = CartDataModel.findById(CartDataModel.class, 1000l);
-                                if(null!=cartData)
-                                {
+                                if (null != cartData) {
                                     String dataStr = cartData.getCartData();
                                     LocalCartOutputModel localCartOutput = new LocalCartOutputModel();
                                     JSONUtil<LocalCartOutputModel> jsonUtil = new JSONUtil<LocalCartOutputModel>();
@@ -302,10 +265,8 @@ public class ListAdapter extends BaseAdapter {
                                     localCartOutput = jsonUtil.toBean(dataStr, localCartOutput);
                                     List<ListModel> lists = localCartOutput.getResultData().getLists();
 
-                                    for(int i=0; i<lists.size(); i++)
-                                    {
-                                        if(list.getIssueId()==lists.get(i).getIssueId())
-                                        {
+                                    for (int i = 0; i < lists.size(); i++) {
+                                        if (list.getIssueId() == lists.get(i).getIssueId()) {
                                             lists.get(i).setUserBuyAmount(list.getUserBuyAmount());
                                         }
                                     }
@@ -315,7 +276,7 @@ public class ListAdapter extends BaseAdapter {
 
                             }
 
-                            Message message = mHandler.obtainMessage ( );
+                            Message message = mHandler.obtainMessage();
                             message.what = Contant.CART_SELECT;
                             message.arg1 = 3;
                             message.obj = lists;
@@ -325,33 +286,27 @@ public class ListAdapter extends BaseAdapter {
                 }
             });
 
-            if(0==list.getAreaAmount()||1==list.getStepAmount())
-            {
+            if (0 == list.getAreaAmount() || 1 == list.getStepAmount()) {
                 holder.stepTag.setVisibility(View.GONE);
+            } else {
+                holder.stepTag.setText("参与人次需是" + list.getStepAmount() + "的倍数");
             }
-            else
-            {
-                holder.stepTag.setText("参与人次需是"+list.getStepAmount()+"的倍数");
-            }
-        }
-        else
-        {
+        } else {
             //空数据，当数据清空时调用
-            Message message = mHandler.obtainMessage ( );
+            Message message = mHandler.obtainMessage();
             message.what = Contant.CART_SELECT;
             message.arg1 = 6;
             message.obj = lists;
-            mHandler.sendMessage ( message );
+            mHandler.sendMessage(message);
         }
         return convertView;
     }
 
-    class ViewHolder
-    {
-        public ViewHolder(View view)
-        {
+    class ViewHolder {
+        public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+
         @Bind(R.id.editBtn)
         TextView editBtn;
         @Bind(R.id.listProductIcon)

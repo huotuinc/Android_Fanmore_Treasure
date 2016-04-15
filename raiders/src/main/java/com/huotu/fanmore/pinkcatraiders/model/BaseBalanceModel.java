@@ -11,25 +11,25 @@ public class BaseBalanceModel implements Serializable {
     //需要支付的金额
     private BigDecimal money;
     //红包结束时间
-    private String	redPacketsEndTime;
+    private String redPacketsEndTime;
     //需要达到的金额
-    private BigDecimal	redPacketsFullMoney;
+    private BigDecimal redPacketsFullMoney;
     // 红包id
-    private long	redPacketsId;
+    private long redPacketsId;
     //红包抵扣金额
-    private BigDecimal	redPacketsMinusMoney;
+    private BigDecimal redPacketsMinusMoney;
     //红包数量
-    private int	redPacketsNumber;
+    private int redPacketsNumber;
     //红包备注
-    private String	redPacketsRemark;
+    private String redPacketsRemark;
     //红包开始时间
-    private String	redPacketsStartTime;
+    private String redPacketsStartTime;
     //红包使用状态
-    private String	redPacketsStatus;
+    private String redPacketsStatus;
     //红包标题(如满50减5)
-    private String	redPacketsTitle;
+    private String redPacketsTitle;
     //总计
-    private BigDecimal	totalMoney;
+    private BigDecimal totalMoney;
 
     public BigDecimal getMoney() {
         return money;
