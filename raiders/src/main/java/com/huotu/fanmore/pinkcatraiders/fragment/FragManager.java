@@ -86,7 +86,7 @@ public class FragManager {
         ft.show(frag);
         if(preFragType != null){
             BaseFragment preFrag = getFragmentByType(preFragType);
-            preFrag.onPause();
+//            preFrag.onPause();
             ft.hide(preFrag);
         }
 

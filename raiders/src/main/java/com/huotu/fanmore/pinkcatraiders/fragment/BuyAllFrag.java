@@ -1,54 +1,46 @@
 package com.huotu.fanmore.pinkcatraiders.fragment;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ListView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.BuyItemAdapter;
-import com.huotu.fanmore.pinkcatraiders.adapter.RaidersAdapter;
-import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.model.BuyItemModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
-import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.BuyLogActivity;
-import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * 购买记录（全部）
  */
 public class BuyAllFrag extends BaseFragment implements Handler.Callback {
 
-    View rootView;
-    public Resources resources;
-    public BaseApplication application;
     public BuyLogActivity rootAty;
-    public WindowManager wManager;
     @Bind(R.id.buyLogList)
     PullToRefreshListView buyLogList;
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public List<BuyItemModel> items;
     public BuyItemAdapter adapter;
-
+    boolean init;
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public int getLayoutRes() {
+        return R.layout.buy_log_frag;
     }
 
     @Override
@@ -56,17 +48,14 @@ public class BuyAllFrag extends BaseFragment implements Handler.Callback {
         super.onCreate(savedInstanceState);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        resources = getActivity().getResources();
-        rootView = inflater.inflate(R.layout.buy_log_frag, container, false);
-        application = (BaseApplication) getActivity().getApplication();
-        rootAty = (BuyLogActivity) getActivity();
-        ButterKnife.bind(this, rootView);
-        wManager = getActivity().getWindowManager();
-        initList();
-        return rootView;
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (!init){
+            rootAty = (BuyLogActivity) getActivity();
+            initList();
+            init=true;
+        }
     }
 
     private void initList()

@@ -33,4 +33,5 @@
     <color name="redpackage_warn">#ff3f8a3d</color>
     <color name="space_color">#ffe2e5e9</color>
     <color name="province_line_border">#FFC7C7C7</color>
+    <color name="transparent_black">#2000</color>
 </resources>

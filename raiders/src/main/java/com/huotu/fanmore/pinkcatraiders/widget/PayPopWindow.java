@@ -12,14 +12,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshWebView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
 import com.huotu.fanmore.pinkcatraiders.model.MallPayModel;
 import com.huotu.fanmore.pinkcatraiders.model.PayModel;
-import com.huotu.fanmore.pinkcatraiders.uitls.AliPayUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.PayFunc;
 import com.huotu.fanmore.pinkcatraiders.uitls.WindowUtils;
 

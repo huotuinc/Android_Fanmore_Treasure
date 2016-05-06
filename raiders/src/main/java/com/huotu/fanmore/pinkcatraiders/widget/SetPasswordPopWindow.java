@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,7 +20,6 @@ import com.huotu.fanmore.pinkcatraiders.model.PayModel;
 import com.huotu.fanmore.pinkcatraiders.ui.login.ChangePasswordActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.login.MobileRegActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
-import com.huotu.fanmore.pinkcatraiders.uitls.PayFunc;
 import com.huotu.fanmore.pinkcatraiders.uitls.WindowUtils;
 
 
@@ -45,6 +42,9 @@ class SetPasswordPopWindow extends PopupWindow {
     private Context context;
     public ProgressPopupWindow progress;
     private WindowManager wManager;
+    private TextView old_password;
+    private TextView phone_code;
+    private TextView tv_cancel;
 
 
     public SetPasswordPopWindow(final Activity aty, final Context context, final Handler mHandler, final BaseApplication application, final PayModel payModel,WindowManager wManager) {
@@ -61,14 +61,12 @@ class SetPasswordPopWindow extends PopupWindow {
     void showProgress ( String tag1, String tag2  ) {
         progress = new ProgressPopupWindow ( context, aty, aty.getWindowManager () );
         LayoutInflater inflater = ( LayoutInflater ) aty.getSystemService ( Context.LAYOUT_INFLATER_SERVICE );
-        payView = inflater.inflate ( R.layout.pop_pay_ui, null );
-        wxPayBtn = ( Button ) payView.findViewById ( R.id.wxPayBtn );
-        wxPayBtn.setText(tag1);
-        alipayBtn = ( Button ) payView.findViewById ( R.id.alipayBtn );
-        alipayBtn.setText(tag2);
-        cancelBtn = ( Button ) payView.findViewById ( R.id.cancelBtn );
+        payView = inflater.inflate ( R.layout.pop_ui, null );
+        old_password = (TextView) payView.findViewById(R.id.old_password);
+        phone_code = (TextView) payView.findViewById(R.id.phone_code);
+        tv_cancel = (TextView) payView.findViewById(R.id.tv_cancel);
 
-        wxPayBtn.setOnClickListener (
+        old_password.setOnClickListener (
                 new View.OnClickListener ( ) {
                     @Override
                     public
@@ -77,7 +75,7 @@ class SetPasswordPopWindow extends PopupWindow {
                         ActivityUtils.getInstance().skipActivity(aty, ChangePasswordActivity.class);
                     }
                 } );
-        alipayBtn.setOnClickListener ( new View.OnClickListener ( ) {
+        phone_code.setOnClickListener ( new View.OnClickListener ( ) {
             @Override
             public
             void onClick ( View v ) {
@@ -87,7 +85,7 @@ class SetPasswordPopWindow extends PopupWindow {
                 ActivityUtils.getInstance().skipActivity(aty, MobileRegActivity.class,bundle);
             }
         } );
-        cancelBtn.setOnClickListener ( new View.OnClickListener ( ) {
+        tv_cancel.setOnClickListener ( new View.OnClickListener ( ) {
             @Override
             public
             void onClick ( View v ) {
@@ -103,6 +101,7 @@ class SetPasswordPopWindow extends PopupWindow {
         this.setHeight ( LinearLayout.LayoutParams.WRAP_CONTENT );
         //设置SelectPicPopupWindow弹出窗体可点击
         this.setFocusable(true);
+        this.setAnimationStyle(R.style.AnimationPop);
         WindowUtils.backgroundAlpha ( aty, 0.4f );
 
         //mMenuView添加OnTouchListener监听判断获取触屏位置如果在选择框外面则销毁弹出框

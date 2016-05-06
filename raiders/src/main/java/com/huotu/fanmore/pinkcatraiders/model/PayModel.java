@@ -1,7 +1,5 @@
 package com.huotu.fanmore.pinkcatraiders.model;
 
-import java.math.BigDecimal;
-
 /**
  * 支付订单信息model
  */

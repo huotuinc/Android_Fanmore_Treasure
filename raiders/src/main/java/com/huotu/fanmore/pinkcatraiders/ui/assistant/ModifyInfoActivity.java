@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,11 +26,8 @@ import com.huotu.fanmore.pinkcatraiders.model.AppUserModel;
 import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.UpdateProfileModel;
 import com.huotu.fanmore.pinkcatraiders.model.UserOutputModel;
-import com.huotu.fanmore.pinkcatraiders.model.UserUnwrapOutput;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
-import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
-import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.EncryptUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
@@ -152,7 +150,8 @@ class ModifyInfoActivity extends BaseActivity implements View.OnClickListener, H
             ToastUtils.showMomentToast(ModifyInfoActivity.this, ModifyInfoActivity.this, "请输入修改后的信息");
             return;
         } else {
-            if (1 == Integer.parseInt(bundle.get("moblieband").toString())) {
+            Log.i("sun", "sun: "+bundle.getInt("moblieband"));
+            if (1 == bundle.getInt("moblieband")) {
                 //弹出执行进度条
                 progress.showProgress("正在修改用户" + bundle.get("profile"));
                 progress.showAtLocation(titleLayoutL,

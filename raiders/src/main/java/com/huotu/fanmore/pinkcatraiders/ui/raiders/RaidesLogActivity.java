@@ -16,8 +16,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.TabPagerAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
@@ -25,25 +23,20 @@ import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogAllFrag;
 import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogDoneFrag;
 import com.huotu.fanmore.pinkcatraiders.fragment.RaidersLogFrag;
-import com.huotu.fanmore.pinkcatraiders.model.BaseModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
+import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.base.BaseActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
-import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.CartUtils;
-import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
-import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
 import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -52,7 +45,7 @@ import butterknife.OnClick;
 /**
  * 夺宝记录
  */
-public class RaidesLogActivity extends BaseActivity implements View.OnClickListener, Handler.Callback {
+public class RaidesLogActivity extends BaseActivity implements View.OnClickListener, Handler.Callback{
 
     public
     Resources resources;
@@ -92,7 +85,6 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
     public NoticePopWindow noticePopWin;
     int index;
     public ProgressPopupWindow progress;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,16 +92,15 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
         ButterKnife.bind(this);
         application = (BaseApplication) this.getApplication();
         resources = this.getResources();
-        mHandler = new Handler ( this );
+        mHandler = new Handler(this);
         wManager = this.getWindowManager();
         initTitle();
-        currentIndex=getIntent().getIntExtra("index",0);
+        currentIndex = getIntent().getIntExtra("index", 0);
         initSwitch();
 
     }
 
-    private void initSwitch()
-    {
+    private void initSwitch() {
         RaidersLogAllFrag raidersLogFragAll = new RaidersLogAllFrag();
         RaidersLogFrag raidersLogFragDoing = new RaidersLogFrag();
         RaidersLogDoneFrag raidersLogFragDone = new RaidersLogDoneFrag();
@@ -153,13 +144,12 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
     }
 
     @OnClick(R.id.titleLeftImage)
-    void doBack()
-    {
+    void doBack() {
         closeSelf(RaidesLogActivity.this);
     }
 
-    private void changeIndex(int index){
-        if(index == 0){
+    private void changeIndex(int index) {
+        if (index == 0) {
             Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
             Drawable drawable_normal = resources.getDrawable(R.color.color_white);
             SystemTools.loadBackground(allL, drawable_press);
@@ -171,7 +161,7 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
             doingCount.setTextColor(resources.getColor(R.color.text_black));
             doneLabel.setTextColor(resources.getColor(R.color.text_black));
             doneCount.setTextColor(resources.getColor(R.color.text_black));
-        }else if(index == 1){
+        } else if (index == 1) {
             Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
             Drawable drawable_normal = resources.getDrawable(R.color.color_white);
             SystemTools.loadBackground(allL, drawable_normal);
@@ -183,8 +173,7 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
             doingCount.setTextColor(resources.getColor(R.color.deep_red));
             doneLabel.setTextColor(resources.getColor(R.color.text_black));
             doneCount.setTextColor(resources.getColor(R.color.text_black));
-        } else if(index == 2)
-        {
+        } else if (index == 2) {
             Drawable drawable_press = resources.getDrawable(R.drawable.switch_press);
             Drawable drawable_normal = resources.getDrawable(R.color.color_white);
             SystemTools.loadBackground(allL, drawable_normal);
@@ -200,9 +189,7 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
     }
 
 
-
-    private void initTitle()
-    {
+    private void initTitle() {
         //背景色
         Drawable bgDraw = resources.getDrawable(R.drawable.account_bg_bottom);
         SystemTools.loadBackground(titleLayoutL, bgDraw);
@@ -214,22 +201,19 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
     }
 
     @OnClick(R.id.allL)
-    void clickAll()
-    {
+    void clickAll() {
         raidersViewPager.setCurrentItem(0);
         changeIndex(raidersViewPager.getCurrentItem());
     }
 
     @OnClick(R.id.doingL)
-    void clickDoing()
-    {
+    void clickDoing() {
         raidersViewPager.setCurrentItem(1);
         changeIndex(raidersViewPager.getCurrentItem());
     }
 
     @OnClick(R.id.doneL)
-    void clickDone()
-    {
+    void clickDone() {
         raidersViewPager.setCurrentItem(2);
         changeIndex(raidersViewPager.getCurrentItem());
     }
@@ -244,10 +228,11 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
-                && event.getAction() == KeyEvent.ACTION_DOWN)
-        {
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
             //关闭
+//            ActivityUtils.getInstance().skipActivity(RaidesLogActivity.this, HomeActivity.class);
             this.closeSelf(RaidesLogActivity.this);
+
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -259,38 +244,33 @@ public class RaidesLogActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public boolean handleMessage(Message msg) {
-        switch (msg.what)
-        {
-            case Contant.UPDATE_RAIDER_COUNT:
-            {
+        switch (msg.what) {
+            case Contant.UPDATE_RAIDER_COUNT: {
                 String[] counts = (String[]) msg.obj;
                 allCount.setText(counts[0]);
                 doingCount.setText(counts[1]);
                 doneCount.setText(counts[2]);
             }
             break;
-            case Contant.RAIDERS_NOW:
-            {
-
-                                ActivityUtils.getInstance().skipActivity(RaidesLogActivity.this, HomeActivity.class);
-                                closeSelf(RaidesLogActivity.this);
-
-
+            case Contant.RAIDERS_NOW: {
+                Bundle bundle=new Bundle();
+                bundle.putInt("home",100);
+                ActivityUtils.getInstance().skipActivity(RaidesLogActivity.this, HomeActivity.class,bundle);
+//                closeSelf(RaidesLogActivity.this);
 
             }
             break;
-            case Contant.APPAND_LIST:
-            {
+            case Contant.APPAND_LIST: {
                 //夺宝记录追加
                 RaidersModel raider = (RaidersModel) msg.obj;
-                progress = new ProgressPopupWindow( RaidesLogActivity.this, RaidesLogActivity.this, wManager );
+                progress = new ProgressPopupWindow(RaidesLogActivity.this, RaidesLogActivity.this, wManager);
                 progress.showProgress("正在追加清单");
                 progress.showAtLocation(titleLayoutL,
                         Gravity.CENTER, 0, 0
                 );
                 ProductModel model = new ProductModel();
                 model.setDefaultAmount(raider.getAttendAmount());
-                CartUtils.addCartDone(model, String.valueOf(raider.getIssueId()), progress, application, RaidesLogActivity.this, mHandler,0);
+                CartUtils.addCartDone(model, String.valueOf(raider.getIssueId()), progress, application, RaidesLogActivity.this, mHandler, 0);
             }
             break;
             default:

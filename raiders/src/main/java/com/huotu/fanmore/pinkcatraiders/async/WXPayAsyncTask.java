@@ -12,21 +12,20 @@ import com.huotu.fanmore.pinkcatraiders.uitls.WXPayUtilEx;
 /**
  * 异步执行微信支付
  */
-public
-class WXPayAsyncTask extends AsyncTask<Void, Void, WXPayResult > {
+public class WXPayAsyncTask extends AsyncTask<Void, Void, WXPayResult> {
 
     private Handler handler;
 
-    private String  body;
+    private String body;
 
-    private String  price;
+    private String price;
 
-    private int     productType;
+    private int productType;
 
-    private long    productId;
+    private long productId;
 
     private
-    Context         context;
+    Context context;
 
     private
     BaseApplication application;
@@ -37,12 +36,11 @@ class WXPayAsyncTask extends AsyncTask<Void, Void, WXPayResult > {
 
     private String orderId;
 
-    public
-    WXPayAsyncTask (
+    public WXPayAsyncTask(
             Handler handler, String body, String price, int productType, long productId,
             Context context, BaseApplication application,
             String notifyUrl, String attach, String orderId
-                   ) {
+    ) {
 
         this.handler = handler;
         this.body = body;
@@ -57,37 +55,32 @@ class WXPayAsyncTask extends AsyncTask<Void, Void, WXPayResult > {
     }
 
     @Override
-    protected
-    WXPayResult doInBackground ( Void... params ) {
+    protected WXPayResult doInBackground(Void... params) {
         WXPayResult payResult = new WXPayResult();
-        try
-        {
+        try {
             WXPayUtilEx wxPay = new WXPayUtilEx(context,
-                                                handler, notifyUrl, application  );
+                    handler, notifyUrl, application);
 
-            payResult =  wxPay.pay( this.body , this.price , productType , productId, attach, orderId );
+            payResult = wxPay.pay(this.body, this.price, productType, productId, attach, orderId);
 
 
-        } catch (Exception ex)
-        {
-            payResult.setCode ( 0 );
-            payResult.setMessage ( ex.getMessage ( ) );
+        } catch (Exception ex) {
+            payResult.setCode(0);
+            payResult.setMessage(ex.getMessage());
         }
         return payResult;
     }
 
     @Override
-    protected
-    void onPreExecute ( ) {
-        super.onPreExecute ( );
+    protected void onPreExecute() {
+        super.onPreExecute();
     }
 
     @Override
-    protected
-    void onPostExecute ( WXPayResult wxPayResult ) {
-        super.onPostExecute ( wxPayResult );
-        if( wxPayResult !=null && wxPayResult.getCode() != 1 ){
-            ToastUtils.showLongToast ( context, wxPayResult.getMessage ( ) );
+    protected void onPostExecute(WXPayResult wxPayResult) {
+        super.onPostExecute(wxPayResult);
+        if (wxPayResult != null && wxPayResult.getCode() != 1) {
+            ToastUtils.showLongToast(context, wxPayResult.getMessage());
         }
     }
 }

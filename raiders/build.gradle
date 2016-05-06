@@ -31,8 +31,8 @@ android {
         applicationId "com.huotu.fanmore.pinkcatraiders"
         minSdkVersion 11
         targetSdkVersion 22
-        versionCode 30
-        versionName "30.0.1"
+        versionCode 31
+        versionName "3.0.2"
     }
 
     sourceSets {
@@ -41,7 +41,7 @@ android {
             jniLibs.srcDirs = ['libs']
         }
 
-        raides{
+        raides {
             assets.srcDirs = ['assets']
             jniLibs.srcDirs = ['libs']
         }
@@ -66,7 +66,7 @@ android {
 
     productFlavors {
 
-        raides{
+        raides {
             applicationId 'com.huotu.fanmore.raiders'
         }
     }
@@ -74,21 +74,19 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    //compile 'com.android.support:appcompat-v7:22+'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'commons-codec:commons-codec:1.10'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.loopeer.android.thirdparty.pulltorefresh:Android-PullToRefresh:2.1.1'
-
-
-    compile(name:'libedittext-release', ext:'aar')
-    compile (name:'libcropper-1.0', ext:'aar'){
+    compile(name: 'libedittext-release', ext: 'aar')
+    compile(name: 'libcropper-1.0', ext: 'aar') {
         exclude module: 'support-v4'
     }
-    compile ('com.github.satyan:sugar:1.4'){
+    compile('com.github.satyan:sugar:1.4') {
 
         exclude module: 'support-v4'
     }
     compile 'com.android.support:appcompat-v7:22.1.1'
+    compile 'com.umeng.analytics:analytics:latest.integration'
 }

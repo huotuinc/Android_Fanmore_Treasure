@@ -1,6 +1,5 @@
 package com.huotu.fanmore.pinkcatraiders.ui.base;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -23,16 +22,11 @@ import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
 import com.huotu.fanmore.pinkcatraiders.model.CarouselModel;
-import com.huotu.fanmore.pinkcatraiders.model.CateGoryOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.InitOutputsModel;
 import com.huotu.fanmore.pinkcatraiders.model.LocalAddressModel;
-import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
-import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
-import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideListModel;
 import com.huotu.fanmore.pinkcatraiders.model.SlideListOutputModel;
 import com.huotu.fanmore.pinkcatraiders.ui.guide.GuideActivity;
-import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AssetsUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
@@ -128,8 +122,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                 if ( ! isConnection ) {
                     //无网络日志
                     popWindow = new MsgPopWindow ( SplashActivity.this, new
-                            SettingNetwork ( ), new CancelNetwork ( ), "网络连接错误",
-                            "请打开你的网络连接！", false );
+                            SettingNetwork ( ), new CancelNetwork ( ), "网络连接错误","请打开你的网络连接！", false );
                     popWindow.showAtLocation ( splashL, Gravity.CENTER, 0,0 );
                     popWindow.setOnDismissListener ( new PoponDismissListener(SplashActivity.this) );
                 }
@@ -182,8 +175,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                         String url = Contant.REQUEST_URL + Contant.GET_SLIDE_LIST;
                                         AuthParamUtils params = new AuthParamUtils ( application,
                                                 System.currentTimeMillis ( ), SplashActivity.this );
-                                        Map< String, Object > maps = new HashMap< String, Object
-                                                > ( );
+                                        Map< String, Object > maps = new HashMap< String, Object> ( );
                                         String suffix = params.obtainGetParam ( maps );
                                         url = url + suffix;
                                         HttpUtils httpUtils = new HttpUtils ( );
@@ -198,12 +190,10 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                                         if ( SplashActivity.this.isFinishing ( ) ) {
                                                             return;
                                                         }
-                                                        JSONUtil< SlideListOutputModel > jsonUtil    = new JSONUtil<
-                                                                SlideListOutputModel > ( );
+                                                        JSONUtil< SlideListOutputModel > jsonUtil    = new JSONUtil<SlideListOutputModel > ( );
                                                         SlideListOutputModel             slideListOutput = new
                                                                 SlideListOutputModel ( );
-                                                        slideListOutput = jsonUtil.toBean ( response.toString ( ),
-                                                                slideListOutput );
+                                                        slideListOutput = jsonUtil.toBean ( response.toString ( ),slideListOutput );
                                                         if ( null != slideListOutput && null != slideListOutput.getResultData
                                                                 ( ) && ( 1 == slideListOutput.getResultCode ( ) ) ) {
 
@@ -212,8 +202,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
                                                             if(null!=slides && !slides.isEmpty ())
                                                             {
                                                                 //删除全部
-                                                                CarouselModel.deleteAll (
-                                                                        CarouselModel.class );
+                                                                CarouselModel.deleteAll (CarouselModel.class );
                                                                 Iterator<SlideListModel> iterator = slides.iterator ();
                                                                 while ( iterator.hasNext () )
                                                                 {

@@ -1,14 +1,12 @@
 package com.huotu.fanmore.pinkcatraiders.fragment;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -16,7 +14,6 @@ import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.NewestProductAdapter;
-import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.NewOpenListModel;
@@ -45,11 +42,7 @@ import butterknife.ButterKnife;
  */
 public class NewestFragment extends BaseFragment implements Handler.Callback, View.OnClickListener {
 
-    View rootView;
-    public Resources resources;
-    public BaseApplication application;
     public HomeActivity rootAty;
-    public WindowManager wManager;
     @Bind(R.id.newestGrid)
     MyPullToRefreshGridView newestGrid;
     View emptyView = null;
@@ -85,22 +78,21 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
     }
 
     @Override
+    public int getLayoutRes() {
+        return R.layout.newest_frag;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (!init) {
-            resources = getActivity().getResources();
-            rootView = inflater.inflate(R.layout.newest_frag, container, false);
-            application = (BaseApplication) getActivity().getApplication();
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (!init){
             rootAty = (HomeActivity) getActivity();
-            ButterKnife.bind(this, rootView);
-            wManager = getActivity().getWindowManager();
-            emptyView = inflater.inflate(R.layout.empty, null);
+            emptyView=LayoutInflater.from(getActivity()).inflate(R.layout.empty, null);
             TextView emptyTag = (TextView) emptyView.findViewById(R.id.emptyTag);
             emptyTag.setText("没有最近揭晓数据");
             TextView emptyBtn = (TextView) emptyView.findViewById(R.id.emptyBtn);
@@ -108,7 +100,6 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
             initGrid();
             init=true;
         }
-        return rootView;
     }
 
     private void initGrid() {
@@ -172,6 +163,7 @@ public class NewestFragment extends BaseFragment implements Handler.Callback, Vi
                     JSONUtil<NewOpenOutputModel> jsonUtil = new JSONUtil<NewOpenOutputModel>();
                     NewOpenOutputModel productsOutputs = new NewOpenOutputModel();
                     productsOutputs = jsonUtil.toBean(response.toString(), productsOutputs);
+                    Log.i("sun", "sun: "+productsOutputs.toString());
                     if (null != productsOutputs && null != productsOutputs.getResultData() && (1 == productsOutputs.getResultCode())) {
                         if (null != productsOutputs.getResultData().getList() && !productsOutputs.getResultData().getList().isEmpty()) {
 

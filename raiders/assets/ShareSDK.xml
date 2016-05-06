@@ -15,8 +15,8 @@
     <QZone
         Id="4"
         SortId="4 "
-        AppId="1101260450"
-        AppKey="qBjXnyJfVgppCpKF"
+        AppId="1105308834"
+        AppKey="2xsJBcZ0oOnVegze"
         ShareByAppClient="true"
         Enable="true" />
 
@@ -39,8 +39,8 @@
     <TencentWeibo
         Id="5"
         SortId="5"
-        AppKey="1101260450"
-        AppSecret="qBjXnyJfVgppCpKF"
+        AppKey="1105308834"
+        AppSecret="2xsJBcZ0oOnVegze"
         RedirectUri="https://api.weibo.com/oauth2/default.html"
         Enable="false" />
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
@@ -56,8 +56,8 @@
 	<QQ
         Id="7"
         SortId="7"
-        AppId="1101260450"
-        AppKey="qBjXnyJfVgppCpKF"
+        AppId="1105308834"
+        AppKey="2xsJBcZ0oOnVegze"
         ShareByAppClient="false"
         Enable="false" />
     

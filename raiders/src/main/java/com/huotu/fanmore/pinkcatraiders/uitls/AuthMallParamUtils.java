@@ -58,7 +58,7 @@ public class AuthMallParamUtils {
             }
 
             //添加额外固定参数
-            paramMap.put ( "version", application.getAppVersion ( context ) );
+            paramMap.put ( "version", application.getAppVersion () );
             paramMap.put ( "operation", "BUYER_ANDROID_2015DC" );
             //1、timestamp
             paramMap.put ( "timestamp", URLEncoder.encode ( String.valueOf ( timestamp ), "UTF-8" ) );
@@ -71,7 +71,7 @@ public class AuthMallParamUtils {
             builder.append ( "&timestamp=" + paramMap.get ( "timestamp" ) );
             builder.append ( "&appid="+paramMap.get ( "appid" ) );
             builder.append ( "&sign="+paramMap.get ( "sign" ) );
-            builder.append ( "&version=" + application.getAppVersion ( context ) );
+            builder.append ( "&version=" + application.getAppVersion () );
             builder.append ( "&operation=" + "BUYER_ANDROID_2015DC" );
 
             return builder.toString ();

@@ -139,6 +139,9 @@ public class WebExhibitionActivity extends BaseActivity implements View.OnClickL
         viewPage.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
+                if (null==progressBar){
+                    return;
+                }
                 progressBar.setProgress(newProgress);
                 if (100 == newProgress) {
                     webPage.onRefreshComplete();

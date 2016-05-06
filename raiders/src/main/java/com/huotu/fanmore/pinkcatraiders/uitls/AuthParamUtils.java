@@ -241,11 +241,11 @@ public class AuthParamUtils {
         //时间
         params.put("timestamp", String.valueOf(timestamp));
         //版本号
-        params.put("version", application.getAppVersion(context));
+        params.put("version", application.getAppVersion());
         //operation
         params.put("operation", Contant.OPERATION);
         //imei
-        String imei = application.getPhoneIMEI(context);
+        String imei = application.getPhoneIMEI();
         if(null != imei && !"".equals(imei))
         {
             params.put("imei", imei);

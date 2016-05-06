@@ -1,6 +1,5 @@
 package com.huotu.fanmore.pinkcatraiders.ui.base;
 
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -31,6 +30,7 @@ import com.huotu.fanmore.pinkcatraiders.adapter.TotalGridAdapter;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.fragment.FragManager;
+import com.huotu.fanmore.pinkcatraiders.fragment.HomeFragment;
 import com.huotu.fanmore.pinkcatraiders.listener.PoponDismissListener;
 import com.huotu.fanmore.pinkcatraiders.model.AppBalanceModel;
 import com.huotu.fanmore.pinkcatraiders.model.BalanceOutputModel;
@@ -70,6 +70,7 @@ import com.huotu.fanmore.pinkcatraiders.widget.NoticePopWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ProgressPopupWindow;
 import com.huotu.fanmore.pinkcatraiders.widget.ScanRedpackagePopWin;
 import com.huotu.fanmore.pinkcatraiders.widget.SharePopupWindow;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
@@ -228,8 +229,23 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 
     @Override
     protected void onResume() {
-
         super.onResume();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            int data = bundle.getInt("home");
+            if (100 == data) {
+                application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
+                ((HomeFragment) application.mFragManager.getCurrentFrag()).scrollToTop();
+//                (HomeFragment)homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
+                initTab();
+
+            }
+        }
     }
 
     @Override
@@ -353,6 +369,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
         super.onDestroy();
         ButterKnife.unbind(this);
         VolleyUtil.cancelAllRequest();
+        mHandler.removeCallbacksAndMessages(null);
         if (null != myBroadcastReceiver) {
             myBroadcastReceiver.unregisterReceiver();
         }
@@ -554,6 +571,7 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
             } else {
                 closeSelf(HomeActivity.this);
                 int currentVersion = android.os.Build.VERSION.SDK_INT;
+                MobclickAgent.onKillProcess(getApplicationContext());
                 SystemTools.killAppDestory(HomeActivity.this);
             }
 
@@ -566,7 +584,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
     public boolean handleMessage(Message msg) {
         switch (msg.what) {
             case Contant.SWITCH_UI: {
-
                 String tag = msg.obj.toString();
                 if (tag.equals(Contant.TAG_1)) {
                     application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
@@ -750,8 +767,8 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         ListModel list = it.next();
                         cartAmount += (list.getUserBuyAmount() > list.getRemainAmount() ? list.getRemainAmount() : list.getUserBuyAmount());
                         double price = list.getPricePercentAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        double total = price*(list.getUserBuyAmount()>list.getRemainAmount()?list.getRemainAmount():list.getUserBuyAmount());
-                        prices+=total;
+                        double total = price * (list.getUserBuyAmount() > list.getRemainAmount() ? list.getRemainAmount() : list.getUserBuyAmount());
+                        prices += total;
                     }
 
                     funcPopWin1.setMsg(String.valueOf(payNum), String.valueOf(prices));
@@ -910,11 +927,9 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                         Bundle bundle = new Bundle();
                         bundle.putString("loginData", cartStr);
                         ActivityUtils.getInstance().showActivity(HomeActivity.this, LoginActivity.class, bundle);
-                    }
-                    else
-                    {
-                        progress = new ProgressPopupWindow ( HomeActivity.this, HomeActivity.this, wManager );
-                        progress.showProgress ( "正在结算" );
+                    } else {
+                        progress = new ProgressPopupWindow(HomeActivity.this, HomeActivity.this, wManager);
+                        progress.showProgress("正在结算");
                         progress.showAtLocation(titleLayoutL,
                                 Gravity.CENTER, 0, 0
                         );
@@ -1329,7 +1344,6 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
                 mHandler.sendMessage(message);
             } else if (0 == types) {
                 //跳转到首页产品列表
-
                 //设置选中状态
                 Drawable oneBuyDraw = resources.getDrawable(R.mipmap.bottom_onebuy_press);
                 SystemTools.loadBackground(oneBuy, oneBuyDraw);

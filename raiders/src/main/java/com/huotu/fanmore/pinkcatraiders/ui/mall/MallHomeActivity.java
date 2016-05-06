@@ -281,6 +281,9 @@ public class MallHomeActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
+                if (null==progressBar){
+                    return;
+                }
                 progressBar.setVisibility(View.VISIBLE);
                 progressBar.setProgress(newProgress);
                 if(100 == newProgress)

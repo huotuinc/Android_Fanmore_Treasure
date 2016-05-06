@@ -195,7 +195,7 @@ public class Contant {
     //接口请求地址Activity has been destroyed
     //public static final String REQUEST_URL = "http://192.168.3.30:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
-    //public static final String REQUEST_URL = "http://duobao.51flashmall.com:8091/app/";
+//    public static final String REQUEST_URL = "http://duobao.51flashmall.com/app/";
     public static final String REQUEST_URL = "http://duobao.huobanplus.com/app/";
     //public static final String REQUEST_URL = "http://192.168.1.41:8080/duobao/app/";
     //public static final String REQUEST_URL = "http://192.168.1.254:10001/app/";

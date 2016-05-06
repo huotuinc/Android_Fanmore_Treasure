@@ -1,7 +1,6 @@
 package com.huotu.fanmore.pinkcatraiders.base;
 
 import android.app.Application;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -88,8 +87,8 @@ public class BaseApplication extends Application {
     /**
      * 获取手机IMEI码
      */
-    public static String getPhoneIMEI ( Context cxt ) {
-        TelephonyManager tm = ( TelephonyManager ) cxt
+    public static String getPhoneIMEI (  ) {
+        TelephonyManager tm = ( TelephonyManager ) app
                 .getSystemService ( Context.TELEPHONY_SERVICE );
         return tm.getDeviceId ( );
     }
@@ -97,13 +96,13 @@ public class BaseApplication extends Application {
     /**
      * 获取当前应用程序的版本号
      */
-    public String getAppVersion(Context context)
+    public String getAppVersion()
     {
         String version = "0";
         try
         {
-            version = context.getPackageManager().getPackageInfo(
-                    context.getPackageName(), 0).versionName;
+            version = getPackageManager().getPackageInfo(
+                    getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e)
         {
 

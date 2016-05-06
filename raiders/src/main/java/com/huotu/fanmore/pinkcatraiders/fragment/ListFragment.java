@@ -1,7 +1,5 @@
 package com.huotu.fanmore.pinkcatraiders.fragment;
 
-import android.app.Activity;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,8 +7,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,7 +16,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.ListAdapter;
-import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.CartDataModel;
@@ -49,11 +44,7 @@ import butterknife.ButterKnife;
  */
 public class ListFragment extends BaseFragment implements Handler.Callback, View.OnClickListener, MyBroadcastReceiver.BroadcastListener{
 
-    View rootView;
-    public Resources resources;
-    public BaseApplication application;
     public HomeActivity rootAty;
-    public WindowManager wManager;
     @Bind(R.id.menuList)
     PullToRefreshListView menuList;
     View emptyView = null;
@@ -89,22 +80,21 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
     }
 
     @Override
+    public int getLayoutRes() {
+        return R.layout.list_frag;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (!init) {
-            resources = getActivity().getResources();
-            rootView = inflater.inflate(R.layout.list_frag, container, false);
-            application = (BaseApplication) getActivity().getApplication();
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (!init){
             rootAty = (HomeActivity) getActivity();
-            ButterKnife.bind(this, rootView);
-            wManager = getActivity().getWindowManager();
-            emptyView = inflater.inflate(R.layout.empty, null);
+            emptyView=LayoutInflater.from(getActivity()).inflate(R.layout.empty, null);
             TextView emptyTag = (TextView) emptyView.findViewById(R.id.emptyTag);
             emptyTag.setText("暂无清单信息");
             TextView emptyBtn = (TextView) emptyView.findViewById(R.id.emptyBtn);
@@ -113,9 +103,7 @@ public class ListFragment extends BaseFragment implements Handler.Callback, View
             initList();
             init=true;
         }
-        return rootView;
     }
-
     private void initList()
     {
         menuList.setOnRefreshListener ( new PullToRefreshBase.OnRefreshListener< ListView > ( ) {

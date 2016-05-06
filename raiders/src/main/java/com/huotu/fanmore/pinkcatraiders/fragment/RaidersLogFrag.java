@@ -1,6 +1,5 @@
 package com.huotu.fanmore.pinkcatraiders.fragment;
 
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,35 +7,24 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
-import com.huotu.fanmore.pinkcatraiders.adapter.AreaProductAdapter;
 import com.huotu.fanmore.pinkcatraiders.adapter.RaidersAdapter;
-import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
-import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
-import com.huotu.fanmore.pinkcatraiders.model.WinnerModel;
-import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,48 +39,45 @@ import butterknife.ButterKnife;
  */
 public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
 
-    View rootView;
-    public Resources resources;
-    public BaseApplication application;
     public RaidesLogActivity rootAty;
-    public WindowManager wManager;
     @Bind(R.id.raidersLogList)
     PullToRefreshListView raidersLogList;
     View emptyView = null;
-    public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
+    public OperateTypeEnum operateType = OperateTypeEnum.REFRESH;
     public List<RaidersModel> raiders;
     public RaidersAdapter adapter;
+    boolean init;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        resources = getActivity().getResources();
-        rootView = inflater.inflate ( R.layout.raiders_log_frag, container, false );
-        application = (BaseApplication) getActivity().getApplication();
-        rootAty = (RaidesLogActivity) getActivity ( );
-        ButterKnife.bind(this, rootView);
-        emptyView = inflater.inflate(R.layout.empty, null);
-        TextView emptyBtn = ( TextView ) emptyView.findViewById ( R.id.emptyBtn );
-        emptyBtn.setOnClickListener ( new View.OnClickListener ( ) {
-
-                                          @Override
-                                          public
-                                          void onClick ( View v ) {
-                                              rootAty.mHandler.sendEmptyMessage ( Contant.RAIDERS_NOW );
-                                          }
-                                      } );
-        wManager = getActivity().getWindowManager();
-        initList();
-        return rootView;
+    public int getLayoutRes() {
+        return R.layout.raiders_log_frag;
     }
 
-    private void initList()
-    {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (!init) {
+            rootAty = (RaidesLogActivity) getActivity();
+            emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.empty, null);
+            TextView emptyBtn = (TextView) emptyView.findViewById(R.id.emptyBtn);
+            emptyBtn.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    rootAty.mHandler.sendEmptyMessage(Contant.RAIDERS_NOW);
+                }
+            });
+            initList();
+            init = true;
+        }
+    }
+
+    private void initList() {
         raidersLogList.setMode(PullToRefreshBase.Mode.BOTH);
         raidersLogList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
@@ -114,9 +99,8 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
         firstGetData();
     }
 
-    private void loadData()
-    {
-        if( false == rootAty.canConnect() ){
+    private void loadData() {
+        if (false == rootAty.canConnect()) {
             rootAty.mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -130,17 +114,13 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
         Map<String, Object> maps = new HashMap<String, Object>();
         //进行中
         maps.put("type", "1");
-        if ( OperateTypeEnum.REFRESH == operateType )
-        {// 下拉
+        if (OperateTypeEnum.REFRESH == operateType) {// 下拉
             maps.put("lastTime", 0);
-        } else if (OperateTypeEnum.LOADMORE == operateType)
-        {// 上拉
-            if ( raiders != null && raiders.size() > 0)
-            {
+        } else if (OperateTypeEnum.LOADMORE == operateType) {// 上拉
+            if (raiders != null && raiders.size() > 0) {
                 RaidersModel raider = raiders.get(raiders.size() - 1);
                 maps.put("lastTime", raider.getTime());
-            } else if (raiders != null && raiders.size() == 0)
-            {
+            } else if (raiders != null && raiders.size() == 0) {
                 maps.put("lastTime", 0);
             }
         }
@@ -148,8 +128,7 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
         url = url + suffix;
         final HttpUtils httpUtils = new HttpUtils();
 
-        new AsyncTask<String, Void, RaidersOutputModel>()
-        {
+        new AsyncTask<String, Void, RaidersOutputModel>() {
 
             @Override
             protected RaidersOutputModel doInBackground(String... params) {
@@ -158,12 +137,10 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
                 try {
                     String jsonStr = httpUtils.doGet(params[0]);
                     raiderOutputs = jsonUtil.toBean(jsonStr, raiderOutputs);
-                }catch (JsonSyntaxException e)
-                {
+                } catch (JsonSyntaxException e) {
                     raiderOutputs.setResultCode(0);
                     raiderOutputs.setResultDescription("解析json出错");
-                } catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     // TODO: handle exception
                     return null;
                 }
@@ -174,30 +151,24 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
             protected void onPostExecute(RaidersOutputModel raidersOutputModel) {
                 super.onPostExecute(raidersOutputModel);
                 raidersLogList.onRefreshComplete();
-                if(null != raidersOutputModel && null != raidersOutputModel.getResultData() && (1==raidersOutputModel.getResultCode()))
-                {
-                    if(null != raidersOutputModel.getResultData().getList() && !raidersOutputModel.getResultData().getList().isEmpty())
-                    {
+                if (null != raidersOutputModel && null != raidersOutputModel.getResultData() && (1 == raidersOutputModel.getResultCode())) {
+                    if (null != raidersOutputModel.getResultData().getList() && !raidersOutputModel.getResultData().getList().isEmpty()) {
                         //更新夺宝数据
                         String[] counts = new String[]{String.valueOf(raidersOutputModel.getResultData().getAllNumber()), String.valueOf(raidersOutputModel.getResultData().getRunNumber()), String.valueOf(raidersOutputModel.getResultData().getFinishNumber())};
                         Message message = rootAty.mHandler.obtainMessage(Contant.UPDATE_RAIDER_COUNT, counts);
                         rootAty.mHandler.sendMessage(message);
-                        if( operateType == OperateTypeEnum.REFRESH){
+                        if (operateType == OperateTypeEnum.REFRESH) {
                             raiders.clear();
                             raiders.addAll(raidersOutputModel.getResultData().getList());
                             adapter.notifyDataSetChanged();
-                        }else if( operateType == OperateTypeEnum.LOADMORE){
-                            raiders.addAll( raidersOutputModel.getResultData().getList());
+                        } else if (operateType == OperateTypeEnum.LOADMORE) {
+                            raiders.addAll(raidersOutputModel.getResultData().getList());
                             adapter.notifyDataSetChanged();
                         }
-                    }
-                    else
-                    {
+                    } else {
                         raidersLogList.setEmptyView(emptyView);
                     }
-                }
-                else
-                {
+                } else {
                     //异常处理，自动切换成无数据
                     raidersLogList.setEmptyView(emptyView);
                 }
@@ -205,7 +176,7 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
         }.execute(url);
     }
 
-    protected void firstGetData(){
+    protected void firstGetData() {
         rootAty.mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -227,6 +198,7 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        rootAty.mHandler.removeCallbacksAndMessages(null);
         VolleyUtil.cancelAllRequest();
     }
 
@@ -244,6 +216,7 @@ public class RaidersLogFrag extends BaseFragment implements Handler.Callback {
     public void onClick(View view) {
 
     }
+
 
     @Override
     public boolean handleMessage(Message msg) {

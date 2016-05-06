@@ -1,6 +1,5 @@
 package com.huotu.fanmore.pinkcatraiders.fragment;
 
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,32 +7,24 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.RaidersAdapter;
-import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
-import com.huotu.fanmore.pinkcatraiders.model.WinnerModel;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,11 +39,7 @@ import butterknife.ButterKnife;
  */
 public class RaidersLogDoneFrag extends BaseFragment implements Handler.Callback {
 
-    View rootView;
-    public Resources resources;
-    public BaseApplication application;
     public RaidesLogActivity rootAty;
-    public WindowManager wManager;
     @Bind(R.id.raidersLogList)
     PullToRefreshListView raidersLogList;
     View emptyView = null;
@@ -67,18 +54,17 @@ public class RaidersLogDoneFrag extends BaseFragment implements Handler.Callback
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (!init) {
-            resources = getActivity().getResources();
-            rootView = inflater.inflate(R.layout.raiders_log_frag, container, false);
-            application = (BaseApplication) getActivity().getApplication();
+    public int getLayoutRes() {
+        return R.layout.raiders_log_frag;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (!init){
             rootAty = (RaidesLogActivity) getActivity();
-            ButterKnife.bind(this, rootView);
-//            raidersLogList = (PullToRefreshListView) rootView.findViewById(R.id.raidersLogList);
-            emptyView = inflater.inflate(R.layout.empty, null);
+            emptyView=LayoutInflater.from(getActivity()).inflate(R.layout.empty, null);
             TextView emptyBtn = (TextView) emptyView.findViewById(R.id.emptyBtn);
             emptyBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -87,13 +73,10 @@ public class RaidersLogDoneFrag extends BaseFragment implements Handler.Callback
                     rootAty.mHandler.sendEmptyMessage(Contant.RAIDERS_NOW);
                 }
             });
-            wManager = getActivity().getWindowManager();
             initList();
             init=true;
         }
-        return rootView;
     }
-
     private void initList()
     {
         raidersLogList.setMode(PullToRefreshBase.Mode.BOTH);
@@ -240,6 +223,7 @@ public class RaidersLogDoneFrag extends BaseFragment implements Handler.Callback
     public void onClick(View view) {
 
     }
+
 
     @Override
     public boolean handleMessage(Message msg) {

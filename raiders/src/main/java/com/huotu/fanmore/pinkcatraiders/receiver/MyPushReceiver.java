@@ -49,7 +49,7 @@ class MyPushReceiver extends BroadcastReceiver
         if ( JPushInterface.ACTION_REGISTRATION_ID.equals ( intent.getAction ( ) ) ) {
             // 注册后获取极光全局ID
             regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
-            imei = BaseApplication.getPhoneIMEI(context);
+            imei = BaseApplication.getPhoneIMEI();
             //将imei注册为别名
             //将remote别名传递给
             String url = Contant.REQUEST_URL + Contant.UPDATE_DEVICE_TOKEN;

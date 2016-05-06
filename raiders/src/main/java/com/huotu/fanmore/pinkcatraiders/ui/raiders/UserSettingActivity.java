@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -415,6 +416,7 @@ public class UserSettingActivity extends BaseActivity implements View.OnClickLis
         //设置或者修改手机号码
         Bundle bundle = new Bundle ();
         bundle.putInt("moblieband", application.readMobileBanded());
+        Log.i("sunny", "sunny: "+application.readMobileBanded());
         if (1==application.readMobileBanded()){
             String phone = application.readMobile();
             int type=3;//修改手机号码

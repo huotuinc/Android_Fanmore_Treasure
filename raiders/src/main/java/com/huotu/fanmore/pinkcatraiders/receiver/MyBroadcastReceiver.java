@@ -49,10 +49,12 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
     //控制title上的消息tag显隐
     public static String TITLE_MSG_TAG = "cy.com.morefan.TITLE_MSG_TAG";
 
+    public static String DESTORY_HOMEACT="cy.com.morefan.DESTORY_HOMEACT";
+
     public enum ReceiverType{
         WXNotBack,AlarmUp, RefreshTaskList,UserMainDataUpdate, Sms, Login, Logout, ShareToWeixinSuccess,
         ShareToSinaSuccess, ShareToQzoneSuccess, BackgroundBackToUpdate, FlowAdd,Register,RefreshTaskDetail,
-        WX_Pay_Callback,requestFlow,sendFlow,wxPaySuccess,shopCart,jumpCart,toaddresslist,RefreshUserlist,titleMsgTag,showOrder,goToHomeFrag
+        WX_Pay_Callback,requestFlow,sendFlow,wxPaySuccess,shopCart,jumpCart,toaddresslist,RefreshUserlist,titleMsgTag,showOrder,goToHomeFrag,destory_homeact
     }
 
     public interface BroadcastListener {

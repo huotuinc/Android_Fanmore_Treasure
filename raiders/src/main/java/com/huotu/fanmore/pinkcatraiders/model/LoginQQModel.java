@@ -1,7 +1,5 @@
 package com.huotu.fanmore.pinkcatraiders.model;
 
-import java.security.PrivateKey;
-
 /**
  * Created by Administrator on 2016/1/27.
  */

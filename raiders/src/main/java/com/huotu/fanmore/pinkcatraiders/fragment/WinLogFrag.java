@@ -1,14 +1,11 @@
 package com.huotu.fanmore.pinkcatraiders.fragment;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -18,13 +15,11 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.RaidersAdapter;
-import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
 import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
-import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.raiders.WinLogActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
@@ -45,11 +40,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2016/2/17.
  */
 public class WinLogFrag extends BaseFragment implements Handler.Callback {
-    View rootView;
-    public Resources resources;
-    public BaseApplication application;
     public WinLogActivity rootAty;
-    public WindowManager wManager;
     View emptyView = null;
     @Bind(R.id.raidersLogList)
     PullToRefreshListView raidersLogList;
@@ -58,24 +49,28 @@ public class WinLogFrag extends BaseFragment implements Handler.Callback {
     public OperateTypeEnum operateType= OperateTypeEnum.REFRESH;
     public List<RaidersModel> raiders;
     public RaidersAdapter adapter;
+    boolean init;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        resources = getActivity().getResources();
-        rootView = inflater.inflate(R.layout.raiders_log_frag, container, false);
-        application = (BaseApplication) getActivity().getApplication();
-        rootAty = (WinLogActivity) getActivity();
-        ButterKnife.bind(this, rootView);
-        emptyView = inflater.inflate(R.layout.empty, null);
-        emptyTag.setText("你还没有中奖纪录");
-        wManager = getActivity().getWindowManager();
-        initList();
-        return rootView;
+    public int getLayoutRes() {
+        return R.layout.raiders_log_frag;
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (!init){
+            rootAty = (WinLogActivity) getActivity();
+            emptyView=LayoutInflater.from(getActivity()).inflate(R.layout.empty, null);
+            emptyTag.setText("你还没有中奖纪录");
+            initList();
+            init=true;
+        }
+    }
+
     private void initList()
     {
         raidersLogList.setMode(PullToRefreshBase.Mode.BOTH);
@@ -200,6 +195,8 @@ public class WinLogFrag extends BaseFragment implements Handler.Callback {
     public void onClick(View view) {
 
     }
+
+
 
     @Override
     public boolean handleMessage(Message msg) {

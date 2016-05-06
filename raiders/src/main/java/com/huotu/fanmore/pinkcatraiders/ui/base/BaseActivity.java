@@ -20,6 +20,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * activity的基类
@@ -34,6 +35,18 @@ public class BaseActivity extends FragmentActivity implements Response.ErrorList
         application = (BaseApplication) BaseActivity.this.getApplication();
         //禁止横屏
         BaseActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     public void setImmerseLayout(View view)

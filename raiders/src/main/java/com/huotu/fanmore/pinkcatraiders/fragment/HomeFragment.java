@@ -1,20 +1,13 @@
 package com.huotu.fanmore.pinkcatraiders.fragment;
 
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -28,21 +21,14 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.huotu.fanmore.pinkcatraiders.R;
 import com.huotu.fanmore.pinkcatraiders.adapter.HomeViewPagerAdapter;
-import com.huotu.fanmore.pinkcatraiders.adapter.TabPagerAdapter;
-import com.huotu.fanmore.pinkcatraiders.base.BaseApplication;
 import com.huotu.fanmore.pinkcatraiders.base.BaseFragment;
 import com.huotu.fanmore.pinkcatraiders.conf.Contant;
-import com.huotu.fanmore.pinkcatraiders.model.AdEntity;
 import com.huotu.fanmore.pinkcatraiders.model.CarouselModel;
 import com.huotu.fanmore.pinkcatraiders.model.NoticeModel;
 import com.huotu.fanmore.pinkcatraiders.model.NoticeOutputModel;
 import com.huotu.fanmore.pinkcatraiders.model.OperateTypeEnum;
 import com.huotu.fanmore.pinkcatraiders.model.ProductModel;
 import com.huotu.fanmore.pinkcatraiders.model.ProductsOutputModel;
-import com.huotu.fanmore.pinkcatraiders.model.RaidersModel;
-import com.huotu.fanmore.pinkcatraiders.model.RaidersOutputModel;
-import com.huotu.fanmore.pinkcatraiders.model.ScanRedpackageModel;
-import com.huotu.fanmore.pinkcatraiders.model.SlideDetailOutputModel;
 import com.huotu.fanmore.pinkcatraiders.receiver.MyBroadcastReceiver;
 import com.huotu.fanmore.pinkcatraiders.ui.assistant.WebExhibitionActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.base.HomeActivity;
@@ -50,10 +36,6 @@ import com.huotu.fanmore.pinkcatraiders.ui.login.LoginActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.orders.ShowOrderActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.product.AreaActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.product.CateGoryActivity;
-import com.huotu.fanmore.pinkcatraiders.ui.product.ProductDetailActivity;
-import com.huotu.fanmore.pinkcatraiders.ui.raiders.BuyLogActivity;
-import com.huotu.fanmore.pinkcatraiders.ui.raiders.RaidesLogActivity;
-import com.huotu.fanmore.pinkcatraiders.ui.raiders.UserSettingActivity;
 import com.huotu.fanmore.pinkcatraiders.ui.redpackage.ReadPackageActivity;
 import com.huotu.fanmore.pinkcatraiders.uitls.ActivityUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.AuthParamUtils;
@@ -61,9 +43,7 @@ import com.huotu.fanmore.pinkcatraiders.uitls.DateUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.HttpUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.JSONUtil;
 import com.huotu.fanmore.pinkcatraiders.uitls.SystemTools;
-import com.huotu.fanmore.pinkcatraiders.uitls.ToastUtils;
 import com.huotu.fanmore.pinkcatraiders.uitls.VolleyUtil;
-import com.huotu.fanmore.pinkcatraiders.widget.MarqueenTextView;
 
 import org.json.JSONObject;
 
@@ -82,11 +62,6 @@ import butterknife.OnClick;
  */
 public class HomeFragment extends BaseFragment implements View.OnClickListener, MyBroadcastReceiver.BroadcastListener {
 
-    View rootView;
-
-    public Resources resources;
-
-    public BaseApplication application;
 
     public HomeActivity rootAty;
 
@@ -100,12 +75,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Bind(R.id.homeHornText)
     ViewFlipper homeHornText;
-
-    @Bind(R.id.productsL)
-    LinearLayout productsL;
-
-    @Bind(R.id.productSwitch)
-    LinearLayout productSwitch;
 
     @Bind(R.id.rqInnerL)
     RelativeLayout rqInnerL;
@@ -138,8 +107,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     private int currentIndex = 0;
 
-    public WindowManager wManager;
-
     public OperateTypeEnum operateType = OperateTypeEnum.REFRESH;
 
     boolean init;
@@ -152,36 +119,32 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
+    public int getLayoutRes() {
+        return R.layout.home_frag;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
     }
 
-
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (!init) {
-            resources = getActivity().getResources();
-            rootView = inflater.inflate(R.layout.home_frag, container, false);
-            application = (BaseApplication) getActivity().getApplication();
             rootAty = (HomeActivity) getActivity();
-            ButterKnife.bind(this, rootView);
             application.proFragManager = FragManager.getIns(getActivity(), R.id.productsL);
             application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
-            broadcastReceiver = new MyBroadcastReceiver(getActivity(),this,MyBroadcastReceiver.GO_TO_HOMEFRAG);
-            wManager = getActivity().getWindowManager();
-            //初始化总需
+            broadcastReceiver = new MyBroadcastReceiver(getActivity(), this, MyBroadcastReceiver.GO_TO_HOMEFRAG);
             zxrsInnerL.setTag(0);
             SystemTools.loadBackground(zxrsLogo, resources.getDrawable(R.mipmap.sort_down));
             initView();
             iniScroll();
-           init=true;
+            init = true;
         }
-        return rootView;
     }
+
     private void iniScroll() {
 
         homePullRefresh.setOnRefreshListener(
@@ -202,70 +165,126 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     }
                 }
         );
-        homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
+        scrollToTop();
     }
 
     private void initView() {
-
         currentIndex = 0;
         application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
-        Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
-        Drawable press = resources.getDrawable(R.drawable.switch_press);
-        rqLabel.setTextColor(resources.getColor(R.color.deep_red));
+        rqLabel.setTextColor(resources.getColor(R.color.title_bg));
         zxLabel.setTextColor(resources.getColor(R.color.text_black));
         jdLabel.setTextColor(resources.getColor(R.color.text_black));
         zxrsLabel.setTextColor(resources.getColor(R.color.text_black));
-        SystemTools.loadBackground(rqInnerL, press);
-        SystemTools.loadBackground(zxInnerL, normal);
-        SystemTools.loadBackground(jdInnerL, normal);
-        SystemTools.loadBackground(zxrsInnerL, normal);
         initSwitchImg();
         mHandler.sendEmptyMessage(0x22113344);
         firstGetData();
     }
 
-    @OnClick(R.id.lbL)
-    void showCatagoryUi() {
+    @OnClick({R.id.rqInnerL, R.id.zxInnerL, R.id.jdInnerL, R.id.zxrsInnerL})
+    void click(View view) {
+        int clickId = view.getId();
+        switch (clickId) {
+            case R.id.rqInnerL:
+                operateType = OperateTypeEnum.REFRESH;
+                currentIndex = 0;
+                application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
+                rqLabel.setTextColor(resources.getColor(R.color.title_bg));
+                zxLabel.setTextColor(resources.getColor(R.color.text_black));
+                jdLabel.setTextColor(resources.getColor(R.color.text_black));
+                zxrsLabel.setTextColor(resources.getColor(R.color.text_black));
+                initProduct();
+                scrollToTop();
+                break;
+            case R.id.zxInnerL:
+                operateType = OperateTypeEnum.REFRESH;
+                currentIndex = 1;
+                application.proFragManager.setCurrentFrag(FragManager.FragType.NEWEST_PRODUCT);
+                rqLabel.setTextColor(resources.getColor(R.color.text_black));
+                zxLabel.setTextColor(resources.getColor(R.color.title_bg));
+                jdLabel.setTextColor(resources.getColor(R.color.text_black));
+                zxrsLabel.setTextColor(resources.getColor(R.color.text_black));
+                initProduct();
+                scrollToTop();
+                break;
+            case R.id.jdInnerL:
+                operateType = OperateTypeEnum.REFRESH;
+                currentIndex = 2;
+                application.proFragManager.setCurrentFrag(FragManager.FragType.PROGRESS);
+                rqLabel.setTextColor(resources.getColor(R.color.text_black));
+                zxLabel.setTextColor(resources.getColor(R.color.text_black));
+                jdLabel.setTextColor(resources.getColor(R.color.title_bg));
+                zxrsLabel.setTextColor(resources.getColor(R.color.text_black));
+                initProduct();
+                scrollToTop();
+                break;
+            case R.id.zxrsInnerL:
+                operateType = OperateTypeEnum.REFRESH;
+                if (0 == Integer.parseInt(zxrsInnerL.getTag().toString())) {
+                    //转换成UP
+                    zxrsInnerL.setTag(1);
+                    SystemTools.loadBackground(zxrsLogo, resources.getDrawable(R.mipmap.sort_up));
+                    currentIndex = 4;
+                    application.proFragManager.setCurrentFrag(FragManager.FragType.TOTAL);
+                    rqLabel.setTextColor(resources.getColor(R.color.text_black));
+                    zxLabel.setTextColor(resources.getColor(R.color.text_black));
+                    jdLabel.setTextColor(resources.getColor(R.color.text_black));
+                    zxrsLabel.setTextColor(resources.getColor(R.color.title_bg));
 
-        ActivityUtils.getInstance().showActivity(getActivity(), CateGoryActivity.class);
-    }
-
-    @OnClick(R.id.zqL)
-    void showZqUi() {
-
-        Bundle bundle = new Bundle();
-        ActivityUtils.getInstance().showActivity(getActivity(), AreaActivity.class);
-    }
-
-    @OnClick(R.id.redPackageL)
-    void showRadPackageUi() {
-
-        if (!application.isLogin()) {
-            ActivityUtils.getInstance().showActivity(getActivity(), LoginActivity.class);
-        } else {
-            Bundle bundle = new Bundle();
-            ActivityUtils.getInstance().showActivity(getActivity(), ReadPackageActivity.class, bundle);
+                } else if (1 == Integer.parseInt(zxrsInnerL.getTag().toString())) {
+                    //转换成DOWN
+                    zxrsInnerL.setTag(0);
+                    SystemTools.loadBackground(zxrsLogo, resources.getDrawable(R.mipmap.sort_down));
+                    currentIndex = 3;
+                    application.proFragManager.setCurrentFrag(FragManager.FragType.TOTAL);
+                    rqLabel.setTextColor(resources.getColor(R.color.text_black));
+                    zxLabel.setTextColor(resources.getColor(R.color.text_black));
+                    jdLabel.setTextColor(resources.getColor(R.color.text_black));
+                    zxrsLabel.setTextColor(resources.getColor(R.color.title_bg));
+                }
+                initProduct();
+                scrollToTop();
+                break;
         }
-
     }
 
-    @OnClick(R.id.sdL)
-    void showSdUi() {
-        //ToastUtils.showLongToast(getActivity(), "弹出晒单界面");
-        Bundle bundle = new Bundle();
-        //首页晒单
-        bundle.putInt("type", 0);
-        ActivityUtils.getInstance().showActivity(getActivity(), ShowOrderActivity.class, bundle);
+    public void scrollToTop(){
+        homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
     }
 
-    @OnClick(R.id.wtL)
-    void showWtUi() {
-        //显示常见问题
-        Bundle bundle = new Bundle();
-        bundle.putString("title", "常见问题");
-        bundle.putString("link", application.readHelpURL());
-        ActivityUtils.getInstance().showActivity(getActivity(), WebExhibitionActivity.class,
-                bundle);
+    @OnClick({R.id.lbL, R.id.zqL, R.id.redPackageL, R.id.sdL, R.id.wtL})
+    void click2(View view) {
+        int click2Id = view.getId();
+        Bundle bundle = null;
+        switch (click2Id) {
+            case R.id.lbL:
+                ActivityUtils.getInstance().showActivity(getActivity(), CateGoryActivity.class);
+                break;
+            case R.id.zqL:
+                bundle = new Bundle();
+                ActivityUtils.getInstance().showActivity(getActivity(), AreaActivity.class);
+                break;
+            case R.id.redPackageL:
+                if (!application.isLogin()) {
+                    ActivityUtils.getInstance().showActivity(getActivity(), LoginActivity.class);
+                } else {
+                    bundle = new Bundle();
+                    ActivityUtils.getInstance().showActivity(getActivity(), ReadPackageActivity.class, bundle);
+                }
+                break;
+            case R.id.sdL:
+                bundle = new Bundle();
+                //首页晒单
+                bundle.putInt("type", 0);
+                ActivityUtils.getInstance().showActivity(getActivity(), ShowOrderActivity.class, bundle);
+                break;
+            case R.id.wtL:
+                bundle = new Bundle();
+                bundle.putString("title", "常见问题");
+                bundle.putString("link", application.readHelpURL());
+                ActivityUtils.getInstance().showActivity(getActivity(), WebExhibitionActivity.class,
+                        bundle);
+                break;
+        }
     }
 
     private void initProduct() {
@@ -590,108 +609,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     }
 
-    @OnClick(R.id.rqInnerL)
-    void clickRql() {
-        //重置加载模式
-        operateType = OperateTypeEnum.REFRESH;
-        currentIndex = 0;
-        application.proFragManager.setCurrentFrag(FragManager.FragType.POPULAR);
-        Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
-        Drawable press = resources.getDrawable(R.drawable.switch_press);
-        rqLabel.setTextColor(resources.getColor(R.color.deep_red));
-        zxLabel.setTextColor(resources.getColor(R.color.text_black));
-        jdLabel.setTextColor(resources.getColor(R.color.text_black));
-        zxrsLabel.setTextColor(resources.getColor(R.color.text_black));
-        SystemTools.loadBackground(rqInnerL, press);
-        SystemTools.loadBackground(zxInnerL, normal);
-        SystemTools.loadBackground(jdInnerL, normal);
-        SystemTools.loadBackground(zxrsInnerL, normal);
-        initProduct();
-        homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
-    }
-
-    @OnClick(R.id.zxInnerL)
-    void clickZxl() {
-        //重置加载模式
-        operateType = OperateTypeEnum.REFRESH;
-        currentIndex = 1;
-        application.proFragManager.setCurrentFrag(FragManager.FragType.NEWEST_PRODUCT);
-        Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
-        Drawable press = resources.getDrawable(R.drawable.switch_press);
-        rqLabel.setTextColor(resources.getColor(R.color.text_black));
-        zxLabel.setTextColor(resources.getColor(R.color.deep_red));
-        jdLabel.setTextColor(resources.getColor(R.color.text_black));
-        zxrsLabel.setTextColor(resources.getColor(R.color.text_black));
-        SystemTools.loadBackground(rqInnerL, normal);
-        SystemTools.loadBackground(zxInnerL, press);
-        SystemTools.loadBackground(jdInnerL, normal);
-        SystemTools.loadBackground(zxrsInnerL, normal);
-        initProduct();
-        homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
-
-    }
-
-    @OnClick(R.id.jdInnerL)
-    void clickJdl() {
-        //重置加载模式
-        operateType = OperateTypeEnum.REFRESH;
-        currentIndex = 2;
-        application.proFragManager.setCurrentFrag(FragManager.FragType.PROGRESS);
-        Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
-        Drawable press = resources.getDrawable(R.drawable.switch_press);
-        rqLabel.setTextColor(resources.getColor(R.color.text_black));
-        zxLabel.setTextColor(resources.getColor(R.color.text_black));
-        jdLabel.setTextColor(resources.getColor(R.color.deep_red));
-        zxrsLabel.setTextColor(resources.getColor(R.color.text_black));
-        SystemTools.loadBackground(rqInnerL, normal);
-        SystemTools.loadBackground(zxInnerL, normal);
-        SystemTools.loadBackground(jdInnerL, press);
-        SystemTools.loadBackground(zxrsInnerL, normal);
-        initProduct();
-        homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
-    }
-
-    @OnClick(R.id.zxrsInnerL)
-    void clickZxrsl() {
-        //重置加载模式
-        operateType = OperateTypeEnum.REFRESH;
-        if (0 == Integer.parseInt(zxrsInnerL.getTag().toString())) {
-            //转换成UP
-            zxrsInnerL.setTag(1);
-            SystemTools.loadBackground(zxrsLogo, resources.getDrawable(R.mipmap.sort_up));
-            currentIndex = 4;
-            application.proFragManager.setCurrentFrag(FragManager.FragType.TOTAL);
-            Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
-            Drawable press = resources.getDrawable(R.drawable.switch_press);
-            rqLabel.setTextColor(resources.getColor(R.color.text_black));
-            zxLabel.setTextColor(resources.getColor(R.color.text_black));
-            jdLabel.setTextColor(resources.getColor(R.color.text_black));
-            zxrsLabel.setTextColor(resources.getColor(R.color.deep_red));
-            SystemTools.loadBackground(rqInnerL, normal);
-            SystemTools.loadBackground(zxInnerL, normal);
-            SystemTools.loadBackground(jdInnerL, normal);
-            SystemTools.loadBackground(zxrsInnerL, press);
-        } else if (1 == Integer.parseInt(zxrsInnerL.getTag().toString())) {
-            //转换成DOWN
-            zxrsInnerL.setTag(0);
-            SystemTools.loadBackground(zxrsLogo, resources.getDrawable(R.mipmap.sort_down));
-            currentIndex = 3;
-            application.proFragManager.setCurrentFrag(FragManager.FragType.TOTAL);
-            Drawable normal = resources.getDrawable(R.drawable.home_switch_normal);
-            Drawable press = resources.getDrawable(R.drawable.switch_press);
-            rqLabel.setTextColor(resources.getColor(R.color.text_black));
-            zxLabel.setTextColor(resources.getColor(R.color.text_black));
-            jdLabel.setTextColor(resources.getColor(R.color.text_black));
-            zxrsLabel.setTextColor(resources.getColor(R.color.deep_red));
-            SystemTools.loadBackground(rqInnerL, normal);
-            SystemTools.loadBackground(zxInnerL, normal);
-            SystemTools.loadBackground(jdInnerL, normal);
-            SystemTools.loadBackground(zxrsInnerL, press);
-        }
-        initProduct();
-        homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
-    }
-
     /**
      * 初始化加载数据
      */
@@ -732,7 +649,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                                 Iterator<NoticeModel> iterator = noticeOutput.getResultData().getList().iterator();
                                 while (iterator.hasNext()) {
                                     NoticeModel notice = iterator.next();
-                                    TextView textView = new TextView(getActivity());
+                                    TextView textView = new TextView(rootAty);
                                     textView.setSingleLine(true);
                                     textView.setEllipsize(TextUtils.TruncateAt.END);
                                     textView.setText(Html.fromHtml("<font color=\"#54595f\">恭喜</font><font color=\"#0c83d4\">" + notice.getName() + "</font><font color=\"#54595f\">在</font><font color=\"#d4750c\">" + DateUtils.getMinHome(notice.getTime()) + "</font><font color=\"#54595f\">获得</font><font color=\"#0c83d4\">" + notice.getTitle() + "</font>"));
@@ -745,8 +662,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                                 }
 
                                 // 设置文字in/out的动画效果
-                                homeHornText.setInAnimation(getActivity(), R.anim.push_up_in);
-                                homeHornText.setOutAnimation(getActivity(), R.anim.push_up_out);
+                                homeHornText.setInAnimation(rootAty, R.anim.push_up_in);
+                                homeHornText.setOutAnimation(rootAty, R.anim.push_up_out);
                                 homeHornText.startFlipping();
 
                                 mHandler.sendEmptyMessageDelayed(1, 600000);
@@ -843,8 +760,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if( null != broadcastReceiver)
-        {
+        if (null != broadcastReceiver) {
             broadcastReceiver.unregisterReceiver();
         }
     }
@@ -886,7 +802,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 break;
                 case 0x22113344: {
                     initNotice();
-                    mHandler.sendEmptyMessageDelayed(0x22113344, 600000);
+                    mHandler.sendEmptyMessageDelayed(0x22113344, 60000);
                 }
                 break;
                 default:
@@ -899,8 +815,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onFinishReceiver(MyBroadcastReceiver.ReceiverType type, Object msg) {
-        if (type==MyBroadcastReceiver.ReceiverType.goToHomeFrag){
-            homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
+        if (type == MyBroadcastReceiver.ReceiverType.goToHomeFrag) {
+            scrollToTop();
         }
     }
 }
