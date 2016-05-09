@@ -55,13 +55,13 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     public
     ProgressPopupWindow successProgress;
 
-    @Bind( R.id.titleLayoutL )
+    @Bind(R.id.titleLayoutL)
     RelativeLayout titleLayoutL;
 
-    @Bind ( R.id.stubTitleText )
+    @Bind(R.id.stubTitleText)
     ViewStub stubTitleText;
 
-    @Bind ( R.id.titleLeftImage )
+    @Bind(R.id.titleLeftImage)
     ImageView titleLeftImage;
     @Bind(R.id.problemL)
     LinearLayout problemL;
@@ -73,15 +73,16 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     TextView data;
     @Bind(R.id.version)
     TextView version;
-    File file =new File("/data/data/"+ Contant.SYS_PACKAGE+"/cache");
+    File file = new File("/data/data/" + Contant.SYS_PACKAGE + "/cache");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
-        application = ( BaseApplication ) this.getApplication ( );
-        resources = this.getResources ( );
-        mHandler = new Handler ( this );
+        application = (BaseApplication) this.getApplication();
+        resources = this.getResources();
+        mHandler = new Handler(this);
         wManager = this.getWindowManager();
         initTitle();
         try {
@@ -100,28 +101,29 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             data.setText(datatext);
         }
     }
-    private
-    void initTitle ( ) {
+
+    private void initTitle() {
         //背景色
-        Drawable bgDraw = resources.getDrawable ( R.drawable.account_bg_bottom );
+        Drawable bgDraw = resources.getDrawable(R.drawable.account_bg_bottom);
         SystemTools.loadBackground(titleLayoutL, bgDraw);
-        Drawable leftDraw = resources.getDrawable ( R.mipmap.back_gray );
+        Drawable leftDraw = resources.getDrawable(R.mipmap.back_gray);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
         stubTitleText.inflate();
-        TextView titleText = ( TextView ) this.findViewById ( R.id.titleText );
+        TextView titleText = (TextView) this.findViewById(R.id.titleText);
         titleText.setText("设置");
     }
 
 
-    @OnClick( R.id.titleLeftImage )
-    void doBack ( ) {
+    @OnClick(R.id.titleLeftImage)
+    void doBack() {
 
         closeSelf(SettingActivity.this);
     }
-    @OnClick( R.id.cleanL)
-    void clean(){
-        DataCleanManager.cleanCustomCache("/data/data/"+ Contant.SYS_PACKAGE+"/cache");
-        DataCleanManager.cleanCustomCache("/data/data/"+ Contant.SYS_PACKAGE+"/cache/volley");
+
+    @OnClick(R.id.cleanL)
+    void clean() {
+        DataCleanManager.cleanCustomCache("/data/data/" + Contant.SYS_PACKAGE + "/cache");
+        DataCleanManager.cleanCustomCache("/data/data/" + Contant.SYS_PACKAGE + "/cache/volley");
         try {
             inintData();
         } catch (Exception e) {
@@ -131,9 +133,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
 
     @OnClick(R.id.layoutL)
-    void layoutapp(){
+    void layoutapp() {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(
-                SettingActivity.this,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+                SettingActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         final AlertDialog alertdialog = dialog.create();
         LayoutInflater inflater = LayoutInflater.from(SettingActivity.this);
         View view = inflater.inflate(R.layout.activity_dialog, null);
@@ -145,54 +147,56 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         titletext.setTextColor(getResources().getColor(R.color.text_black));
         btn_lift.setTextColor(getResources().getColor(R.color.color_blue));
         btn_right.setTextColor(getResources().getColor(R.color.color_blue));
-            titletext.setText("退出登录");
-            messagetext.setText("确定要退出登录吗?");
-            btn_lift.setText("取消");
-            btn_right.setText("确定");
+        titletext.setText("退出登录");
+        messagetext.setText("确定要退出登录吗?");
+        btn_lift.setText("取消");
+        btn_right.setText("确定");
 
-            btn_right.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    alertdialog.dismiss();
-                    logout();
-                    ActivityUtils.getInstance().skipActivity(SettingActivity.this, HomeActivity.class);
+        btn_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertdialog.dismiss();
+                logout();
+                Bundle bundle=new Bundle();
+                bundle.putInt("home", 200);
+                ActivityUtils.getInstance().skipActivity(SettingActivity.this, HomeActivity.class,bundle);
 
-                }
-            });
-            btn_lift.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    alertdialog.dismiss();
-                }
-            });
+            }
+        });
+        btn_lift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertdialog.dismiss();
+            }
+        });
 
-            alertdialog.show();
-        }
+        alertdialog.show();
+    }
 
-    public void logout(){
+    public void logout() {
 
-
-       application.ClearUser();
+        application.ClearUser();
         //清除微信授权信息
         ShareSDK.isRemoveCookieOnAuthorize();
         ShareSDK.getPlatform(Wechat.NAME).removeAccount();
 
         Platform platform = new QQ(SettingActivity.this);
-        if(platform!=null) {
+        if (platform != null) {
             platform.removeAccount();
         }
         //清除地址信息
         application.localAddress = null;
     }
+
     @OnClick(R.id.problemL)
-    void showweb()
-    {
+    void showweb() {
         Bundle bundle = new Bundle();
         bundle.putString("title", "常见问题");
-        bundle.putString("link",  application.readHelpURL());
+        bundle.putString("link", application.readHelpURL());
         ActivityUtils.getInstance().showActivity(SettingActivity.this, WebExhibitionActivity.class,
                 bundle);
     }
+
     @Override
     public boolean handleMessage(Message msg) {
         return false;

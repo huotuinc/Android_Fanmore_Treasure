@@ -244,6 +244,10 @@ public class HomeActivity extends BaseActivity implements Handler.Callback, View
 //                (HomeFragment)homePullRefresh.getRefreshableView().smoothScrollTo(0, 0);
                 initTab();
 
+            }else if (200 == data){
+                application.mFragManager.setCurrentFrag(FragManager.FragType.HOME);
+                ((HomeFragment) application.mFragManager.getCurrentFrag()).scrollToTop();
+                initTab();
             }
         }
     }
