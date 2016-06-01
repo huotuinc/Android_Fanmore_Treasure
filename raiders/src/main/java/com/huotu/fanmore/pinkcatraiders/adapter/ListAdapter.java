@@ -32,6 +32,7 @@ import com.huotu.fanmore.pinkcatraiders.widget.AddAndSubView;
 
 import org.w3c.dom.Text;
 
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.Bind;
@@ -216,6 +217,8 @@ public class ListAdapter extends BaseAdapter {
                                         }
                                     }
 
+
+
                                     CartDataModel.save(cartData);
                                 }
                             }
@@ -243,7 +246,6 @@ public class ListAdapter extends BaseAdapter {
                         ToastUtils.showMomentToast((Activity) context, context, "亲，数量不能超过" + list.getRemainAmount() + "哦~");
                         numView.setText(String.valueOf((long) numView.getTag()));
                     } else {
-
                         if (((long) numView.getTag() - list.getStepAmount()) < 1) // 先减，再判断
                         {
                             //numView.setTag((long)numView.getTag()+list.getStepAmount());

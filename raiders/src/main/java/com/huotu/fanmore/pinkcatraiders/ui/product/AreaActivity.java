@@ -101,8 +101,8 @@ public class AreaActivity extends BaseActivity implements View.OnClickListener, 
         SystemTools.loadBackground(titleLayoutL, bgDraw);
         Drawable leftDraw = resources.getDrawable(R.mipmap.back_gray);
         SystemTools.loadBackground(titleLeftImage, leftDraw);
-        Drawable rightDraw = resources.getDrawable(R.mipmap.more_gray);
-        SystemTools.loadBackground(titleRightImage, rightDraw);
+       /* Drawable rightDraw = resources.getDrawable(R.mipmap.more_gray);
+        SystemTools.loadBackground(titleRightImage, rightDraw);*/
         stubTitleText1.inflate();
         TextView titleText = (TextView) this.findViewById(R.id.titleText);
         titleText.setText("专区商品");

@@ -18,13 +18,13 @@ public class ProductModel extends BaseModel {
     private long stepAmount;
     private List<String> imgs;
     private long sort;
-    private long	attendAmount;
-    private long	buyAmount;
-    private long	defaultAmount;
-    private boolean	isSelect;
+    private long attendAmount;
+    private long buyAmount;
+    private long defaultAmount;
+    private boolean isSelect;
     private BigDecimal pricePercentAmount;
-    private long	sid;
-    private long	userBuyAmount;
+    private long sid;
+    private long userBuyAmount;
 
     public long getSort() {
         return sort;
@@ -90,14 +90,12 @@ public class ProductModel extends BaseModel {
         this.sort = sort;
     }
 
-    public
-    long getIssueId ( ) {
+    public long getIssueId() {
 
         return issueId;
     }
 
-    public
-    void setIssueId ( long issueId ) {
+    public void setIssueId(long issueId) {
 
         this.issueId = issueId;
     }

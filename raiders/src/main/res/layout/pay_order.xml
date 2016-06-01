@@ -39,17 +39,17 @@
                 android:layout_height="wrap_content"
                 android:text="1元"
                 android:textColor="@color/title_bg"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="10dp"
                 android:textSize="@dimen/text_size_16"
                 android:gravity="right"
                 android:layout_gravity="center_vertical"/>
-            <ImageView
+           <!-- <ImageView
                 android:layout_marginRight="5dp"
                 android:id="@+id/arrowTag1"
                 android:layout_gravity="center"
                 android:layout_width="@dimen/icon_size_2"
                 android:layout_height="@dimen/icon_size_2"
-                android:background="@mipmap/down_arrow"/>
+                android:background="@mipmap/down_arrow"/>-->
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -74,6 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:layout_marginRight="10dp"
                 android:textColor="@color/title_bg"
                 android:textSize="@dimen/text_size_16"
                 android:gravity="right"
@@ -127,17 +128,17 @@
                 android:text="1元"
                 android:id="@+id/money"
                 android:textColor="@color/title_bg"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="10dp"
                 android:textSize="@dimen/text_size_16"
                 android:gravity="right"
                 android:layout_gravity="center_vertical"/>
-            <ImageView
+            <!--<ImageView
                 android:layout_marginRight="5dp"
                 android:id="@+id/arrowTag2"
                 android:layout_gravity="center"
                 android:layout_width="@dimen/icon_size_2"
                 android:layout_height="@dimen/icon_size_2"
-                android:background="@mipmap/down_arrow"/>
+                android:background="@mipmap/down_arrow"/>-->
         </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

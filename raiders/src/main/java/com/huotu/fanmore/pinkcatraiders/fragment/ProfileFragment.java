@@ -144,7 +144,7 @@ public class ProfileFragment extends BaseFragment implements Handler.Callback {
                     BitmapLoader.create().loadRoundImage(getActivity(), userimg, imgurl, R.mipmap.defluat_logo);
                     TVUserName.setText(userOutput.getResultData().getUser().getRealName());
                     String balance = String.valueOf(userOutput.getResultData().getUser().getMoney());
-                    money.setText((null != balance && !balance.isEmpty() && !"null".equals(balance)) ? balance + "元" : 0 + "元");
+                    money.setText((null != balance && !balance.isEmpty()) ? balance + "元" : 0 + "元");
 
                 } else {
                     ToastUtils.showMomentToast(getActivity(), getActivity(), "刷新用户数据出现问题");
